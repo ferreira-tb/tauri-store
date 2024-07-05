@@ -51,7 +51,7 @@
   "devDependencies": {
     "@tb-dev/eslint-config": "^3.8.8",
     "@types/node": "^20.14.9",
-    "eslint": "^8.57.0",
+    "eslint": "^9.6.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.2",
