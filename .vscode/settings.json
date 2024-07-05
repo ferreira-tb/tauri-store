@@ -1,0 +1,24 @@
+{
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "conventionalCommits.promptScopes": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "eslint.codeActionsOnSave.mode": "problems",
+  "files.exclude": {
+    ".eslintcache": true
+  },
+  "prettier.requireConfig": true,
+  "typescript.tsdk": "node_modules\\typescript\\lib"
+}
