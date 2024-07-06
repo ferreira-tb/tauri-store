@@ -52,14 +52,13 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.6.0",
-    "@tauri-apps/plugin-store": "2.0.0-beta.6",
     "@vueuse/core": "^10.11.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.31"
   },
   "devDependencies": {
     "@tb-dev/eslint-config": "^3.8.8",
-    "@types/node": "^20.14.9",
+    "@types/node": "^20.14.10",
     "eslint": "^8.57.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
@@ -68,6 +67,6 @@
     "typescript": "^5.5.3",
     "vite": "^5.3.3",
     "vite-plugin-dts": "^3.9.1",
-    "vue-tsc": "^2.0.24"
+    "vue-tsc": "^2.0.26"
   }
 }
