@@ -1,71 +1,30 @@
 {
-  "name": "tauri-plugin-pinia",
+  "name": "monorepo",
   "version": "0.1.2",
-  "description": "Persistent Pinia stores for Tauri",
   "type": "module",
-  "packageManager": "pnpm@9.4.0",
+  "private": true,
+  "packageManager": "pnpm@9.5.0",
   "lint-staged": {
     "*.{?(c|m)@(j|t)s,md,json,yaml}": "prettier --write"
   },
-  "homepage": "https://github.com/ferreira-tb/tauri-plugin-pinia",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ferreira-tb/tauri-plugin-pinia.git"
-  },
-  "bugs": {
-    "url": "https://github.com/ferreira-tb/tauri-plugin-pinia/issues"
-  },
-  "contributors": [
-    {
-      "name": "Andrew Ferreira",
-      "email": "andrew.shien2@gmail.com",
-      "url": "https://tb.dev.br/"
-    }
-  ],
-  "keywords": [
-    "vue",
-    "tauri",
-    "pinia",
-    "plugin"
-  ],
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./*": "./*"
-  },
   "scripts": {
-    "build": "vite build",
+    "dev": "cargo tauri dev",
     "format": "prettier . --write",
     "format-check": "prettier . --check",
     "lint": "eslint . --config eslint.config.js --cache && cargo clippy",
     "lint-fix": "eslint . --config eslint.config.js --fix",
-    "prepare": "husky",
-    "release": "pnpm run build && pnpm publish && cargo publish",
-    "type-check": "tsc --noEmit"
-  },
-  "dependencies": {
-    "@tauri-apps/api": "^1.6.0",
-    "@vueuse/core": "^10.11.0",
-    "pinia": "^2.1.7",
-    "vue": "^3.4.31"
+    "prepare": "husky"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^3.8.8",
-    "@types/node": "^20.14.10",
+    "@tb-dev/eslint-config": "^3.8.10",
+    "@types/node": "^20.14.11",
     "eslint": "^8.57.0",
-    "husky": "^9.0.11",
+    "husky": "^9.1.0",
     "lint-staged": "^15.2.7",
-    "prettier": "^3.3.2",
+    "prettier": "^3.3.3",
     "tslib": "^2.6.3",
     "typescript": "^5.5.3",
-    "vite": "^5.3.3",
+    "vite": "^5.3.4",
     "vite-plugin-dts": "^3.9.1",
     "vue-tsc": "^2.0.26"
   }

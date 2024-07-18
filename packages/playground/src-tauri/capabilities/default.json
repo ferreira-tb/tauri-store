@@ -1,0 +1,6 @@
+{
+  "identifier": "default",
+  "description": "Capability for the main window",
+  "windows": ["window-*"],
+  "permissions": ["pinia:default"]
+}

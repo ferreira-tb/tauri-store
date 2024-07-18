@@ -1,9 +1,9 @@
 {
-  "include": ["guest-js/**/*"],
+  "include": ["./src/**/*"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./guest-js/*"]
+      "@/*": ["./src/*"]
     },
 
     "target": "esnext",

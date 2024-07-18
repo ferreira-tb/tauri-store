@@ -1,21 +1,29 @@
-[package]
-name = "tauri-plugin-pinia"
-description = "Persistent Pinia stores for Tauri"
-version = "0.1.1"
+[workspace]
+members = ["plugin", "packages/playground/src-tauri"]
+resolver = "2"
+
+[workspace.package]
 edition = "2021"
-links = "tauri-plugin-pinia"
 homepage = "https://github.com/ferreira-tb/tauri-plugin-pinia"
 repository = "https://github.com/ferreira-tb/tauri-plugin-pinia"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 keywords = ["plugin", "tauri", "tauri-plugin", "vue", "pinia"]
 
-[dependencies]
-serde = "1.0.203"
-tauri = "2.0.0-beta.23"
-tauri-plugin-store = "2.0.0-beta.9"
-thiserror = "1.0.61"
+[workspace.lints.rust]
+async_fn_in_trait = "allow"
 
-[build-dependencies.tauri-plugin]
-version = "2.0.0-beta.18"
-features = ["build"]
+[workspace.lints.clippy]
+clone_on_ref_ptr = "deny"
+filetype_is_file = "deny"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+rc_buffer = "deny"
+rc_mutex = "deny"
+rest_pat_in_fully_bound_structs = "deny"
+
+[workspace.lints.clippy.pedantic]
+level = "deny"
+priority = -1

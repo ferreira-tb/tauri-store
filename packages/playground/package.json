@@ -1,0 +1,19 @@
+{
+  "name": "playground",
+  "version": "0.1.2",
+  "type": "module",
+  "packageManager": "pnpm@9.5.0",
+  "private": true,
+  "scripts": {
+    "type-check": "vue-tsc --noEmit",
+    "vite:dev": "vite",
+    "vite:build": "pnpm run type-check && vite build"
+  },
+  "dependencies": {
+    "tauri-plugin-pinia": "workspace:*",
+    "@vitejs/plugin-vue": "^5.0.5",
+    "@vueuse/core": "^10.11.0",
+    "pinia": "^2.1.7",
+    "vue": "^3.4.31"
+  }
+}

@@ -6,7 +6,8 @@ declare module 'pinia' {
   export interface PiniaCustomProperties {
     readonly $tauri: {
       readonly load: (path?: string) => Promise<void>;
-      readonly save: () => Promise<void>;
+      readonly start: () => Promise<void>;
+      readonly stop: () => void;
     };
   }
 
@@ -20,29 +21,34 @@ export interface TauriPluginPiniaOptions {
   path?: string;
 }
 
-class TauriStore {
-  constructor(private readonly path: string) {}
-
-  public async set(key: string, value: unknown) {
-    await invoke('plugin:pinia|set', { path: this.path, key, value });
-  }
-
-  public async entries(): Promise<[string, unknown][]> {
-    return invoke('plugin:pinia|entries', { path: this.path });
-  }
-
-  public async load() {
-    await invoke('plugin:pinia|load', { path: this.path });
-  }
+interface TauriStore {
+  entries: () => Promise<[string, unknown][]>;
+  load: () => Promise<void>;
+  set: (key: string, value: unknown) => Promise<void>;
 }
 
-export default function plugin(ctx: PiniaPluginContext) {
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export function TauriPluginPinia(ctx: PiniaPluginContext) {
+  let enabled = false;
   let tauriStore: TauriStore | undefined;
   const options = ctx.options.tauri ?? {};
 
-  let stop: (() => void) | undefined;
+  let stopWatcher: (() => void) | undefined;
   async function load(path = options.path ?? `${ctx.store.$id}.pinia`) {
-    tauriStore ??= new TauriStore(path);
+    if (!enabled) return;
+
+    tauriStore ??= {
+      async entries(): Promise<[string, unknown][]> {
+        return invoke('plugin:pinia|entries', { path });
+      },
+      async load() {
+        await invoke('plugin:pinia|load', { path });
+      },
+      async set(key: string, value: unknown) {
+        await invoke('plugin:pinia|set', { path, key, value });
+      }
+    };
+
     await tauriStore.load();
 
     const values = await tauriStore.entries().then((it) => {
@@ -55,15 +61,16 @@ export default function plugin(ctx: PiniaPluginContext) {
       }, {});
     });
 
-    stop?.();
+    stopWatcher?.();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ctx.store.$patch(values as any);
 
     await nextTick();
-    stop?.();
+    stopWatcher?.();
 
-    stop = ctx.store.$subscribe((mutation, state) => {
+    stopWatcher = ctx.store.$subscribe((mutation, state) => {
+      if (!enabled) return;
       for (const [key, value] of Object.entries(state)) {
         if (mutation.type === MutationType.patchObject && !(key in mutation.payload)) {
           continue;
@@ -74,7 +81,19 @@ export default function plugin(ctx: PiniaPluginContext) {
     });
   }
 
+  async function start() {
+    if (!enabled) {
+      enabled = true;
+      await load();
+    }
+  }
+
+  function stop() {
+    stopWatcher?.();
+    enabled = false;
+  }
+
   return {
-    $tauri: { load }
+    $tauri: { load, start, stop }
   };
 }

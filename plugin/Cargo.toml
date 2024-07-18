@@ -1,0 +1,21 @@
+[package]
+name = "tauri-plugin-pinia"
+description = "Persistent Pinia stores for Tauri"
+version = "0.1.1"
+links = "tauri-plugin-pinia"
+edition.workspace = true
+homepage.workspace = true
+repository.workspace = true
+authors.workspace = true
+license.workspace = true
+keywords.workspace = true
+
+[dependencies]
+serde = "1.0.204"
+tauri = "2.0.0-beta.24"
+tauri-plugin-store = "2.0.0-beta.10"
+thiserror = "1.0.63"
+
+[build-dependencies.tauri-plugin]
+version = "2.0.0-beta.19"
+features = ["build"]
