@@ -7,13 +7,14 @@ Default permissions for the pinia plugin
 - `allow-save-all`
 - `allow-set`
 
-### Permission Table
+### Permission Table 
 
 <table>
 <tr>
 <th>Identifier</th>
 <th>Description</th>
 </tr>
+
 
 <tr>
 <td>
