@@ -56,7 +56,7 @@ impl<R: Runtime> Store<R> {
     let path = pinia
       .path()
       .join(format!("{}.pinia.json", self.id));
-    
+
     let bytes = serde_json::to_vec(&self.state)?;
     let mut file = File::create(path)?;
     file.write_all(&bytes)?;
