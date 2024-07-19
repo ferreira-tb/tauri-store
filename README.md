@@ -11,6 +11,16 @@ Install the plugin by adding the following to your `Cargo.toml` file:
 tauri-plugin-pinia = 0.1
 ```
 
+Install the JavaScript package with your preferred package manager:
+
+```sh
+pnpm add tauri-plugin-pinia
+# or
+npm add tauri-plugin-pinia
+# or
+yarn add tauri-plugin-pinia
+```
+
 ## Usage
 
 Enable the required permissions in your capabilities file:
