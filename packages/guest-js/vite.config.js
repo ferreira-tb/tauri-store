@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [dts({ rollupTypes: true })],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('guest-js', import.meta.url))
+      '@': fileURLToPath(new URL('src', import.meta.url))
     }
   },
   build: {
@@ -15,7 +15,7 @@ export default defineConfig({
     emptyOutDir: true,
     minify: false,
     lib: {
-      entry: resolve(__dirname, 'guest-js/index.ts'),
+      entry: resolve(__dirname, 'src/index.ts'),
       formats: ['es'],
       fileName: 'index'
     },
