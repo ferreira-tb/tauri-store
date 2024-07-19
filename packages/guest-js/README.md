@@ -77,14 +77,9 @@ export const useCounterStore = defineStore('counter', () => {
     counter.value++;
   }
 
-  function decrement() {
-    counter.value--;
-  }
-
   return {
     counter,
-    increment,
-    decrement
+    increment
   };
 });
 ```
