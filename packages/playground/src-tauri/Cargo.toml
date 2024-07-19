@@ -1,15 +1,23 @@
 [package]
 name = "playground"
 version = "0.1.2"
-edition.workspace = true
 publish = false
 
-[build-dependencies]
-tauri-build = { version = "2.0.0-beta", features = [] }
+[package.edition]
+workspace = true
+
+[build-dependencies.tauri-build]
+version = "2.0.0-beta.19"
+features = []
 
 [dependencies]
-tauri = { version = "2.0.0-beta", features = ["devtools", "protocol-asset"] }
+tauri-plugin-process = "2.0.0-beta"
 tauri-plugin-window-state = "2.0.0-beta.11"
+
+[dependencies.tauri]
+version = "2.0.0-beta.24"
+features = ["devtools", "protocol-asset"]
 
 [dependencies.tauri-plugin-pinia]
 path = "../../../plugin"
+features = ["ahash"]

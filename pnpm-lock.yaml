@@ -18,8 +18,8 @@ importers:
         specifier: ^8.57.0
         version: 8.57.0
       husky:
-        specifier: ^9.1.0
-        version: 9.1.0
+        specifier: ^9.1.1
+        version: 9.1.1
       lint-staged:
         specifier: ^15.2.7
         version: 15.2.7
@@ -45,8 +45,11 @@ importers:
   packages/guest-js:
     dependencies:
       '@tauri-apps/api':
-        specifier: ^1.6.0
-        version: 1.6.0
+        specifier: ^2.0.0-beta.15
+        version: 2.0.0-beta.15
+      '@tb-dev/utils':
+        specifier: ^2.0.1
+        version: 2.0.1
       '@vueuse/core':
         specifier: ^10.11.0
         version: 10.11.0(vue@3.4.32(typescript@5.5.3))
@@ -59,6 +62,12 @@ importers:
 
   packages/playground:
     dependencies:
+      '@tauri-apps/api':
+        specifier: ^2.0.0-beta.15
+        version: 2.0.0-beta.15
+      '@tauri-apps/plugin-process':
+        specifier: 2.0.0-beta.7
+        version: 2.0.0-beta.7
       '@vitejs/plugin-vue':
         specifier: ^5.0.5
         version: 5.0.5(vite@5.3.4(@types/node@20.14.11))(vue@3.4.32(typescript@5.5.3))
@@ -72,7 +81,7 @@ importers:
         specifier: workspace:*
         version: link:../guest-js
       vue:
-        specifier: ^3.4.31
+        specifier: ^3.4.32
         version: 3.4.32(typescript@5.5.3)
 
 packages:
@@ -414,9 +423,12 @@ packages:
   '@rushstack/ts-command-line@4.19.1':
     resolution: {integrity: sha512-J7H768dgcpG60d7skZ5uSSwyCZs/S2HrWP1Ds8d1qYAyaaeJmpmmLr9BVw97RjFzmQPOYnoXcKA4GkqDCkduQg==}
 
-  '@tauri-apps/api@1.6.0':
-    resolution: {integrity: sha512-rqI++FWClU5I2UBp4HXFvl+sBWkdigBkxnpJDQUWttNyG7IZP4FwQGhTNL5EOw0vI8i6eSAJ5frLqO7n7jbJdg==}
-    engines: {node: '>= 14.6.0', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+  '@tauri-apps/api@2.0.0-beta.15':
+    resolution: {integrity: sha512-H9w6iISmR+NvH4XuyCZB4zDN10tf9RFt6i/9JHEjaRhAowdAaJ+oiXq/3kedizNClHMtbTQ5j0oqDVPkZDAI8g==}
+    engines: {node: '>= 18.18', npm: '>= 6.6.0', yarn: '>= 1.19.1'}
+
+  '@tauri-apps/plugin-process@2.0.0-beta.7':
+    resolution: {integrity: sha512-iK4HYnzeyqAZE5HAKd0mDI7ekYXUqA9azjA9AgL4LscOEHma1XGEP0DlcHn+RrXIvVbI4LwCol9DSNNoIrB0+w==}
 
   '@tb-dev/eslint-config@3.8.10':
     resolution: {integrity: sha512-1tTdYq8m/Zp4bcTaBcKM6StUfsOiXN4m5ggbZ294j/WfFCIvc+yMusi5UDD0KC8g5JPb3qQSLhp9e8zJ71LpjA==}
@@ -424,6 +436,9 @@ packages:
     peerDependencies:
       eslint: ^8.57.0
       typescript: ^5.4.0
+
+  '@tb-dev/utils@2.0.1':
+    resolution: {integrity: sha512-SEC+kTsl5DVEhwjhb15kRdVDPBs4vItisRMZCh6lOKzy1g1AdItZqqu2mLD0RCkvWeR4/CR3YLvKCK2Fzw6k6Q==}
 
   '@types/argparse@1.0.38':
     resolution: {integrity: sha512-ebDJ9b0e702Yr7pWgB0jzm+CX4Srzz8RcXtLJDJB+BSccqMa36uyH/zUsSYao5+BD1ytv3k3rPYCq4mAE1hsXA==}
@@ -1007,8 +1022,8 @@ packages:
     resolution: {integrity: sha512-AXcZb6vzzrFAUE61HnN4mpLqd/cSIwNQjtNWR0euPm6y0iqx3G4gOXaIDdtdDwZmhwe82LA6+zinmW4UBWVePQ==}
     engines: {node: '>=16.17.0'}
 
-  husky@9.1.0:
-    resolution: {integrity: sha512-8XCjbomYTGdNF2h50dio3T3zghmZ9f/ZNzr99YwSkvDdhEjJGs5qzy8tbFx+SG8yCx2wn9nMVfZxVrr/yT8gNQ==}
+  husky@9.1.1:
+    resolution: {integrity: sha512-fCqlqLXcBnXa/TJXmT93/A36tJsjdJkibQ1MuIiFyCCYUlpYpIaj2mv1w+3KR6Rzu1IC3slFTje5f6DUp2A2rg==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1991,7 +2006,11 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@tauri-apps/api@1.6.0': {}
+  '@tauri-apps/api@2.0.0-beta.15': {}
+
+  '@tauri-apps/plugin-process@2.0.0-beta.7':
+    dependencies:
+      '@tauri-apps/api': 2.0.0-beta.15
 
   '@tb-dev/eslint-config@3.8.10(eslint@8.57.0)(typescript@5.5.3)':
     dependencies:
@@ -2012,6 +2031,8 @@ snapshots:
       - svelte
       - svelte-eslint-parser
       - vitest
+
+  '@tb-dev/utils@2.0.1': {}
 
   '@types/argparse@1.0.38': {}
 
@@ -2697,7 +2718,7 @@ snapshots:
 
   human-signals@5.0.0: {}
 
-  husky@9.1.0: {}
+  husky@9.1.1: {}
 
   ignore@5.3.1: {}
 

@@ -1,74 +1,105 @@
-use serde::{Serialize, Serializer};
-use std::path::{Path, PathBuf};
+#![cfg(not(any(target_os = "android", target_os = "ios")))]
+
+mod error;
+mod pinia;
+pub mod prelude;
+mod store;
+
+pub use error::Error;
+use error::Result;
+pub use pinia::Pinia;
+pub use serde_json::Value as Json;
+use std::path::PathBuf;
+use std::sync::Mutex;
+pub use store::{State, Store};
 use tauri::plugin::TauriPlugin;
-use tauri::{AppHandle, Manager, Runtime};
-pub use tauri_plugin_store::JsonValue as Json;
-use tauri_plugin_store::{Error as StoreError, Store, StoreCollection};
+use tauri::{AppHandle, Manager, RunEvent, Runtime, WebviewWindow};
 
-type Result<T> = std::result::Result<T, Error>;
-type StoreResult<T> = std::result::Result<T, StoreError>;
+#[cfg(feature = "ahash")]
+use ahash::{HashMap, HashMapExt};
+#[cfg(not(feature = "ahash"))]
+use std::collections::HashMap;
 
-#[derive(thiserror::Error, Debug)]
-pub enum Error {
-  #[error(transparent)]
-  Store(#[from] tauri_plugin_store::Error),
-  #[error(transparent)]
-  Tauri(#[from] tauri::Error),
-}
+pub trait AppHandleExt<R: Runtime>: Manager<R> {
+  fn pinia(&self) -> tauri::State<Pinia<R>> {
+    self.state::<Pinia<R>>()
+  }
 
-impl Serialize for Error {
-  fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
+  fn with_store<F, T>(&self, id: impl AsRef<str>, f: F) -> Result<T>
   where
-    S: Serializer,
+    F: FnOnce(&mut Store<R>) -> Result<T>,
   {
-    serializer.serialize_str(self.to_string().as_str())
+    self.pinia().with_store(self.app_handle(), id, f)
   }
 }
 
-pub trait TauriStore<R: Runtime>: Manager<R> {
-  fn with_store<F, T>(&self, path: impl AsRef<Path>, f: F) -> Result<T>
-  where
-    F: FnOnce(&mut Store<R>) -> StoreResult<T>,
-  {
-    let app = self.app_handle().clone();
-    let collection = self.state::<StoreCollection<R>>();
-    tauri_plugin_store::with_store(app, collection, path, f).map_err(Into::into)
+impl<R: Runtime> AppHandleExt<R> for AppHandle<R> {}
+
+#[tauri::command]
+async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<State> {
+  app.with_store(id, |store| Ok(store.state.clone()))
+}
+
+#[tauri::command]
+async fn save<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
+  app.with_store(id, move |store| store.save())
+}
+
+#[tauri::command]
+async fn save_all<R: Runtime>(app: AppHandle<R>) {
+  app.pinia().save();
+}
+
+#[tauri::command]
+async fn set<R: Runtime>(window: WebviewWindow<R>, id: String, state: State) -> Result<()> {
+  let app = window.app_handle().clone();
+  app.with_store(id, move |store| store.set(state, window.label()))
+}
+
+#[derive(Default)]
+pub struct Builder {
+  path: Option<PathBuf>,
+}
+
+impl Builder {
+  pub fn new() -> Self {
+    Self::default()
   }
-}
 
-impl<R: Runtime> TauriStore<R> for AppHandle<R> {}
+  /// Directory where the stores will be saved.
+  pub fn path(mut self, path: PathBuf) -> Self {
+    self.path = Some(path);
+    self
+  }
 
-#[tauri::command]
-async fn set<R: Runtime>(app: AppHandle<R>, path: PathBuf, key: String, value: Json) -> Result<()> {
-  app.with_store(path, |store| store.insert(key, value))
-}
+  pub fn build<R: Runtime>(mut self) -> TauriPlugin<R> {
+    tauri::plugin::Builder::new("pinia")
+      .invoke_handler(tauri::generate_handler![load, save, save_all, set])
+      .setup(move |app, _| {
+        let path = self.path.take().unwrap_or_else(|| {
+          app
+            .path()
+            .app_data_dir()
+            .expect("failed to resolve app data dir")
+            .join("pinia")
+        });
 
-#[tauri::command]
-async fn entries<R: Runtime>(app: AppHandle<R>, path: PathBuf) -> Result<Vec<(String, Json)>> {
-  app.with_store(path, |store| {
-    let entries = store
-      .entries()
-      .map(|(k, v)| (k.to_owned(), v.to_owned()))
-      .collect();
+        app.manage(Pinia::<R> {
+          path,
+          stores: Mutex::new(HashMap::new()),
+        });
 
-    Ok(entries)
-  })
-}
-
-#[tauri::command]
-async fn load<R: Runtime>(app: AppHandle<R>, path: PathBuf) -> Result<()> {
-  app.with_store(path, |store| {
-    let result = store.load();
-    if matches!(result, Err(StoreError::NotFound(_))) {
-      return Ok(());
-    }
-
-    result
-  })
+        Ok(())
+      })
+      .on_event(|app, event| {
+        if matches!(event, RunEvent::Exit) {
+          app.pinia().save();
+        }
+      })
+      .build()
+  }
 }
 
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-  tauri::plugin::Builder::new("pinia")
-    .invoke_handler(tauri::generate_handler![entries, load, set])
-    .build()
+  Builder::default().build()
 }

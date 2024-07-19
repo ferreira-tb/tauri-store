@@ -2,8 +2,9 @@
 
 Default permissions for the pinia plugin
 
-- `allow-entries`
 - `allow-load`
+- `allow-save`
+- `allow-save-all`
 - `allow-set`
 
 ### Permission Table
@@ -12,32 +13,6 @@ Default permissions for the pinia plugin
 <tr>
 <th>Identifier</th>
 <th>Description</th>
-</tr>
-
-<tr>
-<td>
-
-`pinia:allow-entries`
-
-</td>
-<td>
-
-Enables the entries command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`pinia:deny-entries`
-
-</td>
-<td>
-
-Denies the entries command without any pre-configured scope.
-
-</td>
 </tr>
 
 <tr>
@@ -62,6 +37,58 @@ Enables the load command without any pre-configured scope.
 <td>
 
 Denies the load command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-save`
+
+</td>
+<td>
+
+Enables the save command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-save`
+
+</td>
+<td>
+
+Denies the save command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-save-all`
+
+</td>
+<td>
+
+Enables the save_all command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-save-all`
+
+</td>
+<td>
+
+Denies the save_all command without any pre-configured scope.
 
 </td>
 </tr>

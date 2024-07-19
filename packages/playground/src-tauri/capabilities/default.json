@@ -2,5 +2,10 @@
   "identifier": "default",
   "description": "Capability for the main window",
   "windows": ["window-*"],
-  "permissions": ["pinia:default"]
+  "permissions": [
+    "event:allow-listen",
+    "event:allow-unlisten",
+    "pinia:default",
+    "process:allow-exit"
+  ]
 }

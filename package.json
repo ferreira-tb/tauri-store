@@ -8,8 +8,9 @@
     "*.{?(c|m)@(j|t)s,md,json,yaml}": "prettier --write"
   },
   "scripts": {
+    "clippy": "cargo clippy",
     "dev": "cargo tauri dev",
-    "format": "prettier . --write",
+    "format": "prettier . --write && cargo fmt --all",
     "format-check": "prettier . --check",
     "lint": "eslint . --config eslint.config.js --cache && cargo clippy",
     "lint-fix": "eslint . --config eslint.config.js --fix",
@@ -19,7 +20,7 @@
     "@tb-dev/eslint-config": "^3.8.10",
     "@types/node": "^20.14.11",
     "eslint": "^8.57.0",
-    "husky": "^9.1.0",
+    "husky": "^9.1.1",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.3",
     "tslib": "^2.6.3",

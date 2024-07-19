@@ -2,6 +2,7 @@
 import { useStore } from '../../stores';
 
 const store = useStore();
+void store.$tauri.start();
 </script>
 
 <template>

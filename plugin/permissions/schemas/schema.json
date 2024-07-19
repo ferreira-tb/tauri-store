@@ -256,16 +256,6 @@
       "type": "string",
       "oneOf": [
         {
-          "description": "allow-entries -> Enables the entries command without any pre-configured scope.",
-          "type": "string",
-          "enum": ["allow-entries"]
-        },
-        {
-          "description": "deny-entries -> Denies the entries command without any pre-configured scope.",
-          "type": "string",
-          "enum": ["deny-entries"]
-        },
-        {
           "description": "allow-load -> Enables the load command without any pre-configured scope.",
           "type": "string",
           "enum": ["allow-load"]
@@ -274,6 +264,26 @@
           "description": "deny-load -> Denies the load command without any pre-configured scope.",
           "type": "string",
           "enum": ["deny-load"]
+        },
+        {
+          "description": "allow-save -> Enables the save command without any pre-configured scope.",
+          "type": "string",
+          "enum": ["allow-save"]
+        },
+        {
+          "description": "deny-save -> Denies the save command without any pre-configured scope.",
+          "type": "string",
+          "enum": ["deny-save"]
+        },
+        {
+          "description": "allow-save-all -> Enables the save_all command without any pre-configured scope.",
+          "type": "string",
+          "enum": ["allow-save-all"]
+        },
+        {
+          "description": "deny-save-all -> Denies the save_all command without any pre-configured scope.",
+          "type": "string",
+          "enum": ["deny-save-all"]
         },
         {
           "description": "allow-set -> Enables the set command without any pre-configured scope.",

@@ -5,10 +5,11 @@ use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 fn main() {
   tauri::Builder::default()
     .plugin(tauri_plugin_pinia::init())
+    .plugin(tauri_plugin_process::init())
     .plugin(tauri_plugin_window_state::Builder::new().build())
     .setup(|app| {
       let handle = app.handle();
-      (1..=4).for_each(|id| open_window(&handle, id));
+      (1..=4).for_each(|id| open_window(handle, id));
       Ok(())
     })
     .invoke_handler(tauri::generate_handler![])
