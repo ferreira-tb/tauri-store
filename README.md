@@ -23,7 +23,7 @@ yarn add tauri-plugin-pinia
 
 ## Usage
 
-Enable the required permissions in your capabilities file:
+1. Enable the required permissions in your capabilities file:
 
 ```json
 {
@@ -31,7 +31,7 @@ Enable the required permissions in your capabilities file:
 }
 ```
 
-Register the plugin with Tauri:
+2. Register the plugin with Tauri:
 
 `src-tauri/src/main.rs`
 
@@ -44,7 +44,7 @@ fn main() {
 }
 ```
 
-Enable the plugin for Pinia:
+3. Enable the plugin for Pinia:
 
 `src/index.ts`
 
@@ -62,7 +62,7 @@ app.use(pinia);
 app.mount('#app');
 ```
 
-Create your Pinia store:
+4. Create your Pinia store:
 
 `src/stores/counter.ts`
 
@@ -87,4 +87,13 @@ export const useCounterStore = defineStore('counter', () => {
     decrement
   };
 });
+```
+
+5. Start the plugin!
+
+```ts
+import { useCounterStore } from './stores/counter';
+
+const counterStore = useCounterStore();
+counterStore.$tauri.start();
 ```
