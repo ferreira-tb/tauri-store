@@ -3,6 +3,7 @@ name = "tauri-plugin-pinia"
 description = "Persistent Pinia stores for Tauri"
 version = "0.1.3"
 links = "tauri-plugin-pinia"
+readme.workspace = true
 
 [package.edition]
 workspace = true
