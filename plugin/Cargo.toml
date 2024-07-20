@@ -1,7 +1,7 @@
 [package]
 name = "tauri-plugin-pinia"
 description = "Persistent Pinia stores for Tauri"
-version = "0.1.8"
+version = "0.1.9"
 links = "tauri-plugin-pinia"
 
 [package.readme]
