@@ -26,21 +26,16 @@ pub struct Store<R: Runtime> {
 impl<R: Runtime> Store<R> {
   pub(crate) fn load(app: AppHandle<R>, id: impl AsRef<str>) -> Result<Self> {
     let id = id.as_ref().to_owned();
-    let path = app
-      .pinia()
-      .path()
-      .join(format!("{id}.pinia.json"));
+    let path = app.pinia().path().join(format!("{id}.json"));
 
-    let bytes = match fs::read(path) {
-      Ok(bytes) => bytes,
+    let state = match fs::read(path) {
+      Ok(bytes) => serde_json::from_slice(&bytes)?,
       Err(e) if e.kind() == io::ErrorKind::NotFound => {
         warn!("pinia store not found: {id}");
-        Vec::default()
+        State::default()
       }
       Err(e) => return Err(e.into()),
     };
-
-    let state = serde_json::from_slice(&bytes).unwrap_or_default();
 
     let store = Self { app, id, state };
     info!("pinia store loaded: {}", store.id);
@@ -53,9 +48,7 @@ impl<R: Runtime> Store<R> {
     let pinia = self.app.pinia();
     fs::create_dir_all(pinia.path())?;
 
-    let path = pinia
-      .path()
-      .join(format!("{}.pinia.json", self.id));
+    let path = pinia.path().join(format!("{}.json", self.id));
 
     let bytes = serde_json::to_vec(&self.state)?;
     let mut file = File::create(path)?;
