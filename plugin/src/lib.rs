@@ -1,3 +1,11 @@
+//! Persistent Pinia stores for Tauri.
+//! 
+//! ## Features
+//! 
+//! - Saves your Pinia stores to disk on application exit (or manually, if needed).
+//! - Synchronizes your stores across multiple windows.
+//! - Allows debouncing store updates.
+
 #![cfg(not(any(target_os = "android", target_os = "ios")))]
 
 mod error;
@@ -77,7 +85,7 @@ impl Builder {
   }
 
   /// Sets a list of stores that should not be synchronized across windows.
-  pub fn with_sync_denylist(mut self, denylist: &[&str]) -> Self {
+  pub fn sync_denylist(mut self, denylist: &[&str]) -> Self {
     self
       .sync_denylist
       .extend(denylist.iter().map(ToString::to_string));

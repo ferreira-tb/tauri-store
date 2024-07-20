@@ -1,6 +1,12 @@
 # tauri-plugin-pinia
 
-Persistent Pinia stores for Tauri, with automatic synchronization between multiple windows.
+Persistent Pinia stores for Tauri.
+
+## Features
+
+- Saves your Pinia stores to disk on application exit (or manually, if needed).
+- Synchronizes your stores across multiple windows.
+- Allows debouncing store updates.
 
 ## Install
 
@@ -22,6 +28,8 @@ yarn add tauri-plugin-pinia
 ```
 
 ## Usage
+
+> For a working example, see the [playground](https://github.com/ferreira-tb/tauri-plugin-pinia/tree/main/packages/playground).
 
 1. Enable the required permissions in your capabilities file:
 
@@ -51,12 +59,12 @@ fn main() {
 ```ts
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { TauriPluginPinia } from 'tauri-plugin-pinia';
+import { createPlugin } from 'tauri-plugin-pinia';
 
 const app = createApp(App);
 
 const pinia = createPinia();
-pinia.use(TauriPluginPinia);
+pinia.use(createPlugin());
 
 app.use(pinia);
 app.mount('#app');

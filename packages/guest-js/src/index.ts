@@ -1,8 +1,9 @@
 import { nextTick } from 'vue';
 import * as commands from './commands';
+import { watchDebounced } from '@vueuse/core';
+import { listen } from '@tauri-apps/api/event';
 import type { PiniaPluginContext } from 'pinia';
 import type { MaybePromise } from '@tb-dev/utils';
-import { type UnlistenFn, listen } from '@tauri-apps/api/event';
 
 export * from './commands';
 
@@ -22,7 +23,8 @@ declare module 'pinia' {
 }
 
 export interface TauriPluginPiniaOptions {
-  onError?: (error: unknown) => MaybePromise<void>;
+  readonly debounce?: number;
+  readonly onError?: (error: unknown) => MaybePromise<void>;
 }
 
 interface Payload {
@@ -30,75 +32,81 @@ interface Payload {
   state: Record<string, unknown>;
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export function TauriPluginPinia(ctx: PiniaPluginContext) {
-  let enabled = false;
-  let unsubscribe: (() => void) | undefined;
-  let unlisten: UnlistenFn | undefined;
+export function createPlugin(options: TauriPluginPiniaOptions = {}) {
+  return function (ctx: PiniaPluginContext) {
+    let enabled = false;
+    let unsubscribe: (() => void) | undefined;
+    let unlisten: (() => void) | undefined;
 
-  const { onError = console.error } = ctx.options.tauri ?? {};
+    const { debounce = options.debounce ?? 0, onError = options.onError ?? console.error } =
+      ctx.options.tauri ?? options;
 
-  const changeQueue: Payload[] = [];
+    let changeQueue: Payload[] = [];
 
-  async function load() {
-    try {
-      const storeState = await commands.load(ctx.store.$id);
-      ctx.store.$patch(storeState as any);
-
-      await nextTick();
-      unsubscribe = subscribe();
-    } catch (err) {
-      onError(err);
-    }
-  }
-
-  function subscribe() {
-    return ctx.store.$subscribe((_, state) => {
-      if (!enabled) return;
-      commands.patch(ctx.store.$id, state).catch(onError);
-    });
-  }
-
-  async function processQueue() {
-    while (changeQueue.length) {
-      const payload = changeQueue.shift();
-      if (payload && payload.id === ctx.store.$id) {
-        unsubscribe?.();
-        ctx.store.$patch(payload.state as any);
+    async function load() {
+      try {
+        const storeState = await commands.load(ctx.store.$id);
+        ctx.store.$patch(storeState as any);
 
         await nextTick();
-
-        unsubscribe?.();
         unsubscribe = subscribe();
+      } catch (err) {
+        onError(err);
       }
     }
-  }
 
-  async function start() {
-    if (!enabled) {
-      enabled = true;
-      unsubscribe?.();
-      await load();
-
-      const fn = await listen<Payload>(CHANGE_EVENT, ({ payload }) => {
-        if (payload.id === ctx.store.$id) {
-          changeQueue.push(payload);
-          processQueue().catch(onError);
-        }
-      });
-
-      unlisten?.();
-      unlisten = fn;
+    function patch(state: Record<string, unknown>) {
+      if (enabled) {
+        commands.patch(ctx.store.$id, state).catch(onError);
+      }
     }
-  }
 
-  function stop() {
-    unlisten?.();
-    unsubscribe?.();
-    enabled = false;
-  }
+    function subscribe() {
+      return watchDebounced(ctx.store.$state, patch, {
+        debounce,
+        deep: true
+      });
+    }
 
-  return {
-    $tauri: { start, stop }
+    async function processChangeQueue() {
+      while (changeQueue.length > 0) {
+        await nextTick();
+        const payload = changeQueue.pop();
+        if (payload && payload.id === ctx.store.$id) {
+          unsubscribe?.();
+          ctx.store.$patch(payload.state as any);
+          changeQueue = [];
+          unsubscribe = subscribe();
+        }
+      }
+    }
+
+    async function start() {
+      if (!enabled) {
+        enabled = true;
+        unsubscribe?.();
+        await load();
+
+        const fn = await listen<Payload>(CHANGE_EVENT, ({ payload }) => {
+          if (payload.id === ctx.store.$id) {
+            changeQueue.push(payload);
+            processChangeQueue().catch(onError);
+          }
+        });
+
+        unlisten?.();
+        unlisten = fn;
+      }
+    }
+
+    function stop() {
+      unlisten?.();
+      unsubscribe?.();
+      enabled = false;
+    }
+
+    return {
+      $tauri: { start, stop }
+    };
   };
 }

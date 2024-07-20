@@ -8,13 +8,25 @@ export const useStore = defineStore('store', () => {
     counter.value++;
   }
 
-  function decrement() {
-    counter.value--;
-  }
-
   return {
     counter,
-    increment,
-    decrement
+    increment
   };
 });
+
+export const useDebouncedStore = defineStore(
+  'debounced-store',
+  () => {
+    const counter = ref(0);
+
+    function increment() {
+      counter.value++;
+    }
+
+    return {
+      counter,
+      increment
+    };
+  },
+  { tauri: { debounce: 1000 } }
+);
