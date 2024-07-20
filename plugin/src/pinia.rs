@@ -1,5 +1,5 @@
 use crate::error::Result;
-use crate::store::{State, Store};
+use crate::store::Store;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 use tauri::{AppHandle, Runtime};
@@ -43,10 +43,5 @@ impl<R: Runtime> Pinia<R> {
         error!("failed to save store {}: {err}", store.id);
       }
     }
-  }
-
-  /// Updates the state of a store.
-  pub fn patch(&self, app: &AppHandle<R>, id: impl AsRef<str>, state: State) -> Result<()> {
-    self.with_store(app, id, |store| store.patch(state, None))
   }
 }

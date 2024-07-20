@@ -42,8 +42,8 @@ pub trait PiniaExt<R: Runtime>: Manager<R> {
 }
 
 impl<R: Runtime> PiniaExt<R> for AppHandle<R> {}
-impl<R: Runtime> PiniaExt<R> for Window<R> {}
 impl<R: Runtime> PiniaExt<R> for WebviewWindow<R> {}
+impl<R: Runtime> PiniaExt<R> for Window<R> {}
 
 #[tauri::command]
 async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<State> {
@@ -53,7 +53,9 @@ async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<State> {
 #[tauri::command]
 async fn patch<R: Runtime>(window: WebviewWindow<R>, id: String, state: State) -> Result<()> {
   let app = window.app_handle().clone();
-  app.with_store(id, move |store| store.patch(state, window.label()))
+  app.with_store(id, move |store| {
+    store.patch_with_source(state, window.label())
+  })
 }
 
 #[tauri::command]

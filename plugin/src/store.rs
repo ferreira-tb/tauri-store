@@ -57,13 +57,54 @@ impl<R: Runtime> Store<R> {
     Ok(())
   }
 
+  pub fn state(&self) -> &State {
+    &self.state
+  }
+
   /// Patches the store state.
-  pub fn patch<'a, S>(&mut self, state: State, source: S) -> Result<()>
+  pub(crate) fn patch_with_source<'a, S>(&mut self, state: State, source: S) -> Result<()>
   where
     S: Into<Option<&'a str>>,
   {
     self.state.extend(state);
     self.emit(source)
+  }
+
+  pub fn patch(&mut self, state: State) -> Result<()> {
+    self.patch_with_source(state, None)
+  }
+
+  pub fn set(&mut self, key: impl AsRef<str>, value: Json) -> Result<()> {
+    self.state.insert(key.as_ref().to_owned(), value);
+    self.emit(None)
+  }
+
+  pub fn get(&self, key: impl AsRef<str>) -> Option<&Json> {
+    self.state.get(key.as_ref())
+  }
+
+  pub fn has(&self, key: impl AsRef<str>) -> bool {
+    self.state.contains_key(key.as_ref())
+  }
+
+  pub fn keys(&self) -> impl Iterator<Item = &String> {
+    self.state.keys()
+  }
+
+  pub fn values(&self) -> impl Iterator<Item = &Json> {
+    self.state.values()
+  }
+
+  pub fn entries(&self) -> impl Iterator<Item = (&String, &Json)> {
+    self.state.iter()
+  }
+
+  pub fn len(&self) -> usize {
+    self.state.len()
+  }
+
+  pub fn is_empty(&self) -> bool {
+    self.state.is_empty()
   }
 
   fn emit<'a, S>(&self, source: S) -> Result<()>
