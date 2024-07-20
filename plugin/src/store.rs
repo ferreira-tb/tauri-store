@@ -57,6 +57,7 @@ impl<R: Runtime> Store<R> {
     Ok(())
   }
 
+  /// Patches the store state.
   pub fn patch<'a, S>(&mut self, state: State, source: S) -> Result<()>
   where
     S: Into<Option<&'a str>>,
@@ -69,6 +70,11 @@ impl<R: Runtime> Store<R> {
   where
     S: Into<Option<&'a str>>,
   {
+    let pinia = self.app.pinia();
+    if pinia.sync_denylist.contains(&self.id) {
+      return Ok(());
+    }
+
     let payload = Payload::from(self);
     let source: Option<&str> = source.into();
     if let Some(source) = source {

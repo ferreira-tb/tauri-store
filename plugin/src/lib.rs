@@ -16,9 +16,9 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime, WebviewWindow, Window};
 
 #[cfg(feature = "ahash")]
-use ahash::{HashMap, HashMapExt};
+use ahash::{HashMap, HashMapExt, HashSet};
 #[cfg(not(feature = "ahash"))]
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 pub trait PiniaExt<R: Runtime>: Manager<R> {
   fn pinia(&self) -> tauri::State<Pinia<R>> {
@@ -61,6 +61,7 @@ async fn save_all<R: Runtime>(app: AppHandle<R>) {
 #[derive(Default)]
 pub struct Builder {
   path: Option<PathBuf>,
+  sync_denylist: HashSet<String>,
 }
 
 impl Builder {
@@ -72,6 +73,15 @@ impl Builder {
   pub fn path(mut self, path: impl AsRef<Path>) -> Self {
     let path = path.as_ref().to_path_buf();
     self.path = Some(path);
+    self
+  }
+
+  /// Sets a list of stores that should not be synchronized across windows.
+  pub fn with_sync_denylist(mut self, denylist: &[&str]) -> Self {
+    self
+      .sync_denylist
+      .extend(denylist.iter().map(ToString::to_string));
+
     self
   }
 
@@ -90,6 +100,7 @@ impl Builder {
         app.manage(Pinia::<R> {
           path,
           stores: Mutex::new(HashMap::new()),
+          sync_denylist: self.sync_denylist,
         });
 
         Ok(())

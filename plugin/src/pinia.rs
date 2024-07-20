@@ -6,13 +6,14 @@ use tauri::{AppHandle, Runtime};
 use tracing::error;
 
 #[cfg(feature = "ahash")]
-use ahash::HashMap;
+use ahash::{HashMap, HashSet};
 #[cfg(not(feature = "ahash"))]
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 pub struct Pinia<R: Runtime> {
   pub(crate) path: PathBuf,
   pub(crate) stores: Mutex<HashMap<String, Store<R>>>,
+  pub(crate) sync_denylist: HashSet<String>,
 }
 
 impl<R: Runtime> Pinia<R> {
@@ -44,6 +45,7 @@ impl<R: Runtime> Pinia<R> {
     }
   }
 
+  /// Updates the state of a store.
   pub fn patch(&self, app: &AppHandle<R>, id: impl AsRef<str>, state: State) -> Result<()> {
     self.with_store(app, id, |store| store.patch(state, None))
   }
