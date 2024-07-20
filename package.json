@@ -18,7 +18,7 @@
     "prepare": "husky",
     "release": "pnpm run release:crate && pnpm run release:npm",
     "release:crate": "pnpm run clippy && cargo publish -p tauri-plugin-pinia --no-verify",
-    "release:npm": "pnpm run build && pnpm publish -P tauri-plugin-pinia",
+    "release:npm": "pnpm run build && pnpm publish -F tauri-plugin-pinia",
     "type-check": "pnpm run -F tauri-plugin-pinia type-check"
   },
   "devDependencies": {
