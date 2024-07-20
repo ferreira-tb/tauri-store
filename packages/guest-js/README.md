@@ -4,9 +4,9 @@ Persistent Pinia stores for Tauri.
 
 ## Features
 
-- Saves your Pinia stores to disk on application exit (or manually, if needed).
-- Synchronizes your stores across multiple windows.
-- Allows debouncing store updates.
+- Save your Pinia stores to disk on app exit (or manually, if needed).
+- Synchronize your stores across multiple windows.
+- Debounce store updates.
 
 ## Install
 
