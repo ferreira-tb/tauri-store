@@ -72,6 +72,7 @@ impl<R: Runtime> Store<R> {
   {
     let pinia = self.app.pinia();
     if pinia.sync_denylist.contains(&self.id) {
+      info!("store {} is in the denylist, skipping emit", self.id);
       return Ok(());
     }
 
