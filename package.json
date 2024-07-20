@@ -1,6 +1,6 @@
 {
   "name": "monorepo",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@9.5.0",
@@ -8,13 +8,18 @@
     "*.{?(c|m)@(j|t)s,md,json,yaml}": "prettier --write"
   },
   "scripts": {
+    "build": "pnpm run -F tauri-plugin-pinia build",
     "clippy": "cargo clippy",
     "dev": "cargo tauri dev",
     "format": "prettier . --write && cargo fmt --all",
     "format-check": "prettier . --check",
     "lint": "eslint . --config eslint.config.js --cache && cargo clippy",
     "lint-fix": "eslint . --config eslint.config.js --fix",
-    "prepare": "husky"
+    "prepare": "husky",
+    "release": "pnpm run release:crate && pnpm run release:npm",
+    "release:crate": "pnpm run clippy && cargo publish -p tauri-plugin-pinia --no-verify",
+    "release:npm": "pnpm run build && pnpm publish -P tauri-plugin-pinia",
+    "type-check": "pnpm run -F tauri-plugin-pinia type-check"
   },
   "devDependencies": {
     "@tb-dev/eslint-config": "^3.8.10",

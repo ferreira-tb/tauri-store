@@ -1,6 +1,6 @@
 {
   "name": "tauri-plugin-pinia",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Persistent Pinia stores for Tauri",
   "type": "module",
   "private": false,
@@ -47,6 +47,6 @@
     "@tb-dev/utils": "^2.0.1",
     "@vueuse/core": "^10.11.0",
     "pinia": "^2.1.7",
-    "vue": "^3.4.32"
+    "vue": "^3.4.33"
   }
 }

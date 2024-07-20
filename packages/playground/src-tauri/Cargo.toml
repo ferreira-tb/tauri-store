@@ -1,6 +1,6 @@
 [package]
 name = "playground"
-version = "0.1.4"
+version = "0.1.5"
 publish = false
 
 [package.edition]
@@ -11,7 +11,7 @@ version = "2.0.0-beta.19"
 features = []
 
 [dependencies]
-tauri-plugin-process = "2.0.0-beta"
+tauri-plugin-process = "2.0.0-beta.8"
 tauri-plugin-window-state = "2.0.0-beta.11"
 
 [dependencies.tauri]

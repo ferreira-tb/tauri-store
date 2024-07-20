@@ -3,9 +3,9 @@
 Default permissions for the pinia plugin
 
 - `allow-load`
+- `allow-patch`
 - `allow-save`
 - `allow-save-all`
-- `allow-set`
 
 ### Permission Table 
 
@@ -38,6 +38,32 @@ Enables the load command without any pre-configured scope.
 <td>
 
 Denies the load command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-patch`
+
+</td>
+<td>
+
+Enables the patch command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-patch`
+
+</td>
+<td>
+
+Denies the patch command without any pre-configured scope.
 
 </td>
 </tr>
@@ -90,32 +116,6 @@ Enables the save_all command without any pre-configured scope.
 <td>
 
 Denies the save_all command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`pinia:allow-set`
-
-</td>
-<td>
-
-Enables the set command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`pinia:deny-set`
-
-</td>
-<td>
-
-Denies the set command without any pre-configured scope.
 
 </td>
 </tr>

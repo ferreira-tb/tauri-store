@@ -9,18 +9,18 @@ pub use error::Error;
 use error::Result;
 pub use pinia::Pinia;
 pub use serde_json::Value as Json;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 pub use store::{State, Store};
 use tauri::plugin::TauriPlugin;
-use tauri::{AppHandle, Manager, RunEvent, Runtime, WebviewWindow};
+use tauri::{AppHandle, Manager, RunEvent, Runtime, WebviewWindow, Window};
 
 #[cfg(feature = "ahash")]
 use ahash::{HashMap, HashMapExt};
 #[cfg(not(feature = "ahash"))]
 use std::collections::HashMap;
 
-pub trait AppHandleExt<R: Runtime>: Manager<R> {
+pub trait PiniaExt<R: Runtime>: Manager<R> {
   fn pinia(&self) -> tauri::State<Pinia<R>> {
     self.state::<Pinia<R>>()
   }
@@ -33,11 +33,19 @@ pub trait AppHandleExt<R: Runtime>: Manager<R> {
   }
 }
 
-impl<R: Runtime> AppHandleExt<R> for AppHandle<R> {}
+impl<R: Runtime> PiniaExt<R> for AppHandle<R> {}
+impl<R: Runtime> PiniaExt<R> for Window<R> {}
+impl<R: Runtime> PiniaExt<R> for WebviewWindow<R> {}
 
 #[tauri::command]
 async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<State> {
   app.with_store(id, |store| Ok(store.state.clone()))
+}
+
+#[tauri::command]
+async fn patch<R: Runtime>(window: WebviewWindow<R>, id: String, state: State) -> Result<()> {
+  let app = window.app_handle().clone();
+  app.with_store(id, move |store| store.patch(state, window.label()))
 }
 
 #[tauri::command]
@@ -48,12 +56,6 @@ async fn save<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
 #[tauri::command]
 async fn save_all<R: Runtime>(app: AppHandle<R>) {
   app.pinia().save();
-}
-
-#[tauri::command]
-async fn set<R: Runtime>(window: WebviewWindow<R>, id: String, state: State) -> Result<()> {
-  let app = window.app_handle().clone();
-  app.with_store(id, move |store| store.set(state, window.label()))
 }
 
 #[derive(Default)]
@@ -67,14 +69,15 @@ impl Builder {
   }
 
   /// Directory where the stores will be saved.
-  pub fn path(mut self, path: PathBuf) -> Self {
+  pub fn path(mut self, path: impl AsRef<Path>) -> Self {
+    let path = path.as_ref().to_path_buf();
     self.path = Some(path);
     self
   }
 
   pub fn build<R: Runtime>(mut self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
-      .invoke_handler(tauri::generate_handler![load, save, save_all, set])
+      .invoke_handler(tauri::generate_handler![load, patch, save, save_all])
       .setup(move |app, _| {
         let path = self.path.take().unwrap_or_else(|| {
           app

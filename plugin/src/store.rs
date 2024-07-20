@@ -1,5 +1,5 @@
 use crate::error::Result;
-use crate::AppHandleExt;
+use crate::PiniaExt;
 use serde::Serialize;
 use serde_json::Value as Json;
 use std::fmt;
@@ -64,7 +64,7 @@ impl<R: Runtime> Store<R> {
     Ok(())
   }
 
-  pub fn set<'a, S>(&mut self, state: State, source: S) -> Result<()>
+  pub fn patch<'a, S>(&mut self, state: State, source: S) -> Result<()>
   where
     S: Into<Option<&'a str>>,
   {

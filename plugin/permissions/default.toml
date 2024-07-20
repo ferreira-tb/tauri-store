@@ -1,4 +1,4 @@
 "$schema" = "schemas/schema.json"
 [default]
 description = "Default permissions for the pinia plugin"
-permissions = ["allow-load", "allow-save", "allow-save-all", "allow-set"]
+permissions = ["allow-load", "allow-patch", "allow-save", "allow-save-all"]

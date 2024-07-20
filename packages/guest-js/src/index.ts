@@ -55,7 +55,7 @@ export function TauriPluginPinia(ctx: PiniaPluginContext) {
   function subscribe() {
     return ctx.store.$subscribe((_, state) => {
       if (!enabled) return;
-      commands.set(ctx.store.$id, state).catch(onError);
+      commands.patch(ctx.store.$id, state).catch(onError);
     });
   }
 

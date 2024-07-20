@@ -1,6 +1,6 @@
 {
   "name": "playground",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "packageManager": "pnpm@9.5.0",
   "private": true,
@@ -16,6 +16,6 @@
     "@vueuse/core": "^10.11.0",
     "pinia": "^2.1.7",
     "tauri-plugin-pinia": "workspace:*",
-    "vue": "^3.4.32"
+    "vue": "^3.4.33"
   }
 }

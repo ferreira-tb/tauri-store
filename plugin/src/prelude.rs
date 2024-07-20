@@ -1,1 +1,1 @@
-pub use crate::AppHandleExt as _;
+pub use crate::PiniaExt as _;

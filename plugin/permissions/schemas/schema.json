@@ -309,6 +309,20 @@
           ]
         },
         {
+          "description": "allow-patch -> Enables the patch command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "allow-patch"
+          ]
+        },
+        {
+          "description": "deny-patch -> Denies the patch command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "deny-patch"
+          ]
+        },
+        {
           "description": "allow-save -> Enables the save command without any pre-configured scope.",
           "type": "string",
           "enum": [
@@ -334,20 +348,6 @@
           "type": "string",
           "enum": [
             "deny-save-all"
-          ]
-        },
-        {
-          "description": "allow-set -> Enables the set command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "allow-set"
-          ]
-        },
-        {
-          "description": "deny-set -> Denies the set command without any pre-configured scope.",
-          "type": "string",
-          "enum": [
-            "deny-set"
           ]
         },
         {

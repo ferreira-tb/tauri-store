@@ -44,7 +44,7 @@ impl<R: Runtime> Pinia<R> {
     }
   }
 
-  pub fn set(&self, app: &AppHandle<R>, id: impl AsRef<str>, state: State) -> Result<()> {
-    self.with_store(app, id, |store| store.set(state, None))
+  pub fn patch(&self, app: &AppHandle<R>, id: impl AsRef<str>, state: State) -> Result<()> {
+    self.with_store(app, id, |store| store.patch(state, None))
   }
 }
