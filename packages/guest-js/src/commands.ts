@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api/core';
 
-export function load(id: string): Promise<Record<string, unknown>> {
+export function load<T extends Record<string, unknown>>(id: string): Promise<T> {
   return invoke('plugin:pinia|load', { id });
 }
 
