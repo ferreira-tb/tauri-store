@@ -10,14 +10,14 @@ Persistent Pinia stores for Tauri.
 
 ## Install
 
-- Install the Rust crate by adding the following to your `Cargo.toml` file:
+Install the Rust crate by adding the following to your `Cargo.toml` file:
 
 ```toml
 [dependencies]
 tauri-plugin-pinia = 0.1
 ```
 
-- Install the JavaScript package with your preferred package manager:
+Install the JavaScript package with your preferred package manager:
 
 ```sh
 pnpm add tauri-plugin-pinia
