@@ -17,7 +17,7 @@ void debouncedStore.$tauri.start();
     </section>
 
     <section>
-      <p>Debounced Counter: {{ debouncedStore.counter }}</p>
+      <p>Debounced Counter: {{ debouncedStore.debouncedCounter }}</p>
       <button type="button" @click="debouncedStore.increment">Increment Debounced</button>
     </section>
   </main>

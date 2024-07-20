@@ -17,14 +17,14 @@ export const useStore = defineStore('store', () => {
 export const useDebouncedStore = defineStore(
   'debounced-store',
   () => {
-    const counter = ref(0);
+    const debouncedCounter = ref(0);
 
     function increment() {
-      counter.value++;
+      debouncedCounter.value++;
     }
 
     return {
-      counter,
+      debouncedCounter,
       increment
     };
   },
