@@ -2,7 +2,7 @@
   "name": "playground",
   "version": "0.1.10",
   "type": "module",
-  "packageManager": "pnpm@9.5.0",
+  "packageManager": "pnpm@9.6.0",
   "private": true,
   "scripts": {
     "type-check": "vue-tsc --noEmit",

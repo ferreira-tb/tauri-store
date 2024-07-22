@@ -3,7 +3,7 @@
   "version": "0.1.10",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@9.5.0",
+  "packageManager": "pnpm@9.6.0",
   "lint-staged": {
     "*.{?(c|m)@(j|t)s,md,json,yaml}": "prettier --write"
   },
@@ -22,7 +22,7 @@
     "type-check": "pnpm run -F tauri-plugin-pinia type-check"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^3.8.10",
+    "@tb-dev/eslint-config": "^4.0.0",
     "@types/node": "^20.14.11",
     "eslint": "^8.57.0",
     "husky": "^9.1.1",
