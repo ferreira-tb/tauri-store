@@ -1,6 +1,6 @@
 {
   "name": "monorepo",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@9.6.0",
@@ -22,7 +22,7 @@
     "type-check": "pnpm run -F tauri-plugin-pinia type-check"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^4.0.0",
+    "@tb-dev/eslint-config": "^4.1.1",
     "@types/node": "^20.14.11",
     "eslint": "^8.57.0",
     "husky": "^9.1.1",
