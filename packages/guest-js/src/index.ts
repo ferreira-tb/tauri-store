@@ -64,7 +64,7 @@ export function createPlugin(options: TauriPluginPiniaOptions = {}) {
     function subscribe() {
       return watchDebounced(ctx.store.$state, patch, {
         debounce,
-        deep: true
+        deep: true,
       });
     }
 
@@ -106,7 +106,7 @@ export function createPlugin(options: TauriPluginPiniaOptions = {}) {
     }
 
     return {
-      $tauri: { start, stop }
+      $tauri: { start, stop },
     };
   };
 }

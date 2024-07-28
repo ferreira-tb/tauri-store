@@ -10,7 +10,7 @@ export const useStore = defineStore('store', () => {
 
   return {
     counter,
-    increment
+    increment,
   };
 });
 
@@ -25,7 +25,7 @@ export const useDebouncedStore = defineStore(
 
     return {
       debouncedCounter,
-      increment
+      increment,
     };
   },
   { tauri: { debounce: 1000 } }

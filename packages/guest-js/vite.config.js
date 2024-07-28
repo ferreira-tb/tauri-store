@@ -1,15 +1,9 @@
 import dts from 'vite-plugin-dts';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
-import { URL, fileURLToPath } from 'node:url';
 
 export default defineConfig({
   plugins: [dts({ rollupTypes: true })],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('src', import.meta.url))
-    }
-  },
   build: {
     outDir: 'dist',
     emptyOutDir: true,
@@ -17,10 +11,10 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       formats: ['es'],
-      fileName: 'index'
+      fileName: 'index',
     },
     rollupOptions: {
-      external: [/^@tauri-apps/, 'pinia', 'vue']
-    }
-  }
+      external: [/^@tauri-apps/, 'pinia', 'vue'],
+    },
+  },
 });

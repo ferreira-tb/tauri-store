@@ -1,3 +1,5 @@
+//! # tauri-plugin-pinia
+//!
 //! Persistent Pinia stores for Tauri.
 //!
 //! ## Features
@@ -5,7 +7,99 @@
 //! - Save your Pinia stores to disk on app exit (or manually, if needed).
 //! - Synchronize your stores across multiple windows.
 //! - Debounce store updates.
+//!
+//! ## Install
+//!
+//! Install the Rust crate by adding the following to your `Cargo.toml` file:
+//!
+//! ```toml
+//! [dependencies]
+//! tauri-plugin-pinia = 0.2
+//! ```
+//!
+//! Install the JavaScript package with your preferred package manager:
+//!
+//! ```sh
+//! pnpm add tauri-plugin-pinia
+//! ```
+//!
+//! ## Usage
+//!
+//! > For a working example, see the [playground](https://github.com/ferreira-tb/tauri-plugin-pinia/tree/main/packages/playground).
+//!
+//! 1. Enable the required permissions in your capabilities file:
+//!
+//! `src-tauri/capabilities/pinia.json`
+//!
+//! ```json
+//! {
+//!   "identifier": "pinia",
+//!   "windows": ["*"],
+//!   "permissions": ["pinia:default", "event:allow-listen", "event:allow-unlisten"]
+//! }
+//! ```
+//!
+//! 2. Register the plugin with Tauri:
+//!
+//! `src-tauri/src/main.rs`
+//!
+//! ```rust
+//! tauri::Builder::default()
+//!   .plugin(tauri_plugin_pinia::init())
+//!   .run(tauri::generate_context!())
+//!   .expect("error while running tauri application");
+//!
+//! ```
+//!
+//! 3. Enable the plugin for Pinia:
+//!
+//! `src/index.ts`
+//!
+//! ```ts
+//! import { createApp } from 'vue';
+//! import { createPinia } from 'pinia';
+//! import { createPlugin } from 'tauri-plugin-pinia';
+//!
+//! const app = createApp(App);
+//!
+//! const pinia = createPinia();
+//! pinia.use(createPlugin());
+//!
+//! app.use(pinia).mount('#app');
+//! ```
+//!
+//! 4. Create your Pinia store:
+//!
+//! `src/stores/counter.ts`
+//!
+//! ```ts
+//! import { ref } from 'vue';
+//! import { defineStore } from 'pinia';
+//!
+//! export const useCounterStore = defineStore('counter', () => {
+//!   const counter = ref(0);
+//!
+//!   function increment() {
+//!     counter.value++;
+//!   }
+//!
+//!   return {
+//!     counter,
+//!     increment,
+//!   };
+//! });
+//! ```
+//!
+//! 5. Start the plugin!
+//!
+//! ```ts
+//! import { useCounterStore } from './stores/counter';
+//!
+//! const counterStore = useCounterStore();
+//! counterStore.$tauri.start();
+//! ```
 
+#![forbid(unsafe_code)]
 #![cfg(not(any(target_os = "android", target_os = "ios")))]
 
 mod error;
@@ -38,6 +132,10 @@ pub trait PiniaExt<R: Runtime>: Manager<R> {
     F: FnOnce(&mut Store<R>) -> Result<T>,
   {
     self.pinia().with_store(self.app_handle(), id, f)
+  }
+
+  fn save_store(&self, id: impl AsRef<str>) -> Result<()> {
+    self.with_store(id, |store| store.save())
   }
 }
 
@@ -80,6 +178,7 @@ impl Builder {
   }
 
   /// Directory where the stores will be saved.
+  #[must_use]
   pub fn path(mut self, path: impl AsRef<Path>) -> Self {
     let path = path.as_ref().to_path_buf();
     self.path = Some(path);
@@ -87,6 +186,7 @@ impl Builder {
   }
 
   /// Sets a list of stores that should not be synchronized across windows.
+  #[must_use]
   pub fn sync_denylist(mut self, denylist: &[&str]) -> Self {
     self
       .sync_denylist
