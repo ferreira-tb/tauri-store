@@ -14,17 +14,13 @@ Install the Rust crate by adding the following to your `Cargo.toml` file:
 
 ```toml
 [dependencies]
-tauri-plugin-pinia = 0.1
+tauri-plugin-pinia = 0.2
 ```
 
 Install the JavaScript package with your preferred package manager:
 
 ```sh
 pnpm add tauri-plugin-pinia
-# or
-npm add tauri-plugin-pinia
-# or
-yarn add tauri-plugin-pinia
 ```
 
 ## Usage
@@ -33,9 +29,13 @@ yarn add tauri-plugin-pinia
 
 1. Enable the required permissions in your capabilities file:
 
+`src-tauri/capabilities/pinia.json`
+
 ```json
 {
-  "permissions": ["event:allow-listen", "event:allow-unlisten", "pinia:default"]
+  "identifier": "pinia",
+  "windows": ["*"],
+  "permissions": ["pinia:default", "event:allow-listen", "event:allow-unlisten"]
 }
 ```
 
@@ -44,12 +44,11 @@ yarn add tauri-plugin-pinia
 `src-tauri/src/main.rs`
 
 ```rust
-fn main() {
-  tauri::Builder::default()
-    .plugin(tauri_plugin_pinia::init())
-    .run(tauri::generate_context!())
-    .expect("error while running tauri application");
-}
+tauri::Builder::default()
+  .plugin(tauri_plugin_pinia::init())
+  .run(tauri::generate_context!())
+  .expect("error while running tauri application");
+
 ```
 
 3. Enable the plugin for Pinia:
@@ -66,8 +65,7 @@ const app = createApp(App);
 const pinia = createPinia();
 pinia.use(createPlugin());
 
-app.use(pinia);
-app.mount('#app');
+app.use(pinia).mount('#app');
 ```
 
 4. Create your Pinia store:
@@ -87,7 +85,7 @@ export const useCounterStore = defineStore('counter', () => {
 
   return {
     counter,
-    increment
+    increment,
   };
 });
 ```

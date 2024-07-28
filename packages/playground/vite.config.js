@@ -10,17 +10,17 @@ export default defineConfig({
     port: 1422,
     strictPort: true,
     watch: {
-      ignored: ['**/src-tauri/**']
-    }
+      ignored: ['**/src-tauri/**'],
+    },
   },
   build: {
     emptyOutDir: true,
     minify: false,
     target: 'esnext',
     rollupOptions: {
-      input: entries()
-    }
-  }
+      input: entries(),
+    },
+  },
 });
 
 function entries() {

@@ -3,6 +3,8 @@ use crate::store::Store;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 use tauri::{AppHandle, Runtime};
+
+#[cfg(feature = "tracing")]
 use tracing::error;
 
 #[cfg(feature = "ahash")]
@@ -32,15 +34,17 @@ impl<R: Runtime> Pinia<R> {
       stores.insert(id.to_owned(), store);
     }
 
-    f(stores.get_mut(id).unwrap())
+    f(stores.get_mut(id).expect("store should exist"))
   }
 
   /// Saves all the stores to the disk.
   pub fn save(&self) {
     let stores = self.stores.lock().unwrap();
     for store in stores.values() {
+      #[cfg_attr(not(feature = "tracing"), allow(unused_variables))]
       if let Err(err) = store.save() {
-        error!("failed to save store {}: {err}", store.id);
+        #[cfg(feature = "tracing")]
+        error!("failed to save store {}: {}", store.id, err);
       }
     }
   }

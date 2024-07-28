@@ -6,6 +6,8 @@ use std::fmt;
 use std::fs::{self, File};
 use std::io::{self, Write};
 use tauri::{AppHandle, Emitter, EventTarget, Runtime};
+
+#[cfg(feature = "tracing")]
 use tracing::{info, trace, warn};
 
 #[cfg(feature = "ahash")]
@@ -31,16 +33,17 @@ impl<R: Runtime> Store<R> {
     let state = match fs::read(path) {
       Ok(bytes) => serde_json::from_slice(&bytes)?,
       Err(e) if e.kind() == io::ErrorKind::NotFound => {
+        #[cfg(feature = "tracing")]
         warn!("pinia store not found: {id}");
         State::default()
       }
       Err(e) => return Err(e.into()),
     };
 
-    let store = Self { app, id, state };
-    info!("pinia store loaded: {}", store.id);
+    #[cfg(feature = "tracing")]
+    info!("pinia store loaded: {id}");
 
-    Ok(store)
+    Ok(Self { id, state, app })
   }
 
   /// Saves the store state to the disk.
@@ -61,7 +64,7 @@ impl<R: Runtime> Store<R> {
     &self.state
   }
 
-  /// Patches the store state.
+  /// Patches the store state, optionally having a window as the source.
   pub(crate) fn patch_with_source<'a, S>(&mut self, state: State, source: S) -> Result<()>
   where
     S: Into<Option<&'a str>>,
@@ -70,39 +73,48 @@ impl<R: Runtime> Store<R> {
     self.emit(source)
   }
 
+  /// Patches the store state.
   pub fn patch(&mut self, state: State) -> Result<()> {
     self.patch_with_source(state, None)
   }
 
+  /// Sets a key-value pair in the store.
   pub fn set(&mut self, key: impl AsRef<str>, value: Json) -> Result<()> {
     self.state.insert(key.as_ref().to_owned(), value);
     self.emit(None)
   }
 
+  /// Gets a value from the store.
   pub fn get(&self, key: impl AsRef<str>) -> Option<&Json> {
     self.state.get(key.as_ref())
   }
 
+  /// Whether the store has a key.
   pub fn has(&self, key: impl AsRef<str>) -> bool {
     self.state.contains_key(key.as_ref())
   }
 
+  /// Creates an iterator over the store keys.
   pub fn keys(&self) -> impl Iterator<Item = &String> {
     self.state.keys()
   }
 
+  /// Creates an iterator over the store values.
   pub fn values(&self) -> impl Iterator<Item = &Json> {
     self.state.values()
   }
 
+  /// Creates an iterator over the store entries.
   pub fn entries(&self) -> impl Iterator<Item = (&String, &Json)> {
     self.state.iter()
   }
 
+  /// Returns the amount of items in the store.
   pub fn len(&self) -> usize {
     self.state.len()
   }
 
+  /// Whether the store is empty.
   pub fn is_empty(&self) -> bool {
     self.state.is_empty()
   }
@@ -113,6 +125,7 @@ impl<R: Runtime> Store<R> {
   {
     let pinia = self.app.pinia();
     if pinia.sync_denylist.contains(&self.id) {
+      #[cfg(feature = "tracing")]
       info!("store {} is in the denylist, skipping emit", self.id);
       return Ok(());
     }
@@ -132,7 +145,7 @@ impl<R: Runtime> fmt::Debug for Store<R> {
     f.debug_struct("Store")
       .field("id", &self.id)
       .field("state", &self.state)
-      .finish()
+      .finish_non_exhaustive()
   }
 }
 
@@ -144,6 +157,7 @@ struct Payload<'a> {
 
 impl<'a> Payload<'a> {
   fn emit_all<R: Runtime>(&self, app: &AppHandle<R>) -> Result<()> {
+    #[cfg(feature = "tracing")]
     trace!(event = CHANGE_EVENT, payload = ?self);
     app.emit_filter(CHANGE_EVENT, self, |target| {
       matches!(target, EventTarget::WebviewWindow { .. })
@@ -153,6 +167,7 @@ impl<'a> Payload<'a> {
   }
 
   fn emit_filter<R: Runtime>(&self, app: &AppHandle<R>, source: &str) -> Result<()> {
+    #[cfg(feature = "tracing")]
     trace!(event = CHANGE_EVENT, source, payload = ?self);
     app.emit_filter(CHANGE_EVENT, self, |target| match target {
       EventTarget::WebviewWindow { label } => label != source,
