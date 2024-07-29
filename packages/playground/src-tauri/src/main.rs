@@ -19,8 +19,8 @@ fn main() {
 
 fn open_window(app: &AppHandle, id: u8) {
   let label = format!("window-{id}");
-  let url = format!("src/windows/{label}/index.html");
-  WebviewWindowBuilder::new(app, &label, WebviewUrl::App(url.into()))
+  let url = WebviewUrl::App("src/index.html".into());
+  WebviewWindowBuilder::new(app, &label, url)
     .title(label)
     .inner_size(300.0, 300.0)
     .resizable(true)

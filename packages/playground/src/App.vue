@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useDebouncedStore, useStore } from '../../stores';
+import { useDebouncedStore, useStore } from './stores';
 
 const store = useStore();
 const { start, stop } = store.$tauri;
