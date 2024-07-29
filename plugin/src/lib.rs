@@ -277,6 +277,9 @@ impl Builder {
             .join("pinia")
         });
 
+        #[cfg(feature = "tracing")]
+        tracing::info!("pinia path: {}", path.display());
+
         app.manage(Pinia::<R> {
           path,
           sync_denylist: self.sync_denylist,

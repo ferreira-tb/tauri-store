@@ -46,6 +46,8 @@ version = "2.0.0-beta.19"
 features = ["build"]
 
 [features]
-async-pinia = ["dep:tokio"]
+async-pinia = ["tokio"]
+
 ahash = ["dep:ahash", "ahash/serde"]
 tracing = ["dep:tracing"]
+tokio = ["dep:tokio"]

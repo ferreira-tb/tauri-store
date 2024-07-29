@@ -103,10 +103,13 @@ impl<R: Runtime> Pinia<R> {
     use tokio::time::{self, MissedTickBehavior};
 
     self.clear_autosave();
-    
+
     let app = manager.app_handle().clone();
     let RuntimeHandle::Tokio(runtime) = async_runtime::handle();
     let task = runtime.spawn(async move {
+      #[cfg(feature = "tracing")]
+      tracing::info!("autosaving enabled: {:?}", duration);
+
       let mut interval = time::interval(duration);
       interval.set_missed_tick_behavior(MissedTickBehavior::Delay);
       loop {
@@ -124,6 +127,9 @@ impl<R: Runtime> Pinia<R> {
     let mut guard = self.autosave.lock().unwrap();
     if let Some(autosave) = guard.take() {
       autosave.abort();
+
+      #[cfg(feature = "tracing")]
+      tracing::info!("autosave cleared");
     }
   }
 }
