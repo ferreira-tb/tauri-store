@@ -113,7 +113,7 @@ pub use pinia::Pinia;
 pub use serde_json::Value as Json;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
-pub use store::{State, Store};
+pub use store::{Store, StoreState};
 use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime, WebviewWindow, Window};
 
@@ -144,12 +144,12 @@ impl<R: Runtime> ManagerExt<R> for WebviewWindow<R> {}
 impl<R: Runtime> ManagerExt<R> for Window<R> {}
 
 #[tauri::command]
-async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<State> {
+async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<StoreState> {
   app.with_store(id, |store| Ok(store.state.clone()))
 }
 
 #[tauri::command]
-async fn patch<R: Runtime>(window: WebviewWindow<R>, id: String, state: State) -> Result<()> {
+async fn patch<R: Runtime>(window: WebviewWindow<R>, id: String, state: StoreState) -> Result<()> {
   let app = window.app_handle().clone();
   app.with_store(id, move |store| {
     store.patch_with_source(state, window.label())

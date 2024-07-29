@@ -15,13 +15,13 @@ use ahash::HashMap;
 #[cfg(not(feature = "ahash"))]
 use std::collections::HashMap;
 
-pub type State = HashMap<String, Json>;
+pub type StoreState = HashMap<String, Json>;
 
 const CHANGE_EVENT: &str = "pinia://change";
 
 pub struct Store<R: Runtime> {
   pub(crate) id: String,
-  pub(crate) state: State,
+  pub(crate) state: StoreState,
   app: AppHandle<R>,
 }
 
@@ -35,7 +35,7 @@ impl<R: Runtime> Store<R> {
       Err(e) if e.kind() == io::ErrorKind::NotFound => {
         #[cfg(feature = "tracing")]
         warn!("pinia store not found: {id}");
-        State::default()
+        StoreState::default()
       }
       Err(e) => return Err(e.into()),
     };
@@ -60,12 +60,12 @@ impl<R: Runtime> Store<R> {
     Ok(())
   }
 
-  pub fn state(&self) -> &State {
+  pub fn state(&self) -> &StoreState {
     &self.state
   }
 
   /// Patches the store state, optionally having a window as the source.
-  pub(crate) fn patch_with_source<'a, S>(&mut self, state: State, source: S) -> Result<()>
+  pub(crate) fn patch_with_source<'a, S>(&mut self, state: StoreState, source: S) -> Result<()>
   where
     S: Into<Option<&'a str>>,
   {
@@ -74,7 +74,7 @@ impl<R: Runtime> Store<R> {
   }
 
   /// Patches the store state.
-  pub fn patch(&mut self, state: State) -> Result<()> {
+  pub fn patch(&mut self, state: StoreState) -> Result<()> {
     self.patch_with_source(state, None)
   }
 
@@ -152,7 +152,7 @@ impl<R: Runtime> fmt::Debug for Store<R> {
 #[derive(Clone, Debug, Serialize)]
 struct Payload<'a> {
   id: &'a str,
-  state: &'a State,
+  state: &'a StoreState,
 }
 
 impl<'a> Payload<'a> {
