@@ -115,14 +115,8 @@ pub use store::{Store, StoreState};
 use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime, WebviewWindow, Window};
 
-#[cfg(not(feature = "async-pinia"))]
-use std::sync::Mutex;
 #[cfg(feature = "async-pinia")]
-use {
-  std::future::Future,
-  std::pin::Pin,
-  tauri::async_runtime::{self, Mutex},
-};
+use {std::future::Future, std::pin::Pin, std::time::Duration, tauri::async_runtime};
 
 #[cfg(feature = "ahash")]
 use ahash::{HashMap, HashMapExt, HashSet};
@@ -235,6 +229,9 @@ async fn save_all<R: Runtime>(app: AppHandle<R>) {
 pub struct Builder {
   path: Option<PathBuf>,
   sync_denylist: HashSet<String>,
+
+  #[cfg(feature = "async-pinia")]
+  autosave: Option<Duration>,
 }
 
 impl Builder {
@@ -260,6 +257,14 @@ impl Builder {
     self
   }
 
+  /// Sets the autosave interval for all stores.
+  #[cfg(feature = "async-pinia")]
+  #[must_use]
+  pub fn autosave(mut self, interval: Duration) -> Self {
+    self.autosave = Some(interval);
+    self
+  }
+
   pub fn build<R: Runtime>(mut self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
       .invoke_handler(tauri::generate_handler![load, patch, save, save_all])
@@ -274,9 +279,21 @@ impl Builder {
 
         app.manage(Pinia::<R> {
           path,
-          stores: Mutex::new(HashMap::new()),
           sync_denylist: self.sync_denylist,
+
+          #[cfg(not(feature = "async-pinia"))]
+          stores: std::sync::Mutex::new(HashMap::new()),
+          #[cfg(feature = "async-pinia")]
+          stores: tokio::sync::Mutex::new(HashMap::new()),
+
+          #[cfg(feature = "async-pinia")]
+          autosave: std::sync::Mutex::new(None),
         });
+
+        #[cfg(feature = "async-pinia")]
+        if let Some(duration) = self.autosave {
+          app.pinia().set_autosave(app, duration);
+        };
 
         Ok(())
       })

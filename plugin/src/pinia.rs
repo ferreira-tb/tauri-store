@@ -3,10 +3,8 @@ use crate::store::Store;
 use std::path::{Path, PathBuf};
 use tauri::{Manager, Runtime};
 
-#[cfg(not(feature = "async-pinia"))]
-use std::sync::Mutex;
 #[cfg(feature = "async-pinia")]
-use {crate::BoxFuture, tauri::async_runtime::Mutex};
+use {crate::BoxFuture, std::time::Duration, tokio::task::AbortHandle};
 
 #[cfg(feature = "ahash")]
 use ahash::{HashMap, HashSet};
@@ -15,8 +13,15 @@ use std::collections::{HashMap, HashSet};
 
 pub struct Pinia<R: Runtime> {
   pub(crate) path: PathBuf,
-  pub(crate) stores: Mutex<HashMap<String, Store<R>>>,
   pub(crate) sync_denylist: HashSet<String>,
+
+  #[cfg(not(feature = "async-pinia"))]
+  pub(crate) stores: std::sync::Mutex<HashMap<String, Store<R>>>,
+  #[cfg(feature = "async-pinia")]
+  pub(crate) stores: tokio::sync::Mutex<HashMap<String, Store<R>>>,
+
+  #[cfg(feature = "async-pinia")]
+  pub(crate) autosave: std::sync::Mutex<Option<AbortHandle>>,
 }
 
 impl<R: Runtime> Pinia<R> {
@@ -84,6 +89,38 @@ impl<R: Runtime> Pinia<R> {
         #[cfg(feature = "tracing")]
         tracing::error!("failed to save store {}: {}", store.id, err);
       }
+    }
+  }
+
+  /// Saves the stores periodically.
+  #[cfg(feature = "async-pinia")]
+  pub fn set_autosave<M>(&self, manager: &M, duration: Duration)
+  where
+    M: Manager<R>,
+  {
+    use crate::ManagerExt;
+    use tokio::time::{self, MissedTickBehavior};
+
+    self.clear_autosave();
+    let app = manager.app_handle().clone();
+    let task = tokio::spawn(async move {
+      let mut interval = time::interval(duration);
+      interval.set_missed_tick_behavior(MissedTickBehavior::Delay);
+      loop {
+        interval.tick().await;
+        app.pinia().save().await;
+      }
+    });
+
+    let mut guard = self.autosave.lock().unwrap();
+    *guard = Some(task.abort_handle());
+  }
+
+  #[cfg(feature = "async-pinia")]
+  pub fn clear_autosave(&self) {
+    let mut guard = self.autosave.lock().unwrap();
+    if let Some(autosave) = guard.take() {
+      autosave.abort();
     }
   }
 }

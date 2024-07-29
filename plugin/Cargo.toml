@@ -39,7 +39,7 @@ optional = true
 version = "1.39"
 optional = true
 default-features = false
-features = ["fs", "io-util"]
+features = ["fs", "io-util", "time"]
 
 [build-dependencies.tauri-plugin]
 version = "2.0.0-beta.19"
