@@ -1,6 +1,6 @@
 //! # tauri-plugin-pinia
 //!
-//! Persistent Pinia stores for Tauri.
+//! Persistent Pinia stores for Tauri and Vue.
 //!
 //! ## Features
 //!
