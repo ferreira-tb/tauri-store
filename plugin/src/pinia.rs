@@ -2,7 +2,7 @@ use crate::error::Result;
 use crate::store::Store;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
-use tauri::{AppHandle, Runtime};
+use tauri::{Manager, Runtime};
 
 #[cfg(feature = "ahash")]
 use ahash::{HashMap, HashSet};
@@ -20,13 +20,15 @@ impl<R: Runtime> Pinia<R> {
     &self.path
   }
 
-  pub fn with_store<F, T>(&self, app: &AppHandle<R>, id: impl AsRef<str>, f: F) -> Result<T>
+  pub fn with_store<M, F, T>(&self, manager: &M, id: impl AsRef<str>, f: F) -> Result<T>
   where
+    M: Manager<R>,
     F: FnOnce(&mut Store<R>) -> Result<T>,
   {
     let id = id.as_ref();
     let mut stores = self.stores.lock().unwrap();
     if !stores.contains_key(id) {
+      let app = manager.app_handle();
       let store = Store::load(app.clone(), id)?;
       stores.insert(id.to_owned(), store);
     }
