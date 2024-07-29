@@ -14,7 +14,7 @@ Install the Rust crate by adding the following to your `Cargo.toml` file:
 
 ```toml
 [dependencies]
-tauri-plugin-pinia = 0.2
+tauri-plugin-pinia = 0.3
 ```
 
 Install the JavaScript package with your preferred package manager:
@@ -90,7 +90,7 @@ export const useCounterStore = defineStore('counter', () => {
 });
 ```
 
-5. Start the plugin!
+5. Start the plugin:
 
 ```ts
 import { useCounterStore } from './stores/counter';

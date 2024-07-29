@@ -1,71 +1,92 @@
 use crate::error::Result;
-use crate::PiniaExt;
+use crate::ManagerExt;
 use serde::Serialize;
 use serde_json::Value as Json;
-use std::fmt;
-use std::fs::{self, File};
-use std::io::{self, Write};
+use std::path::PathBuf;
+use std::{fmt, io};
 use tauri::{AppHandle, Emitter, EventTarget, Runtime};
-
-#[cfg(feature = "tracing")]
-use tracing::{info, trace, warn};
 
 #[cfg(feature = "ahash")]
 use ahash::HashMap;
 #[cfg(not(feature = "ahash"))]
 use std::collections::HashMap;
 
-pub type State = HashMap<String, Json>;
+pub type StoreState = HashMap<String, Json>;
 
 const CHANGE_EVENT: &str = "pinia://change";
 
 pub struct Store<R: Runtime> {
   pub(crate) id: String,
-  pub(crate) state: State,
+  pub(crate) state: StoreState,
   app: AppHandle<R>,
 }
 
 impl<R: Runtime> Store<R> {
   pub(crate) fn load(app: AppHandle<R>, id: impl AsRef<str>) -> Result<Self> {
     let id = id.as_ref().to_owned();
-    let path = app.pinia().path().join(format!("{id}.json"));
+    let path = store_path(&app, &id);
 
-    let state = match fs::read(path) {
+    let state = match std::fs::read(path) {
       Ok(bytes) => serde_json::from_slice(&bytes)?,
       Err(e) if e.kind() == io::ErrorKind::NotFound => {
         #[cfg(feature = "tracing")]
-        warn!("pinia store not found: {id}");
-        State::default()
+        tracing::warn!("pinia store not found: {id}");
+        StoreState::default()
       }
       Err(e) => return Err(e.into()),
     };
 
     #[cfg(feature = "tracing")]
-    info!("pinia store loaded: {id}");
+    tracing::info!("pinia store loaded: {id}");
 
     Ok(Self { id, state, app })
   }
 
-  /// Saves the store state to the disk.
+  /// Save the store state to the disk.
+  #[cfg(not(feature = "async-pinia"))]
   pub fn save(&self) -> Result<()> {
+    use std::fs::{self, File};
+    use std::io::Write;
+
     let pinia = self.app.pinia();
     fs::create_dir_all(pinia.path())?;
 
-    let path = pinia.path().join(format!("{}.json", self.id));
-
     let bytes = serde_json::to_vec(&self.state)?;
-    let mut file = File::create(path)?;
+    let mut file = File::create(self.path())?;
     file.write_all(&bytes)?;
 
     Ok(())
   }
 
-  pub fn state(&self) -> &State {
-    &self.state
+  /// Save the store state to the disk.
+  #[cfg(feature = "async-pinia")]
+  pub async fn save(&self) -> Result<()> {
+    use tokio::fs::{self, File};
+    use tokio::io::AsyncWriteExt;
+
+    let pinia = self.app.pinia();
+    fs::create_dir_all(pinia.path()).await?;
+
+    let path = pinia.path().join(format!("{}.json", self.id));
+
+    let bytes = serde_json::to_vec(&self.state)?;
+    let mut file = File::create(path).await?;
+    file.write_all(&bytes).await?;
+
+    Ok(())
+  }
+
+  pub fn id(&self) -> &str {
+    &self.id
+  }
+
+  /// Path to the store file.
+  pub fn path(&self) -> PathBuf {
+    store_path(&self.app, &self.id)
   }
 
   /// Patches the store state, optionally having a window as the source.
-  pub(crate) fn patch_with_source<'a, S>(&mut self, state: State, source: S) -> Result<()>
+  pub(crate) fn patch_with_source<'a, S>(&mut self, state: StoreState, source: S) -> Result<()>
   where
     S: Into<Option<&'a str>>,
   {
@@ -74,7 +95,7 @@ impl<R: Runtime> Store<R> {
   }
 
   /// Patches the store state.
-  pub fn patch(&mut self, state: State) -> Result<()> {
+  pub fn patch(&mut self, state: StoreState) -> Result<()> {
     self.patch_with_source(state, None)
   }
 
@@ -126,7 +147,7 @@ impl<R: Runtime> Store<R> {
     let pinia = self.app.pinia();
     if pinia.sync_denylist.contains(&self.id) {
       #[cfg(feature = "tracing")]
-      info!("store {} is in the denylist, skipping emit", self.id);
+      tracing::info!("store {} is in the denylist, skipping emit", self.id);
       return Ok(());
     }
 
@@ -152,13 +173,13 @@ impl<R: Runtime> fmt::Debug for Store<R> {
 #[derive(Clone, Debug, Serialize)]
 struct Payload<'a> {
   id: &'a str,
-  state: &'a State,
+  state: &'a StoreState,
 }
 
 impl<'a> Payload<'a> {
   fn emit_all<R: Runtime>(&self, app: &AppHandle<R>) -> Result<()> {
     #[cfg(feature = "tracing")]
-    trace!(event = CHANGE_EVENT, payload = ?self);
+    tracing::trace!(event = CHANGE_EVENT, payload = ?self);
     app.emit_filter(CHANGE_EVENT, self, |target| {
       matches!(target, EventTarget::WebviewWindow { .. })
     })?;
@@ -168,7 +189,7 @@ impl<'a> Payload<'a> {
 
   fn emit_filter<R: Runtime>(&self, app: &AppHandle<R>, source: &str) -> Result<()> {
     #[cfg(feature = "tracing")]
-    trace!(event = CHANGE_EVENT, source, payload = ?self);
+    tracing::trace!(event = CHANGE_EVENT, source, payload = ?self);
     app.emit_filter(CHANGE_EVENT, self, |target| match target {
       EventTarget::WebviewWindow { label } => label != source,
       _ => false,
@@ -182,4 +203,8 @@ impl<'a, R: Runtime> From<&'a Store<R>> for Payload<'a> {
   fn from(store: &'a Store<R>) -> Self {
     Self { id: &store.id, state: &store.state }
   }
+}
+
+fn store_path<R: Runtime>(app: &AppHandle<R>, id: &str) -> PathBuf {
+  app.pinia().path().join(format!("{id}.json"))
 }

@@ -351,6 +351,20 @@
           ]
         },
         {
+          "description": "allow-unload -> Enables the unload command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "allow-unload"
+          ]
+        },
+        {
+          "description": "deny-unload -> Denies the unload command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "deny-unload"
+          ]
+        },
+        {
           "description": "default -> Default permissions for the pinia plugin",
           "type": "string",
           "enum": [

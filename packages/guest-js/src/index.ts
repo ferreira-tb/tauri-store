@@ -5,7 +5,7 @@ import { listen } from '@tauri-apps/api/event';
 import type { PiniaPluginContext } from 'pinia';
 import type { MaybePromise } from '@tb-dev/utils';
 
-export * from './commands';
+export { save, saveAll } from './commands';
 
 const CHANGE_EVENT = 'pinia://change';
 
@@ -23,7 +23,11 @@ declare module 'pinia' {
 }
 
 export interface TauriPluginPiniaOptions {
+  /** @default 0 */
   readonly debounce?: number;
+  /** @default true */
+  readonly deep?: boolean;
+
   readonly onError?: (error: unknown) => MaybePromise<void>;
 }
 
@@ -38,10 +42,31 @@ export function createPlugin(options: TauriPluginPiniaOptions = {}) {
     let unsubscribe: (() => void) | undefined;
     let unlisten: (() => void) | undefined;
 
-    const { debounce = options.debounce ?? 0, onError = options.onError ?? console.error } =
-      ctx.options.tauri ?? options;
+    const {
+      debounce = options.debounce ?? 0,
+      deep = options.deep ?? true,
+      onError = options.onError ?? console.error,
+    } = ctx.options.tauri ?? options;
 
     let changeQueue: Payload[] = [];
+
+    async function start() {
+      if (!enabled) {
+        enabled = true;
+        unsubscribe?.();
+        await load();
+
+        const fn = await listen<Payload>(CHANGE_EVENT, ({ payload }) => {
+          if (enabled && payload.id === ctx.store.$id) {
+            changeQueue.push(payload);
+            processChangeQueue().catch(onError);
+          }
+        });
+
+        unlisten?.();
+        unlisten = fn;
+      }
+    }
 
     async function load() {
       try {
@@ -55,24 +80,21 @@ export function createPlugin(options: TauriPluginPiniaOptions = {}) {
       }
     }
 
-    function patch(state: Record<string, unknown>) {
-      if (enabled) {
-        commands.patch(ctx.store.$id, state).catch(onError);
-      }
-    }
-
     function subscribe() {
-      return watchDebounced(ctx.store.$state, patch, {
-        debounce,
-        deep: true,
-      });
+      const fn = (state: Record<string, unknown>) => {
+        if (enabled) {
+          commands.patch(ctx.store.$id, state).catch(onError);
+        }
+      };
+
+      return watchDebounced(ctx.store.$state, fn, { debounce, deep });
     }
 
     async function processChangeQueue() {
       while (changeQueue.length > 0) {
         await nextTick();
         const payload = changeQueue.pop();
-        if (payload && payload.id === ctx.store.$id) {
+        if (enabled && payload && payload.id === ctx.store.$id) {
           unsubscribe?.();
           ctx.store.$patch(payload.state as any);
           changeQueue = [];
@@ -81,32 +103,22 @@ export function createPlugin(options: TauriPluginPiniaOptions = {}) {
       }
     }
 
-    async function start() {
-      if (!enabled) {
-        enabled = true;
-        unsubscribe?.();
-        await load();
-
-        const fn = await listen<Payload>(CHANGE_EVENT, ({ payload }) => {
-          if (payload.id === ctx.store.$id) {
-            changeQueue.push(payload);
-            processChangeQueue().catch(onError);
-          }
-        });
-
+    async function stop() {
+      try {
         unlisten?.();
-        unlisten = fn;
+        unsubscribe?.();
+        enabled = false;
+        await commands.unload(ctx.store.$id);
+      } catch (err) {
+        onError(err);
       }
     }
 
-    function stop() {
-      unlisten?.();
-      unsubscribe?.();
-      enabled = false;
-    }
-
     return {
-      $tauri: { start, stop },
+      $tauri: {
+        start,
+        stop,
+      },
     };
   };
 }

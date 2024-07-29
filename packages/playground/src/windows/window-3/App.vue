@@ -1,24 +1,37 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import { useDebouncedStore, useStore } from '../../stores';
 
 const store = useStore();
-void store.$tauri.start();
+const { start, stop } = store.$tauri;
 
 const debouncedStore = useDebouncedStore();
-void debouncedStore.$tauri.start();
+const { start: startDebounced, stop: stopDebounced } = debouncedStore.$tauri;
+
+onMounted(() => {
+  void start();
+  void startDebounced();
+});
 </script>
 
 <template>
   <main>
-    <h1>Window 3</h1>
-    <section>
+    <section id="counter">
       <p>Counter: {{ store.counter }}</p>
-      <button type="button" @click="store.increment">Increment</button>
+      <div class="action">
+        <button type="button" @click="store.increment">Increment</button>
+        <button type="button" @click="start">Start</button>
+        <button type="button" @click="stop">Stop</button>
+      </div>
     </section>
 
-    <section>
+    <section id="debounced-counter">
       <p>Debounced Counter: {{ debouncedStore.debouncedCounter }}</p>
-      <button type="button" @click="debouncedStore.increment">Increment Debounced</button>
+      <div class="action">
+        <button type="button" @click="debouncedStore.increment">Increment</button>
+        <button type="button" @click="startDebounced">Start</button>
+        <button type="button" @click="stopDebounced">Stop</button>
+      </div>
     </section>
   </main>
 </template>
@@ -31,6 +44,14 @@ section {
 }
 
 section {
-  margin-bottom: 1rem;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.action {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5rem;
 }
 </style>
