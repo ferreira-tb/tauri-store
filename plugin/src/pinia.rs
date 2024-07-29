@@ -4,9 +4,6 @@ use std::path::{Path, PathBuf};
 use std::sync::Mutex;
 use tauri::{AppHandle, Runtime};
 
-#[cfg(feature = "tracing")]
-use tracing::error;
-
 #[cfg(feature = "ahash")]
 use ahash::{HashMap, HashSet};
 #[cfg(not(feature = "ahash"))]
@@ -44,7 +41,7 @@ impl<R: Runtime> Pinia<R> {
       #[cfg_attr(not(feature = "tracing"), allow(unused_variables))]
       if let Err(err) = store.save() {
         #[cfg(feature = "tracing")]
-        error!("failed to save store {}: {}", store.id, err);
+        tracing::error!("failed to save store {}: {}", store.id, err);
       }
     }
   }

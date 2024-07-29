@@ -1,5 +1,5 @@
 use crate::error::Result;
-use crate::PiniaExt;
+use crate::ManagerExt;
 use serde::Serialize;
 use serde_json::Value as Json;
 use std::fmt;

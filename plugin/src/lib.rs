@@ -122,7 +122,7 @@ use ahash::{HashMap, HashMapExt, HashSet};
 #[cfg(not(feature = "ahash"))]
 use std::collections::{HashMap, HashSet};
 
-pub trait PiniaExt<R: Runtime>: Manager<R> {
+pub trait ManagerExt<R: Runtime>: Manager<R> {
   fn pinia(&self) -> tauri::State<Pinia<R>> {
     self.state::<Pinia<R>>()
   }
@@ -139,9 +139,9 @@ pub trait PiniaExt<R: Runtime>: Manager<R> {
   }
 }
 
-impl<R: Runtime> PiniaExt<R> for AppHandle<R> {}
-impl<R: Runtime> PiniaExt<R> for WebviewWindow<R> {}
-impl<R: Runtime> PiniaExt<R> for Window<R> {}
+impl<R: Runtime> ManagerExt<R> for AppHandle<R> {}
+impl<R: Runtime> ManagerExt<R> for WebviewWindow<R> {}
+impl<R: Runtime> ManagerExt<R> for Window<R> {}
 
 #[tauri::command]
 async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<State> {

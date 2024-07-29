@@ -1,1 +1,1 @@
-pub use crate::PiniaExt as _;
+pub use crate::ManagerExt as _;
