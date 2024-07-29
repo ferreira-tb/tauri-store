@@ -142,6 +142,7 @@ impl<R: Runtime> Pinia<R> {
 
   /// Saves the stores periodically.
   #[cfg(feature = "async-pinia")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "async-pinia")))]
   pub fn set_autosave<M>(&self, manager: &M, duration: Duration)
   where
     M: Manager<R>,
@@ -171,6 +172,7 @@ impl<R: Runtime> Pinia<R> {
   }
 
   #[cfg(feature = "async-pinia")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "async-pinia")))]
   pub fn clear_autosave(&self) {
     let mut guard = self.autosave.lock().unwrap();
     if let Some(autosave) = guard.take() {

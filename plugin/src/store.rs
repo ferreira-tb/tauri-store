@@ -148,6 +148,7 @@ impl<R: Runtime> Store<R> {
     if pinia.sync_denylist.contains(&self.id) {
       #[cfg(feature = "tracing")]
       tracing::info!("store {} is in the denylist, skipping emit", self.id);
+
       return Ok(());
     }
 
@@ -180,6 +181,7 @@ impl<'a> Payload<'a> {
   fn emit_all<R: Runtime>(&self, app: &AppHandle<R>) -> Result<()> {
     #[cfg(feature = "tracing")]
     tracing::trace!(event = CHANGE_EVENT, payload = ?self);
+    
     app.emit_filter(CHANGE_EVENT, self, |target| {
       matches!(target, EventTarget::WebviewWindow { .. })
     })?;
@@ -190,6 +192,7 @@ impl<'a> Payload<'a> {
   fn emit_filter<R: Runtime>(&self, app: &AppHandle<R>, source: &str) -> Result<()> {
     #[cfg(feature = "tracing")]
     tracing::trace!(event = CHANGE_EVENT, source, payload = ?self);
+
     app.emit_filter(CHANGE_EVENT, self, |target| match target {
       EventTarget::WebviewWindow { label } => label != source,
       _ => false,

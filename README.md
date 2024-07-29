@@ -4,7 +4,7 @@ Persistent Pinia stores for Tauri.
 
 ## Features
 
-- Save your Pinia stores to disk on app exit (or manually, if needed).
+- Save your Pinia stores to disk.
 - Synchronize your stores across multiple windows.
 - Debounce store updates.
 
@@ -35,7 +35,7 @@ pnpm add tauri-plugin-pinia
 {
   "identifier": "pinia",
   "windows": ["*"],
-  "permissions": ["pinia:default", "event:allow-listen", "event:allow-unlisten"]
+  "permissions": ["pinia:default", "event:default"]
 }
 ```
 
@@ -91,6 +91,8 @@ export const useCounterStore = defineStore('counter', () => {
 ```
 
 5. Start the plugin:
+
+`src/App.vue`
 
 ```ts
 import { useCounterStore } from './stores/counter';

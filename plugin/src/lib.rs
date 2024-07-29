@@ -4,7 +4,7 @@
 //!
 //! ## Features
 //!
-//! - Save your Pinia stores to disk on app exit (or manually, if needed).
+//! - Save your Pinia stores to disk.
 //! - Synchronize your stores across multiple windows.
 //! - Debounce store updates.
 //!
@@ -35,7 +35,7 @@
 //! {
 //!   "identifier": "pinia",
 //!   "windows": ["*"],
-//!   "permissions": ["pinia:default", "event:allow-listen", "event:allow-unlisten"]
+//!   "permissions": ["pinia:default", "event:default"]
 //! }
 //! ```
 //!
@@ -92,15 +92,19 @@
 //!
 //! 5. Start the plugin:
 //!
+//! `src/App.vue`
+//!
 //! ```ts
 //! import { useCounterStore } from './stores/counter';
 //!
 //! const counterStore = useCounterStore();
 //! counterStore.$tauri.start();
 //! ```
+//!
 
 #![forbid(unsafe_code)]
 #![cfg(not(any(target_os = "android", target_os = "ios")))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 
 mod error;
 mod pinia;
@@ -124,6 +128,7 @@ use ahash::{HashMap, HashMapExt, HashSet};
 use std::collections::{HashMap, HashSet};
 
 #[cfg(feature = "async-pinia")]
+#[cfg_attr(docsrs, doc(cfg(feature = "async-pinia")))]
 pub type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
 
 pub trait ManagerExt<R: Runtime>: Manager<R> {
@@ -271,6 +276,7 @@ impl Builder {
 
   /// Sets the autosave interval for all stores.
   #[cfg(feature = "async-pinia")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "async-pinia")))]
   #[must_use]
   pub fn autosave(mut self, interval: Duration) -> Self {
     self.autosave = Some(interval);
@@ -331,7 +337,9 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
 }
 
 #[cfg(feature = "async-pinia")]
+#[cfg_attr(docsrs, doc(cfg(feature = "async-pinia")))]
 pub trait FutureExt: Future {
+  /// Wrap the future in a Box, pinning it.
   fn boxed<'a>(self) -> BoxFuture<'a, Self::Output>
   where
     Self: Sized + Send + 'a,
