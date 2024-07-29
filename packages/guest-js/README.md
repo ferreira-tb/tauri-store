@@ -1,10 +1,10 @@
 # tauri-plugin-pinia
 
-Persistent Pinia stores for Tauri.
+Persistent Pinia stores for Tauri and Vue.
 
 ## Features
 
-- Save your Pinia stores to disk on app exit (or manually, if needed).
+- Save your Pinia stores to disk.
 - Synchronize your stores across multiple windows.
 - Debounce store updates.
 
@@ -14,7 +14,7 @@ Install the Rust crate by adding the following to your `Cargo.toml` file:
 
 ```toml
 [dependencies]
-tauri-plugin-pinia = 0.2
+tauri-plugin-pinia = 0.3
 ```
 
 Install the JavaScript package with your preferred package manager:
@@ -35,7 +35,7 @@ pnpm add tauri-plugin-pinia
 {
   "identifier": "pinia",
   "windows": ["*"],
-  "permissions": ["pinia:default", "event:allow-listen", "event:allow-unlisten"]
+  "permissions": ["pinia:default", "event:default"]
 }
 ```
 
@@ -90,7 +90,9 @@ export const useCounterStore = defineStore('counter', () => {
 });
 ```
 
-5. Start the plugin!
+5. Start the plugin:
+
+`src/App.vue`
 
 ```ts
 import { useCounterStore } from './stores/counter';
