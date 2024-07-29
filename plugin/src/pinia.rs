@@ -24,6 +24,16 @@ pub struct Pinia<R: Runtime> {
   pub(crate) autosave: std::sync::Mutex<Option<AbortHandle>>,
 }
 
+macro_rules! save_one {
+  ($store:expr, $save_call:expr) => {
+    #[cfg_attr(not(feature = "tracing"), allow(unused_variables))]
+    if let Err(err) = $save_call {
+      #[cfg(feature = "tracing")]
+      tracing::error!("failed to save store {}: {}", $store.id, err);
+    }
+  };
+}
+
 impl<R: Runtime> Pinia<R> {
   pub fn path(&self) -> &Path {
     &self.path
@@ -66,28 +76,66 @@ impl<R: Runtime> Pinia<R> {
     })
   }
 
+  #[cfg(not(feature = "async-pinia"))]
+  pub(crate) fn unload_store(&self, id: &str) {
+    let mut stores = self.stores.lock().unwrap();
+    if let Some(store) = stores.remove(id) {
+      drop(stores);
+      save_one!(store, store.save());
+
+      #[cfg(feature = "tracing")]
+      tracing::info!("store {id} unloaded");
+    }
+  }
+
+  #[cfg(feature = "async-pinia")]
+  pub(crate) async fn unload_store(&self, id: &str) {
+    let mut stores = self.stores.lock().await;
+    if let Some(store) = stores.remove(id) {
+      drop(stores);
+      save_one!(store, store.save().await);
+
+      #[cfg(feature = "tracing")]
+      tracing::info!("store {id} unloaded");
+    }
+  }
+
   /// Saves all the stores to the disk.
   #[cfg(not(feature = "async-pinia"))]
-  pub fn save(&self) {
+  pub fn save_all(&self) {
     let stores = self.stores.lock().unwrap();
     for store in stores.values() {
-      #[cfg_attr(not(feature = "tracing"), allow(unused_variables))]
-      if let Err(err) = store.save() {
-        #[cfg(feature = "tracing")]
-        tracing::error!("failed to save store {}: {}", store.id, err);
-      }
+      save_one!(store, store.save());
     }
   }
 
   /// Saves all the stores to the disk.
   #[cfg(feature = "async-pinia")]
-  pub async fn save(&self) {
+  pub async fn save_all(&self) {
     let stores = self.stores.lock().await;
     for store in stores.values() {
-      #[cfg_attr(not(feature = "tracing"), allow(unused_variables))]
-      if let Err(err) = store.save().await {
-        #[cfg(feature = "tracing")]
-        tracing::error!("failed to save store {}: {}", store.id, err);
+      save_one!(store, store.save().await);
+    }
+  }
+
+  /// Saves some stores to the disk.
+  #[cfg(not(feature = "async-pinia"))]
+  pub fn save_some(&self, ids: &[impl AsRef<str>]) {
+    let stores = self.stores.lock().unwrap();
+    for id in ids {
+      if let Some(store) = stores.get(id.as_ref()) {
+        save_one!(store, store.save());
+      }
+    }
+  }
+
+  /// Saves some stores to the disk.
+  #[cfg(feature = "async-pinia")]
+  pub async fn save_some(&self, ids: &[impl AsRef<str>]) {
+    let stores = self.stores.lock().await;
+    for id in ids {
+      if let Some(store) = stores.get(id.as_ref()) {
+        save_one!(store, store.save().await);
       }
     }
   }
@@ -114,7 +162,7 @@ impl<R: Runtime> Pinia<R> {
       interval.set_missed_tick_behavior(MissedTickBehavior::Delay);
       loop {
         interval.tick().await;
-        app.pinia().save().await;
+        app.pinia().save_all().await;
       }
     });
 

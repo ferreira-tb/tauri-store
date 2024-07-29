@@ -11,6 +11,7 @@
     "build": "pnpm run -F tauri-plugin-pinia build",
     "clippy": "cargo clippy",
     "dev": "cargo tauri dev",
+    "dev:async": "cargo tauri dev --features async-pinia",
     "format": "prettier . --write && cargo fmt --all",
     "format-check": "prettier . --check",
     "lint": "eslint . --config eslint.config.js --cache && cargo clippy",

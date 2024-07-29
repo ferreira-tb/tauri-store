@@ -6,6 +6,7 @@ Default permissions for the pinia plugin
 - `allow-patch`
 - `allow-save`
 - `allow-save-all`
+- `allow-unload`
 
 ### Permission Table 
 
@@ -116,6 +117,32 @@ Enables the save_all command without any pre-configured scope.
 <td>
 
 Denies the save_all command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-unload`
+
+</td>
+<td>
+
+Enables the unload command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-unload`
+
+</td>
+<td>
+
+Denies the unload command without any pre-configured scope.
 
 </td>
 </tr>

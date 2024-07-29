@@ -216,13 +216,25 @@ async fn save<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
 #[cfg(not(feature = "async-pinia"))]
 #[tauri::command]
 async fn save_all<R: Runtime>(app: AppHandle<R>) {
-  app.pinia().save();
+  app.pinia().save_all();
 }
 
 #[cfg(feature = "async-pinia")]
 #[tauri::command]
 async fn save_all<R: Runtime>(app: AppHandle<R>) {
-  app.pinia().save().await;
+  app.pinia().save_all().await;
+}
+
+#[cfg(not(feature = "async-pinia"))]
+#[tauri::command]
+async fn unload<R: Runtime>(app: AppHandle<R>, id: String) {
+  app.pinia().unload_store(&id);
+}
+
+#[cfg(feature = "async-pinia")]
+#[tauri::command]
+async fn unload<R: Runtime>(app: AppHandle<R>, id: String) {
+  app.pinia().unload_store(&id).await;
 }
 
 #[derive(Default)]
@@ -267,7 +279,9 @@ impl Builder {
 
   pub fn build<R: Runtime>(mut self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
-      .invoke_handler(tauri::generate_handler![load, patch, save, save_all])
+      .invoke_handler(tauri::generate_handler![
+        load, patch, save, save_all, unload
+      ])
       .setup(move |app, _| {
         let path = self.path.take().unwrap_or_else(|| {
           app
@@ -303,9 +317,9 @@ impl Builder {
       .on_event(|app, event| {
         if let RunEvent::Exit = event {
           #[cfg(not(feature = "async-pinia"))]
-          app.pinia().save();
+          app.pinia().save_all();
           #[cfg(feature = "async-pinia")]
-          async_runtime::block_on(app.pinia().save());
+          async_runtime::block_on(app.pinia().save_all());
         }
       })
       .build()

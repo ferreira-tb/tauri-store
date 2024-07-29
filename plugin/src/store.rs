@@ -2,6 +2,7 @@ use crate::error::Result;
 use crate::ManagerExt;
 use serde::Serialize;
 use serde_json::Value as Json;
+use std::path::PathBuf;
 use std::{fmt, io};
 use tauri::{AppHandle, Emitter, EventTarget, Runtime};
 
@@ -23,7 +24,7 @@ pub struct Store<R: Runtime> {
 impl<R: Runtime> Store<R> {
   pub(crate) fn load(app: AppHandle<R>, id: impl AsRef<str>) -> Result<Self> {
     let id = id.as_ref().to_owned();
-    let path = app.pinia().path().join(format!("{id}.json"));
+    let path = store_path(&app, &id);
 
     let state = match std::fs::read(path) {
       Ok(bytes) => serde_json::from_slice(&bytes)?,
@@ -50,10 +51,8 @@ impl<R: Runtime> Store<R> {
     let pinia = self.app.pinia();
     fs::create_dir_all(pinia.path())?;
 
-    let path = pinia.path().join(format!("{}.json", self.id));
-
     let bytes = serde_json::to_vec(&self.state)?;
-    let mut file = File::create(path)?;
+    let mut file = File::create(self.path())?;
     file.write_all(&bytes)?;
 
     Ok(())
@@ -77,8 +76,13 @@ impl<R: Runtime> Store<R> {
     Ok(())
   }
 
-  pub fn state(&self) -> &StoreState {
-    &self.state
+  pub fn id(&self) -> &str {
+    &self.id
+  }
+
+  /// Path to the store file.
+  pub fn path(&self) -> PathBuf {
+    store_path(&self.app, &self.id)
   }
 
   /// Patches the store state, optionally having a window as the source.
@@ -199,4 +203,8 @@ impl<'a, R: Runtime> From<&'a Store<R>> for Payload<'a> {
   fn from(store: &'a Store<R>) -> Self {
     Self { id: &store.id, state: &store.state }
   }
+}
+
+fn store_path<R: Runtime>(app: &AppHandle<R>, id: &str) -> PathBuf {
+  app.pinia().path().join(format!("{id}.json"))
 }
