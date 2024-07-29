@@ -99,11 +99,14 @@ impl<R: Runtime> Pinia<R> {
     M: Manager<R>,
   {
     use crate::ManagerExt;
+    use tauri::async_runtime::{self, RuntimeHandle};
     use tokio::time::{self, MissedTickBehavior};
 
     self.clear_autosave();
+    
     let app = manager.app_handle().clone();
-    let task = tokio::spawn(async move {
+    let RuntimeHandle::Tokio(runtime) = async_runtime::handle();
+    let task = runtime.spawn(async move {
       let mut interval = time::interval(duration);
       interval.set_missed_tick_behavior(MissedTickBehavior::Delay);
       loop {
