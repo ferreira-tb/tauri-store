@@ -181,7 +181,7 @@ impl<'a> Payload<'a> {
   fn emit_all<R: Runtime>(&self, app: &AppHandle<R>) -> Result<()> {
     #[cfg(feature = "tracing")]
     tracing::trace!(event = CHANGE_EVENT, payload = ?self);
-    
+
     app.emit_filter(CHANGE_EVENT, self, |target| {
       matches!(target, EventTarget::WebviewWindow { .. })
     })?;
