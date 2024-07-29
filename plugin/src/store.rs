@@ -2,13 +2,8 @@ use crate::error::Result;
 use crate::ManagerExt;
 use serde::Serialize;
 use serde_json::Value as Json;
-use std::fmt;
-use std::fs::{self, File};
-use std::io::{self, Write};
+use std::{fmt, io};
 use tauri::{AppHandle, Emitter, EventTarget, Runtime};
-
-#[cfg(feature = "tracing")]
-use tracing::{info, trace, warn};
 
 #[cfg(feature = "ahash")]
 use ahash::HashMap;
@@ -30,24 +25,28 @@ impl<R: Runtime> Store<R> {
     let id = id.as_ref().to_owned();
     let path = app.pinia().path().join(format!("{id}.json"));
 
-    let state = match fs::read(path) {
+    let state = match std::fs::read(path) {
       Ok(bytes) => serde_json::from_slice(&bytes)?,
       Err(e) if e.kind() == io::ErrorKind::NotFound => {
         #[cfg(feature = "tracing")]
-        warn!("pinia store not found: {id}");
+        tracing::warn!("pinia store not found: {id}");
         StoreState::default()
       }
       Err(e) => return Err(e.into()),
     };
 
     #[cfg(feature = "tracing")]
-    info!("pinia store loaded: {id}");
+    tracing::info!("pinia store loaded: {id}");
 
     Ok(Self { id, state, app })
   }
 
-  /// Saves the store state to the disk.
+  /// Save the store state to the disk.
+  #[cfg(not(feature = "async-pinia"))]
   pub fn save(&self) -> Result<()> {
+    use std::fs::{self, File};
+    use std::io::Write;
+
     let pinia = self.app.pinia();
     fs::create_dir_all(pinia.path())?;
 
@@ -56,6 +55,24 @@ impl<R: Runtime> Store<R> {
     let bytes = serde_json::to_vec(&self.state)?;
     let mut file = File::create(path)?;
     file.write_all(&bytes)?;
+
+    Ok(())
+  }
+
+  /// Save the store state to the disk.
+  #[cfg(feature = "async-pinia")]
+  pub async fn save(&self) -> Result<()> {
+    use tokio::fs::{self, File};
+    use tokio::io::AsyncWriteExt;
+
+    let pinia = self.app.pinia();
+    fs::create_dir_all(pinia.path()).await?;
+
+    let path = pinia.path().join(format!("{}.json", self.id));
+
+    let bytes = serde_json::to_vec(&self.state)?;
+    let mut file = File::create(path).await?;
+    file.write_all(&bytes).await?;
 
     Ok(())
   }
@@ -126,7 +143,7 @@ impl<R: Runtime> Store<R> {
     let pinia = self.app.pinia();
     if pinia.sync_denylist.contains(&self.id) {
       #[cfg(feature = "tracing")]
-      info!("store {} is in the denylist, skipping emit", self.id);
+      tracing::info!("store {} is in the denylist, skipping emit", self.id);
       return Ok(());
     }
 
@@ -158,7 +175,7 @@ struct Payload<'a> {
 impl<'a> Payload<'a> {
   fn emit_all<R: Runtime>(&self, app: &AppHandle<R>) -> Result<()> {
     #[cfg(feature = "tracing")]
-    trace!(event = CHANGE_EVENT, payload = ?self);
+    tracing::trace!(event = CHANGE_EVENT, payload = ?self);
     app.emit_filter(CHANGE_EVENT, self, |target| {
       matches!(target, EventTarget::WebviewWindow { .. })
     })?;
@@ -168,7 +185,7 @@ impl<'a> Payload<'a> {
 
   fn emit_filter<R: Runtime>(&self, app: &AppHandle<R>, source: &str) -> Result<()> {
     #[cfg(feature = "tracing")]
-    trace!(event = CHANGE_EVENT, source, payload = ?self);
+    tracing::trace!(event = CHANGE_EVENT, source, payload = ?self);
     app.emit_filter(CHANGE_EVENT, self, |target| match target {
       EventTarget::WebviewWindow { label } => label != source,
       _ => false,
