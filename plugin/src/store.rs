@@ -37,7 +37,7 @@ impl<R: Runtime> Store<R> {
     };
 
     #[cfg(feature = "tracing")]
-    tracing::info!("pinia store loaded: {id}");
+    tracing::debug!("pinia store loaded: {id}");
 
     Ok(Self { id, state, app })
   }
@@ -147,7 +147,7 @@ impl<R: Runtime> Store<R> {
     let pinia = self.app.pinia();
     if pinia.sync_denylist.contains(&self.id) {
       #[cfg(feature = "tracing")]
-      tracing::info!("store {} is in the denylist, skipping emit", self.id);
+      tracing::debug!("store {} is in the denylist, skipping emit", self.id);
 
       return Ok(());
     }

@@ -1,6 +1,6 @@
 {
   "name": "monorepo",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@9.6.0",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@tb-dev/eslint-config": "^4.4.2",
-    "@types/node": "^22.0.0",
+    "@types/node": "^22.0.2",
     "eslint": "^8.57.0",
     "husky": "^9.1.4",
     "lint-staged": "^15.2.7",
