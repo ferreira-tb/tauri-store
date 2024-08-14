@@ -1,9 +1,9 @@
 {
   "name": "monorepo",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@9.6.0",
+  "packageManager": "pnpm@9.7.1",
   "lint-staged": {
     "*.{?(c|m)@(j|t)s,md}": "prettier --write"
   },
@@ -23,15 +23,15 @@
     "type-check": "pnpm run -F tauri-plugin-pinia type-check"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^4.4.2",
-    "@types/node": "^22.0.2",
-    "eslint": "^8.57.0",
+    "@tb-dev/eslint-config": "^5.2.0",
+    "@types/node": "^22.3.0",
+    "eslint": "^9.9.0",
     "husky": "^9.1.4",
-    "lint-staged": "^15.2.7",
+    "lint-staged": "^15.2.9",
     "prettier": "^3.3.3",
     "tslib": "^2.6.3",
     "typescript": "^5.5.4",
-    "vite": "^5.3.5",
+    "vite": "^5.4.0",
     "vite-plugin-dts": "^3.9.1",
     "vue-tsc": "^2.0.29"
   }

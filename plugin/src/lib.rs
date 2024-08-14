@@ -101,6 +101,10 @@
 //! counterStore.$tauri.start();
 //! ```
 //!
+//! ## Supported Tauri Version
+//!
+//! This plugin requires Tauri `2.0.0-beta.24` or later.
+//!
 
 #![forbid(unsafe_code)]
 #![cfg(not(any(target_os = "android", target_os = "ios")))]
