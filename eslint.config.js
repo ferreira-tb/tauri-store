@@ -10,5 +10,8 @@ export default defineConfig({
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
     },
+    vue: {
+      'vue/v-on-handler-style': 'off',
+    },
   },
 });
