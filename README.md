@@ -100,3 +100,7 @@ import { useCounterStore } from './stores/counter';
 const counterStore = useCounterStore();
 counterStore.$tauri.start();
 ```
+
+## Supported Tauri Version
+
+This plugin requires Tauri `2.0.0-beta.24` or later.

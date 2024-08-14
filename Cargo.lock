@@ -2154,7 +2154,7 @@ checksum = "d231b230927b5e4ad203db57bbcbee2802f6bce620b1e4a9024a07d94e2907ec"
 
 [[package]]
 name = "playground"
-version = "0.3.4"
+version = "0.3.5"
 dependencies = [
  "tauri",
  "tauri-build",
@@ -3125,7 +3125,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-pinia"
-version = "0.3.4"
+version = "0.3.5"
 dependencies = [
  "ahash",
  "serde",
