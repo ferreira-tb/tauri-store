@@ -12,6 +12,7 @@
     "clippy": "cargo clippy",
     "dev": "cargo tauri dev",
     "dev:async": "cargo tauri dev --features async-pinia",
+    "docs:cargo": "cargo doc -p tauri-plugin-pinia --open --no-deps",
     "format": "prettier . --write && cargo fmt --all",
     "format-check": "prettier . --check",
     "lint": "eslint . --config eslint.config.js --cache && cargo clippy",

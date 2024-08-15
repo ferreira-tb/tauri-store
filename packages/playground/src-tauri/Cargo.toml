@@ -23,6 +23,7 @@ features = ["devtools", "protocol-asset"]
 
 [dependencies.tauri-plugin-pinia]
 path = "../../../plugin"
+default-features = false
 features = ["ahash", "tracing"]
 
 [features]

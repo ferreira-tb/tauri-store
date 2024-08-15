@@ -338,6 +338,27 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
   Builder::default().build()
 }
 
+#[cfg(not(feature = "async-pinia"))]
+pub fn with_store<R, M, F, T>(manager: &M, id: impl AsRef<str>, f: F) -> Result<T>
+where
+  R: Runtime,
+  M: Manager<R> + ManagerExt<R>,
+  F: FnOnce(&mut Store<R>) -> Result<T>,
+{
+  manager.with_store(id, f)
+}
+
+#[cfg(feature = "async-pinia")]
+pub async fn with_store<R, M, F, T>(manager: &M, id: impl AsRef<str>, f: F) -> Result<T>
+where
+  R: Runtime,
+  M: Manager<R> + ManagerExt<R>,
+  F: FnOnce(&mut Store<R>) -> BoxFuture<Result<T>> + Send + 'static,
+  T: Send + 'static,
+{
+  manager.with_store(id, f).await
+}
+
 #[cfg(feature = "async-pinia")]
 #[cfg_attr(docsrs, doc(cfg(feature = "async-pinia")))]
 pub trait FutureExt: Future {
