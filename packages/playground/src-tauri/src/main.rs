@@ -13,7 +13,7 @@ fn main() {
       (1..=4).for_each(|id| open_window(handle, id));
       Ok(())
     })
-    .invoke_handler(tauri::generate_handler![print_counter])
+    .invoke_handler(tauri::generate_handler![get_counter, print_counter,])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
@@ -30,6 +30,20 @@ fn open_window(app: &AppHandle, id: u8) {
     .visible(true)
     .build()
     .unwrap();
+}
+
+#[tauri::command]
+async fn get_counter(app: AppHandle) -> Option<String> {
+  app
+    .with_store("store", |store| {
+      let counter = store
+        .get("counter")
+        .and_then(|v| v.as_str())
+        .map(ToOwned::to_owned);
+
+      Ok(counter)
+    })
+    .unwrap()
 }
 
 #[tauri::command]

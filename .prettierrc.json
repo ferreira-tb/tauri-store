@@ -1,4 +1,5 @@
 {
+  "plugins": ["prettier-plugin-css-order", "prettier-plugin-tailwindcss"],
   "endOfLine": "lf",
   "printWidth": 100,
   "tabWidth": 2,
@@ -8,5 +9,6 @@
   "trailingComma": "es5",
   "bracketSpacing": true,
   "bracketSameLine": false,
-  "arrowParens": "always"
+  "arrowParens": "always",
+  "vueIndentScriptAndStyle": false
 }

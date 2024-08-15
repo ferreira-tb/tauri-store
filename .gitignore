@@ -28,10 +28,14 @@ target/
 # Tauri
 **/gen
 
+# Vite and Vitepress
+**/*vite*timestamp*
+**/.vitepress/dist
+**/.vitepress/cache
+
 # Others
 .temp/
 coverage/
-
-**/*vite*timestamp*
 .eslintcache
+
 workspace.md

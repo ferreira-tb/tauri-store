@@ -1,7 +1,11 @@
 import { defineConfig } from '@tb-dev/eslint-config';
 
 export default defineConfig({
-  project: ['packages/guest-js/tsconfig.json', 'packages/playground/tsconfig.json'],
+  project: [
+    'packages/docs/tsconfig.json',
+    'packages/guest-js/tsconfig.json',
+    'packages/playground/tsconfig.json',
+  ],
   features: {
     vue: true,
   },

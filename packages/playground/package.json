@@ -13,7 +13,7 @@
     "@tauri-apps/api": "^2.0.0-rc.0",
     "@tauri-apps/plugin-process": "^2.0.0-rc.0",
     "@vitejs/plugin-vue": "^5.1.2",
-    "@vueuse/core": "^10.11.1",
+    "@vueuse/core": "^11.0.0",
     "pinia": "^2.2.2",
     "tauri-plugin-pinia": "workspace:*",
     "vue": "^3.4.38"

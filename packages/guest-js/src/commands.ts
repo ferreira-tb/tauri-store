@@ -10,10 +10,12 @@ export function patch(id: string, state: Record<string, unknown>): Promise<void>
   return invoke('plugin:pinia|patch', { id, state });
 }
 
+/** Save the store state to the disk. */
 export function save(id: string): Promise<void> {
   return invoke('plugin:pinia|save', { id });
 }
 
+/** Save all store states to the disk. */
 export function saveAll(): Promise<void> {
   return invoke('plugin:pinia|save_all');
 }
