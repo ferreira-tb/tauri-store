@@ -3,6 +3,7 @@ import autoprefixer from 'autoprefixer';
 import { defineConfig } from 'vitepress';
 
 export default defineConfig({
+  base: '/tauri-plugin-pinia/',
   title: 'tauri-plugin-pinia',
   description: 'Persistent Pinia stores for Tauri',
   lang: 'en-US',
