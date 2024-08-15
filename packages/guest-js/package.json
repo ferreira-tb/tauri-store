@@ -5,7 +5,7 @@
   "type": "module",
   "private": false,
   "packageManager": "pnpm@9.7.1",
-  "homepage": "https://github.com/ferreira-tb/tauri-plugin-pinia",
+  "homepage": "https://tb.dev.br/tauri-plugin-pinia",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ferreira-tb/tauri-plugin-pinia.git"
