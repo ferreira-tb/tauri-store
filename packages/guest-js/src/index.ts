@@ -52,32 +52,32 @@ export function createPlugin(options: TauriPluginPiniaOptions = {}) {
 
     async function start() {
       if (!enabled) {
-        enabled = true;
-        unsubscribe?.();
-        await load();
+        try {
+          enabled = true;
+          unsubscribe?.();
+          await load();
 
-        const fn = await listen<Payload>(CHANGE_EVENT, ({ payload }) => {
-          if (enabled && payload.id === ctx.store.$id) {
-            changeQueue.push(payload);
-            processChangeQueue().catch(onError);
-          }
-        });
+          const fn = await listen<Payload>(CHANGE_EVENT, ({ payload }) => {
+            if (enabled && payload.id === ctx.store.$id) {
+              changeQueue.push(payload);
+              processChangeQueue().catch(onError);
+            }
+          });
 
-        unlisten?.();
-        unlisten = fn;
+          unlisten?.();
+          unlisten = fn;
+        } catch (err) {
+          onError(err);
+        }
       }
     }
 
     async function load() {
-      try {
-        const storeState = await commands.load(ctx.store.$id);
-        ctx.store.$patch(storeState as any);
+      const storeState = await commands.load(ctx.store.$id);
+      ctx.store.$patch(storeState as any);
 
-        await nextTick();
-        unsubscribe = subscribe();
-      } catch (err) {
-        onError(err);
-      }
+      await nextTick();
+      unsubscribe = subscribe();
     }
 
     function subscribe() {
@@ -122,3 +122,6 @@ export function createPlugin(options: TauriPluginPiniaOptions = {}) {
     };
   };
 }
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const TauriPluginPinia = createPlugin;

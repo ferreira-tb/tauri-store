@@ -5,6 +5,9 @@
   "[toml]": {
     "editor.defaultFormatter": "tamasfe.even-better-toml"
   },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -16,6 +19,9 @@
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "eslint.codeActionsOnSave.mode": "problems",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "files.exclude": {
     ".eslintcache": true
   },

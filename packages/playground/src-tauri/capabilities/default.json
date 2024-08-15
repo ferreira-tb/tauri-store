@@ -2,5 +2,5 @@
   "identifier": "default",
   "description": "Capability for the main window",
   "windows": ["window-*"],
-  "permissions": ["event:default", "pinia:default", "process:allow-exit"]
+  "permissions": ["core:event:default", "pinia:default", "process:allow-exit"]
 }
