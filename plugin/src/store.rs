@@ -30,14 +30,14 @@ impl<R: Runtime> Store<R> {
       Ok(bytes) => serde_json::from_slice(&bytes)?,
       Err(e) if e.kind() == io::ErrorKind::NotFound => {
         #[cfg(feature = "tracing")]
-        tracing::warn!("pinia store not found: {id}");
+        tracing::warn!("pinia store not found: {id}, using default state");
         StoreState::default()
       }
       Err(e) => return Err(e.into()),
     };
 
     #[cfg(feature = "tracing")]
-    tracing::debug!("pinia store loaded: {id}");
+    tracing::trace!("pinia store loaded: {id}");
 
     Ok(Self { id, state, app })
   }
@@ -147,7 +147,7 @@ impl<R: Runtime> Store<R> {
     let pinia = self.app.pinia();
     if pinia.sync_denylist.contains(&self.id) {
       #[cfg(feature = "tracing")]
-      tracing::debug!("store {} is in the denylist, skipping emit", self.id);
+      tracing::trace!("store {} is in the denylist, skipping emit", self.id);
 
       return Ok(());
     }

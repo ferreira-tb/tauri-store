@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
+import { invoke } from '@tauri-apps/api/core';
 import { useDebouncedStore, useStore } from './stores';
 
 const store = useStore();
@@ -7,6 +8,10 @@ const { start, stop } = store.$tauri;
 
 const debouncedStore = useDebouncedStore();
 const { start: startDebounced, stop: stopDebounced } = debouncedStore.$tauri;
+
+function printCounter() {
+  void invoke('print_counter');
+}
 
 onMounted(() => {
   void start();
@@ -22,6 +27,7 @@ onMounted(() => {
         <button type="button" @click="store.increment">Increment</button>
         <button type="button" @click="start">Start</button>
         <button type="button" @click="stop">Stop</button>
+        <button type="button" @click="printCounter">Print</button>
       </div>
     </section>
 

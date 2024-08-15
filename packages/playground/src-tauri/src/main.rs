@@ -1,6 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
+use tauri_plugin_pinia::ManagerExt;
 
 fn main() {
   tauri::Builder::default()
@@ -12,7 +13,7 @@ fn main() {
       (1..=4).for_each(|id| open_window(handle, id));
       Ok(())
     })
-    .invoke_handler(tauri::generate_handler![])
+    .invoke_handler(tauri::generate_handler![print_counter])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
@@ -29,4 +30,15 @@ fn open_window(app: &AppHandle, id: u8) {
     .visible(true)
     .build()
     .unwrap();
+}
+
+#[tauri::command]
+async fn print_counter(app: AppHandle) {
+  let _ = app.with_store("store", |store| {
+    if let Some(counter) = store.get("counter") {
+      println!("counter: {counter}");
+    }
+
+    Ok(())
+  });
 }

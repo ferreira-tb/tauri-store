@@ -1,6 +1,6 @@
 {
   "name": "tauri-plugin-pinia",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "description": "Persistent Pinia stores for Tauri",
   "type": "module",
   "private": false,
@@ -43,10 +43,10 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.0.0-beta.15",
-    "@tb-dev/utils": "^3.0.3",
+    "@tauri-apps/api": "^2.0.0-rc.0",
+    "@tb-dev/utils": "^3.2.0",
     "@vueuse/core": "^10.11.1",
-    "pinia": "^2.2.1",
-    "vue": "^3.4.37"
+    "pinia": "^2.2.2",
+    "vue": "^3.4.38"
   }
 }

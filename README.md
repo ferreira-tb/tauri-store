@@ -2,6 +2,8 @@
 
 Persistent Pinia stores for Tauri and Vue.
 
+> This plugin requires Tauri `2.0.0-rc.0` or later. If you are using Tauri `2.0.0-beta`, try the `0.3` version.
+
 ## Features
 
 - Save your Pinia stores to disk.
@@ -14,7 +16,7 @@ Install the Rust crate by adding the following to your `Cargo.toml` file:
 
 ```toml
 [dependencies]
-tauri-plugin-pinia = 0.3
+tauri-plugin-pinia = 0.4
 ```
 
 Install the JavaScript package with your preferred package manager:
@@ -35,7 +37,7 @@ pnpm add tauri-plugin-pinia
 {
   "identifier": "pinia",
   "windows": ["*"],
-  "permissions": ["pinia:default", "event:default"]
+  "permissions": ["pinia:default", "core:event:default"]
 }
 ```
 
@@ -100,7 +102,3 @@ import { useCounterStore } from './stores/counter';
 const counterStore = useCounterStore();
 counterStore.$tauri.start();
 ```
-
-## Supported Tauri Version
-
-This plugin requires Tauri `2.0.0-beta.24` or later.

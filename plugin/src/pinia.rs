@@ -82,9 +82,6 @@ impl<R: Runtime> Pinia<R> {
     if let Some(store) = stores.remove(id) {
       drop(stores);
       save_one!(store, store.save());
-
-      #[cfg(feature = "tracing")]
-      tracing::debug!("store {id} unloaded");
     }
   }
 
@@ -94,9 +91,6 @@ impl<R: Runtime> Pinia<R> {
     if let Some(store) = stores.remove(id) {
       drop(stores);
       save_one!(store, store.save().await);
-
-      #[cfg(feature = "tracing")]
-      tracing::debug!("store {id} unloaded");
     }
   }
 
@@ -156,9 +150,6 @@ impl<R: Runtime> Pinia<R> {
     let app = manager.app_handle().clone();
     let RuntimeHandle::Tokio(runtime) = async_runtime::handle();
     let task = runtime.spawn(async move {
-      #[cfg(feature = "tracing")]
-      tracing::debug!("autosaving enabled: {:?}", duration);
-
       let mut interval = time::interval(duration);
       interval.set_missed_tick_behavior(MissedTickBehavior::Delay);
       loop {
@@ -176,10 +167,8 @@ impl<R: Runtime> Pinia<R> {
   pub fn clear_autosave(&self) {
     let mut guard = self.autosave.lock().unwrap();
     if let Some(autosave) = guard.take() {
+      drop(guard);
       autosave.abort();
-
-      #[cfg(feature = "tracing")]
-      tracing::debug!("autosave cleared");
     }
   }
 }
