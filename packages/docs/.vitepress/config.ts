@@ -22,12 +22,12 @@ export default defineConfig({
     socialLinks: [{ icon: 'github', link: 'https://github.com/ferreira-tb/tauri-plugin-pinia' }],
     nav: [
       {
-        text: 'Reference',
-        link: 'https://tb.dev.br/tauri-plugin-pinia/reference/index.html',
+        text: 'docs.rs',
+        link: 'https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/',
       },
       {
-        text: 'Docs.rs',
-        link: 'https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/',
+        text: 'Reference',
+        link: 'https://tb.dev.br/tauri-plugin-pinia/reference/index.html',
       },
       {
         text: 'Playground',
