@@ -1,10 +1,10 @@
 {
   "name": "tauri-plugin-pinia",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Persistent Pinia stores for Tauri",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@9.7.1",
+  "packageManager": "pnpm@9.8.0",
   "homepage": "https://tb.dev.br/tauri-plugin-pinia",
   "repository": {
     "type": "git",
@@ -46,12 +46,12 @@
   "dependencies": {
     "@tauri-apps/api": "^2.0.0-rc.0",
     "@tb-dev/utils": "^3.2.0",
-    "@vueuse/core": "^11.0.0",
+    "@vueuse/core": "^11.0.1",
     "pinia": "^2.2.2",
     "vue": "^3.4.38"
   },
   "devDependencies": {
-    "typedoc": "^0.26.5",
-    "typedoc-plugin-mdn-links": "^3.2.8"
+    "typedoc": "^0.26.6",
+    "typedoc-plugin-mdn-links": "^3.2.9"
   }
 }

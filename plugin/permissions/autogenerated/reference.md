@@ -8,7 +8,7 @@ Default permissions for the pinia plugin
 - `allow-save-all`
 - `allow-unload`
 
-### Permission Table 
+## Permission Table 
 
 <table>
 <tr>

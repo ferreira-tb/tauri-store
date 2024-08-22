@@ -213,7 +213,7 @@ impl Builder {
         });
 
         #[cfg(feature = "tracing")]
-        tracing::debug!("pinia path: {}", path.display());
+        tracing::trace!("pinia path: {}", path.display());
 
         app.manage(Pinia::<R> {
           path,

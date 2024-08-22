@@ -22,7 +22,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install javascriptcoregtk-4.1 libsoup-3.0 webkit2gtk-4.1
 
-      - run: cargo publish -p tauri-plugin-pinia --allow-dirty
+      - run: pnpm run lint
+      - run: cargo publish -p tauri-plugin-pinia --allow-dirty --no-verify
         env:
           CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_TOKEN }}
 

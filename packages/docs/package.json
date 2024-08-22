@@ -1,8 +1,8 @@
 {
   "name": "docs",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "type": "module",
-  "packageManager": "pnpm@9.7.1",
+  "packageManager": "pnpm@9.8.0",
   "private": true,
   "scripts": {
     "build": "vitepress build",
@@ -10,8 +10,8 @@
     "preview": "vitepress preview"
   },
   "dependencies": {
-    "@vueuse/core": "^11.0.0",
+    "@vueuse/core": "^11.0.1",
     "vue": "^3.4.38",
-    "vitepress": "^1.3.2"
+    "vitepress": "^1.3.3"
   }
 }
