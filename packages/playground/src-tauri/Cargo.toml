@@ -1,9 +1,13 @@
 [package]
 name = "playground"
-version = "0.5.0"
+version = "0.5.1"
 publish = false
-edition.workspace = true
-rust-version.workspace = true
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
 
 [lints]
 workspace = true
@@ -15,6 +19,10 @@ features = []
 [dependencies]
 tauri-plugin-process = "2.0.0-rc"
 tauri-plugin-window-state = "2.0.0-rc"
+
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
 
 [dependencies.tauri]
 version = "2.0.0-rc"

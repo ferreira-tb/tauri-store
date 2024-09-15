@@ -1,5 +1,7 @@
 use crate::error::Result;
-use crate::ManagerExt;
+use crate::io_err;
+use crate::manager::ManagerExt;
+use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::Value as Json;
 use std::path::PathBuf;
@@ -85,6 +87,36 @@ impl<R: Runtime> Store<R> {
     store_path(&self.app, &self.id)
   }
 
+  /// Gets a clone of the store state.
+  ///
+  /// **WARNING:** Changes to the returned state will not be reflected in the store.
+  pub fn state(&self) -> StoreState {
+    self.state.clone()
+  }
+
+  /// Gets a value from the store.
+  pub fn get(&self, key: impl AsRef<str>) -> Option<&Json> {
+    self.state.get(key.as_ref())
+  }
+
+  /// Gets a value from the store and tries to interpret it as an instance of type `T`.
+  pub fn try_get<T>(&self, key: impl AsRef<str>) -> Result<T>
+  where
+    T: DeserializeOwned,
+  {
+    let Some(value) = self.get(key.as_ref()).map(ToOwned::to_owned) else {
+      return io_err!(NotFound, "key not found: {}", key.as_ref());
+    };
+
+    serde_json::from_value(value).map_err(Into::into)
+  }
+
+  /// Sets a key-value pair in the store.
+  pub fn set(&mut self, key: impl AsRef<str>, value: Json) -> Result<()> {
+    self.state.insert(key.as_ref().to_owned(), value);
+    self.emit(None)
+  }
+
   /// Patches the store state, optionally having a window as the source.
   pub(crate) fn patch_with_source<'a, S>(&mut self, state: StoreState, source: S) -> Result<()>
   where
@@ -97,17 +129,6 @@ impl<R: Runtime> Store<R> {
   /// Patches the store state.
   pub fn patch(&mut self, state: StoreState) -> Result<()> {
     self.patch_with_source(state, None)
-  }
-
-  /// Sets a key-value pair in the store.
-  pub fn set(&mut self, key: impl AsRef<str>, value: Json) -> Result<()> {
-    self.state.insert(key.as_ref().to_owned(), value);
-    self.emit(None)
-  }
-
-  /// Gets a value from the store.
-  pub fn get(&self, key: impl AsRef<str>) -> Option<&Json> {
-    self.state.get(key.as_ref())
   }
 
   /// Whether the store has a key.
@@ -144,16 +165,19 @@ impl<R: Runtime> Store<R> {
   where
     S: Into<Option<&'a str>>,
   {
+    let source: Option<&str> = source.into();
     let pinia = self.app.pinia();
-    if pinia.sync_denylist.contains(&self.id) {
+
+    // If we also skip the store when the source is the backend,
+    // the window where the store resides would never know about the change.
+    if source.is_some() && pinia.sync_denylist.contains(&self.id) {
       #[cfg(feature = "tracing")]
-      tracing::trace!("store {} is in the denylist, skipping emit", self.id);
+      tracing::trace!("store {} is in the denylist, skipping", self.id);
 
       return Ok(());
     }
 
     let payload = Payload::from(self);
-    let source: Option<&str> = source.into();
     if let Some(source) = source {
       payload.emit_filter(&self.app, source)
     } else {
