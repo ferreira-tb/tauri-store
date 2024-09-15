@@ -1,6 +1,6 @@
 {
   "productName": "playground",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "identifier": "tsukilabs.pinia",
   "build": {
     "beforeDevCommand": "pnpm run -F playground vite:dev",
