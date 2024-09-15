@@ -1,5 +1,8 @@
 use crate::error::Result;
-use crate::store::Store;
+use crate::io_err;
+use crate::store::{Store, StoreState};
+use serde::de::DeserializeOwned;
+use serde_json::json;
 use std::path::{Path, PathBuf};
 use tauri::{Manager, Runtime};
 
@@ -74,6 +77,66 @@ impl<R: Runtime> Pinia<R> {
 
       f(stores.get_mut(&id).expect("store should exist")).await
     })
+  }
+
+  #[cfg(not(feature = "async-pinia"))]
+  pub fn ids(&self) -> Vec<String> {
+    let stores = self.stores.lock().unwrap();
+    stores.keys().cloned().collect()
+  }
+
+  #[cfg(feature = "async-pinia")]
+  pub async fn ids(&self) -> Vec<String> {
+    let stores = self.stores.lock().await;
+    stores.keys().cloned().collect()
+  }
+
+  /// Gets a clone of the store state if it exists.
+  ///
+  /// **WARNING:** Changes to the returned state will not be reflected in the store.
+  #[cfg(not(feature = "async-pinia"))]
+  pub fn store_state(&self, store_id: impl AsRef<str>) -> Option<StoreState> {
+    let stores = self.stores.lock().unwrap();
+    stores.get(store_id.as_ref()).map(Store::state)
+  }
+
+  /// Gets a clone of the store state if it exists.
+  ///
+  /// **WARNING:** Changes to the returned state will not be reflected in the store.
+  #[cfg(feature = "async-pinia")]
+  pub async fn store_state(&self, store_id: impl AsRef<str>) -> Option<StoreState> {
+    let stores = self.stores.lock().await;
+    stores.get(store_id.as_ref()).map(Store::state)
+  }
+
+  /// Gets the store state if it exists, then tries to deserialize it as an instance of type `T`.
+  #[cfg(not(feature = "async-pinia"))]
+  pub fn try_store_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
+  where
+    T: DeserializeOwned,
+  {
+    let stores = self.stores.lock().unwrap();
+    let Some(store) = stores.get(store_id.as_ref()) else {
+      return io_err!(NotFound, "store not found: {}", store_id.as_ref());
+    };
+
+    let state = json!(store.state());
+    serde_json::from_value(state).map_err(Into::into)
+  }
+
+  /// Gets the store state if it exists, then tries to deserialize it as an instance of type `T`.
+  #[cfg(feature = "async-pinia")]
+  pub async fn try_store_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
+  where
+    T: DeserializeOwned,
+  {
+    let stores = self.stores.lock().await;
+    let Some(store) = stores.get(store_id.as_ref()) else {
+      return io_err!(NotFound, "store not found: {}", store_id.as_ref());
+    };
+
+    let state = json!(store.state());
+    serde_json::from_value(state).map_err(Into::into)
   }
 
   #[cfg(not(feature = "async-pinia"))]

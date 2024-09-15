@@ -20,3 +20,20 @@ impl Serialize for Error {
     serializer.serialize_str(self.to_string().as_str())
   }
 }
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! io_err {
+  ($variant:ident) => {{
+    use $crate::error::Error;
+    use std::io::{Error as IoError, ErrorKind};
+    let err = IoError::from(ErrorKind::$variant);
+    Err(Error::Io(err))
+  }};
+  ($variant:ident, $($arg:tt)*) => {{
+    use $crate::error::Error;
+    use std::io::{Error as IoError, ErrorKind};
+    let err = IoError::new(ErrorKind::$variant, format!($($arg)*));
+    Err(Error::Io(err))
+  }};
+}

@@ -1,7 +1,14 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use serde::{Deserialize, Serialize};
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 use tauri_plugin_pinia::ManagerExt;
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct CounterStore {
+  counter: i32,
+}
 
 fn main() {
   tauri::Builder::default()
@@ -13,7 +20,12 @@ fn main() {
       (1..=4).for_each(|id| open_window(handle, id));
       Ok(())
     })
-    .invoke_handler(tauri::generate_handler![get_counter, print_counter,])
+    .invoke_handler(tauri::generate_handler![
+      get_counter,
+      print_counter,
+      try_get_counter,
+      try_store_state
+    ])
     .run(tauri::generate_context!())
     .expect("error while running tauri application");
 }
@@ -55,4 +67,19 @@ async fn print_counter(app: AppHandle) {
 
     Ok(())
   });
+}
+
+#[tauri::command]
+async fn try_get_counter(app: AppHandle) -> i32 {
+  app
+    .with_store("store", |store| store.try_get::<i32>("counter"))
+    .expect("counter must exist, we know, right?")
+}
+
+#[tauri::command]
+async fn try_store_state(app: AppHandle) -> CounterStore {
+  app
+    .pinia()
+    .try_store_state::<CounterStore>("store")
+    .expect("store must exist")
 }

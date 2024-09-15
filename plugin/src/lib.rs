@@ -20,18 +20,20 @@
 #![forbid(unsafe_code)]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
+mod command;
 mod error;
+mod manager;
 mod pinia;
 mod store;
 
-pub use error::Error;
-use error::Result;
+pub use error::{Error, Result};
+pub use manager::ManagerExt;
 pub use pinia::Pinia;
 pub use serde_json::Value as Json;
 use std::path::{Path, PathBuf};
 pub use store::{Store, StoreState};
 use tauri::plugin::TauriPlugin;
-use tauri::{AppHandle, Manager, RunEvent, Runtime, WebviewWindow, Window};
+use tauri::{Manager, RunEvent, Runtime};
 
 #[cfg(feature = "async-pinia")]
 use {std::future::Future, std::pin::Pin, std::time::Duration, tauri::async_runtime};
@@ -44,117 +46,6 @@ use std::collections::{HashMap, HashSet};
 #[cfg(feature = "async-pinia")]
 #[cfg_attr(docsrs, doc(cfg(feature = "async-pinia")))]
 pub type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
-
-pub trait ManagerExt<R: Runtime>: Manager<R> {
-  fn pinia(&self) -> tauri::State<Pinia<R>> {
-    self.state::<Pinia<R>>()
-  }
-
-  #[cfg(not(feature = "async-pinia"))]
-  fn with_store<F, T>(&self, id: impl AsRef<str>, f: F) -> Result<T>
-  where
-    F: FnOnce(&mut Store<R>) -> Result<T>,
-  {
-    self.pinia().with_store(self.app_handle(), id, f)
-  }
-
-  #[cfg(feature = "async-pinia")]
-  fn with_store<F, T>(&self, id: impl AsRef<str>, f: F) -> BoxFuture<Result<T>>
-  where
-    F: FnOnce(&mut Store<R>) -> BoxFuture<Result<T>> + Send + 'static,
-    T: Send + 'static,
-  {
-    let id = id.as_ref().to_owned();
-    let app = self.app_handle().clone();
-    async move { app.pinia().with_store(&app, id, f).await }.boxed()
-  }
-
-  #[cfg(not(feature = "async-pinia"))]
-  fn save_store(&self, id: impl AsRef<str>) -> Result<()> {
-    self.with_store(id, |store| store.save())
-  }
-
-  #[cfg(feature = "async-pinia")]
-  async fn save_store(&self, id: impl AsRef<str>) -> Result<()> {
-    self
-      .with_store(id, |store| store.save().boxed())
-      .await
-  }
-}
-
-impl<R: Runtime> ManagerExt<R> for AppHandle<R> {}
-impl<R: Runtime> ManagerExt<R> for WebviewWindow<R> {}
-impl<R: Runtime> ManagerExt<R> for Window<R> {}
-
-#[cfg(not(feature = "async-pinia"))]
-#[tauri::command]
-async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<StoreState> {
-  app.with_store(id, |store| Ok(store.state.clone()))
-}
-
-#[cfg(feature = "async-pinia")]
-#[tauri::command]
-async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<StoreState> {
-  app
-    .with_store(id, |store| async { Ok(store.state.clone()) }.boxed())
-    .await
-}
-
-#[cfg(not(feature = "async-pinia"))]
-#[tauri::command]
-async fn patch<R: Runtime>(window: WebviewWindow<R>, id: String, state: StoreState) -> Result<()> {
-  let app = window.app_handle().clone();
-  app.with_store(id, move |store| {
-    store.patch_with_source(state, window.label())
-  })
-}
-
-#[cfg(feature = "async-pinia")]
-#[tauri::command]
-async fn patch<R: Runtime>(window: WebviewWindow<R>, id: String, state: StoreState) -> Result<()> {
-  let app = window.app_handle().clone();
-  app
-    .with_store(id, move |store| {
-      async move { store.patch_with_source(state, window.label()) }.boxed()
-    })
-    .await
-}
-
-#[cfg(not(feature = "async-pinia"))]
-#[tauri::command]
-async fn save<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
-  app.save_store(id)
-}
-
-#[cfg(feature = "async-pinia")]
-#[tauri::command]
-async fn save<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
-  app.save_store(id).await
-}
-
-#[cfg(not(feature = "async-pinia"))]
-#[tauri::command]
-async fn save_all<R: Runtime>(app: AppHandle<R>) {
-  app.pinia().save_all();
-}
-
-#[cfg(feature = "async-pinia")]
-#[tauri::command]
-async fn save_all<R: Runtime>(app: AppHandle<R>) {
-  app.pinia().save_all().await;
-}
-
-#[cfg(not(feature = "async-pinia"))]
-#[tauri::command]
-async fn unload<R: Runtime>(app: AppHandle<R>, id: String) {
-  app.pinia().unload_store(&id);
-}
-
-#[cfg(feature = "async-pinia")]
-#[tauri::command]
-async fn unload<R: Runtime>(app: AppHandle<R>, id: String) {
-  app.pinia().unload_store(&id).await;
-}
 
 #[derive(Default)]
 pub struct Builder {
@@ -200,7 +91,11 @@ impl Builder {
   pub fn build<R: Runtime>(mut self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
       .invoke_handler(tauri::generate_handler![
-        load, patch, save, save_all, unload
+        command::load,
+        command::patch,
+        command::save,
+        command::save_all,
+        command::unload
       ])
       .setup(move |app, _| {
         let path = self.path.take().unwrap_or_else(|| {
