@@ -295,81 +295,59 @@
       "type": "string",
       "oneOf": [
         {
-          "description": "allow-load -> Enables the load command without any pre-configured scope.",
+          "description": "Enables the load command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "allow-load"
-          ]
+          "const": "allow-load"
         },
         {
-          "description": "deny-load -> Denies the load command without any pre-configured scope.",
+          "description": "Denies the load command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "deny-load"
-          ]
+          "const": "deny-load"
         },
         {
-          "description": "allow-patch -> Enables the patch command without any pre-configured scope.",
+          "description": "Enables the patch command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "allow-patch"
-          ]
+          "const": "allow-patch"
         },
         {
-          "description": "deny-patch -> Denies the patch command without any pre-configured scope.",
+          "description": "Denies the patch command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "deny-patch"
-          ]
+          "const": "deny-patch"
         },
         {
-          "description": "allow-save -> Enables the save command without any pre-configured scope.",
+          "description": "Enables the save command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "allow-save"
-          ]
+          "const": "allow-save"
         },
         {
-          "description": "deny-save -> Denies the save command without any pre-configured scope.",
+          "description": "Denies the save command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "deny-save"
-          ]
+          "const": "deny-save"
         },
         {
-          "description": "allow-save-all -> Enables the save_all command without any pre-configured scope.",
+          "description": "Enables the save_all command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "allow-save-all"
-          ]
+          "const": "allow-save-all"
         },
         {
-          "description": "deny-save-all -> Denies the save_all command without any pre-configured scope.",
+          "description": "Denies the save_all command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "deny-save-all"
-          ]
+          "const": "deny-save-all"
         },
         {
-          "description": "allow-unload -> Enables the unload command without any pre-configured scope.",
+          "description": "Enables the unload command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "allow-unload"
-          ]
+          "const": "allow-unload"
         },
         {
-          "description": "deny-unload -> Denies the unload command without any pre-configured scope.",
+          "description": "Denies the unload command without any pre-configured scope.",
           "type": "string",
-          "enum": [
-            "deny-unload"
-          ]
+          "const": "deny-unload"
         },
         {
-          "description": "default -> Default permissions for the pinia plugin",
+          "description": "Default permissions for the pinia plugin",
           "type": "string",
-          "enum": [
-            "default"
-          ]
+          "const": "default"
         }
       ]
     }

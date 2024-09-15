@@ -1,10 +1,10 @@
 {
   "productName": "playground",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "identifier": "tsukilabs.pinia",
   "build": {
-    "beforeDevCommand": "pnpm run vite:dev",
-    "beforeBuildCommand": "pnpm run vite:build",
+    "beforeDevCommand": "pnpm run -F playground vite:dev",
+    "beforeBuildCommand": "pnpm run -F playground vite:build",
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1422"
   },

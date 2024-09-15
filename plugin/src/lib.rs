@@ -18,7 +18,6 @@
 //!
 
 #![forbid(unsafe_code)]
-#![cfg(not(any(target_os = "android", target_os = "ios")))]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
 mod error;
