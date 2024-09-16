@@ -51,6 +51,7 @@ version = "2.0.0-rc"
 features = ["build"]
 
 [features]
+# default = ["async-pinia"]
 async-pinia = ["tokio"]
 ahash = ["dep:ahash", "ahash/serde"]
 tracing = ["dep:tracing"]

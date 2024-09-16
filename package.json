@@ -4,9 +4,6 @@
   "type": "module",
   "private": true,
   "packageManager": "pnpm@9.10.0",
-  "lint-staged": {
-    "*.{?(c|m)@(j|t)s,md}": "prettier --write"
-  },
   "scripts": {
     "build": "pnpm run -F tauri-plugin-pinia build",
     "build:docs": "pnpm run -F docs build && pnpm run -F tauri-plugin-pinia typedoc",
@@ -31,7 +28,6 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9.10.0",
     "husky": "^9.1.6",
-    "lint-staged": "^15.2.10",
     "prettier": "^3.3.3",
     "prettier-plugin-css-order": "^2.1.2",
     "prettier-plugin-tailwindcss": "^0.6.6",

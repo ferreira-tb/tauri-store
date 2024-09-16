@@ -5,7 +5,7 @@ import { listen } from '@tauri-apps/api/event';
 import type { PiniaPluginContext } from 'pinia';
 import type { MaybePromise } from '@tb-dev/utils';
 
-export { save, saveAll } from './commands';
+export * from './commands/public';
 
 const CHANGE_EVENT = 'pinia://change';
 

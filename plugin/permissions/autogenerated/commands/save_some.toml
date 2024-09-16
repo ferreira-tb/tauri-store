@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-save-some"
+description = "Enables the save_some command without any pre-configured scope."
+commands.allow = ["save_some"]
+
+[[permission]]
+identifier = "deny-save-some"
+description = "Denies the save_some command without any pre-configured scope."
+commands.deny = ["save_some"]
