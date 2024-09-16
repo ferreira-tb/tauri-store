@@ -295,6 +295,46 @@
       "type": "string",
       "oneOf": [
         {
+          "description": "Enables the clear_autosave command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-clear-autosave"
+        },
+        {
+          "description": "Denies the clear_autosave command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-clear-autosave"
+        },
+        {
+          "description": "Enables the get_pinia_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-pinia-path"
+        },
+        {
+          "description": "Denies the get_pinia_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-pinia-path"
+        },
+        {
+          "description": "Enables the get_store_ids command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-store-ids"
+        },
+        {
+          "description": "Denies the get_store_ids command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-store-ids"
+        },
+        {
+          "description": "Enables the get_store_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-store-path"
+        },
+        {
+          "description": "Denies the get_store_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-store-path"
+        },
+        {
           "description": "Enables the load command without any pre-configured scope.",
           "type": "string",
           "const": "allow-load"
@@ -333,6 +373,26 @@
           "description": "Denies the save_all command without any pre-configured scope.",
           "type": "string",
           "const": "deny-save-all"
+        },
+        {
+          "description": "Enables the save_some command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-save-some"
+        },
+        {
+          "description": "Denies the save_some command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-save-some"
+        },
+        {
+          "description": "Enables the set_autosave command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-autosave"
+        },
+        {
+          "description": "Denies the set_autosave command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-autosave"
         },
         {
           "description": "Enables the unload command without any pre-configured scope.",

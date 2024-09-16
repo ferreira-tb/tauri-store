@@ -2,10 +2,16 @@
 
 Default permissions for the pinia plugin
 
+- `allow-clear-autosave`
+- `allow-get-pinia-path`
+- `allow-get-store-ids`
+- `allow-get-store-path`
 - `allow-load`
 - `allow-patch`
 - `allow-save`
 - `allow-save-all`
+- `allow-save-some`
+- `allow-set-autosave`
 - `allow-unload`
 
 ## Permission Table 
@@ -16,6 +22,110 @@ Default permissions for the pinia plugin
 <th>Description</th>
 </tr>
 
+
+<tr>
+<td>
+
+`pinia:allow-clear-autosave`
+
+</td>
+<td>
+
+Enables the clear_autosave command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-clear-autosave`
+
+</td>
+<td>
+
+Denies the clear_autosave command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-get-pinia-path`
+
+</td>
+<td>
+
+Enables the get_pinia_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-get-pinia-path`
+
+</td>
+<td>
+
+Denies the get_pinia_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-get-store-ids`
+
+</td>
+<td>
+
+Enables the get_store_ids command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-get-store-ids`
+
+</td>
+<td>
+
+Denies the get_store_ids command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-get-store-path`
+
+</td>
+<td>
+
+Enables the get_store_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-get-store-path`
+
+</td>
+<td>
+
+Denies the get_store_path command without any pre-configured scope.
+
+</td>
+</tr>
 
 <tr>
 <td>
@@ -117,6 +227,58 @@ Enables the save_all command without any pre-configured scope.
 <td>
 
 Denies the save_all command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-save-some`
+
+</td>
+<td>
+
+Enables the save_some command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-save-some`
+
+</td>
+<td>
+
+Denies the save_some command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-set-autosave`
+
+</td>
+<td>
+
+Enables the set_autosave command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-set-autosave`
+
+</td>
+<td>
+
+Denies the set_autosave command without any pre-configured scope.
 
 </td>
 </tr>

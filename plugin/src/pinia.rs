@@ -3,11 +3,16 @@ use crate::io_err;
 use crate::store::{Store, StoreState};
 use serde::de::DeserializeOwned;
 use serde_json::json;
+use serde_json::Value as Json;
 use std::path::{Path, PathBuf};
-use tauri::{Manager, Runtime};
+use tauri::{AppHandle, Runtime};
 
 #[cfg(feature = "async-pinia")]
-use {crate::BoxFuture, std::time::Duration, tokio::task::AbortHandle};
+use {
+  crate::{BoxFuture, FutureExt},
+  std::time::Duration,
+  tokio::task::AbortHandle,
+};
 
 #[cfg(feature = "ahash")]
 use ahash::{HashMap, HashSet};
@@ -15,6 +20,7 @@ use ahash::{HashMap, HashSet};
 use std::collections::{HashMap, HashSet};
 
 pub struct Pinia<R: Runtime> {
+  pub(crate) app: AppHandle<R>,
   pub(crate) path: PathBuf,
   pub(crate) sync_denylist: HashSet<String>,
 
@@ -27,47 +33,48 @@ pub struct Pinia<R: Runtime> {
   pub(crate) autosave: std::sync::Mutex<Option<AbortHandle>>,
 }
 
-macro_rules! save_one {
-  ($store:expr, $save_call:expr) => {
-    #[cfg_attr(not(feature = "tracing"), allow(unused_variables))]
-    if let Err(err) = $save_call {
-      #[cfg(feature = "tracing")]
-      tracing::error!("failed to save store {}: {}", $store.id, err);
+macro_rules! get_store {
+  ($stores:expr, $id:expr) => {{
+    let id = $id.as_ref();
+    match $stores.get(id) {
+      Some(store) => Ok(store),
+      None => $crate::io_err!(NotFound, "store not found: {id}"),
     }
-  };
+  }};
 }
 
 impl<R: Runtime> Pinia<R> {
+  /// Directory where the stores are saved.
   pub fn path(&self) -> &Path {
     &self.path
   }
 
+  /// Calls a closure with a mutable reference to the store with the given id.
   #[cfg(not(feature = "async-pinia"))]
-  pub fn with_store<M, F, T>(&self, manager: &M, id: impl AsRef<str>, f: F) -> Result<T>
+  pub fn with_store<F, T>(&self, id: impl AsRef<str>, f: F) -> Result<T>
   where
-    M: Manager<R>,
     F: FnOnce(&mut Store<R>) -> Result<T>,
   {
     let id = id.as_ref();
     let mut stores = self.stores.lock().unwrap();
     if !stores.contains_key(id) {
-      let app = manager.app_handle();
-      let store = Store::load(app.clone(), id)?;
+      let app = self.app.clone();
+      let store = Store::load(app, id)?;
       stores.insert(id.to_owned(), store);
     }
 
     f(stores.get_mut(id).expect("store should exist"))
   }
 
+  /// Calls a closure with a mutable reference to the store with the given id.
   #[cfg(feature = "async-pinia")]
-  pub fn with_store<M, F, T>(&self, manager: &M, id: impl AsRef<str>, f: F) -> BoxFuture<Result<T>>
+  pub fn with_store<F, T>(&self, id: impl AsRef<str>, f: F) -> BoxFuture<Result<T>>
   where
-    M: Manager<R>,
     F: FnOnce(&mut Store<R>) -> BoxFuture<Result<T>> + Send + 'static,
     T: Send + 'static,
   {
     let id = id.as_ref().to_owned();
-    let app = manager.app_handle().clone();
+    let app = self.app.clone();
     Box::pin(async move {
       let mut stores = self.stores.lock().await;
       if !stores.contains_key(&id) {
@@ -79,12 +86,68 @@ impl<R: Runtime> Pinia<R> {
     })
   }
 
+  /// Saves a store to the disk.
+  #[cfg(not(feature = "async-pinia"))]
+  pub fn save(&self, id: impl AsRef<str>) -> Result<()> {
+    let stores = self.stores.lock().unwrap();
+    get_store!(stores, id)?.save()
+  }
+
+  /// Saves a store to the disk.
+  #[cfg(feature = "async-pinia")]
+  pub async fn save(&self, id: impl AsRef<str>) -> Result<()> {
+    let stores = self.stores.lock().await;
+    get_store!(stores, id)?.save().await
+  }
+
+  /// Saves some stores to the disk.
+  #[cfg(not(feature = "async-pinia"))]
+  pub fn save_some(&self, ids: &[impl AsRef<str>]) -> Result<()> {
+    let stores = self.stores.lock().unwrap();
+    for id in ids {
+      get_store!(stores, id)?.save()?;
+    }
+
+    Ok(())
+  }
+
+  /// Saves some stores to the disk.
+  #[cfg(feature = "async-pinia")]
+  pub async fn save_some(&self, ids: &[impl AsRef<str>]) -> Result<()> {
+    let stores = self.stores.lock().await;
+    for id in ids {
+      get_store!(stores, id)?.save().await?;
+    }
+
+    Ok(())
+  }
+
+  /// Saves all the stores to the disk.
+  #[cfg(not(feature = "async-pinia"))]
+  pub fn save_all(&self) -> Result<()> {
+    let stores = self.stores.lock().unwrap();
+    stores.values().try_for_each(Store::save)
+  }
+
+  /// Saves all the stores to the disk.
+  #[cfg(feature = "async-pinia")]
+  pub async fn save_all(&self) -> Result<()> {
+    let stores = self.stores.lock().await;
+    for store in stores.values() {
+      store.save().await?;
+    }
+
+    Ok(())
+  }
+
+  /// Lists all the store ids.
   #[cfg(not(feature = "async-pinia"))]
   pub fn ids(&self) -> Vec<String> {
     let stores = self.stores.lock().unwrap();
     stores.keys().cloned().collect()
   }
 
+  /// Lists all the store ids.
   #[cfg(feature = "async-pinia")]
   pub async fn ids(&self) -> Vec<String> {
     let stores = self.stores.lock().await;
@@ -116,9 +179,7 @@ impl<R: Runtime> Pinia<R> {
     T: DeserializeOwned,
   {
     let stores = self.stores.lock().unwrap();
-    let Some(store) = stores.get(store_id.as_ref()) else {
-      return io_err!(NotFound, "store not found: {}", store_id.as_ref());
-    };
+    let store = get_store!(stores, store_id)?;
 
     let state = json!(store.state());
     serde_json::from_value(state).map_err(Into::into)
@@ -131,93 +192,110 @@ impl<R: Runtime> Pinia<R> {
     T: DeserializeOwned,
   {
     let stores = self.stores.lock().await;
-    let Some(store) = stores.get(store_id.as_ref()) else {
-      return io_err!(NotFound, "store not found: {}", store_id.as_ref());
-    };
+    let store = get_store!(stores, store_id)?;
 
     let state = json!(store.state());
     serde_json::from_value(state).map_err(Into::into)
   }
 
+  /// Gets a value from a store.
   #[cfg(not(feature = "async-pinia"))]
-  pub(crate) fn unload_store(&self, id: &str) {
-    let mut stores = self.stores.lock().unwrap();
-    if let Some(store) = stores.remove(id) {
-      drop(stores);
-      save_one!(store, store.save());
-    }
-  }
-
-  #[cfg(feature = "async-pinia")]
-  pub(crate) async fn unload_store(&self, id: &str) {
-    let mut stores = self.stores.lock().await;
-    if let Some(store) = stores.remove(id) {
-      drop(stores);
-      save_one!(store, store.save().await);
-    }
-  }
-
-  /// Saves all the stores to the disk.
-  #[cfg(not(feature = "async-pinia"))]
-  pub fn save_all(&self) {
+  pub fn get(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Option<Json> {
     let stores = self.stores.lock().unwrap();
-    for store in stores.values() {
-      save_one!(store, store.save());
-    }
+    stores
+      .get(store_id.as_ref())
+      .and_then(|store| store.get_owned(key))
   }
 
-  /// Saves all the stores to the disk.
+  /// Gets a value from a store.
   #[cfg(feature = "async-pinia")]
-  pub async fn save_all(&self) {
+  pub async fn get(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Option<Json> {
     let stores = self.stores.lock().await;
-    for store in stores.values() {
-      save_one!(store, store.save().await);
-    }
+    stores
+      .get(store_id.as_ref())
+      .and_then(|store| store.get_owned(key))
   }
 
-  /// Saves some stores to the disk.
   #[cfg(not(feature = "async-pinia"))]
-  pub fn save_some(&self, ids: &[impl AsRef<str>]) {
-    let stores = self.stores.lock().unwrap();
-    for id in ids {
-      if let Some(store) = stores.get(id.as_ref()) {
-        save_one!(store, store.save());
-      }
-    }
+  /// Gets a value from a store and tries to interpret it as an instance of type `T`.
+  pub fn try_get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
+  where
+    T: DeserializeOwned,
+  {
+    let key = key.as_ref();
+    let Some(value) = self.get(store_id, key) else {
+      return io_err!(NotFound, "key not found: {key}");
+    };
+
+    serde_json::from_value(value).map_err(Into::into)
   }
 
-  /// Saves some stores to the disk.
   #[cfg(feature = "async-pinia")]
-  pub async fn save_some(&self, ids: &[impl AsRef<str>]) {
-    let stores = self.stores.lock().await;
-    for id in ids {
-      if let Some(store) = stores.get(id.as_ref()) {
-        save_one!(store, store.save().await);
-      }
-    }
+  /// Gets a value from a store and tries to interpret it as an instance of type `T`.
+  pub async fn try_get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
+  where
+    T: DeserializeOwned,
+  {
+    let key = key.as_ref();
+    let Some(value) = self.get(store_id, key).await else {
+      return io_err!(NotFound, "key not found: {key}");
+    };
+
+    serde_json::from_value(value).map_err(Into::into)
+  }
+
+  /// Sets a key-value pair in a store.
+  #[cfg(not(feature = "async-pinia"))]
+  pub fn set(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, value: Json) -> Result<()> {
+    self.with_store(store_id, |store| store.set(key, value))
+  }
+
+  /// Sets a key-value pair in a store.
+  #[cfg(feature = "async-pinia")]
+  pub async fn set(
+    &self,
+    store_id: impl AsRef<str>,
+    key: impl AsRef<str>,
+    value: Json,
+  ) -> Result<()> {
+    let key = key.as_ref().to_owned();
+    self
+      .with_store(store_id, |store| async { store.set(key, value) }.boxed())
+      .await
+  }
+
+  /// Patches a store state.
+  #[cfg(not(feature = "async-pinia"))]
+  pub fn patch(&self, store_id: impl AsRef<str>, state: StoreState) -> Result<()> {
+    self.with_store(store_id, |store| store.patch(state))
+  }
+
+  /// Patches a store state.
+  #[cfg(feature = "async-pinia")]
+  pub async fn patch(&self, store_id: impl AsRef<str>, state: StoreState) -> Result<()> {
+    self
+      .with_store(store_id, |store| async { store.patch(state) }.boxed())
+      .await
   }
 
   /// Saves the stores periodically.
   #[cfg(feature = "async-pinia")]
   #[cfg_attr(docsrs, doc(cfg(feature = "async-pinia")))]
-  pub fn set_autosave<M>(&self, manager: &M, duration: Duration)
-  where
-    M: Manager<R>,
-  {
+  pub fn set_autosave(&self, duration: Duration) {
     use crate::ManagerExt;
     use tauri::async_runtime::{self, RuntimeHandle};
     use tokio::time::{self, MissedTickBehavior};
 
     self.clear_autosave();
 
-    let app = manager.app_handle().clone();
+    let app = self.app.clone();
     let RuntimeHandle::Tokio(runtime) = async_runtime::handle();
     let task = runtime.spawn(async move {
       let mut interval = time::interval(duration);
       interval.set_missed_tick_behavior(MissedTickBehavior::Delay);
       loop {
         interval.tick().await;
-        app.pinia().save_all().await;
+        let _ = app.pinia().save_all().await;
       }
     });
 
@@ -225,6 +303,7 @@ impl<R: Runtime> Pinia<R> {
     *guard = Some(task.abort_handle());
   }
 
+  /// Stops the autosave.
   #[cfg(feature = "async-pinia")]
   #[cfg_attr(docsrs, doc(cfg(feature = "async-pinia")))]
   pub fn clear_autosave(&self) {
@@ -233,5 +312,27 @@ impl<R: Runtime> Pinia<R> {
       drop(guard);
       autosave.abort();
     }
+  }
+
+  #[cfg(not(feature = "async-pinia"))]
+  pub(crate) fn unload_store(&self, id: &str) -> Result<()> {
+    let mut stores = self.stores.lock().unwrap();
+    if let Some(store) = stores.remove(id) {
+      drop(stores);
+      store.save()?;
+    }
+
+    Ok(())
+  }
+
+  #[cfg(feature = "async-pinia")]
+  pub(crate) async fn unload_store(&self, id: &str) -> Result<()> {
+    let mut stores = self.stores.lock().await;
+    if let Some(store) = stores.remove(id) {
+      drop(stores);
+      store.save().await?;
+    }
+
+    Ok(())
   }
 }

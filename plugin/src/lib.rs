@@ -91,10 +91,16 @@ impl Builder {
   pub fn build<R: Runtime>(mut self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
       .invoke_handler(tauri::generate_handler![
+        command::clear_autosave,
+        command::get_pinia_path,
+        command::get_store_ids,
+        command::get_store_path,
         command::load,
         command::patch,
         command::save,
         command::save_all,
+        command::save_some,
+        command::set_autosave,
         command::unload
       ])
       .setup(move |app, _| {
@@ -110,6 +116,7 @@ impl Builder {
         tracing::trace!("pinia path: {}", path.display());
 
         app.manage(Pinia::<R> {
+          app: app.clone(),
           path,
           sync_denylist: self.sync_denylist,
 
@@ -124,7 +131,7 @@ impl Builder {
 
         #[cfg(feature = "async-pinia")]
         if let Some(duration) = self.autosave {
-          app.pinia().set_autosave(app, duration);
+          app.pinia().set_autosave(duration);
         };
 
         Ok(())
@@ -132,9 +139,9 @@ impl Builder {
       .on_event(|app, event| {
         if let RunEvent::Exit = event {
           #[cfg(not(feature = "async-pinia"))]
-          app.pinia().save_all();
+          let _ = app.pinia().save_all();
           #[cfg(feature = "async-pinia")]
-          async_runtime::block_on(app.pinia().save_all());
+          let _ = async_runtime::block_on(app.pinia().save_all());
         }
       })
       .build()
@@ -152,7 +159,7 @@ where
   M: Manager<R> + ManagerExt<R>,
   F: FnOnce(&mut Store<R>) -> Result<T>,
 {
-  manager.with_store(id, f)
+  manager.pinia().with_store(id, f)
 }
 
 #[cfg(feature = "async-pinia")]
@@ -163,7 +170,7 @@ where
   F: FnOnce(&mut Store<R>) -> BoxFuture<Result<T>> + Send + 'static,
   T: Send + 'static,
 {
-  manager.with_store(id, f).await
+  manager.pinia().with_store(id, f).await
 }
 
 #[cfg(feature = "async-pinia")]
@@ -175,6 +182,13 @@ pub trait FutureExt: Future {
     Self: Sized + Send + 'a,
   {
     Box::pin(self)
+  }
+
+  fn boxed_ok<'a>(self) -> BoxFuture<'a, Result<Self::Output>>
+  where
+    Self: Sized + Send + 'a,
+  {
+    Box::pin(async move { Ok(self.await) })
   }
 }
 

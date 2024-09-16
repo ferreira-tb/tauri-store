@@ -4,6 +4,9 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
+  #[error("missing cargo feature: {0}")]
+  MissingFeature(&'static str),
+
   #[error(transparent)]
   Io(#[from] std::io::Error),
   #[error(transparent)]
@@ -35,5 +38,14 @@ macro_rules! io_err {
     use std::io::{Error as IoError, ErrorKind};
     let err = IoError::new(ErrorKind::$variant, format!($($arg)*));
     Err(Error::Io(err))
+  }};
+}
+
+#[doc(hidden)]
+#[macro_export]
+macro_rules! missing_feature {
+  ($feature:expr) => {{
+    use $crate::error::Error;
+    Err(Error::MissingFeature($feature))
   }};
 }

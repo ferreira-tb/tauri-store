@@ -78,6 +78,7 @@ impl<R: Runtime> Store<R> {
     Ok(())
   }
 
+  /// The id of the store.
   pub fn id(&self) -> &str {
     &self.id
   }
@@ -99,12 +100,17 @@ impl<R: Runtime> Store<R> {
     self.state.get(key.as_ref())
   }
 
+  /// Gets a clone of the value from the store.
+  pub fn get_owned(&self, key: impl AsRef<str>) -> Option<Json> {
+    self.get(key).cloned()
+  }
+
   /// Gets a value from the store and tries to interpret it as an instance of type `T`.
   pub fn try_get<T>(&self, key: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
   {
-    let Some(value) = self.get(key.as_ref()).map(ToOwned::to_owned) else {
+    let Some(value) = self.get_owned(key.as_ref()) else {
       return io_err!(NotFound, "key not found: {}", key.as_ref());
     };
 

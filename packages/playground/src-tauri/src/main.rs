@@ -45,35 +45,25 @@ fn open_window(app: &AppHandle, id: u8) {
 }
 
 #[tauri::command]
-async fn get_counter(app: AppHandle) -> Option<String> {
+async fn get_counter(app: AppHandle) -> Option<i32> {
   app
-    .with_store("store", |store| {
-      let counter = store
-        .get("counter")
-        .and_then(|v| v.as_str())
-        .map(ToOwned::to_owned);
-
-      Ok(counter)
-    })
-    .unwrap()
+    .pinia()
+    .get("store", "counter")
+    .and_then(|counter| serde_json::from_value(counter).ok())
 }
 
 #[tauri::command]
 async fn print_counter(app: AppHandle) {
-  let _ = app.with_store("store", |store| {
-    if let Some(counter) = store.get("counter") {
-      println!("counter: {counter}");
-    }
-
-    Ok(())
-  });
+  let counter = try_get_counter(app).await;
+  println!("counter: {counter}");
 }
 
 #[tauri::command]
 async fn try_get_counter(app: AppHandle) -> i32 {
   app
-    .with_store("store", |store| store.try_get::<i32>("counter"))
-    .expect("counter must exist, we know, right?")
+    .pinia()
+    .try_get::<i32>("store", "counter")
+    .unwrap()
 }
 
 #[tauri::command]

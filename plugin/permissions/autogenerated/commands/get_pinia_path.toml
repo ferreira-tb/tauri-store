@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-get-pinia-path"
+description = "Enables the get_pinia_path command without any pre-configured scope."
+commands.allow = ["get_pinia_path"]
+
+[[permission]]
+identifier = "deny-get-pinia-path"
+description = "Denies the get_pinia_path command without any pre-configured scope."
+commands.deny = ["get_pinia_path"]
