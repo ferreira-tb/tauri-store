@@ -5,10 +5,13 @@ All your stores are automatically persisted to disk upon graceful exit, so usual
 ::: code-group
 
 ```ts [JavaScript]
-import { save, saveAll } from 'tauri-plugin-pinia';
+import { save, saveSome, saveAll } from 'tauri-plugin-pinia';
 
 // Save a single store.
 await save('my-store');
+
+// Save some stores.
+await saveSome(['my-store', 'my-store-2']);
 
 // Save all stores.
 await saveAll();
@@ -21,10 +24,10 @@ use tauri_plugin_pinia::ManagerExt;
 // This includes `AppHandle`, `Window`, and `WebviewWindow`.
 
 // Save a single store.
-manager.save_store("my-store");
+manager.pinia().save("my-store");
 
 // Save some stores.
-manager.pinia().save(&["my-store", "my-store-2"]);
+manager.pinia().save_some(&["my-store", "my-store-2"]);
 
 // Save all stores.
 manager.pinia().save_all();

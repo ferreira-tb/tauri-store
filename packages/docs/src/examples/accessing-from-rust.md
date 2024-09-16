@@ -10,16 +10,18 @@ A list of all available methods for the stores can be found [here](https://docs.
 use tauri_plugin_pinia::ManagerExt;
 
 #[tauri::command]
-async fn get_counter(app: AppHandle) -> Option<String> {
+async fn get_counter(app: AppHandle) -> Option<i32> {
   app
-    .with_store("store", |store| {
-      let counter = store
-        .get("counter")
-        .and_then(|it| it.as_str())
-        .map(ToOwned::to_owned);
+    .pinia()
+    .get("store", "counter")
+    .and_then(|counter| serde_json::from_value(counter).ok())
+}
 
-      Ok(counter)
-    })
+#[tauri::command]
+async fn try_get_counter(app: AppHandle) -> i32 {
+  app
+    .pinia()
+    .try_get::<i32>("store", "counter")
     .unwrap()
 }
 ```
