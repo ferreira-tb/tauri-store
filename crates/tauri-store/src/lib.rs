@@ -7,7 +7,7 @@ mod manager;
 mod store;
 
 pub use collection::{StoreCollection, StoreCollectionBuilder};
-pub use error::{Error, Result, BoxResult};
+pub use error::{BoxResult, Error, Result};
 pub use event::{STORE_UNLOADED_EVENT, STORE_UPDATED_EVENT};
 pub use manager::ManagerExt;
 pub use serde_json::Value as Json;
