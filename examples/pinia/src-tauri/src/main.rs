@@ -32,7 +32,7 @@ fn main() {
 
 fn open_window(app: &AppHandle, id: u8) {
   let label = format!("window-{id}");
-  let url = WebviewUrl::App("src/index.html".into());
+  let url = WebviewUrl::App("index.html".into());
   WebviewWindowBuilder::new(app, &label, url)
     .title(label)
     .inner_size(300.0, 300.0)

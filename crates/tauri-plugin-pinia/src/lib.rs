@@ -4,8 +4,8 @@
 //!
 //! ## Features
 //!
-//! - Save your Pinia stores to disk.
-//! - Synchronize your stores across multiple windows.
+//! - Save your stores to disk.
+//! - Synchronize across multiple windows.
 //! - Debounce store updates.
 //!
 //! ## Documentation

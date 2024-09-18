@@ -31,13 +31,13 @@ impl Serialize for Error {
 #[macro_export]
 macro_rules! io_err {
   ($variant:ident) => {{
-    use $crate::error::Error;
+    use $crate::Error;
     use std::io::{Error as IoError, ErrorKind};
     let err = IoError::from(ErrorKind::$variant);
     Err(Error::Io(err))
   }};
   ($variant:ident, $($arg:tt)*) => {{
-    use $crate::error::Error;
+    use $crate::Error;
     use std::io::{Error as IoError, ErrorKind};
     let err = IoError::new(ErrorKind::$variant, format!($($arg)*));
     Err(Error::Io(err))
@@ -48,7 +48,7 @@ macro_rules! io_err {
 #[macro_export]
 macro_rules! missing_feature {
   ($feature:expr) => {{
-    use $crate::error::Error;
+    use $crate::Error;
     Err(Error::MissingFeature($feature))
   }};
 }

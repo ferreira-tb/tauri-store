@@ -37,10 +37,6 @@ bun add tauri-plugin-pinia
 
 ## Usage
 
-::: tip
-For a working example, see the [playground](https://github.com/ferreira-tb/tauri-plugin-pinia/tree/main/packages/playground).
-:::
-
 1. Enable the required permissions in your capabilities file:
 
 ::: code-group

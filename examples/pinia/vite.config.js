@@ -16,15 +16,5 @@ export default defineConfig({
     emptyOutDir: true,
     minify: false,
     target: 'esnext',
-    rollupOptions: {
-      input: windows(),
-    },
   },
 });
-
-function windows() {
-  return [1, 2, 3, 4].reduce((acc, i) => {
-    acc[`window-${i}`] = resolve(__dirname, `src/windows/window-${i}/index.html`);
-    return acc;
-  }, {});
-}

@@ -19,16 +19,35 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    socialLinks: [{ icon: 'github', link: 'https://github.com/ferreira-tb/tauri-plugin-pinia' }],
-    sidebar: [
-      { text: 'Introduction', link: '/' },
-      { text: 'Getting Started', link: '/getting-started' },
+    socialLinks: [{ icon: 'github', link: 'https://github.com/ferreira-tb/tauri-store' }],
+    nav: [
       {
-        text: 'Examples',
+        text: 'docs.rs',
+        items: [
+          {
+            text: 'Pinia',
+            link: 'https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/',
+          },
+        ],
+      },
+      {
+        text: 'Reference',
+        items: [
+          {
+            text: 'Pinia',
+            link: 'https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/index.html',
+          },
+        ],
+      },
+    ],
+    sidebar: [
+      {
+        text: 'Pinia',
         collapsed: false,
         items: [
-          { text: 'Persisting state', link: '/examples/persisting-state' },
-          { text: 'Accessing from Rust', link: '/examples/accessing-from-rust' },
+          { text: 'Getting Started', link: '/pinia/getting-started' },
+          { text: 'Persisting state', link: '/pinia/persisting-state' },
+          { text: 'Accessing from Rust', link: '/pinia/accessing-from-rust' },
         ],
       },
     ],

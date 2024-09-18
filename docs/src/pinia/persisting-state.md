@@ -55,8 +55,6 @@ tauri::Builder::default()
 
 :::
 
-::: code-group
-
 ## Autosave <Badge type="warning">unstable-async</Badge>
 
 Instead of only saving on app exit, you can also enable [`autosave`](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.Builder.html#method.autosave) to periodically write them to disk.

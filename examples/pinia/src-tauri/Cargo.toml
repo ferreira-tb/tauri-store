@@ -1,5 +1,5 @@
 [package]
-name = "playground"
+name = "example-pinia"
 version = "0.6.0"
 publish = false
 

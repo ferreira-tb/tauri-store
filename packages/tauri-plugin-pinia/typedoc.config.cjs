@@ -6,5 +6,5 @@ module.exports = {
   excludePrivate: true,
   excludeProtected: true,
   githubPages: false,
-  titleLink: 'https://tb.dev.br/tauri-store/pinia/',
+  titleLink: 'https://tb.dev.br/tauri-store/pinia/getting-started.html',
 };

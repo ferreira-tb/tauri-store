@@ -40,16 +40,10 @@ optional = true
 path = "../tauri-store"
 features = ["derive"]
 
-[dependencies.tokio]
-version = "1.39"
-optional = true
-default-features = false
-features = ["fs", "io-util", "time"]
-
 [build-dependencies.tauri-plugin]
 version = "2.0.0-rc"
 features = ["build"]
 
 [features]
-unstable-async = ["dep:tokio", "tauri-store/unstable-async"]
+unstable-async = ["tauri-store/unstable-async"]
 ahash = ["dep:ahash", "ahash/serde"]

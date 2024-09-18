@@ -38,6 +38,12 @@ importers:
       tslib:
         specifier: ^2.7.0
         version: 2.7.0
+      typedoc:
+        specifier: ^0.26.7
+        version: 0.26.7(typescript@5.6.2)
+      typedoc-plugin-mdn-links:
+        specifier: ^3.2.12
+        version: 3.2.12(typedoc@0.26.7(typescript@5.6.2))
       typescript:
         specifier: ^5.6.2
         version: 5.6.2
@@ -104,13 +110,6 @@ importers:
       vue:
         specifier: ^3.5.6
         version: 3.5.6(typescript@5.6.2)
-    devDependencies:
-      typedoc:
-        specifier: ^0.26.7
-        version: 0.26.7(typescript@5.6.2)
-      typedoc-plugin-mdn-links:
-        specifier: ^3.2.12
-        version: 3.2.12(typedoc@0.26.7(typescript@5.6.2))
 
 packages:
 

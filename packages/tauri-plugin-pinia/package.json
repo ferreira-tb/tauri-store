@@ -5,13 +5,13 @@
   "type": "module",
   "private": false,
   "packageManager": "pnpm@9.10.0",
-  "homepage": "https://tb.dev.br/tauri-plugin-pinia",
+  "homepage": "https://tb.dev.br/tauri-store",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ferreira-tb/tauri-plugin-pinia.git"
+    "url": "git+https://github.com/ferreira-tb/tauri-store.git"
   },
   "bugs": {
-    "url": "https://github.com/ferreira-tb/tauri-plugin-pinia/issues"
+    "url": "https://github.com/ferreira-tb/tauri-store/issues"
   },
   "contributors": [
     {
@@ -49,9 +49,5 @@
     "@vueuse/core": "^11.1.0",
     "pinia": "^2.2.2",
     "vue": "^3.5.6"
-  },
-  "devDependencies": {
-    "typedoc": "^0.26.7",
-    "typedoc-plugin-mdn-links": "^3.2.12"
   }
 }

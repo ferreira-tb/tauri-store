@@ -2,6 +2,8 @@
 
 Persistent stores for Tauri.
 
-## Supported Tauri Version
+## Features
 
-This plugin requires Tauri `2.0.0-rc` or later.
+- Save your stores to disk.
+- Synchronize across multiple windows.
+- Debounce store updates.
