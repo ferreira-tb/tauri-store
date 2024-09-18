@@ -1,16 +1,6 @@
-# tauri-plugin-pinia
+# tauri-store
 
-Persistent Pinia stores for Tauri and Vue.
-
-## Features
-
-- Save your Pinia stores to disk.
-- Synchronize your stores across multiple windows.
-- Debounce store updates.
-
-## Documentation
-
-Check the [documentation](https://tb.dev.br/tauri-plugin-pinia/getting-started.html) for more information on how to install and use the plugin.
+Persistent stores for Tauri.
 
 ## Supported Tauri Version
 

@@ -2,9 +2,9 @@ import { defineConfig } from '@tb-dev/eslint-config';
 
 export default defineConfig({
   project: [
-    'packages/docs/tsconfig.json',
-    'packages/guest-js/tsconfig.json',
-    'packages/playground/tsconfig.json',
+    'docs/tsconfig.json',
+    'examples/pinia/tsconfig.json',
+    'packages/tauri-plugin-pinia/tsconfig.json',
   ],
   features: {
     vue: true,

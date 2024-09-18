@@ -1,0 +1,28 @@
+[package]
+name = "tauri-store-macros"
+description = "Persistent stores for Tauri"
+version = "0.0.1"
+documentation = "https://docs.rs/tauri-store"
+homepage = "https://tb.dev.br/tauri-store"
+repository = "https://github.com/ferreira-tb/tauri-store"
+authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
+license = "MIT"
+readme = "../../README.md"
+keywords = ["plugin", "tauri", "tauri-plugin", "store"]
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[lib]
+proc-macro = true
+
+[lints]
+workspace = true
+
+[dependencies]
+quote = "1.0"
+syn = "2.0"
+proc-macro2 = "1.0"
