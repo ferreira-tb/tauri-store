@@ -46,4 +46,4 @@ features = ["build"]
 
 [features]
 unstable-async = ["tauri-store/unstable-async"]
-ahash = ["dep:ahash", "ahash/serde"]
+ahash = ["tauri-store/ahash", "dep:ahash", "ahash/serde"]
