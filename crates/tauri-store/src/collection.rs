@@ -20,7 +20,7 @@ use {
 };
 
 #[cfg(feature = "ahash")]
-use ahash::{HashMap, HashSet};
+use ahash::{HashMap, HashMapExt, HashSet};
 #[cfg(not(feature = "ahash"))]
 use std::collections::{HashMap, HashSet};
 
