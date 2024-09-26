@@ -12,7 +12,11 @@ struct CounterStore {
 
 fn main() {
   tauri::Builder::default()
-    .plugin(tauri_plugin_pinia::init())
+    .plugin(
+      tauri_plugin_pinia::Builder::new()
+        .pretty(true)
+        .build(),
+    )
     .plugin(tauri_plugin_process::init())
     .plugin(tauri_plugin_window_state::Builder::new().build())
     .setup(|app| {

@@ -1,6 +1,6 @@
 [package]
 name = "example-pinia"
-version = "0.6.1"
+version = "0.6.2"
 publish = false
 
 [package.edition]

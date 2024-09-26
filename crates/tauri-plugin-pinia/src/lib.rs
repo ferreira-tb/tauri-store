@@ -128,6 +128,7 @@ fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder) -> BoxResult<()> 
 
   let collection = StoreCollection::<R>::builder()
     .path(path)
+    .pretty(builder.pretty)
     .sync_denylist(builder.sync_denylist)
     .build(app);
 

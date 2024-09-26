@@ -1,6 +1,6 @@
 {
   "name": "example-pinia",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "type": "module",
   "packageManager": "pnpm@9.11.0",
   "private": true,

@@ -2,6 +2,7 @@
 import { onMounted } from 'vue';
 import { invoke } from '@tauri-apps/api/core';
 import { useDebouncedStore, useStore } from './stores';
+import { saveAll } from 'tauri-plugin-pinia/src/index.ts';
 
 const store = useStore();
 const { start, stop } = store.$tauri;
@@ -21,6 +22,9 @@ onMounted(() => {
 
 <template>
   <main>
+    <div class="action">
+      <button type="button" @click="saveAll">Save All</button>
+    </div>
     <section id="counter">
       <p>Counter: {{ store.counter }}</p>
       <div class="action">
