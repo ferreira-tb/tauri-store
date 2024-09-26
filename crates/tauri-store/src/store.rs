@@ -3,6 +3,7 @@ use crate::event::{Payload, STORE_UPDATED_EVENT};
 use crate::io_err;
 use crate::manager::ManagerExt;
 use serde::de::DeserializeOwned;
+use serde::Serialize;
 use serde_json::Value as Json;
 use std::path::PathBuf;
 use std::{fmt, io};
@@ -44,7 +45,7 @@ impl<R: Runtime> Store<R> {
     let collection = self.app.store_collection();
     fs::create_dir_all(collection.path())?;
 
-    let bytes = serde_json::to_vec(&self.state)?;
+    let bytes = to_bytes(&self.state, collection.pretty)?;
     let mut file = File::create(self.path())?;
     file.write_all(&bytes)?;
 
@@ -60,9 +61,8 @@ impl<R: Runtime> Store<R> {
     let collection = self.app.store_collection();
     fs::create_dir_all(collection.path()).await?;
 
-    let path = store_path(&self.app, &self.id);
-    let bytes = serde_json::to_vec(&self.state)?;
-    let mut file = File::create(path).await?;
+    let bytes = to_bytes(&self.state, collection.pretty)?;
+    let mut file = File::create(self.path()).await?;
     file.write_all(&bytes).await?;
 
     Ok(())
@@ -200,4 +200,15 @@ fn store_path<R: Runtime>(app: &AppHandle<R>, id: &str) -> PathBuf {
     .store_collection()
     .path()
     .join(format!("{id}.json"))
+}
+
+fn to_bytes<T>(value: &T, pretty: bool) -> Result<Vec<u8>>
+where
+  T: ?Sized + Serialize,
+{
+  if pretty {
+    serde_json::to_vec_pretty(value).map_err(Into::into)
+  } else {
+    serde_json::to_vec(value).map_err(Into::into)
+  }
 }
