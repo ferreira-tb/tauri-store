@@ -126,5 +126,5 @@ counterStore.$tauri.start();
 :::
 
 ::: tip
-The stores won't be saver nor synchronized until you call the `start` method.
+The stores won't be saved nor synchronized until you call the `start` method.
 :::
