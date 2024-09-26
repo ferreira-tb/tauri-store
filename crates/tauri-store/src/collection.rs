@@ -29,7 +29,7 @@ pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
 pub struct StoreCollection<R: Runtime> {
   pub(crate) app: AppHandle<R>,
   pub(crate) path: PathBuf,
-  pub(crate) sync_denylist: HashSet<String>,
+  pub(crate) sync_denylist: StdMutex<HashSet<String>>,
 
   #[cfg(not(feature = "unstable-async"))]
   pub(crate) stores: StdMutex<HashMap<String, Store<R>>>,
@@ -289,6 +289,24 @@ impl<R: Runtime> StoreCollection<R> {
       .await
   }
 
+  /// Remove a store from the sync denylist.
+  pub fn enable_sync(&self, store_id: impl AsRef<str>) {
+    self
+      .sync_denylist
+      .lock()
+      .expect("sync denylist mutex is poisoned")
+      .remove(store_id.as_ref());
+  }
+
+  /// Add a store to the sync denylist.
+  pub fn disable_sync(&self, store_id: impl AsRef<str>) {
+    self
+      .sync_denylist
+      .lock()
+      .expect("sync denylist mutex is poisoned")
+      .insert(store_id.as_ref().to_owned());
+  }
+
   /// Saves the stores periodically.
   #[cfg(feature = "unstable-async")]
   #[cfg_attr(docsrs, doc(cfg(feature = "unstable-async")))]
@@ -355,7 +373,6 @@ impl<R: Runtime> fmt::Debug for StoreCollection<R> {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     f.debug_struct("StoreCollection")
       .field("path", &self.path)
-      .field("sync_denylist", &self.sync_denylist)
       .finish_non_exhaustive()
   }
 }
@@ -399,10 +416,12 @@ impl StoreCollectionBuilder {
         .join("tauri-store")
     });
 
+    let sync_denylist = self.sync_denylist.take().unwrap_or_default();
+
     let collection = Arc::new(StoreCollection::<R> {
       app: app.clone(),
       path,
-      sync_denylist: self.sync_denylist.unwrap_or_default(),
+      sync_denylist: StdMutex::new(sync_denylist),
 
       #[cfg(not(feature = "unstable-async"))]
       stores: StdMutex::new(HashMap::new()),

@@ -305,6 +305,26 @@
           "const": "deny-clear-autosave"
         },
         {
+          "description": "Enables the disable_sync command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-disable-sync"
+        },
+        {
+          "description": "Denies the disable_sync command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-disable-sync"
+        },
+        {
+          "description": "Enables the enable_sync command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-enable-sync"
+        },
+        {
+          "description": "Denies the enable_sync command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-enable-sync"
+        },
+        {
           "description": "Enables the get_pinia_path command without any pre-configured scope.",
           "type": "string",
           "const": "allow-get-pinia-path"

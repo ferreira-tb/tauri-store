@@ -18,6 +18,16 @@ pub(crate) async fn clear_autosave<R: Runtime>(app: AppHandle<R>) {
 }
 
 #[tauri::command]
+pub(crate) async fn disable_sync<R: Runtime>(app: AppHandle<R>, id: String) {
+  app.pinia().disable_sync(id);
+}
+
+#[tauri::command]
+pub(crate) async fn enable_sync<R: Runtime>(app: AppHandle<R>, id: String) {
+  app.pinia().enable_sync(id);
+}
+
+#[tauri::command]
 pub(crate) async fn get_pinia_path<R: Runtime>(app: AppHandle<R>) -> PathBuf {
   app.pinia().path().to_path_buf()
 }
