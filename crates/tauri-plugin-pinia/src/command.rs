@@ -63,6 +63,24 @@ pub(crate) async fn get_store_path<R: Runtime>(app: AppHandle<R>, id: String) ->
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
+pub(crate) async fn get_store_state<R: Runtime>(
+  app: AppHandle<R>,
+  id: String,
+) -> Option<StoreState> {
+  app.pinia().store_state(id)
+}
+
+#[cfg(feature = "unstable-async")]
+#[tauri::command]
+pub(crate) async fn get_store_state<R: Runtime>(
+  app: AppHandle<R>,
+  id: String,
+) -> Option<StoreState> {
+  app.pinia().store_state(id).await
+}
+
+#[cfg(not(feature = "unstable-async"))]
+#[tauri::command]
 pub(crate) async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<StoreState> {
   app
     .pinia()

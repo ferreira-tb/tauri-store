@@ -5,7 +5,7 @@ import { watchDebounced } from '@vueuse/core';
 import type { PiniaPluginContext } from 'pinia';
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
 import type {
-  Payload,
+  ChangePayload,
   State,
   TauriPluginPiniaOptions,
   TauriPluginPiniaStoreOptions,
@@ -53,7 +53,7 @@ export function createPlugin(options: TauriPluginPiniaOptions = {}) {
     const save = () => commands.save(ctx.store.$id);
 
     let enabled = false;
-    let changeQueue: Payload[] = [];
+    let changeQueue: ChangePayload[] = [];
     let unsubscribe: (() => void) | undefined;
     let unlisten: (() => void) | undefined;
 
@@ -65,7 +65,7 @@ export function createPlugin(options: TauriPluginPiniaOptions = {}) {
         await load();
 
         const webview = getCurrentWebviewWindow();
-        const fn = await webview.listen<Payload>(STORE_UPDATED, ({ payload }) => {
+        const fn = await webview.listen<ChangePayload>(STORE_UPDATED, ({ payload }) => {
           if (enabled && payload.id === ctx.store.$id) {
             changeQueue.push(payload);
             processChangeQueue().catch(onError);

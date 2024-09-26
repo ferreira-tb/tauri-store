@@ -13,7 +13,6 @@
     "docs:cargo": "cargo doc -p tauri-* --open --no-deps",
     "docs:vite": "pnpm run -F docs dev --open",
     "format": "prettier . --write && cargo fmt --all",
-    "format-check": "prettier . --check",
     "lint": "eslint . --config eslint.config.js --cache && cargo clippy",
     "lint-fix": "eslint . --config eslint.config.js --fix",
     "type-check": "pnpm run -r type-check"

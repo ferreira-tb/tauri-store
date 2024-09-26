@@ -8,6 +8,7 @@ permissions = [
   "allow-get-pinia-path",
   "allow-get-store-ids",
   "allow-get-store-path",
+  "allow-get-store-state",
   "allow-load",
   "allow-patch",
   "allow-save",

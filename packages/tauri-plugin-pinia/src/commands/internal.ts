@@ -1,12 +1,13 @@
+import type { State } from '../types';
 import { invoke } from '@tauri-apps/api/core';
 
 /** @internal */
-export function load<T extends Record<string, unknown>>(id: string): Promise<T> {
+export function load<T extends State>(id: string): Promise<T> {
   return invoke('plugin:pinia|load', { id });
 }
 
 /** @internal */
-export function patch(id: string, state: Record<string, unknown>): Promise<void> {
+export function patch(id: string, state: State): Promise<void> {
   return invoke('plugin:pinia|patch', { id, state });
 }
 

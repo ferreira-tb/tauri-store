@@ -8,6 +8,7 @@ Default permissions for the pinia plugin
 - `allow-get-pinia-path`
 - `allow-get-store-ids`
 - `allow-get-store-path`
+- `allow-get-store-state`
 - `allow-load`
 - `allow-patch`
 - `allow-save`
@@ -177,6 +178,32 @@ Enables the get_store_path command without any pre-configured scope.
 <td>
 
 Denies the get_store_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-get-store-state`
+
+</td>
+<td>
+
+Enables the get_store_state command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-get-store-state`
+
+</td>
+<td>
+
+Denies the get_store_state command without any pre-configured scope.
 
 </td>
 </tr>

@@ -37,6 +37,7 @@ version = "0.8"
 optional = true
 
 [dependencies.tauri-store]
+version = "0.1"
 path = "../tauri-store"
 features = ["derive"]
 

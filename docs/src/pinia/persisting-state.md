@@ -5,13 +5,13 @@ All your stores are automatically persisted to disk upon graceful exit, so usual
 ::: code-group
 
 ```ts [JavaScript]
-import { save, saveSome, saveAll } from 'tauri-plugin-pinia';
+import { save, saveAll } from 'tauri-plugin-pinia';
 
 // Save a single store.
 await save('my-store');
 
 // Save some stores.
-await saveSome(['my-store', 'my-store-2']);
+await save(['my-store', 'my-store-2']);
 
 // Save all stores.
 await saveAll();

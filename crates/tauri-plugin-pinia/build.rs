@@ -5,6 +5,7 @@ const COMMANDS: &[&str] = &[
   "get_pinia_path",
   "get_store_ids",
   "get_store_path",
+  "get_store_state",
   "load",
   "patch",
   "save",

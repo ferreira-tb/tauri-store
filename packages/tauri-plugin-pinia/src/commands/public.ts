@@ -1,3 +1,4 @@
+import type { State } from '../types';
 import { invoke } from '@tauri-apps/api/core';
 
 /**
@@ -37,20 +38,27 @@ export function getStorePath(id: string): Promise<string> {
   return invoke('plugin:pinia|get_store_path', { id });
 }
 
+/** Get the state of a store. */
+export function getStoreState<T extends State>(id: string): Promise<T | null> {
+  return invoke('plugin:pinia|get_store_state', { id });
+}
+
 /**
  * Save a store to the disk.
  * @param id The store id.
  **/
-export function save(id: string): Promise<void> {
-  return invoke('plugin:pinia|save', { id });
-}
-
+export function save(id: string): Promise<void>;
 /**
  * Save some stores to the disk.
  * @param ids The store ids.
  **/
-export function saveSome(ids: string[]): Promise<void> {
-  return invoke('plugin:pinia|save_some', { ids });
+export function save(ids: string[]): Promise<void>;
+export function save(id: string | string[]): Promise<void> {
+  if (typeof id === 'string') {
+    return invoke('plugin:pinia|save', { id });
+  }
+
+  return invoke('plugin:pinia|save_some', { ids: id });
 }
 
 /** Save all the stores to the disk. */

@@ -95,6 +95,7 @@ impl Builder {
         command::get_pinia_path,
         command::get_store_ids,
         command::get_store_path,
+        command::get_store_state,
         command::load,
         command::patch,
         command::save,
