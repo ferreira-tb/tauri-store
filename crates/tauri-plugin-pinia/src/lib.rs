@@ -90,6 +90,8 @@ impl Builder {
       .on_event(on_event)
       .invoke_handler(tauri::generate_handler![
         command::clear_autosave,
+        command::disable_sync,
+        command::enable_sync,
         command::get_pinia_path,
         command::get_store_ids,
         command::get_store_path,

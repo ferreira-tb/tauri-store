@@ -3,6 +3,8 @@
 description = "Default permissions for the pinia plugin"
 permissions = [
   "allow-clear-autosave",
+  "allow-disable-sync",
+  "allow-enable-sync",
   "allow-get-pinia-path",
   "allow-get-store-ids",
   "allow-get-store-path",
