@@ -14,8 +14,8 @@ export interface TauriPluginPiniaOptions {
 }
 
 export interface TauriPluginPiniaStoreOptions extends TauriPluginPiniaOptions {
-  /** Denylist of keys the plugin should ignore. Those won't be saved nor synced. */
-  readonly ignoreKey?: string | string[];
+  /** Keys the plugin should ignore. Those won't be saved nor synced. */
+  readonly ignoreKeys?: string | string[];
 }
 
 export type State = Record<string, unknown>;
