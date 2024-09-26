@@ -46,6 +46,7 @@ use std::collections::HashSet;
 #[derive(Default)]
 pub struct Builder {
   path: Option<PathBuf>,
+  pretty: bool,
   sync_denylist: HashSet<String>,
 
   #[cfg(feature = "unstable-async")]
@@ -62,6 +63,13 @@ impl Builder {
   pub fn path(mut self, path: impl AsRef<Path>) -> Self {
     let path = path.as_ref().to_path_buf();
     self.path = Some(path);
+    self
+  }
+
+  /// Sets whether the store files should be pretty printed.
+  #[must_use]
+  pub fn pretty(mut self, yes: bool) -> Self {
+    self.pretty = yes;
     self
   }
 

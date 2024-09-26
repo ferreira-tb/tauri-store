@@ -29,12 +29,14 @@ pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
 pub struct StoreCollection<R: Runtime> {
   pub(crate) app: AppHandle<R>,
   pub(crate) path: PathBuf,
-  pub(crate) sync_denylist: StdMutex<HashSet<String>>,
 
   #[cfg(not(feature = "unstable-async"))]
   pub(crate) stores: StdMutex<HashMap<String, Store<R>>>,
   #[cfg(feature = "unstable-async")]
   pub(crate) stores: TokioMutex<HashMap<String, Store<R>>>,
+
+  pub(crate) pretty: bool,
+  pub(crate) sync_denylist: StdMutex<HashSet<String>>,
 
   #[cfg(feature = "unstable-async")]
   pub(crate) autosave: StdMutex<Option<AbortHandle>>,
@@ -387,17 +389,24 @@ impl<R: Runtime> Drop for StoreCollection<R> {
 #[derive(Debug, Default)]
 pub struct StoreCollectionBuilder {
   path: Option<PathBuf>,
+  pretty: bool,
   sync_denylist: Option<HashSet<String>>,
 }
 
 impl StoreCollectionBuilder {
   pub fn new() -> Self {
-    Self { path: None, sync_denylist: None }
+    Self::default()
   }
 
   #[must_use]
   pub fn path(mut self, path: impl AsRef<Path>) -> Self {
     self.path = Some(path.as_ref().to_path_buf());
+    self
+  }
+
+  #[must_use]
+  pub fn pretty(mut self, yes: bool) -> Self {
+    self.pretty = yes;
     self
   }
 
@@ -421,6 +430,7 @@ impl StoreCollectionBuilder {
     let collection = Arc::new(StoreCollection::<R> {
       app: app.clone(),
       path,
+      pretty: self.pretty,
       sync_denylist: StdMutex::new(sync_denylist),
 
       #[cfg(not(feature = "unstable-async"))]
