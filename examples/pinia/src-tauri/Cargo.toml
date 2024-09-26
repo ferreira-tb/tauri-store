@@ -1,0 +1,39 @@
+[package]
+name = "example-pinia"
+version = "0.6.0"
+publish = false
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[lints]
+workspace = true
+
+[build-dependencies.tauri-build]
+version = "2.0.0-rc"
+features = []
+
+[dependencies]
+serde_json = "1.0"
+tauri-plugin-process = "2.0.0-rc"
+tauri-plugin-window-state = "2.0.0-rc"
+
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
+
+[dependencies.tauri]
+version = "2.0.0-rc"
+features = ["devtools", "protocol-asset"]
+
+[dependencies.tauri-plugin-pinia]
+path = "../../../crates/tauri-plugin-pinia"
+default-features = false
+features = []
+
+[features]
+default = ["unstable-async"]
+unstable-async = ["tauri-plugin-pinia/unstable-async"]

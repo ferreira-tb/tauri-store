@@ -1,0 +1,50 @@
+[package]
+name = "tauri-plugin-pinia"
+description = "Persistent Pinia stores for Tauri"
+version = "0.6.0"
+documentation = "https://docs.rs/tauri-plugin-pinia"
+homepage = "https://tb.dev.br/tauri-plugin-pinia"
+repository = "https://github.com/ferreira-tb/tauri-plugin-pinia"
+authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
+license = "MIT"
+readme = "./README.md"
+keywords = ["plugin", "tauri", "tauri-plugin", "vue", "pinia"]
+links = "tauri-plugin-pinia"
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.metadata.docs.rs]
+no-default-features = true
+features = ["unstable-async"]
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs"]
+
+[lints]
+workspace = true
+
+[dependencies]
+serde = "1.0"
+serde_json = "1.0"
+tauri = "2.0.0-rc"
+thiserror = "1.0"
+
+[dependencies.ahash]
+version = "0.8"
+optional = true
+
+[dependencies.tauri-store]
+version = "0.1"
+path = "../tauri-store"
+features = ["derive"]
+
+[build-dependencies.tauri-plugin]
+version = "2.0.0-rc"
+features = ["build"]
+
+[features]
+unstable-async = ["tauri-store/unstable-async"]
+ahash = ["tauri-store/ahash", "dep:ahash", "ahash/serde"]
