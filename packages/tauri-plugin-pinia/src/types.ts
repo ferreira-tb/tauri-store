@@ -20,6 +20,7 @@ export interface TauriPluginPiniaStoreOptions extends TauriPluginPiniaOptions {
 
 export type State = Record<string, unknown>;
 
+/** @internal */
 export interface ChangePayload {
   id: string;
   state: State;
