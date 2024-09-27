@@ -18,6 +18,7 @@ fn main() {
         .build(),
     )
     .plugin(tauri_plugin_process::init())
+    .plugin(tauri_plugin_shell::init())
     .plugin(tauri_plugin_window_state::Builder::new().build())
     .setup(|app| {
       let handle = app.handle();

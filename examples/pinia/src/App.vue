@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { invoke } from '@tauri-apps/api/core';
+import { open } from '@tauri-apps/plugin-shell';
 import { useDebouncedStore, useStore } from './stores';
 import { saveAll } from 'tauri-plugin-pinia/src/index.ts';
 
@@ -12,6 +13,16 @@ const { start: startDebounced, stop: stopDebounced } = debouncedStore.$tauri;
 
 function printCounter() {
   void invoke('print_counter');
+}
+
+async function openStore() {
+  const path = await store.$tauri.getPath();
+  await open(path);
+}
+
+async function openDebouncedStore() {
+  const path = await debouncedStore.$tauri.getPath();
+  await open(path);
 }
 
 onMounted(() => {
@@ -32,6 +43,7 @@ onMounted(() => {
         <button type="button" @click="start">Start</button>
         <button type="button" @click="stop">Stop</button>
         <button type="button" @click="printCounter">Print</button>
+        <button type="button" @click="openStore">Open</button>
       </div>
     </section>
 
@@ -41,6 +53,7 @@ onMounted(() => {
         <button type="button" @click="debouncedStore.increment">Increment</button>
         <button type="button" @click="startDebounced">Start</button>
         <button type="button" @click="stopDebounced">Stop</button>
+        <button type="button" @click="openDebouncedStore">Open</button>
       </div>
     </section>
   </main>

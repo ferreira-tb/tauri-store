@@ -1,6 +1,6 @@
 {
   "identifier": "default",
-  "description": "Capability for the main window",
+  "description": "Capability for the windows",
   "windows": ["window-*"],
-  "permissions": ["core:event:default", "pinia:default", "process:allow-exit"]
+  "permissions": ["core:event:default", "pinia:default", "process:allow-exit", "shell:allow-open"]
 }
