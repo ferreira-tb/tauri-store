@@ -6,6 +6,7 @@ export interface TauriPluginPiniaOptions {
 
   /**
    * Whether the store should be deeply watched for changes.
+   * @deprecated
    * @default true
    */
   readonly deep?: boolean;
