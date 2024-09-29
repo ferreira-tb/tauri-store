@@ -1,10 +1,10 @@
 [package]
 name = "tauri-plugin-pinia"
 description = "Persistent Pinia stores for Tauri"
-version = "0.6.3"
+version = "0.6.4"
 documentation = "https://docs.rs/tauri-plugin-pinia"
-homepage = "https://tb.dev.br/tauri-plugin-pinia"
-repository = "https://github.com/ferreira-tb/tauri-plugin-pinia"
+homepage = "https://tb.dev.br/tauri-store"
+repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
