@@ -14,7 +14,7 @@
 //!
 //! ## Supported Tauri Version
 //!
-//! This plugin requires Tauri `2.0.0-rc` or later.
+//! This plugin requires Tauri `2.0.0` or later.
 //!
 
 #![forbid(unsafe_code)]

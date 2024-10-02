@@ -14,4 +14,4 @@ Check the [documentation](https://tb.dev.br/tauri-store/pinia/getting-started.ht
 
 ## Supported Tauri Version
 
-This plugin requires Tauri `2.0.0-rc` or later.
+This plugin requires Tauri `2.0.0` or later.
