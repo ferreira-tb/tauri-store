@@ -17,7 +17,7 @@ Default permissions for the pinia plugin
 - `allow-set-autosave`
 - `allow-unload`
 
-## Permission Table 
+## Permission Table
 
 <table>
 <tr>
