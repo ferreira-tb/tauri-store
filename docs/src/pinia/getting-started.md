@@ -1,7 +1,7 @@
 # Getting Started
 
 ::: info Supported Tauri Version
-This plugin requires Tauri `2.0.0` or later.
+This plugin requires Tauri `2.0` or later.
 :::
 
 ## Install
