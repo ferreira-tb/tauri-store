@@ -10,16 +10,6 @@ export function clearAutosave(): Promise<void> {
   return invoke('plugin:pinia|clear_autosave');
 }
 
-/** Add a store to the sync denylist. */
-export function disableSync(id: string): Promise<void> {
-  return invoke('plugin:pinia|disable_sync', { id });
-}
-
-/** Remove a store from the sync denylist. */
-export function enableSync(id: string): Promise<void> {
-  return invoke('plugin:pinia|enable_sync', { id });
-}
-
 /** Directory where the stores are saved. */
 export function getPiniaPath(): Promise<string> {
   return invoke('plugin:pinia|get_pinia_path');

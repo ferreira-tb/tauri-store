@@ -36,7 +36,8 @@ pub struct StoreCollection<R: Runtime> {
   pub(crate) stores: TokioMutex<HashMap<String, Store<R>>>,
 
   pub(crate) pretty: bool,
-  pub(crate) sync_denylist: StdMutex<HashSet<String>>,
+  pub(crate) save_denylist: Option<HashSet<String>>,
+  pub(crate) sync_denylist: Option<HashSet<String>>,
 
   #[cfg(feature = "unstable-async")]
   pub(crate) autosave: StdMutex<Option<AbortHandle>>,
@@ -291,24 +292,6 @@ impl<R: Runtime> StoreCollection<R> {
       .await
   }
 
-  /// Remove a store from the sync denylist.
-  pub fn enable_sync(&self, store_id: impl AsRef<str>) {
-    self
-      .sync_denylist
-      .lock()
-      .expect("sync denylist mutex is poisoned")
-      .remove(store_id.as_ref());
-  }
-
-  /// Add a store to the sync denylist.
-  pub fn disable_sync(&self, store_id: impl AsRef<str>) {
-    self
-      .sync_denylist
-      .lock()
-      .expect("sync denylist mutex is poisoned")
-      .insert(store_id.as_ref().to_owned());
-  }
-
   /// Saves the stores periodically.
   #[cfg(feature = "unstable-async")]
   #[cfg_attr(docsrs, doc(cfg(feature = "unstable-async")))]
@@ -390,6 +373,7 @@ impl<R: Runtime> Drop for StoreCollection<R> {
 pub struct StoreCollectionBuilder {
   path: Option<PathBuf>,
   pretty: bool,
+  save_denylist: Option<HashSet<String>>,
   sync_denylist: Option<HashSet<String>>,
 }
 
@@ -411,6 +395,12 @@ impl StoreCollectionBuilder {
   }
 
   #[must_use]
+  pub fn save_denylist(mut self, save_denylist: HashSet<String>) -> Self {
+    self.save_denylist = Some(save_denylist);
+    self
+  }
+
+  #[must_use]
   pub fn sync_denylist(mut self, sync_denylist: HashSet<String>) -> Self {
     self.sync_denylist = Some(sync_denylist);
     self
@@ -425,13 +415,12 @@ impl StoreCollectionBuilder {
         .join("tauri-store")
     });
 
-    let sync_denylist = self.sync_denylist.take().unwrap_or_default();
-
     let collection = Arc::new(StoreCollection::<R> {
       app: app.clone(),
       path,
       pretty: self.pretty,
-      sync_denylist: StdMutex::new(sync_denylist),
+      save_denylist: self.save_denylist,
+      sync_denylist: self.sync_denylist,
 
       #[cfg(not(feature = "unstable-async"))]
       stores: StdMutex::new(HashMap::new()),

@@ -6,7 +6,7 @@
 //!
 //! - Save your stores to disk.
 //! - Synchronize across multiple windows.
-//! - Debounce store updates.
+//! - Debounce or throttle store updates.
 //!
 //! ## Documentation
 //!
@@ -14,7 +14,7 @@
 //!
 //! ## Supported Tauri Version
 //!
-//! This plugin requires Tauri `2.0.0-rc` or later.
+//! This plugin requires Tauri `2.0` or later.
 //!
 
 #![forbid(unsafe_code)]
@@ -47,6 +47,7 @@ use std::collections::HashSet;
 pub struct Builder {
   path: Option<PathBuf>,
   pretty: bool,
+  save_denylist: HashSet<String>,
   sync_denylist: HashSet<String>,
 
   #[cfg(feature = "unstable-async")]
@@ -70,6 +71,16 @@ impl Builder {
   #[must_use]
   pub fn pretty(mut self, yes: bool) -> Self {
     self.pretty = yes;
+    self
+  }
+
+  /// Sets a list of stores that should not be saved to disk.
+  #[must_use]
+  pub fn save_denylist(mut self, denylist: &[&str]) -> Self {
+    self
+      .save_denylist
+      .extend(denylist.iter().map(ToString::to_string));
+
     self
   }
 
@@ -98,8 +109,6 @@ impl Builder {
       .on_event(on_event)
       .invoke_handler(tauri::generate_handler![
         command::clear_autosave,
-        command::disable_sync,
-        command::enable_sync,
         command::get_pinia_path,
         command::get_store_ids,
         command::get_store_path,
@@ -129,6 +138,7 @@ fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder) -> BoxResult<()> 
   let collection = StoreCollection::<R>::builder()
     .path(path)
     .pretty(builder.pretty)
+    .save_denylist(builder.save_denylist)
     .sync_denylist(builder.sync_denylist)
     .build(app);
 

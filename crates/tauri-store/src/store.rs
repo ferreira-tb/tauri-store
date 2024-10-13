@@ -43,6 +43,14 @@ impl<R: Runtime> Store<R> {
     use std::io::Write;
 
     let collection = self.app.store_collection();
+    if collection
+      .save_denylist
+      .as_ref()
+      .is_some_and(|it| it.contains(&self.id))
+    {
+      return Ok(());
+    }
+
     fs::create_dir_all(collection.path())?;
 
     let bytes = to_bytes(&self.state, collection.pretty)?;
@@ -59,6 +67,14 @@ impl<R: Runtime> Store<R> {
     use tokio::io::AsyncWriteExt;
 
     let collection = self.app.store_collection();
+    if collection
+      .save_denylist
+      .as_ref()
+      .is_some_and(|it| it.contains(&self.id))
+    {
+      return Ok(());
+    }
+
     fs::create_dir_all(collection.path()).await?;
 
     let bytes = to_bytes(&self.state, collection.pretty)?;
@@ -164,18 +180,16 @@ impl<R: Runtime> Store<R> {
     let source: Option<&str> = source.into();
     let collection = self.app.store_collection();
 
-    let sync_denylist = collection
-      .sync_denylist
-      .lock()
-      .expect("sync denylist mutex is poisoned");
-
     // If we also skip the store when the source is the backend,
     // the window where the store resides would never know about the change.
-    if source.is_some() && sync_denylist.contains(&self.id) {
+    if source.is_some()
+      && collection
+        .sync_denylist
+        .as_ref()
+        .is_some_and(|it| it.contains(&self.id))
+    {
       return Ok(());
     }
-
-    drop(sync_denylist);
 
     let payload = Payload::from(self);
     if let Some(source) = source {

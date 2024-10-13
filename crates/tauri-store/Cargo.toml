@@ -1,7 +1,7 @@
 [package]
 name = "tauri-store"
 description = "Persistent stores for Tauri"
-version = "0.1.1"
+version = "0.2.0"
 documentation = "https://docs.rs/tauri-store"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
@@ -28,7 +28,7 @@ workspace = true
 [dependencies]
 serde = "1.0"
 serde_json = "1.0"
-tauri = "2.0.0-rc"
+tauri = "2.0"
 thiserror = "1.0"
 
 [dependencies.ahash]
@@ -36,7 +36,7 @@ version = "0.8"
 optional = true
 
 [dependencies.tauri-store-macros]
-version = "0.1"
+version = "0.2"
 optional = true
 path = "../tauri-store-macros"
 
@@ -47,7 +47,7 @@ default-features = false
 features = ["fs", "io-util", "time"]
 
 [build-dependencies.tauri-plugin]
-version = "2.0.0-rc"
+version = "2.0"
 features = ["build"]
 
 [features]

@@ -170,16 +170,6 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
         self.0.patch(store_id, state).await
       }
 
-      /// Remove a store from the sync denylist.
-      pub fn enable_sync(&self, store_id: impl AsRef<str>) {
-        self.0.enable_sync(store_id)
-      }
-
-      /// Add a store to the sync denylist.
-      pub fn disable_sync(&self, store_id: impl AsRef<str>) {
-        self.0.disable_sync(store_id)
-      }
-
       /// Saves the stores periodically.
       #[cfg(feature = "unstable-async")]
       #[cfg_attr(docsrs, doc(cfg(feature = "unstable-async")))]

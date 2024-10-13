@@ -3,8 +3,6 @@
 Default permissions for the pinia plugin
 
 - `allow-clear-autosave`
-- `allow-disable-sync`
-- `allow-enable-sync`
 - `allow-get-pinia-path`
 - `allow-get-store-ids`
 - `allow-get-store-path`
@@ -17,7 +15,7 @@ Default permissions for the pinia plugin
 - `allow-set-autosave`
 - `allow-unload`
 
-## Permission Table 
+## Permission Table
 
 <table>
 <tr>
@@ -48,58 +46,6 @@ Enables the clear_autosave command without any pre-configured scope.
 <td>
 
 Denies the clear_autosave command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`pinia:allow-disable-sync`
-
-</td>
-<td>
-
-Enables the disable_sync command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`pinia:deny-disable-sync`
-
-</td>
-<td>
-
-Denies the disable_sync command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`pinia:allow-enable-sync`
-
-</td>
-<td>
-
-Enables the enable_sync command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`pinia:deny-enable-sync`
-
-</td>
-<td>
-
-Denies the enable_sync command without any pre-configured scope.
 
 </td>
 </tr>

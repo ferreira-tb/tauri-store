@@ -6,4 +6,4 @@ Persistent stores for Tauri.
 
 - Save your stores to disk.
 - Synchronize across multiple windows.
-- Debounce store updates.
+- Debounce or throttle store updates.

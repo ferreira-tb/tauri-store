@@ -1,14 +1,7 @@
 import type { MaybePromise } from '@tb-dev/utils';
 
 export interface TauriPluginPiniaOptions {
-  /** @default 0 */
-  readonly debounce?: number;
-
-  /**
-   * Whether the store should be deeply watched for changes.
-   * @deprecated
-   * @default true
-   */
+  /** @default true */
   readonly deep?: boolean;
 
   /**
@@ -16,6 +9,27 @@ export interface TauriPluginPiniaOptions {
    * @default console.error
    */
   readonly onError?: (error: unknown) => MaybePromise<void>;
+
+  /**
+   * Interval in milliseconds to use when syncing the store with the backend.
+   * This option is only valid when {@link TauriPluginPiniaOptions.syncStrategy} is set to `debounce` or `throttle`.
+   *
+   * @default 0
+   */
+  readonly syncInterval?: number;
+
+  /**
+   * Strategy to use when syncing the store with the backend.
+   *
+   * If the value is a number, the plugin will use `debounce` with the specified value as the interval.
+   * If `null`, the strategy will be `immediate`.
+   *
+   * For a detailed explanation about the differences between `debounce` and `throttle`, see:
+   * https://kettanaito.com/blog/debounce-vs-throttle
+   *
+   * @default 'immediate'
+   */
+  readonly syncStrategy?: 'debounce' | 'throttle' | 'immediate' | number | null;
 }
 
 export type StoreKeyFilter = string | string[] | RegExp;
@@ -40,12 +54,6 @@ export interface TauriPluginPiniaStoreOptions extends TauriPluginPiniaOptions {
    * @default 'omit'
    */
   readonly filterKeysStrategy?: StoreKeyFilterStrategy;
-
-  /**
-   * Keys the plugin should ignore. Those won't be saved nor synced.
-   * @deprecated Use {@link TauriPluginPiniaStoreOptions.filterKeys} instead.
-   */
-  readonly ignoreKeys?: string | string[];
 }
 
 export type State = Record<string, unknown>;

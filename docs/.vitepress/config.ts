@@ -45,9 +45,10 @@ export default defineConfig({
         text: 'Pinia',
         collapsed: false,
         items: [
-          { text: 'Getting Started', link: '/pinia/getting-started' },
+          { text: 'Getting started', link: '/pinia/getting-started' },
           { text: 'Persisting state', link: '/pinia/persisting-state' },
           { text: 'Accessing from Rust', link: '/pinia/accessing-from-rust' },
+          { text: 'Debounce and throttle', link: '/pinia/debounce-throttle' },
         ],
       },
     ],

@@ -1,7 +1,7 @@
-# Getting Started
+# Getting started
 
 ::: info Supported Tauri Version
-This plugin requires Tauri `2.0.0-rc`. If you are using Tauri `2.0.0-beta`, try the `0.3` version.
+This plugin requires Tauri `2.0` or later.
 :::
 
 ## Install
@@ -10,7 +10,7 @@ Install the Rust crate by adding the following to your `Cargo.toml` file:
 
 ```toml
 [dependencies]
-tauri-plugin-pinia = 0.6
+tauri-plugin-pinia = 0.7
 ```
 
 Install the JavaScript package with your preferred package manager:

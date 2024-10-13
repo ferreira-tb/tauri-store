@@ -1,7 +1,7 @@
-import { nextTick } from 'vue';
+import { nextTick, watch } from 'vue';
 import { applyOptions } from './state';
 import * as commands from './commands';
-import { watchDebounced } from '@vueuse/core';
+import { debounce, throttle } from 'lodash-es';
 import type { PiniaPluginContext } from 'pinia';
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
 import type {
@@ -19,10 +19,6 @@ const STORE_UPDATED = 'tauri-store://updated';
 declare module 'pinia' {
   export interface PiniaCustomProperties {
     readonly $tauri: {
-      /** Add the store to the sync denylist. */
-      readonly disableSync: () => Promise<void>;
-      /** Remove the store from the sync denylist. */
-      readonly enableSync: () => Promise<void>;
       /** Path where the store is saved. */
       readonly getPath: () => Promise<string>;
       /** Save the store to the disk. */
@@ -42,13 +38,12 @@ declare module 'pinia' {
 export function createPlugin(options: TauriPluginPiniaOptions = {}) {
   return function (ctx: PiniaPluginContext) {
     const {
-      debounce = options.debounce ?? 0,
       deep = options.deep ?? true,
       onError = options.onError ?? console.error,
+      syncInterval = options.syncInterval ?? 0,
+      syncStrategy = options.syncStrategy ?? 'immediate',
     } = ctx.options.tauri ?? options;
 
-    const disableSync = () => commands.disableSync(ctx.store.$id);
-    const enableSync = () => commands.enableSync(ctx.store.$id);
     const getPath = () => commands.getStorePath(ctx.store.$id);
     const save = () => commands.save(ctx.store.$id);
 
@@ -88,7 +83,15 @@ export function createPlugin(options: TauriPluginPiniaOptions = {}) {
     }
 
     function subscribe() {
-      return watchDebounced(ctx.store.$state, patchBackend, { debounce, deep });
+      if (syncStrategy === 'debounce') {
+        const fn = debounce(patchBackend, syncInterval);
+        return watch(ctx.store.$state, fn, { deep });
+      } else if (syncStrategy === 'throttle') {
+        const fn = throttle(patchBackend, syncInterval);
+        return watch(ctx.store.$state, fn, { deep });
+      }
+
+      return watch(ctx.store.$state, patchBackend, { deep });
     }
 
     async function processChangeQueue() {
@@ -129,8 +132,6 @@ export function createPlugin(options: TauriPluginPiniaOptions = {}) {
 
     return {
       $tauri: {
-        disableSync,
-        enableSync,
         getPath,
         save,
         start,

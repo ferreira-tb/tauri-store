@@ -40,11 +40,12 @@ fn open_window(app: &AppHandle, id: u8) {
   let url = WebviewUrl::App("index.html".into());
   WebviewWindowBuilder::new(app, &label, url)
     .title(label)
-    .inner_size(300.0, 300.0)
+    .inner_size(300.0, 500.0)
     .resizable(true)
     .maximizable(true)
     .minimizable(true)
     .visible(true)
+    .always_on_top(true)
     .build()
     .unwrap();
 }
