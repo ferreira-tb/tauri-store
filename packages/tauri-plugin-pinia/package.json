@@ -6,6 +6,7 @@
   "private": false,
   "packageManager": "pnpm@9.12.1",
   "homepage": "https://tb.dev.br/tauri-store",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ferreira-tb/tauri-store.git"
