@@ -47,8 +47,35 @@ function debouncedStore() {
 
 export const useDebouncedStore = defineStore('debounced-store', debouncedStore, {
   tauri: {
-    debounce: 1000,
     filterKeys: ['debouncedCounter3'],
     filterKeysStrategy: 'omit',
+    syncStrategy: 'debounce',
+    syncInterval: 1000,
+  },
+});
+
+function throttledStore() {
+  const throttledCounter = ref(0);
+  const throttledCounter2 = ref(0);
+  const throttledCounter3 = ref(0);
+
+  function increment() {
+    throttledCounter.value++;
+  }
+
+  return {
+    throttledCounter,
+    throttledCounter2,
+    throttledCounter3,
+    increment,
+  };
+}
+
+export const useThrottledStore = defineStore('throttled-store', throttledStore, {
+  tauri: {
+    filterKeys: ['throttledCounter3'],
+    filterKeysStrategy: 'omit',
+    syncStrategy: 'throttle',
+    syncInterval: 1000,
   },
 });

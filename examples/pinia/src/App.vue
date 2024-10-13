@@ -2,14 +2,17 @@
 import { onMounted } from 'vue';
 import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-shell';
-import { useDebouncedStore, useStore } from './stores';
 import { saveAll } from 'tauri-plugin-pinia/src/index.ts';
+import { useDebouncedStore, useStore, useThrottledStore } from './stores';
 
 const store = useStore();
 const { start, stop } = store.$tauri;
 
 const debouncedStore = useDebouncedStore();
 const { start: startDebounced, stop: stopDebounced } = debouncedStore.$tauri;
+
+const throttledStore = useThrottledStore();
+const { start: startThrottled, stop: stopThrottled } = throttledStore.$tauri;
 
 function printCounter() {
   void invoke('print_counter');
@@ -25,9 +28,15 @@ async function openDebouncedStore() {
   await open(path);
 }
 
+async function openThrottledStore() {
+  const path = await throttledStore.$tauri.getPath();
+  await open(path);
+}
+
 onMounted(() => {
   void start();
   void startDebounced();
+  void startThrottled();
 });
 </script>
 
@@ -54,6 +63,16 @@ onMounted(() => {
         <button type="button" @click="startDebounced">Start</button>
         <button type="button" @click="stopDebounced">Stop</button>
         <button type="button" @click="openDebouncedStore">Open</button>
+      </div>
+    </section>
+
+    <section id="throttled-counter">
+      <p>Throttled Counter: {{ throttledStore.throttledCounter }}</p>
+      <div class="action">
+        <button type="button" @click="throttledStore.increment">Increment</button>
+        <button type="button" @click="startThrottled">Start</button>
+        <button type="button" @click="stopThrottled">Stop</button>
+        <button type="button" @click="openThrottledStore">Open</button>
       </div>
     </section>
   </main>

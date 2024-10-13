@@ -1,7 +1,5 @@
 const COMMANDS: &[&str] = &[
   "clear_autosave",
-  "disable_sync",
-  "enable_sync",
   "get_pinia_path",
   "get_store_ids",
   "get_store_path",

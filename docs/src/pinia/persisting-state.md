@@ -37,7 +37,7 @@ manager.pinia().save_all();
 
 ## Custom directory
 
-By default, the stores are saved in the [app's data directory](https://docs.rs/tauri/2.0.0-rc/tauri/path/struct.PathResolver.html#method.app_data_dir). You can change this by setting the [`path`](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.Builder.html#method.path) option when initializing the plugin.
+By default, the stores are saved in the [app's data directory](https://docs.rs/tauri/latest/tauri/path/struct.PathResolver.html#method.app_data_dir). You can change this by setting the [`path`](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.Builder.html#method.path) option when initializing the plugin.
 
 ::: code-group
 
@@ -75,4 +75,8 @@ tauri::Builder::default()
 
 ```
 
+:::
+
+::: tip
+This is not much different from calling [`saveAll`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/functions/saveAll.html) inside a JavaScript [`setInterval`](https://developer.mozilla.org/en-US/docs/Web/API/Window/setInterval). Use this feature only if you prefer using Rust to handle the autosave.
 :::

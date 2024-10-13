@@ -1,4 +1,4 @@
-# Getting Started
+# Getting started
 
 ::: info Supported Tauri Version
 This plugin requires Tauri `2.0` or later.
