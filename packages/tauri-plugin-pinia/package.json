@@ -4,7 +4,7 @@
   "description": "Persistent Pinia stores for Tauri",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@9.12.1",
+  "packageManager": "pnpm@9.12.3",
   "homepage": "https://tb.dev.br/tauri-store",
   "license": "MIT",
   "repository": {
@@ -45,8 +45,8 @@
     "typedoc": "typedoc --plugin typedoc-plugin-mdn-links"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.0.2",
-    "@tb-dev/utils": "^4.0.1",
+    "@tauri-apps/api": "^2.0.3",
+    "@tb-dev/utils": "^4.0.3",
     "lodash-es": "^4.17.21",
     "pinia": "^2.2.4",
     "vue": "^3.5.12"
