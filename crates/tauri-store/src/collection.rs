@@ -1,8 +1,8 @@
 use crate::error::Result;
 use crate::event::{emit_all, STORE_UNLOADED_EVENT};
+use crate::io_err;
 use crate::state::{StoreState, StoreStateExt};
 use crate::store::Store;
-use crate::{boxed, boxed_ok, io_err};
 use serde::de::DeserializeOwned;
 use serde_json::Value as Json;
 use std::fmt;
@@ -12,8 +12,12 @@ use tauri::{AppHandle, Manager, Resource, ResourceId, Runtime};
 
 #[cfg(feature = "unstable-async")]
 use {
-  crate::manager::ManagerExt, futures::future::BoxFuture, std::time::Duration,
-  tokio::sync::Mutex as TokioMutex, tokio::task::AbortHandle,
+  crate::manager::ManagerExt,
+  crate::{boxed, boxed_ok},
+  futures::future::BoxFuture,
+  std::time::Duration,
+  tokio::sync::Mutex as TokioMutex,
+  tokio::task::AbortHandle,
 };
 
 #[cfg(feature = "ahash")]
