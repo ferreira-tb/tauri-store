@@ -11,9 +11,6 @@ use std::sync::{Arc, Mutex};
 use std::{fmt, io};
 use tauri::{async_runtime, AppHandle, Runtime};
 
-#[cfg(feature = "unstable-async")]
-use crate::BoxFuture;
-
 #[cfg(feature = "ahash")]
 use ahash::HashMap;
 #[cfg(not(feature = "ahash"))]
