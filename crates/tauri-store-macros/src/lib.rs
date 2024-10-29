@@ -98,7 +98,7 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
         self.0.store_state(store_id).await
       }
 
-      /// Gets the store state if it exists, then tries to deserialize it as an instance of type `T`.
+      /// Gets the store state if it exists, then tries to parse it as an instance of type `T`.
       #[cfg(not(feature = "unstable-async"))]
       pub fn try_store_state<T>(&self, store_id: impl AsRef<str>) -> tauri_store::Result<T>
       where
@@ -107,7 +107,7 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
         self.0.try_store_state(store_id)
       }
 
-      /// Gets the store state if it exists, then tries to deserialize it as an instance of type `T`.
+      /// Gets the store state if it exists, then tries to parse it as an instance of type `T`.
       #[cfg(feature = "unstable-async")]
       pub async fn try_store_state<T>(&self, store_id: impl AsRef<str>) -> tauri_store::Result<T>
       where
@@ -129,7 +129,7 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
       }
 
       #[cfg(not(feature = "unstable-async"))]
-      /// Gets a value from a store and tries to interpret it as an instance of type `T`.
+      /// Gets a value from a store and tries to parse it as an instance of type `T`.
       pub fn try_get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> tauri_store::Result<T>
       where
         T: serde::de::DeserializeOwned,
@@ -138,7 +138,7 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
       }
 
       #[cfg(feature = "unstable-async")]
-      /// Gets a value from a store and tries to interpret it as an instance of type `T`.
+      /// Gets a value from a store and tries to parse it as an instance of type `T`.
       pub async fn try_get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> tauri_store::Result<T>
       where
         T: serde::de::DeserializeOwned,
