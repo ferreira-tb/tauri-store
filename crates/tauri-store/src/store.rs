@@ -1,7 +1,7 @@
 use crate::error::Result;
 use crate::event::{Payload, STORE_UPDATED_EVENT};
 use crate::io_err;
-use crate::listener::Listener;
+use crate::listener::{Listener, WatcherResult};
 use crate::manager::ManagerExt;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
@@ -20,7 +20,6 @@ use ahash::HashMap;
 use std::collections::HashMap;
 
 pub type StoreState = HashMap<String, Json>;
-pub type StoreStateArc = Arc<StoreState>;
 
 pub struct Store<R: Runtime> {
   app: AppHandle<R>,
@@ -192,27 +191,9 @@ impl<R: Runtime> Store<R> {
   }
 
   /// Watches the store for changes.
-  #[cfg(not(feature = "unstable-async"))]
   pub fn watch<F>(&self, f: F) -> u32
   where
-    F: Fn(StoreStateArc) -> Result<()> + Send + Sync + 'static,
-  {
-    let listener = Listener::new(f);
-    let id = listener.id;
-    self
-      .listeners
-      .lock()
-      .expect("listeners mutex is poisoned")
-      .insert(id, listener);
-
-    id
-  }
-
-  /// Watches the store for changes.
-  #[cfg(feature = "unstable-async")]
-  pub fn watch<F>(&self, f: F) -> u32
-  where
-    F: Fn(StoreStateArc) -> BoxFuture<'static, Result<()>> + Send + Sync + 'static,
+    F: Fn(Arc<StoreState>) -> WatcherResult + Send + Sync + 'static,
   {
     let listener = Listener::new(f);
     let id = listener.id;

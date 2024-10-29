@@ -1,7 +1,7 @@
 use crate::error::Result;
 use crate::event::{emit_all, STORE_UNLOADED_EVENT};
 use crate::io_err;
-use crate::store::{Store, StoreState, StoreStateArc};
+use crate::store::{Store, StoreState};
 use serde::de::DeserializeOwned;
 use serde_json::json;
 use serde_json::Value as Json;
@@ -296,7 +296,7 @@ impl<R: Runtime> StoreCollection<R> {
   #[cfg(not(feature = "unstable-async"))]
   pub fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<u32>
   where
-    F: Fn(StoreStateArc) -> Result<()> + Send + Sync + 'static,
+    F: Fn(Arc<StoreState>) -> Result<()> + Send + Sync + 'static,
   {
     self.with_store(store_id, move |store| Ok(store.watch(f)))
   }
@@ -305,7 +305,7 @@ impl<R: Runtime> StoreCollection<R> {
   #[cfg(feature = "unstable-async")]
   pub async fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<u32>
   where
-    F: Fn(StoreStateArc) -> BoxFuture<'static, Result<()>> + Send + Sync + 'static,
+    F: Fn(Arc<StoreState>) -> BoxFuture<'static, Result<()>> + Send + Sync + 'static,
   {
     self
       .with_store(store_id, move |store| {

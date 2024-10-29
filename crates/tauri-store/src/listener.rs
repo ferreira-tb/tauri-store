@@ -1,5 +1,5 @@
 use crate::error::Result;
-use crate::store::StoreStateArc;
+use crate::store::StoreState;
 use std::fmt;
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::Arc;
@@ -10,9 +10,11 @@ use crate::BoxFuture;
 static ID: AtomicU32 = AtomicU32::new(0);
 
 #[cfg(not(feature = "unstable-async"))]
-type ListenerFn = dyn Fn(StoreStateArc) -> Result<()> + Send + Sync;
+pub type WatcherResult = Result<()>;
 #[cfg(feature = "unstable-async")]
-type ListenerFn = dyn Fn(StoreStateArc) -> BoxFuture<'static, Result<()>> + Send + Sync;
+pub type WatcherResult = BoxFuture<'static, Result<()>>;
+
+type ListenerFn = dyn Fn(Arc<StoreState>) -> WatcherResult + Send + Sync;
 
 pub(crate) struct Listener {
   pub(crate) id: u32,
@@ -20,21 +22,9 @@ pub(crate) struct Listener {
 }
 
 impl Listener {
-  #[cfg(not(feature = "unstable-async"))]
   pub(crate) fn new<F>(f: F) -> Self
   where
-    F: Fn(StoreStateArc) -> Result<()> + Send + Sync + 'static,
-  {
-    Self {
-      id: ID.fetch_add(1, Ordering::Relaxed),
-      inner: Arc::new(f),
-    }
-  }
-
-  #[cfg(feature = "unstable-async")]
-  pub(crate) fn new<F>(f: F) -> Self
-  where
-    F: Fn(StoreStateArc) -> BoxFuture<'static, Result<()>> + Send + Sync + 'static,
+    F: Fn(Arc<StoreState>) -> WatcherResult + Send + Sync + 'static,
   {
     Self {
       id: ID.fetch_add(1, Ordering::Relaxed),
@@ -43,12 +33,12 @@ impl Listener {
   }
 
   #[cfg(not(feature = "unstable-async"))]
-  pub(crate) fn call(&self, state: StoreStateArc) -> Result<()> {
+  pub(crate) fn call(&self, state: Arc<StoreState>) -> Result<()> {
     (self.inner)(state)
   }
 
   #[cfg(feature = "unstable-async")]
-  pub(crate) async fn call(&self, state: StoreStateArc) -> Result<()> {
+  pub(crate) async fn call(&self, state: Arc<StoreState>) -> Result<()> {
     (self.inner)(state).await
   }
 }

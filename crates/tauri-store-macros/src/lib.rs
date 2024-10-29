@@ -174,7 +174,7 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
       #[cfg(not(feature = "unstable-async"))]
       pub fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> tauri_store::Result<u32>
       where
-        F: Fn(tauri_store::StoreStateArc) -> tauri_store::Result<()> + Send + Sync + 'static,
+        F: Fn(std::sync::Arc<tauri_store::StoreState>) -> tauri_store::WatcherResult + Send + Sync + 'static,
       {
         self.0.watch(store_id, f)
       }
@@ -183,7 +183,7 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
       #[cfg(feature = "unstable-async")]
       pub async fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> tauri_store::Result<u32>
       where
-        F: Fn(tauri_store::StoreStateArc) -> tauri_store::BoxFuture<'static, tauri_store::Result<()>> + Send + Sync + 'static,
+        F: Fn(std::sync::Arc<tauri_store::StoreState>) -> tauri_store::WatcherResult + Send + Sync + 'static,
       {
         self.0.watch(store_id, f).await
       }
