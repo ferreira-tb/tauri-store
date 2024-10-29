@@ -1,7 +1,7 @@
 use crate::error::Result;
 use crate::event::{emit_all, STORE_UNLOADED_EVENT};
 use crate::io_err;
-use crate::state::{StoreState, StoreStateExt};
+use crate::state::StoreState;
 use crate::store::Store;
 use serde::de::DeserializeOwned;
 use serde_json::Value as Json;
@@ -204,26 +204,24 @@ impl<R: Runtime> StoreCollection<R> {
     stores.get(store_id.as_ref()).map(Store::state)
   }
 
-  /// Gets the store state if it exists, then tries to deserialize it as an instance of type `T`.
+  /// Gets the store state if it exists, then tries to parse it as an instance of type `T`.
   #[cfg(not(feature = "unstable-async"))]
   pub fn try_store_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
   {
     let stores = self.stores.lock().unwrap();
-    let store = get_store!(stores, store_id)?;
-    store.state().parse()
+    get_store!(stores, store_id)?.try_state()
   }
 
-  /// Gets the store state if it exists, then tries to deserialize it as an instance of type `T`.
+  /// Gets the store state if it exists, then tries to parse it as an instance of type `T`.
   #[cfg(feature = "unstable-async")]
   pub async fn try_store_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
   {
     let stores = self.stores.lock().await;
-    let store = get_store!(stores, store_id)?;
-    store.state().parse()
+    get_store!(stores, store_id)?.try_state()
   }
 
   /// Gets a value from a store.
@@ -245,7 +243,7 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   #[cfg(not(feature = "unstable-async"))]
-  /// Gets a value from a store and tries to interpret it as an instance of type `T`.
+  /// Gets a value from a store and tries to parse it as an instance of type `T`.
   pub fn try_get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
@@ -259,7 +257,7 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   #[cfg(feature = "unstable-async")]
-  /// Gets a value from a store and tries to interpret it as an instance of type `T`.
+  /// Gets a value from a store and tries to parse it as an instance of type `T`.
   pub async fn try_get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,

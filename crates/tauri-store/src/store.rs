@@ -122,6 +122,11 @@ impl<R: Runtime> Store<R> {
     self.state.clone()
   }
 
+  /// Tries to parse the store state as an instance of type `T`.
+  pub fn try_state<T: DeserializeOwned>(&self) -> Result<T> {
+    self.state.parse()
+  }
+
   /// Gets a value from the store.
   pub fn get(&self, key: impl AsRef<str>) -> Option<&Json> {
     self.state.get(key.as_ref())
@@ -132,7 +137,7 @@ impl<R: Runtime> Store<R> {
     self.state.get_owned(key)
   }
 
-  /// Gets a value from the store and tries to interpret it as an instance of type `T`.
+  /// Gets a value from the store and tries to parse it as an instance of type `T`.
   pub fn try_get<T>(&self, key: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
