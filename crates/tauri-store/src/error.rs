@@ -5,6 +5,7 @@ use std::result::Result as StdResult;
 pub type Result<T> = StdResult<T, Error>;
 pub type BoxResult<T> = StdResult<T, Box<dyn StdError>>;
 
+#[non_exhaustive]
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
   #[error("missing feature: {0}")]
