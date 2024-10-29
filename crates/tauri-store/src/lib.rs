@@ -3,20 +3,20 @@
 mod collection;
 mod error;
 mod event;
-mod listener;
 mod manager;
 mod state;
 mod store;
+mod watch;
 
-pub use collection::{StoreCollection, StoreCollectionBuilder};
+pub use collection::{OnLoadFn, OnLoadResult, StoreCollection, StoreCollectionBuilder};
 pub use error::{BoxResult, Error, Result};
 pub use event::{STORE_UNLOADED_EVENT, STORE_UPDATED_EVENT};
-pub use listener::WatcherResult;
 pub use manager::ManagerExt;
 pub use serde_json::Value as Json;
 pub use state::{StoreState, StoreStateExt};
 pub use store::Store;
 use tauri::{Manager, Runtime};
+pub use watch::WatcherResult;
 
 #[cfg(feature = "derive")]
 pub use tauri_store_macros::Collection;

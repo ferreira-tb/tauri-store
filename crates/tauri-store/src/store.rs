@@ -1,8 +1,8 @@
 use crate::error::Result;
 use crate::event::{Payload, STORE_UPDATED_EVENT};
-use crate::listener::{Listener, WatcherResult};
 use crate::manager::ManagerExt;
 use crate::state::{StoreState, StoreStateExt};
+use crate::watch::{Watcher, WatcherResult};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::Value as Json;
@@ -11,6 +11,9 @@ use std::io::ErrorKind::NotFound;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
 use tauri::{async_runtime, AppHandle, Runtime};
+
+#[cfg(feature = "unstable-async")]
+use tauri::async_runtime::spawn_blocking;
 
 #[cfg(feature = "ahash")]
 use ahash::HashMap;
@@ -21,14 +24,12 @@ pub struct Store<R: Runtime> {
   app: AppHandle<R>,
   pub(crate) id: String,
   pub(crate) state: StoreState,
-  pub(crate) listeners: Arc<Mutex<HashMap<u32, Listener>>>,
+  pub(crate) listeners: Arc<Mutex<HashMap<u32, Watcher>>>,
 }
 
 impl<R: Runtime> Store<R> {
-  pub(crate) fn load(app: AppHandle<R>, id: impl AsRef<str>) -> Result<Self> {
-    let id = id.as_ref().to_owned();
+  fn blocking_load(app: AppHandle<R>, id: String) -> Result<Self> {
     let path = store_path(&app, &id);
-
     let state = match std::fs::read(path) {
       Ok(bytes) => serde_json::from_slice(&bytes)?,
       Err(e) if e.kind() == NotFound => StoreState::default(),
@@ -41,6 +42,18 @@ impl<R: Runtime> Store<R> {
       state,
       listeners: Arc::new(Mutex::default()),
     })
+  }
+
+  #[cfg(not(feature = "unstable-async"))]
+  pub(crate) fn load(app: AppHandle<R>, id: impl AsRef<str>) -> Result<Self> {
+    let id = id.as_ref().to_owned();
+    Self::blocking_load(app, id)
+  }
+
+  #[cfg(feature = "unstable-async")]
+  pub(crate) async fn load(app: AppHandle<R>, id: impl AsRef<str>) -> Result<Self> {
+    let id = id.as_ref().to_owned();
+    spawn_blocking(move || Self::blocking_load(app, id)).await?
   }
 
   /// Save the store state to the disk.
@@ -87,6 +100,7 @@ impl<R: Runtime> Store<R> {
     let bytes = to_bytes(&self.state, collection.pretty)?;
     let mut file = File::create(self.path()).await?;
     file.write_all(&bytes).await?;
+    file.flush().await?;
 
     Ok(())
   }
@@ -187,7 +201,7 @@ impl<R: Runtime> Store<R> {
   where
     F: Fn(Arc<StoreState>) -> WatcherResult + Send + Sync + 'static,
   {
-    let listener = Listener::new(f);
+    let listener = Watcher::new(f);
     let id = listener.id;
     self
       .listeners

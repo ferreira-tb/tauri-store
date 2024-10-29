@@ -7,27 +7,27 @@ use std::sync::Arc;
 #[cfg(feature = "unstable-async")]
 use futures::future::BoxFuture;
 
-static ID: AtomicU32 = AtomicU32::new(0);
+static WATCHER_ID: AtomicU32 = AtomicU32::new(0);
 
 #[cfg(not(feature = "unstable-async"))]
 pub type WatcherResult = Result<()>;
 #[cfg(feature = "unstable-async")]
 pub type WatcherResult = BoxFuture<'static, Result<()>>;
 
-type ListenerFn = dyn Fn(Arc<StoreState>) -> WatcherResult + Send + Sync;
+type WatcherFn = dyn Fn(Arc<StoreState>) -> WatcherResult + Send + Sync;
 
-pub(crate) struct Listener {
+pub(crate) struct Watcher {
   pub(crate) id: u32,
-  inner: Arc<ListenerFn>,
+  inner: Arc<WatcherFn>,
 }
 
-impl Listener {
+impl Watcher {
   pub(crate) fn new<F>(f: F) -> Self
   where
     F: Fn(Arc<StoreState>) -> WatcherResult + Send + Sync + 'static,
   {
     Self {
-      id: ID.fetch_add(1, Ordering::Relaxed),
+      id: WATCHER_ID.fetch_add(1, Ordering::Relaxed),
       inner: Arc::new(f),
     }
   }
@@ -43,7 +43,7 @@ impl Listener {
   }
 }
 
-impl Clone for Listener {
+impl Clone for Watcher {
   fn clone(&self) -> Self {
     Self {
       id: self.id,
@@ -52,7 +52,7 @@ impl Clone for Listener {
   }
 }
 
-impl fmt::Debug for Listener {
+impl fmt::Debug for Watcher {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     f.debug_struct("Listener")
       .field("id", &self.id)

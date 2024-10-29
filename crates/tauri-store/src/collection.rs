@@ -27,6 +27,13 @@ use std::collections::{HashMap, HashSet};
 
 pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
 
+#[cfg(not(feature = "unstable-async"))]
+pub type OnLoadResult = Result<()>;
+#[cfg(feature = "unstable-async")]
+pub type OnLoadResult = BoxFuture<'static, Result<()>>;
+
+pub type OnLoadFn = dyn Fn(&str, &StoreState) -> OnLoadResult + Send + Sync;
+
 pub struct StoreCollection<R: Runtime> {
   pub(crate) app: AppHandle<R>,
   pub(crate) path: PathBuf,
@@ -39,6 +46,8 @@ pub struct StoreCollection<R: Runtime> {
   pub(crate) pretty: bool,
   pub(crate) save_denylist: Option<HashSet<String>>,
   pub(crate) sync_denylist: Option<HashSet<String>>,
+
+  pub(crate) on_load: Option<Box<OnLoadFn>>,
 
   #[cfg(feature = "unstable-async")]
   pub(crate) autosave: StdMutex<Option<AbortHandle>>,
@@ -75,6 +84,10 @@ impl<R: Runtime> StoreCollection<R> {
     if !stores.contains_key(id) {
       let app = self.app.clone();
       let store = Store::load(app, id)?;
+      if let Some(ref on_load) = self.on_load {
+        on_load(id, &store.state)?;
+      }
+
       stores.insert(id.to_owned(), store);
     }
 
@@ -93,7 +106,11 @@ impl<R: Runtime> StoreCollection<R> {
     Box::pin(async move {
       let mut stores = self.stores.lock().await;
       if !stores.contains_key(&id) {
-        let store = Store::load(app, &id)?;
+        let store = Store::load(app, &id).await?;
+        if let Some(ref on_load) = self.on_load {
+          on_load(&id, &store.state).await?;
+        }
+
         stores.insert(id.clone(), store);
       }
 
@@ -402,12 +419,13 @@ impl<R: Runtime> Drop for StoreCollection<R> {
   }
 }
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct StoreCollectionBuilder {
   path: Option<PathBuf>,
   pretty: bool,
   save_denylist: Option<HashSet<String>>,
   sync_denylist: Option<HashSet<String>>,
+  on_load: Option<Box<OnLoadFn>>,
 }
 
 impl StoreCollectionBuilder {
@@ -439,6 +457,15 @@ impl StoreCollectionBuilder {
     self
   }
 
+  #[must_use]
+  pub fn on_load<F>(mut self, f: F) -> Self
+  where
+    F: Fn(&str, &StoreState) -> OnLoadResult + Send + Sync + 'static,
+  {
+    self.on_load = Some(Box::new(f));
+    self
+  }
+
   pub fn build<R: Runtime>(mut self, app: &AppHandle<R>) -> Arc<StoreCollection<R>> {
     let path = self.path.take().unwrap_or_else(|| {
       app
@@ -447,6 +474,9 @@ impl StoreCollectionBuilder {
         .expect("failed to resolve app data dir")
         .join("tauri-store")
     });
+
+    self.save_denylist = self.save_denylist.filter(|it| !it.is_empty());
+    self.sync_denylist = self.sync_denylist.filter(|it| !it.is_empty());
 
     let collection = Arc::new(StoreCollection::<R> {
       app: app.clone(),
@@ -459,6 +489,8 @@ impl StoreCollectionBuilder {
       stores: StdMutex::new(HashMap::new()),
       #[cfg(feature = "unstable-async")]
       stores: TokioMutex::new(HashMap::new()),
+
+      on_load: self.on_load,
 
       #[cfg(feature = "unstable-async")]
       autosave: StdMutex::new(None),

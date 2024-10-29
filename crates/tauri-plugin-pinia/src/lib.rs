@@ -31,7 +31,8 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
 use tauri_store::StoreCollection;
 pub use tauri_store::{
-  BoxResult, Error, Json, Result, Store, StoreState, StoreStateExt, WatcherResult,
+  BoxResult, Error, Json, OnLoadFn, OnLoadResult, Result, Store, StoreState, StoreStateExt,
+  WatcherResult,
 };
 
 #[cfg(feature = "unstable-async")]
@@ -51,6 +52,8 @@ pub struct Builder {
   pretty: bool,
   save_denylist: HashSet<String>,
   sync_denylist: HashSet<String>,
+
+  on_load: Option<Box<OnLoadFn>>,
 
   #[cfg(feature = "unstable-async")]
   autosave: Option<Duration>,
@@ -96,6 +99,17 @@ impl Builder {
     self
   }
 
+  /// Sets a function to be called when a store is loaded.
+  /// It will receive the store id and current state as arguments.
+  #[must_use]
+  pub fn on_load<F>(mut self, f: F) -> Self
+  where
+    F: Fn(&str, &StoreState) -> OnLoadResult + Send + Sync + 'static,
+  {
+    self.on_load = Some(Box::new(f));
+    self
+  }
+
   /// Sets the autosave interval for all stores.
   #[cfg(feature = "unstable-async")]
   #[cfg_attr(docsrs, doc(cfg(feature = "unstable-async")))]
@@ -137,14 +151,17 @@ fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder) -> BoxResult<()> 
       .join("pinia")
   });
 
-  let collection = StoreCollection::<R>::builder()
+  let mut collection = StoreCollection::<R>::builder()
     .path(path)
     .pretty(builder.pretty)
     .save_denylist(builder.save_denylist)
-    .sync_denylist(builder.sync_denylist)
-    .build(app);
+    .sync_denylist(builder.sync_denylist);
 
-  app.manage(Pinia(collection));
+  if let Some(on_load) = builder.on_load {
+    collection = collection.on_load(on_load);
+  }
+
+  app.manage(Pinia(collection.build(app)));
 
   #[cfg(feature = "unstable-async")]
   if let Some(duration) = builder.autosave {
