@@ -76,20 +76,20 @@ impl Builder {
 
   /// Sets a list of stores that should not be saved to disk.
   #[must_use]
-  pub fn save_denylist(mut self, denylist: &[&str]) -> Self {
+  pub fn save_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
     self
       .save_denylist
-      .extend(denylist.iter().map(ToString::to_string));
+      .extend(denylist.iter().map(|s| s.as_ref().to_string()));
 
     self
   }
 
   /// Sets a list of stores that should not be synchronized across windows.
   #[must_use]
-  pub fn sync_denylist(mut self, denylist: &[&str]) -> Self {
+  pub fn sync_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
     self
       .sync_denylist
-      .extend(denylist.iter().map(ToString::to_string));
+      .extend(denylist.iter().map(|s| s.as_ref().to_string()));
 
     self
   }

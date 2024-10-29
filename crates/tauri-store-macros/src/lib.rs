@@ -170,6 +170,36 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
         self.0.patch(store_id, state).await
       }
 
+      /// Watches a store for changes.
+      #[cfg(not(feature = "unstable-async"))]
+      pub fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> tauri_store::Result<u32>
+      where
+        F: Fn(tauri_store::StoreStateArc) -> tauri_store::Result<()> + Send + Sync + 'static,
+      {
+        self.0.watch(store_id, f)
+      }
+
+      /// Watches a store for changes.
+      #[cfg(feature = "unstable-async")]
+      pub async fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> tauri_store::Result<u32>
+      where
+        F: Fn(tauri_store::StoreStateArc) -> tauri_store::BoxFuture<'static, tauri_store::Result<()>> + Send + Sync + 'static,
+      {
+        self.0.watch(store_id, f).await
+      }
+
+      /// Removes a listener from a store.
+      #[cfg(not(feature = "unstable-async"))]
+      pub fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> tauri_store::Result<bool> {
+        self.0.unwatch(store_id, listener_id)
+      }
+
+      /// Removes a listener from a store.
+      #[cfg(feature = "unstable-async")]
+      pub async fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> tauri_store::Result<bool> {
+        self.0.unwatch(store_id, listener_id).await
+      }
+
       /// Saves the stores periodically.
       #[cfg(feature = "unstable-async")]
       #[cfg_attr(docsrs, doc(cfg(feature = "unstable-async")))]

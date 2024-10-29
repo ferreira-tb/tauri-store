@@ -4,6 +4,9 @@ use serde::{Deserialize, Serialize};
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 use tauri_plugin_pinia::ManagerExt;
 
+#[cfg(feature = "unstable-async")]
+use tauri::async_runtime::block_on;
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 struct CounterStore {
@@ -23,6 +26,12 @@ fn main() {
     .setup(|app| {
       let handle = app.handle();
       (1..=4).for_each(|id| open_window(handle, id));
+
+      #[cfg(not(feature = "unstable-async"))]
+      watch_counter(handle);
+      #[cfg(feature = "unstable-async")]
+      block_on(watch_counter(handle));
+
       Ok(())
     })
     .invoke_handler(tauri::generate_handler![
@@ -48,6 +57,27 @@ fn open_window(app: &AppHandle, id: u8) {
     .always_on_top(true)
     .build()
     .unwrap();
+}
+
+#[cfg(not(feature = "unstable-async"))]
+fn watch_counter(app: &AppHandle) {
+  let _ = app.pinia().watch("store", |state| {
+    println!("counter: {}", state.get("counter").unwrap());
+    Ok(())
+  });
+}
+
+#[cfg(feature = "unstable-async")]
+async fn watch_counter(app: &AppHandle) {
+  let _ = app
+    .pinia()
+    .watch("store", |state| {
+      Box::pin(async move {
+        println!("counter: {}", state.get("counter").unwrap());
+        Ok(())
+      })
+    })
+    .await;
 }
 
 #[cfg(not(feature = "unstable-async"))]

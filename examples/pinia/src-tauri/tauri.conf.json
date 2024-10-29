@@ -1,6 +1,6 @@
 {
   "productName": "example-pinia",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "identifier": "tsukilabs.example.pinia",
   "build": {
     "beforeDevCommand": "pnpm run -F example-pinia vite:dev",

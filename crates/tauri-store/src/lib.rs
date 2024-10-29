@@ -3,6 +3,7 @@
 mod collection;
 mod error;
 mod event;
+mod listener;
 mod manager;
 mod store;
 
@@ -11,7 +12,7 @@ pub use error::{BoxResult, Error, Result};
 pub use event::{STORE_UNLOADED_EVENT, STORE_UPDATED_EVENT};
 pub use manager::ManagerExt;
 pub use serde_json::Value as Json;
-pub use store::{Store, StoreState};
+pub use store::{Store, StoreState, StoreStateArc};
 use tauri::{Manager, Runtime};
 
 #[cfg(feature = "derive")]

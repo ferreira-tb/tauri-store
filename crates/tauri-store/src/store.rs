@@ -1,13 +1,18 @@
 use crate::error::Result;
 use crate::event::{Payload, STORE_UPDATED_EVENT};
 use crate::io_err;
+use crate::listener::Listener;
 use crate::manager::ManagerExt;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::Value as Json;
 use std::path::PathBuf;
+use std::sync::{Arc, Mutex};
 use std::{fmt, io};
-use tauri::{AppHandle, Runtime};
+use tauri::{async_runtime, AppHandle, Runtime};
+
+#[cfg(feature = "unstable-async")]
+use crate::BoxFuture;
 
 #[cfg(feature = "ahash")]
 use ahash::HashMap;
@@ -15,11 +20,13 @@ use ahash::HashMap;
 use std::collections::HashMap;
 
 pub type StoreState = HashMap<String, Json>;
+pub type StoreStateArc = Arc<StoreState>;
 
 pub struct Store<R: Runtime> {
+  app: AppHandle<R>,
   pub(crate) id: String,
   pub(crate) state: StoreState,
-  app: AppHandle<R>,
+  pub(crate) listeners: Arc<Mutex<HashMap<u32, Listener>>>,
 }
 
 impl<R: Runtime> Store<R> {
@@ -33,7 +40,12 @@ impl<R: Runtime> Store<R> {
       Err(e) => return Err(e.into()),
     };
 
-    Ok(Self { id, state, app })
+    Ok(Self {
+      app,
+      id,
+      state,
+      listeners: Arc::new(Mutex::default()),
+    })
   }
 
   /// Save the store state to the disk.
@@ -126,7 +138,10 @@ impl<R: Runtime> Store<R> {
   /// Sets a key-value pair in the store.
   pub fn set(&mut self, key: impl AsRef<str>, value: Json) -> Result<()> {
     self.state.insert(key.as_ref().to_owned(), value);
-    self.emit(None)
+    self.emit(None)?;
+    self.call_listeners();
+
+    Ok(())
   }
 
   /// Patches the store state, optionally having a window as the source.
@@ -135,7 +150,10 @@ impl<R: Runtime> Store<R> {
     S: Into<Option<&'a str>>,
   {
     self.state.extend(state);
-    self.emit(source)
+    self.emit(source)?;
+    self.call_listeners();
+
+    Ok(())
   }
 
   /// Patches the store state.
@@ -173,6 +191,50 @@ impl<R: Runtime> Store<R> {
     self.state.is_empty()
   }
 
+  /// Watches the store for changes.
+  #[cfg(not(feature = "unstable-async"))]
+  pub fn watch<F>(&self, f: F) -> u32
+  where
+    F: Fn(StoreStateArc) -> Result<()> + Send + Sync + 'static,
+  {
+    let listener = Listener::new(f);
+    let id = listener.id;
+    self
+      .listeners
+      .lock()
+      .expect("listeners mutex is poisoned")
+      .insert(id, listener);
+
+    id
+  }
+
+  /// Watches the store for changes.
+  #[cfg(feature = "unstable-async")]
+  pub fn watch<F>(&self, f: F) -> u32
+  where
+    F: Fn(StoreStateArc) -> BoxFuture<'static, Result<()>> + Send + Sync + 'static,
+  {
+    let listener = Listener::new(f);
+    let id = listener.id;
+    self
+      .listeners
+      .lock()
+      .expect("listeners mutex is poisoned")
+      .insert(id, listener);
+
+    id
+  }
+
+  /// Removes a listener from this store.
+  pub fn unwatch(&self, id: u32) -> bool {
+    self
+      .listeners
+      .lock()
+      .expect("listeners mutex is poisoned")
+      .remove(&id)
+      .is_some()
+  }
+
   fn emit<'a, S>(&self, source: S) -> Result<()>
   where
     S: Into<Option<&'a str>>,
@@ -196,6 +258,29 @@ impl<R: Runtime> Store<R> {
       payload.emit_filter(&self.app, STORE_UPDATED_EVENT, |it| it != source)
     } else {
       payload.emit_all(&self.app, STORE_UPDATED_EVENT)
+    }
+  }
+
+  fn call_listeners(&self) {
+    let listeners = self
+      .listeners
+      .lock()
+      .expect("listeners mutex is poisoned")
+      .clone();
+
+    let state = Arc::new(self.state());
+    for listener in listeners.into_values() {
+      let state = Arc::clone(&state);
+
+      #[cfg(not(feature = "unstable-async"))]
+      async_runtime::spawn_blocking(move || {
+        let _ = listener.call(state);
+      });
+
+      #[cfg(feature = "unstable-async")]
+      async_runtime::spawn(async move {
+        let _ = listener.call(state).await;
+      });
     }
   }
 }

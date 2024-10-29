@@ -1,7 +1,7 @@
 use crate::error::Result;
 use crate::event::{emit_all, STORE_UNLOADED_EVENT};
 use crate::io_err;
-use crate::store::{Store, StoreState};
+use crate::store::{Store, StoreState, StoreStateArc};
 use serde::de::DeserializeOwned;
 use serde_json::json;
 use serde_json::Value as Json;
@@ -92,7 +92,7 @@ impl<R: Runtime> StoreCollection<R> {
     Box::pin(async move {
       let mut stores = self.stores.lock().await;
       if !stores.contains_key(&id) {
-        let store = Store::load(app, &id).unwrap();
+        let store = Store::load(app, &id)?;
         stores.insert(id.clone(), store);
       }
 
@@ -289,6 +289,44 @@ impl<R: Runtime> StoreCollection<R> {
   pub async fn patch(&self, store_id: impl AsRef<str>, state: StoreState) -> Result<()> {
     self
       .with_store(store_id, |store| async { store.patch(state) }.boxed())
+      .await
+  }
+
+  /// Watches a store for changes.
+  #[cfg(not(feature = "unstable-async"))]
+  pub fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<u32>
+  where
+    F: Fn(StoreStateArc) -> Result<()> + Send + Sync + 'static,
+  {
+    self.with_store(store_id, move |store| Ok(store.watch(f)))
+  }
+
+  /// Watches a store for changes.
+  #[cfg(feature = "unstable-async")]
+  pub async fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<u32>
+  where
+    F: Fn(StoreStateArc) -> BoxFuture<'static, Result<()>> + Send + Sync + 'static,
+  {
+    self
+      .with_store(store_id, move |store| {
+        async move { store.watch(f) }.boxed_ok()
+      })
+      .await
+  }
+
+  /// Removes a listener from a store.
+  #[cfg(not(feature = "unstable-async"))]
+  pub fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> Result<bool> {
+    self.with_store(store_id, move |store| Ok(store.unwatch(listener_id)))
+  }
+
+  /// Removes a listener from a store.
+  #[cfg(feature = "unstable-async")]
+  pub async fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> Result<bool> {
+    self
+      .with_store(store_id, move |store| {
+        async move { store.unwatch(listener_id) }.boxed_ok()
+      })
       .await
   }
 
