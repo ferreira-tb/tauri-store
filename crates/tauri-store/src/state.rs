@@ -11,13 +11,13 @@ use std::collections::HashMap;
 pub type StoreState = HashMap<String, Json>;
 
 pub trait StoreStateExt {
-  fn parse<T: DeserializeOwned>(self) -> Result<T>;
+  fn parse<T: DeserializeOwned>(&self) -> Result<T>;
   fn get_owned(&self, key: impl AsRef<str>) -> Option<Json>;
   fn try_get<T: DeserializeOwned>(&self, key: impl AsRef<str>) -> Result<T>;
 }
 
 impl StoreStateExt for StoreState {
-  fn parse<T: DeserializeOwned>(self) -> Result<T> {
+  fn parse<T: DeserializeOwned>(&self) -> Result<T> {
     from_value(json!(self)).map_err(Into::into)
   }
 
