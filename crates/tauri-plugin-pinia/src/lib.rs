@@ -30,10 +30,12 @@ use std::path::{Path, PathBuf};
 use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
 use tauri_store::StoreCollection;
-pub use tauri_store::{BoxResult, Error, Json, Result, Store, StoreState, WatcherResult};
+pub use tauri_store::{
+  BoxResult, Error, Json, Result, Store, StoreState, StoreStateExt, WatcherResult,
+};
 
 #[cfg(feature = "unstable-async")]
-pub use tauri_store::{BoxFuture, FutureExt};
+pub use tauri_store::{boxed, boxed_ok, BoxFuture};
 
 #[cfg(feature = "unstable-async")]
 use {std::time::Duration, tauri::async_runtime};

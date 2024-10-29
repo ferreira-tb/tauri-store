@@ -2,8 +2,12 @@ use crate::manager::ManagerExt;
 use std::path::PathBuf;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
 use tauri_store::{Result, StoreState};
+
 #[cfg(feature = "unstable-async")]
-use {std::time::Duration, tauri_store::FutureExt};
+use {
+  std::time::Duration,
+  tauri_store::{boxed, boxed_ok},
+};
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
@@ -47,7 +51,7 @@ pub(crate) async fn get_store_path<R: Runtime>(app: AppHandle<R>, id: String) ->
 pub(crate) async fn get_store_path<R: Runtime>(app: AppHandle<R>, id: String) -> Result<PathBuf> {
   app
     .pinia()
-    .with_store(id, |store| async { store.path() }.boxed_ok())
+    .with_store(id, |store| boxed_ok! { store.path() })
     .await
 }
 
@@ -82,7 +86,7 @@ pub(crate) async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<St
 pub(crate) async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<StoreState> {
   app
     .pinia()
-    .with_store(id, |store| async { store.state() }.boxed_ok())
+    .with_store(id, |store| boxed_ok! { store.state() })
     .await
 }
 
@@ -110,7 +114,7 @@ pub(crate) async fn patch<R: Runtime>(
   app
     .pinia()
     .with_store(id, move |store| {
-      async move { store.patch_with_source(state, window.label()) }.boxed()
+      boxed! { store.patch_with_source(state, window.label()) }
     })
     .await
 }

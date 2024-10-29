@@ -35,6 +35,10 @@ thiserror = "1.0"
 version = "0.8"
 optional = true
 
+[dependencies.futures]
+version = "0.3"
+optional = true
+
 [dependencies.tauri-store-macros]
 version = "0.3"
 optional = true
@@ -52,5 +56,5 @@ features = ["build"]
 
 [features]
 derive = ["dep:tauri-store-macros"]
-unstable-async = ["dep:tokio"]
+unstable-async = ["dep:futures", "dep:tokio"]
 ahash = ["dep:ahash", "ahash/serde"]

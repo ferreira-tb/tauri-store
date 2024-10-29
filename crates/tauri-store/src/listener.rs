@@ -1,11 +1,11 @@
 use crate::error::Result;
-use crate::store::StoreState;
+use crate::state::StoreState;
 use std::fmt;
 use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::Arc;
 
 #[cfg(feature = "unstable-async")]
-use crate::BoxFuture;
+use futures::future::BoxFuture;
 
 static ID: AtomicU32 = AtomicU32::new(0);
 

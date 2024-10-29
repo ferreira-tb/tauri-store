@@ -1,22 +1,21 @@
 use crate::error::Result;
 use crate::event::{Payload, STORE_UPDATED_EVENT};
-use crate::io_err;
 use crate::listener::{Listener, WatcherResult};
 use crate::manager::ManagerExt;
+use crate::state::{StoreState, StoreStateExt};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::Value as Json;
+use std::fmt;
+use std::io::ErrorKind::NotFound;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
-use std::{fmt, io};
 use tauri::{async_runtime, AppHandle, Runtime};
 
 #[cfg(feature = "ahash")]
 use ahash::HashMap;
 #[cfg(not(feature = "ahash"))]
 use std::collections::HashMap;
-
-pub type StoreState = HashMap<String, Json>;
 
 pub struct Store<R: Runtime> {
   app: AppHandle<R>,
@@ -32,7 +31,7 @@ impl<R: Runtime> Store<R> {
 
     let state = match std::fs::read(path) {
       Ok(bytes) => serde_json::from_slice(&bytes)?,
-      Err(e) if e.kind() == io::ErrorKind::NotFound => StoreState::default(),
+      Err(e) if e.kind() == NotFound => StoreState::default(),
       Err(e) => return Err(e.into()),
     };
 
@@ -116,7 +115,7 @@ impl<R: Runtime> Store<R> {
 
   /// Gets a clone of the value from the store.
   pub fn get_owned(&self, key: impl AsRef<str>) -> Option<Json> {
-    self.get(key).cloned()
+    self.state.get_owned(key)
   }
 
   /// Gets a value from the store and tries to interpret it as an instance of type `T`.
@@ -124,11 +123,7 @@ impl<R: Runtime> Store<R> {
   where
     T: DeserializeOwned,
   {
-    let Some(value) = self.get_owned(key.as_ref()) else {
-      return io_err!(NotFound, "key not found: {}", key.as_ref());
-    };
-
-    serde_json::from_value(value).map_err(Into::into)
+    self.state.try_get(key)
   }
 
   /// Sets a key-value pair in the store.

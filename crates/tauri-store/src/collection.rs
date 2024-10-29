@@ -1,9 +1,9 @@
 use crate::error::Result;
 use crate::event::{emit_all, STORE_UNLOADED_EVENT};
-use crate::io_err;
-use crate::store::{Store, StoreState};
+use crate::state::{StoreState, StoreStateExt};
+use crate::store::Store;
+use crate::{boxed, boxed_ok, io_err};
 use serde::de::DeserializeOwned;
-use serde_json::json;
 use serde_json::Value as Json;
 use std::fmt;
 use std::path::{Path, PathBuf};
@@ -12,11 +12,8 @@ use tauri::{AppHandle, Manager, Resource, ResourceId, Runtime};
 
 #[cfg(feature = "unstable-async")]
 use {
-  crate::manager::ManagerExt,
-  crate::{BoxFuture, FutureExt},
-  std::time::Duration,
-  tokio::sync::Mutex as TokioMutex,
-  tokio::task::AbortHandle,
+  crate::manager::ManagerExt, futures::future::BoxFuture, std::time::Duration,
+  tokio::sync::Mutex as TokioMutex, tokio::task::AbortHandle,
 };
 
 #[cfg(feature = "ahash")]
@@ -194,9 +191,7 @@ impl<R: Runtime> StoreCollection<R> {
   {
     let stores = self.stores.lock().unwrap();
     let store = get_store!(stores, store_id)?;
-
-    let state = json!(store.state());
-    serde_json::from_value(state).map_err(Into::into)
+    store.state().parse()
   }
 
   /// Gets the store state if it exists, then tries to deserialize it as an instance of type `T`.
@@ -207,9 +202,7 @@ impl<R: Runtime> StoreCollection<R> {
   {
     let stores = self.stores.lock().await;
     let store = get_store!(stores, store_id)?;
-
-    let state = json!(store.state());
-    serde_json::from_value(state).map_err(Into::into)
+    store.state().parse()
   }
 
   /// Gets a value from a store.
@@ -274,7 +267,7 @@ impl<R: Runtime> StoreCollection<R> {
   ) -> Result<()> {
     let key = key.as_ref().to_owned();
     self
-      .with_store(store_id, |store| async { store.set(key, value) }.boxed())
+      .with_store(store_id, |store| boxed! { store.set(key, value) })
       .await
   }
 
@@ -288,7 +281,7 @@ impl<R: Runtime> StoreCollection<R> {
   #[cfg(feature = "unstable-async")]
   pub async fn patch(&self, store_id: impl AsRef<str>, state: StoreState) -> Result<()> {
     self
-      .with_store(store_id, |store| async { store.patch(state) }.boxed())
+      .with_store(store_id, |store| boxed! { store.patch(state) })
       .await
   }
 
@@ -308,9 +301,7 @@ impl<R: Runtime> StoreCollection<R> {
     F: Fn(Arc<StoreState>) -> BoxFuture<'static, Result<()>> + Send + Sync + 'static,
   {
     self
-      .with_store(store_id, move |store| {
-        async move { store.watch(f) }.boxed_ok()
-      })
+      .with_store(store_id, move |store| boxed_ok! { store.watch(f) })
       .await
   }
 
@@ -325,7 +316,7 @@ impl<R: Runtime> StoreCollection<R> {
   pub async fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> Result<bool> {
     self
       .with_store(store_id, move |store| {
-        async move { store.unwatch(listener_id) }.boxed_ok()
+        boxed_ok! { store.unwatch(listener_id) }
       })
       .await
   }
