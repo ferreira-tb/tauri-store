@@ -92,7 +92,7 @@ impl<R: Runtime> StoreCollection<R> {
     Box::pin(async move {
       let mut stores = self.stores.lock().await;
       if !stores.contains_key(&id) {
-        let store = Store::load(app, &id).unwrap();
+        let store = Store::load(app, &id)?;
         stores.insert(id.clone(), store);
       }
 
