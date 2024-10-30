@@ -83,16 +83,12 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
       }
 
       /// Gets a clone of the store state if it exists.
-      ///
-      /// **WARNING:** Changes to the returned state will not be reflected in the store.
       #[cfg(not(feature = "unstable-async"))]
       pub fn store_state(&self, store_id: impl AsRef<str>) -> Option<tauri_store::StoreState> {
         self.0.store_state(store_id)
       }
 
       /// Gets a clone of the store state if it exists.
-      ///
-      /// **WARNING:** Changes to the returned state will not be reflected in the store.
       #[cfg(feature = "unstable-async")]
       pub async fn store_state(&self, store_id: impl AsRef<str>) -> Option<tauri_store::StoreState> {
         self.0.store_state(store_id).await
@@ -174,7 +170,7 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
       #[cfg(not(feature = "unstable-async"))]
       pub fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> tauri_store::Result<u32>
       where
-        F: Fn(std::sync::Arc<tauri_store::StoreState>) -> tauri_store::WatcherResult + Send + Sync + 'static,
+        F: Fn(tauri::AppHandle<R>) -> tauri_store::WatcherResult + Send + Sync + 'static,
       {
         self.0.watch(store_id, f)
       }
@@ -183,7 +179,7 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
       #[cfg(feature = "unstable-async")]
       pub async fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> tauri_store::Result<u32>
       where
-        F: Fn(std::sync::Arc<tauri_store::StoreState>) -> tauri_store::WatcherResult + Send + Sync + 'static,
+        F: Fn(tauri::AppHandle<R>) -> tauri_store::WatcherResult + Send + Sync + 'static,
       {
         self.0.watch(store_id, f).await
       }

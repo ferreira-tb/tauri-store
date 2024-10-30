@@ -78,7 +78,7 @@ pub(crate) async fn get_store_state<R: Runtime>(
 pub(crate) async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<StoreState> {
   app
     .pinia()
-    .with_store(id, |store| Ok(store.state()))
+    .with_store(id, |store| Ok(store.state().clone()))
 }
 
 #[cfg(feature = "unstable-async")]
@@ -86,7 +86,7 @@ pub(crate) async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<St
 pub(crate) async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<StoreState> {
   app
     .pinia()
-    .with_store(id, |store| boxed_ok! { store.state() })
+    .with_store(id, |store| boxed_ok! { store.state().clone() })
     .await
 }
 

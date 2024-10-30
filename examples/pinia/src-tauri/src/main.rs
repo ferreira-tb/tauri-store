@@ -61,9 +61,12 @@ fn open_window(app: &AppHandle, id: u8) {
 
 #[cfg(not(feature = "unstable-async"))]
 fn watch_counter(app: &AppHandle) {
-  let _ = app.pinia().watch("store", |state| {
-    println!("counter: {}", state.get("counter").unwrap());
-    Ok(())
+  let _ = app.pinia().watch("store", |handle| {
+    handle
+      .pinia()
+      .try_get::<i32>("store", "counter")
+      .inspect(|counter| println!("counter: {counter}"))
+      .map(drop)
   });
 }
 
@@ -71,10 +74,14 @@ fn watch_counter(app: &AppHandle) {
 async fn watch_counter(app: &AppHandle) {
   let _ = app
     .pinia()
-    .watch("store", |state| {
+    .watch("store", |handle| {
       Box::pin(async move {
-        println!("counter: {}", state.get("counter").unwrap());
-        Ok(())
+        handle
+          .pinia()
+          .try_get::<i32>("store", "counter")
+          .await
+          .inspect(|counter| println!("counter: {counter}"))
+          .map(drop)
       })
     })
     .await;

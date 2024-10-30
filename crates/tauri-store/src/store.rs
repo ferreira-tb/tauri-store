@@ -24,7 +24,7 @@ pub struct Store<R: Runtime> {
   app: AppHandle<R>,
   pub(crate) id: String,
   pub(crate) state: StoreState,
-  pub(crate) listeners: Arc<Mutex<HashMap<u32, Watcher>>>,
+  pub(crate) listeners: Arc<Mutex<HashMap<u32, Watcher<R>>>>,
 }
 
 impl<R: Runtime> Store<R> {
@@ -115,11 +115,14 @@ impl<R: Runtime> Store<R> {
     store_path(&self.app, &self.id)
   }
 
-  /// Gets a clone of the store state.
-  ///
-  /// **WARNING:** Changes to the returned state will not be reflected in the store.
-  pub fn state(&self) -> StoreState {
-    self.state.clone()
+  /// Gets a handle to the application instance.
+  pub fn app_handle(&self) -> &AppHandle<R> {
+    &self.app
+  }
+
+  /// Gets a reference to the store state.
+  pub fn state(&self) -> &StoreState {
+    &self.state
   }
 
   /// Tries to parse the store state as an instance of type `T`.
@@ -132,16 +135,8 @@ impl<R: Runtime> Store<R> {
     self.state.get(key.as_ref())
   }
 
-  /// Gets a clone of the value from the store.
-  pub fn get_owned(&self, key: impl AsRef<str>) -> Option<Json> {
-    self.state.get_owned(key)
-  }
-
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
-  pub fn try_get<T>(&self, key: impl AsRef<str>) -> Result<T>
-  where
-    T: DeserializeOwned,
-  {
+  pub fn try_get<T: DeserializeOwned>(&self, key: impl AsRef<str>) -> Result<T> {
     self.state.try_get(key)
   }
 
@@ -204,7 +199,7 @@ impl<R: Runtime> Store<R> {
   /// Watches the store for changes.
   pub fn watch<F>(&self, f: F) -> u32
   where
-    F: Fn(Arc<StoreState>) -> WatcherResult + Send + Sync + 'static,
+    F: Fn(AppHandle<R>) -> WatcherResult + Send + Sync + 'static,
   {
     let listener = Watcher::new(f);
     let id = listener.id;
@@ -260,18 +255,17 @@ impl<R: Runtime> Store<R> {
       .expect("listeners mutex is poisoned")
       .clone();
 
-    let state = Arc::new(self.state());
     for listener in listeners.into_values() {
-      let state = Arc::clone(&state);
+      let app = self.app.clone();
 
       #[cfg(not(feature = "unstable-async"))]
       async_runtime::spawn_blocking(move || {
-        let _ = listener.call(state);
+        let _ = listener.call(app);
       });
 
       #[cfg(feature = "unstable-async")]
       async_runtime::spawn(async move {
-        let _ = listener.call(state).await;
+        let _ = listener.call(app).await;
       });
     }
   }

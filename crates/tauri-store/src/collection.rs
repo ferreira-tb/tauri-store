@@ -32,7 +32,7 @@ pub type OnLoadResult = Result<()>;
 #[cfg(feature = "unstable-async")]
 pub type OnLoadResult = BoxFuture<'static, Result<()>>;
 
-pub type OnLoadFn = dyn Fn(&str, &StoreState) -> OnLoadResult + Send + Sync;
+pub type OnLoadFn<R> = dyn Fn(&Store<R>) -> OnLoadResult + Send + Sync;
 
 pub struct StoreCollection<R: Runtime> {
   pub(crate) app: AppHandle<R>,
@@ -47,7 +47,7 @@ pub struct StoreCollection<R: Runtime> {
   pub(crate) save_denylist: Option<HashSet<String>>,
   pub(crate) sync_denylist: Option<HashSet<String>>,
 
-  pub(crate) on_load: Option<Box<OnLoadFn>>,
+  pub(crate) on_load: Option<Box<OnLoadFn<R>>>,
 
   #[cfg(feature = "unstable-async")]
   pub(crate) autosave: StdMutex<Option<AbortHandle>>,
@@ -64,7 +64,7 @@ macro_rules! get_store {
 }
 
 impl<R: Runtime> StoreCollection<R> {
-  pub fn builder() -> StoreCollectionBuilder {
+  pub fn builder() -> StoreCollectionBuilder<R> {
     StoreCollectionBuilder::new()
   }
 
@@ -84,8 +84,8 @@ impl<R: Runtime> StoreCollection<R> {
     if !stores.contains_key(id) {
       let app = self.app.clone();
       let store = Store::load(app, id)?;
-      if let Some(ref on_load) = self.on_load {
-        on_load(id, &store.state)?;
+      if let Some(on_load) = &self.on_load {
+        on_load(&store)?;
       }
 
       stores.insert(id.to_owned(), store);
@@ -107,8 +107,8 @@ impl<R: Runtime> StoreCollection<R> {
       let mut stores = self.stores.lock().await;
       if !stores.contains_key(&id) {
         let store = Store::load(app, &id).await?;
-        if let Some(ref on_load) = self.on_load {
-          on_load(&id, &store.state).await?;
+        if let Some(on_load) = &self.on_load {
+          on_load(&store).await?;
         }
 
         stores.insert(id.clone(), store);
@@ -187,21 +187,21 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Gets a clone of the store state if it exists.
-  ///
-  /// **WARNING:** Changes to the returned state will not be reflected in the store.
   #[cfg(not(feature = "unstable-async"))]
   pub fn store_state(&self, store_id: impl AsRef<str>) -> Option<StoreState> {
     let stores = self.stores.lock().unwrap();
-    stores.get(store_id.as_ref()).map(Store::state)
+    stores
+      .get(store_id.as_ref())
+      .map(|it| it.state().clone())
   }
 
   /// Gets a clone of the store state if it exists.
-  ///
-  /// **WARNING:** Changes to the returned state will not be reflected in the store.
   #[cfg(feature = "unstable-async")]
   pub async fn store_state(&self, store_id: impl AsRef<str>) -> Option<StoreState> {
     let stores = self.stores.lock().await;
-    stores.get(store_id.as_ref()).map(Store::state)
+    stores
+      .get(store_id.as_ref())
+      .map(|it| it.state().clone())
   }
 
   /// Gets the store state if it exists, then tries to parse it as an instance of type `T`.
@@ -230,7 +230,7 @@ impl<R: Runtime> StoreCollection<R> {
     let stores = self.stores.lock().unwrap();
     stores
       .get(store_id.as_ref())
-      .and_then(|store| store.get_owned(key))
+      .and_then(|store| store.get(key).cloned())
   }
 
   /// Gets a value from a store.
@@ -239,7 +239,7 @@ impl<R: Runtime> StoreCollection<R> {
     let stores = self.stores.lock().await;
     stores
       .get(store_id.as_ref())
-      .and_then(|store| store.get_owned(key))
+      .and_then(|store| store.get(key).cloned())
   }
 
   #[cfg(not(feature = "unstable-async"))]
@@ -308,7 +308,7 @@ impl<R: Runtime> StoreCollection<R> {
   #[cfg(not(feature = "unstable-async"))]
   pub fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<u32>
   where
-    F: Fn(Arc<StoreState>) -> Result<()> + Send + Sync + 'static,
+    F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
   {
     self.with_store(store_id, move |store| Ok(store.watch(f)))
   }
@@ -317,7 +317,7 @@ impl<R: Runtime> StoreCollection<R> {
   #[cfg(feature = "unstable-async")]
   pub async fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<u32>
   where
-    F: Fn(Arc<StoreState>) -> BoxFuture<'static, Result<()>> + Send + Sync + 'static,
+    F: Fn(AppHandle<R>) -> BoxFuture<'static, Result<()>> + Send + Sync + 'static,
   {
     self
       .with_store(store_id, move |store| boxed_ok! { store.watch(f) })
@@ -417,16 +417,15 @@ impl<R: Runtime> Drop for StoreCollection<R> {
   }
 }
 
-#[derive(Default)]
-pub struct StoreCollectionBuilder {
+pub struct StoreCollectionBuilder<R: Runtime> {
   path: Option<PathBuf>,
   pretty: bool,
   save_denylist: Option<HashSet<String>>,
   sync_denylist: Option<HashSet<String>>,
-  on_load: Option<Box<OnLoadFn>>,
+  on_load: Option<Box<OnLoadFn<R>>>,
 }
 
-impl StoreCollectionBuilder {
+impl<R: Runtime> StoreCollectionBuilder<R> {
   pub fn new() -> Self {
     Self::default()
   }
@@ -458,13 +457,13 @@ impl StoreCollectionBuilder {
   #[must_use]
   pub fn on_load<F>(mut self, f: F) -> Self
   where
-    F: Fn(&str, &StoreState) -> OnLoadResult + Send + Sync + 'static,
+    F: Fn(&Store<R>) -> OnLoadResult + Send + Sync + 'static,
   {
     self.on_load = Some(Box::new(f));
     self
   }
 
-  pub fn build<R: Runtime>(mut self, app: &AppHandle<R>) -> Arc<StoreCollection<R>> {
+  pub fn build(mut self, app: &AppHandle<R>) -> Arc<StoreCollection<R>> {
     let path = self.path.take().unwrap_or_else(|| {
       app
         .path()
@@ -501,5 +500,17 @@ impl StoreCollectionBuilder {
     let _ = RESOURCE_ID.set(rid);
 
     collection
+  }
+}
+
+impl<R: Runtime> Default for StoreCollectionBuilder<R> {
+  fn default() -> Self {
+    Self {
+      path: None,
+      pretty: false,
+      save_denylist: None,
+      sync_denylist: None,
+      on_load: None,
+    }
   }
 }

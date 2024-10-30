@@ -46,20 +46,19 @@ use ahash::HashSet;
 #[cfg(not(feature = "ahash"))]
 use std::collections::HashSet;
 
-#[derive(Default)]
-pub struct Builder {
+pub struct Builder<R: Runtime> {
   path: Option<PathBuf>,
   pretty: bool,
   save_denylist: HashSet<String>,
   sync_denylist: HashSet<String>,
 
-  on_load: Option<Box<OnLoadFn>>,
+  on_load: Option<Box<OnLoadFn<R>>>,
 
   #[cfg(feature = "unstable-async")]
   autosave: Option<Duration>,
 }
 
-impl Builder {
+impl<R: Runtime> Builder<R> {
   pub fn new() -> Self {
     Self::default()
   }
@@ -100,11 +99,10 @@ impl Builder {
   }
 
   /// Sets a function to be called when a store is loaded.
-  /// It will receive the store id and current state as arguments.
   #[must_use]
   pub fn on_load<F>(mut self, f: F) -> Self
   where
-    F: Fn(&str, &StoreState) -> OnLoadResult + Send + Sync + 'static,
+    F: Fn(&Store<R>) -> OnLoadResult + Send + Sync + 'static,
   {
     self.on_load = Some(Box::new(f));
     self
@@ -119,7 +117,7 @@ impl Builder {
     self
   }
 
-  pub fn build<R: Runtime>(self) -> TauriPlugin<R> {
+  pub fn build(self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
       .setup(|app, _| setup(app, self))
       .on_event(on_event)
@@ -141,8 +139,23 @@ impl Builder {
   }
 }
 
+impl<R: Runtime> Default for Builder<R> {
+  fn default() -> Self {
+    Self {
+      path: None,
+      pretty: false,
+      save_denylist: HashSet::new(),
+      sync_denylist: HashSet::new(),
+      on_load: None,
+
+      #[cfg(feature = "unstable-async")]
+      autosave: None,
+    }
+  }
+}
+
 #[expect(clippy::unnecessary_wraps)]
-fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder) -> BoxResult<()> {
+fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder<R>) -> BoxResult<()> {
   let path = builder.path.take().unwrap_or_else(|| {
     app
       .path()
