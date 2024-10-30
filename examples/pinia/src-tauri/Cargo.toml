@@ -36,5 +36,6 @@ default-features = false
 features = []
 
 [features]
-default = ["unstable-async"]
+default = ["unstable-async", "ahash"]
+ahash = ["tauri-plugin-pinia/ahash"]
 unstable-async = ["tauri-plugin-pinia/unstable-async"]

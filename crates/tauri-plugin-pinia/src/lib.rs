@@ -144,8 +144,8 @@ impl<R: Runtime> Default for Builder<R> {
     Self {
       path: None,
       pretty: false,
-      save_denylist: HashSet::new(),
-      sync_denylist: HashSet::new(),
+      save_denylist: HashSet::default(),
+      sync_denylist: HashSet::default(),
       on_load: None,
 
       #[cfg(feature = "unstable-async")]
