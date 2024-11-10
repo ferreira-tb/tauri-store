@@ -46,9 +46,9 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
-    "@tb-dev/utils": "^4.0.3",
+    "@tb-dev/utils": "^4.0.5",
     "lodash-es": "^4.17.21",
-    "pinia": "^2.2.4",
+    "pinia": "^2.2.6",
     "vue": "^3.5.12"
   }
 }

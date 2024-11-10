@@ -27,7 +27,7 @@ version = "1.0"
 features = ["derive"]
 
 [dependencies.tauri]
-version = "2.0"
+version = "2.1"
 features = ["devtools", "protocol-asset"]
 
 [dependencies.tauri-plugin-pinia]
