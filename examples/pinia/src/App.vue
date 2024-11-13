@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
+import { useStore } from './stores/counter';
 import { invoke } from '@tauri-apps/api/core';
 import { open } from '@tauri-apps/plugin-shell';
 import { saveAll } from 'tauri-plugin-pinia/src/index.ts';
-import { useDebouncedStore, useStore, useThrottledStore } from './stores';
+import { useDebouncedStore } from './stores/debounced-counter';
+import { useThrottledStore } from './stores/throttled-counter';
 
 const store = useStore();
 const { start, stop } = store.$tauri;

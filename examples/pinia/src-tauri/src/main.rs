@@ -14,12 +14,12 @@ struct CounterStore {
 }
 
 fn main() {
+  let pinia = tauri_plugin_pinia::Builder::new()
+    .pretty(true)
+    .build();
+
   tauri::Builder::default()
-    .plugin(
-      tauri_plugin_pinia::Builder::new()
-        .pretty(true)
-        .build(),
-    )
+    .plugin(pinia)
     .plugin(tauri_plugin_process::init())
     .plugin(tauri_plugin_shell::init())
     .plugin(tauri_plugin_window_state::Builder::new().build())
@@ -61,10 +61,10 @@ fn open_window(app: &AppHandle, id: u8) {
 
 #[cfg(not(feature = "unstable-async"))]
 fn watch_counter(app: &AppHandle) {
-  let _ = app.pinia().watch("store", |handle| {
+  let _ = app.pinia().watch("counter-store", |handle| {
     handle
       .pinia()
-      .try_get::<i32>("store", "counter")
+      .try_get::<i32>("counter-store", "counter")
       .inspect(|counter| println!("counter: {counter}"))
       .map(drop)
   });
@@ -74,11 +74,11 @@ fn watch_counter(app: &AppHandle) {
 async fn watch_counter(app: &AppHandle) {
   let _ = app
     .pinia()
-    .watch("store", |handle| {
+    .watch("counter-store", |handle| {
       Box::pin(async move {
         handle
           .pinia()
-          .try_get::<i32>("store", "counter")
+          .try_get::<i32>("counter-store", "counter")
           .await
           .inspect(|counter| println!("counter: {counter}"))
           .map(drop)
@@ -92,7 +92,7 @@ async fn watch_counter(app: &AppHandle) {
 async fn get_counter(app: AppHandle) -> Option<i32> {
   app
     .pinia()
-    .get("store", "counter")
+    .get("counter-store", "counter")
     .and_then(|counter| serde_json::from_value(counter).ok())
 }
 
@@ -101,7 +101,7 @@ async fn get_counter(app: AppHandle) -> Option<i32> {
 async fn get_counter(app: AppHandle) -> Option<i32> {
   app
     .pinia()
-    .get("store", "counter")
+    .get("counter-store", "counter")
     .await
     .and_then(|counter| serde_json::from_value(counter).ok())
 }
@@ -117,7 +117,7 @@ async fn print_counter(app: AppHandle) {
 async fn try_get_counter(app: AppHandle) -> i32 {
   app
     .pinia()
-    .try_get::<i32>("store", "counter")
+    .try_get::<i32>("counter-store", "counter")
     .unwrap()
 }
 
@@ -126,7 +126,7 @@ async fn try_get_counter(app: AppHandle) -> i32 {
 async fn try_get_counter(app: AppHandle) -> i32 {
   app
     .pinia()
-    .try_get::<i32>("store", "counter")
+    .try_get::<i32>("counter-store", "counter")
     .await
     .unwrap()
 }
@@ -136,7 +136,7 @@ async fn try_get_counter(app: AppHandle) -> i32 {
 async fn try_store_state(app: AppHandle) -> CounterStore {
   app
     .pinia()
-    .try_store_state::<CounterStore>("store")
+    .try_store_state::<CounterStore>("counter-store")
     .expect("store must exist")
 }
 
@@ -145,7 +145,7 @@ async fn try_store_state(app: AppHandle) -> CounterStore {
 async fn try_store_state(app: AppHandle) -> CounterStore {
   app
     .pinia()
-    .try_store_state::<CounterStore>("store")
+    .try_store_state::<CounterStore>("counter-store")
     .await
     .expect("store must exist")
 }
