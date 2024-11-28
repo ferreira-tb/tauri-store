@@ -1,3 +1,4 @@
+#![doc = include_str!("../../../README.md")]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
 mod collection;
@@ -50,7 +51,7 @@ where
 #[macro_export]
 macro_rules! boxed {
   { $($t:tt)* } => {{
-      Box::pin(async move { $($t)* })
+    Box::pin(async move { $($t)* })
   }};
 }
 
@@ -59,6 +60,6 @@ macro_rules! boxed {
 #[macro_export]
 macro_rules! boxed_ok {
   { $($t:tt)* } => {{
-      Box::pin(async move { Ok($($t)*) })
+    Box::pin(async move { Ok($($t)*) })
   }};
 }

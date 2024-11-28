@@ -1,3 +1,6 @@
+#![doc = include_str!("../../../README.md")]
+#![cfg_attr(docsrs, feature(doc_cfg))]
+
 use proc_macro::TokenStream;
 use quote::quote;
 use syn::DeriveInput;

@@ -37,12 +37,24 @@ declare module 'pinia' {
 
 export function createPlugin(options: TauriPluginPiniaOptions = {}) {
   return function (ctx: PiniaPluginContext) {
-    const {
+    let {
       deep = options.deep ?? true,
       onError = options.onError ?? console.error,
       syncInterval = options.syncInterval ?? 0,
       syncStrategy = options.syncStrategy ?? 'immediate',
     } = ctx.options.tauri ?? options;
+
+    if (typeof syncStrategy === 'number') {
+      if (Number.isFinite(syncStrategy) && syncStrategy > 0) {
+        if (syncInterval <= 0) {
+          syncInterval = syncStrategy;
+        }
+
+        syncStrategy = 'debounce';
+      } else {
+        syncStrategy = 'immediate';
+      }
+    }
 
     const getPath = () => commands.getStorePath(ctx.store.$id);
     const save = () => commands.save(ctx.store.$id);
