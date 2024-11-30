@@ -1,8 +1,11 @@
+import type { WatchOptions } from 'vue';
 import type { MaybePromise } from '@tb-dev/utils';
 
 export interface TauriPluginPiniaOptions {
   /** @default true */
-  readonly deep?: boolean;
+  readonly deep?: WatchOptions['deep'];
+  /** @default 'pre' */
+  readonly flush?: WatchOptions['flush'];
 
   /**
    * Custom error handler.
