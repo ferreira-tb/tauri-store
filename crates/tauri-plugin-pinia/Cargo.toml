@@ -8,7 +8,7 @@ repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
-keywords = ["plugin", "tauri", "tauri-plugin", "vue", "pinia"]
+keywords = ["plugin", "tauri", "vue", "pinia", "nuxt"]
 links = "tauri-plugin-pinia"
 
 [package.edition]

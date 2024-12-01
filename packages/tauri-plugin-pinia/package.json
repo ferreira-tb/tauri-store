@@ -25,7 +25,8 @@
     "vue",
     "tauri",
     "pinia",
-    "plugin"
+    "plugin",
+    "nuxt"
   ],
   "files": [
     "dist"
