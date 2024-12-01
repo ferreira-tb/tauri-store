@@ -1,5 +1,6 @@
 use crate::error::Result;
-use crate::store::{Store, StoreState};
+use crate::state::StoreState;
+use crate::store::Store;
 use serde::Serialize;
 use tauri::{AppHandle, Emitter as _, EventTarget, Runtime};
 

@@ -1,9 +1,9 @@
 use crate::error::Result;
 use crate::event::{emit_all, STORE_UNLOADED_EVENT};
 use crate::io_err;
-use crate::store::{Store, StoreState};
+use crate::state::StoreState;
+use crate::store::Store;
 use serde::de::DeserializeOwned;
-use serde_json::json;
 use serde_json::Value as Json;
 use std::fmt;
 use std::path::{Path, PathBuf};
@@ -13,7 +13,8 @@ use tauri::{AppHandle, Manager, Resource, ResourceId, Runtime};
 #[cfg(feature = "unstable-async")]
 use {
   crate::manager::ManagerExt,
-  crate::{BoxFuture, FutureExt},
+  crate::{boxed, boxed_ok},
+  futures::future::BoxFuture,
   std::time::Duration,
   tokio::sync::Mutex as TokioMutex,
   tokio::task::AbortHandle,
@@ -25,6 +26,13 @@ use ahash::{HashMap, HashMapExt, HashSet};
 use std::collections::{HashMap, HashSet};
 
 pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
+
+#[cfg(not(feature = "unstable-async"))]
+pub type OnLoadResult = Result<()>;
+#[cfg(feature = "unstable-async")]
+pub type OnLoadResult = BoxFuture<'static, Result<()>>;
+
+pub type OnLoadFn<R> = dyn Fn(&Store<R>) -> OnLoadResult + Send + Sync;
 
 pub struct StoreCollection<R: Runtime> {
   pub(crate) app: AppHandle<R>,
@@ -38,6 +46,8 @@ pub struct StoreCollection<R: Runtime> {
   pub(crate) pretty: bool,
   pub(crate) save_denylist: Option<HashSet<String>>,
   pub(crate) sync_denylist: Option<HashSet<String>>,
+
+  pub(crate) on_load: Option<Box<OnLoadFn<R>>>,
 
   #[cfg(feature = "unstable-async")]
   pub(crate) autosave: StdMutex<Option<AbortHandle>>,
@@ -54,7 +64,7 @@ macro_rules! get_store {
 }
 
 impl<R: Runtime> StoreCollection<R> {
-  pub fn builder() -> StoreCollectionBuilder {
+  pub fn builder() -> StoreCollectionBuilder<R> {
     StoreCollectionBuilder::new()
   }
 
@@ -74,6 +84,10 @@ impl<R: Runtime> StoreCollection<R> {
     if !stores.contains_key(id) {
       let app = self.app.clone();
       let store = Store::load(app, id)?;
+      if let Some(on_load) = &self.on_load {
+        on_load(&store)?;
+      }
+
       stores.insert(id.to_owned(), store);
     }
 
@@ -92,7 +106,11 @@ impl<R: Runtime> StoreCollection<R> {
     Box::pin(async move {
       let mut stores = self.stores.lock().await;
       if !stores.contains_key(&id) {
-        let store = Store::load(app, &id).unwrap();
+        let store = Store::load(app, &id).await?;
+        if let Some(on_load) = &self.on_load {
+          on_load(&store).await?;
+        }
+
         stores.insert(id.clone(), store);
       }
 
@@ -169,47 +187,41 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Gets a clone of the store state if it exists.
-  ///
-  /// **WARNING:** Changes to the returned state will not be reflected in the store.
   #[cfg(not(feature = "unstable-async"))]
   pub fn store_state(&self, store_id: impl AsRef<str>) -> Option<StoreState> {
     let stores = self.stores.lock().unwrap();
-    stores.get(store_id.as_ref()).map(Store::state)
+    stores
+      .get(store_id.as_ref())
+      .map(|it| it.state().clone())
   }
 
   /// Gets a clone of the store state if it exists.
-  ///
-  /// **WARNING:** Changes to the returned state will not be reflected in the store.
   #[cfg(feature = "unstable-async")]
   pub async fn store_state(&self, store_id: impl AsRef<str>) -> Option<StoreState> {
     let stores = self.stores.lock().await;
-    stores.get(store_id.as_ref()).map(Store::state)
+    stores
+      .get(store_id.as_ref())
+      .map(|it| it.state().clone())
   }
 
-  /// Gets the store state if it exists, then tries to deserialize it as an instance of type `T`.
+  /// Gets the store state if it exists, then tries to parse it as an instance of type `T`.
   #[cfg(not(feature = "unstable-async"))]
   pub fn try_store_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
   {
     let stores = self.stores.lock().unwrap();
-    let store = get_store!(stores, store_id)?;
-
-    let state = json!(store.state());
-    serde_json::from_value(state).map_err(Into::into)
+    get_store!(stores, store_id)?.try_state()
   }
 
-  /// Gets the store state if it exists, then tries to deserialize it as an instance of type `T`.
+  /// Gets the store state if it exists, then tries to parse it as an instance of type `T`.
   #[cfg(feature = "unstable-async")]
   pub async fn try_store_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
   {
     let stores = self.stores.lock().await;
-    let store = get_store!(stores, store_id)?;
-
-    let state = json!(store.state());
-    serde_json::from_value(state).map_err(Into::into)
+    get_store!(stores, store_id)?.try_state()
   }
 
   /// Gets a value from a store.
@@ -218,7 +230,7 @@ impl<R: Runtime> StoreCollection<R> {
     let stores = self.stores.lock().unwrap();
     stores
       .get(store_id.as_ref())
-      .and_then(|store| store.get_owned(key))
+      .and_then(|store| store.get(key).cloned())
   }
 
   /// Gets a value from a store.
@@ -227,11 +239,11 @@ impl<R: Runtime> StoreCollection<R> {
     let stores = self.stores.lock().await;
     stores
       .get(store_id.as_ref())
-      .and_then(|store| store.get_owned(key))
+      .and_then(|store| store.get(key).cloned())
   }
 
   #[cfg(not(feature = "unstable-async"))]
-  /// Gets a value from a store and tries to interpret it as an instance of type `T`.
+  /// Gets a value from a store and tries to parse it as an instance of type `T`.
   pub fn try_get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
@@ -245,7 +257,7 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   #[cfg(feature = "unstable-async")]
-  /// Gets a value from a store and tries to interpret it as an instance of type `T`.
+  /// Gets a value from a store and tries to parse it as an instance of type `T`.
   pub async fn try_get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
@@ -274,7 +286,7 @@ impl<R: Runtime> StoreCollection<R> {
   ) -> Result<()> {
     let key = key.as_ref().to_owned();
     self
-      .with_store(store_id, |store| async { store.set(key, value) }.boxed())
+      .with_store(store_id, |store| boxed! { store.set(key, value) })
       .await
   }
 
@@ -288,7 +300,43 @@ impl<R: Runtime> StoreCollection<R> {
   #[cfg(feature = "unstable-async")]
   pub async fn patch(&self, store_id: impl AsRef<str>, state: StoreState) -> Result<()> {
     self
-      .with_store(store_id, |store| async { store.patch(state) }.boxed())
+      .with_store(store_id, |store| boxed! { store.patch(state) })
+      .await
+  }
+
+  /// Watches a store for changes.
+  #[cfg(not(feature = "unstable-async"))]
+  pub fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<u32>
+  where
+    F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
+  {
+    self.with_store(store_id, move |store| Ok(store.watch(f)))
+  }
+
+  /// Watches a store for changes.
+  #[cfg(feature = "unstable-async")]
+  pub async fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<u32>
+  where
+    F: Fn(AppHandle<R>) -> BoxFuture<'static, Result<()>> + Send + Sync + 'static,
+  {
+    self
+      .with_store(store_id, move |store| boxed_ok! { store.watch(f) })
+      .await
+  }
+
+  /// Removes a listener from a store.
+  #[cfg(not(feature = "unstable-async"))]
+  pub fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> Result<bool> {
+    self.with_store(store_id, move |store| Ok(store.unwatch(listener_id)))
+  }
+
+  /// Removes a listener from a store.
+  #[cfg(feature = "unstable-async")]
+  pub async fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> Result<bool> {
+    self
+      .with_store(store_id, move |store| {
+        boxed_ok! { store.unwatch(listener_id) }
+      })
       .await
   }
 
@@ -369,15 +417,15 @@ impl<R: Runtime> Drop for StoreCollection<R> {
   }
 }
 
-#[derive(Debug, Default)]
-pub struct StoreCollectionBuilder {
+pub struct StoreCollectionBuilder<R: Runtime> {
   path: Option<PathBuf>,
   pretty: bool,
   save_denylist: Option<HashSet<String>>,
   sync_denylist: Option<HashSet<String>>,
+  on_load: Option<Box<OnLoadFn<R>>>,
 }
 
-impl StoreCollectionBuilder {
+impl<R: Runtime> StoreCollectionBuilder<R> {
   pub fn new() -> Self {
     Self::default()
   }
@@ -406,7 +454,16 @@ impl StoreCollectionBuilder {
     self
   }
 
-  pub fn build<R: Runtime>(mut self, app: &AppHandle<R>) -> Arc<StoreCollection<R>> {
+  #[must_use]
+  pub fn on_load<F>(mut self, f: F) -> Self
+  where
+    F: Fn(&Store<R>) -> OnLoadResult + Send + Sync + 'static,
+  {
+    self.on_load = Some(Box::new(f));
+    self
+  }
+
+  pub fn build(mut self, app: &AppHandle<R>) -> Arc<StoreCollection<R>> {
     let path = self.path.take().unwrap_or_else(|| {
       app
         .path()
@@ -414,6 +471,9 @@ impl StoreCollectionBuilder {
         .expect("failed to resolve app data dir")
         .join("tauri-store")
     });
+
+    self.save_denylist = self.save_denylist.filter(|it| !it.is_empty());
+    self.sync_denylist = self.sync_denylist.filter(|it| !it.is_empty());
 
     let collection = Arc::new(StoreCollection::<R> {
       app: app.clone(),
@@ -427,6 +487,8 @@ impl StoreCollectionBuilder {
       #[cfg(feature = "unstable-async")]
       stores: TokioMutex::new(HashMap::new()),
 
+      on_load: self.on_load,
+
       #[cfg(feature = "unstable-async")]
       autosave: StdMutex::new(None),
     });
@@ -438,5 +500,17 @@ impl StoreCollectionBuilder {
     let _ = RESOURCE_ID.set(rid);
 
     collection
+  }
+}
+
+impl<R: Runtime> Default for StoreCollectionBuilder<R> {
+  fn default() -> Self {
+    Self {
+      path: None,
+      pretty: false,
+      save_denylist: None,
+      sync_denylist: None,
+      on_load: None,
+    }
   }
 }

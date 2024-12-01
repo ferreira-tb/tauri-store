@@ -1,5 +1,10 @@
 [workspace]
-members = ["crates/*", "examples/pinia/src-tauri"]
+members = [
+  "crates/*",
+  "examples/shared",
+  "examples/nuxt/src-tauri",
+  "examples/pinia/src-tauri",
+]
 resolver = "2"
 
 [workspace.package]

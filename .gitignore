@@ -34,6 +34,18 @@ target/
 **/.vitepress/dist
 **/.vitepress/cache
 
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+
+# Local env files
+.env
+.env.*
+!.env.example
+
 # Others
 .temp/
 coverage/

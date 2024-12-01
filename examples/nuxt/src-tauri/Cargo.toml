@@ -1,0 +1,43 @@
+[package]
+name = "example-nuxt"
+version = "0.8.0"
+publish = false
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[lints]
+workspace = true
+
+[build-dependencies.tauri-build]
+version = "2.0"
+features = []
+
+[dependencies]
+serde_json = "1.0"
+tauri-plugin-process = "2.0"
+tauri-plugin-shell = "2.0"
+tauri-plugin-window-state = "2.0"
+
+[dependencies.serde]
+version = "1.0"
+features = ["derive"]
+
+[dependencies.example-shared]
+path = "../../shared"
+
+[dependencies.tauri]
+version = "2.1"
+features = ["devtools", "protocol-asset"]
+
+[dependencies.tauri-plugin-pinia]
+path = "../../../crates/tauri-plugin-pinia"
+default-features = false
+features = []
+
+[features]
+ahash = ["example-shared/ahash"]
+unstable-async = ["example-shared/unstable-async"]

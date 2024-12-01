@@ -1,39 +1,59 @@
 use crate::error::Result;
 use crate::event::{Payload, STORE_UPDATED_EVENT};
-use crate::io_err;
 use crate::manager::ManagerExt;
+use crate::state::{StoreState, StoreStateExt};
+use crate::watch::{Watcher, WatcherResult};
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json::Value as Json;
+use std::fmt;
+use std::io::ErrorKind::NotFound;
 use std::path::PathBuf;
-use std::{fmt, io};
-use tauri::{AppHandle, Runtime};
+use std::sync::{Arc, Mutex};
+use tauri::{async_runtime, AppHandle, Runtime};
+
+#[cfg(feature = "unstable-async")]
+use tauri::async_runtime::spawn_blocking;
 
 #[cfg(feature = "ahash")]
 use ahash::HashMap;
 #[cfg(not(feature = "ahash"))]
 use std::collections::HashMap;
 
-pub type StoreState = HashMap<String, Json>;
-
 pub struct Store<R: Runtime> {
+  app: AppHandle<R>,
   pub(crate) id: String,
   pub(crate) state: StoreState,
-  app: AppHandle<R>,
+  pub(crate) listeners: Arc<Mutex<HashMap<u32, Watcher<R>>>>,
 }
 
 impl<R: Runtime> Store<R> {
-  pub(crate) fn load(app: AppHandle<R>, id: impl AsRef<str>) -> Result<Self> {
-    let id = id.as_ref().to_owned();
+  fn blocking_load(app: AppHandle<R>, id: String) -> Result<Self> {
     let path = store_path(&app, &id);
-
     let state = match std::fs::read(path) {
       Ok(bytes) => serde_json::from_slice(&bytes)?,
-      Err(e) if e.kind() == io::ErrorKind::NotFound => StoreState::default(),
+      Err(e) if e.kind() == NotFound => StoreState::default(),
       Err(e) => return Err(e.into()),
     };
 
-    Ok(Self { id, state, app })
+    Ok(Self {
+      app,
+      id,
+      state,
+      listeners: Arc::new(Mutex::default()),
+    })
+  }
+
+  #[cfg(not(feature = "unstable-async"))]
+  pub(crate) fn load(app: AppHandle<R>, id: impl AsRef<str>) -> Result<Self> {
+    let id = id.as_ref().to_owned();
+    Self::blocking_load(app, id)
+  }
+
+  #[cfg(feature = "unstable-async")]
+  pub(crate) async fn load(app: AppHandle<R>, id: impl AsRef<str>) -> Result<Self> {
+    let id = id.as_ref().to_owned();
+    spawn_blocking(move || Self::blocking_load(app, id)).await?
   }
 
   /// Save the store state to the disk.
@@ -80,6 +100,7 @@ impl<R: Runtime> Store<R> {
     let bytes = to_bytes(&self.state, collection.pretty)?;
     let mut file = File::create(self.path()).await?;
     file.write_all(&bytes).await?;
+    file.flush().await?;
 
     Ok(())
   }
@@ -94,11 +115,19 @@ impl<R: Runtime> Store<R> {
     store_path(&self.app, &self.id)
   }
 
-  /// Gets a clone of the store state.
-  ///
-  /// **WARNING:** Changes to the returned state will not be reflected in the store.
-  pub fn state(&self) -> StoreState {
-    self.state.clone()
+  /// Gets a handle to the application instance.
+  pub fn app_handle(&self) -> &AppHandle<R> {
+    &self.app
+  }
+
+  /// Gets a reference to the store state.
+  pub fn state(&self) -> &StoreState {
+    &self.state
+  }
+
+  /// Tries to parse the store state as an instance of type `T`.
+  pub fn try_state<T: DeserializeOwned>(&self) -> Result<T> {
+    self.state.parse()
   }
 
   /// Gets a value from the store.
@@ -106,27 +135,18 @@ impl<R: Runtime> Store<R> {
     self.state.get(key.as_ref())
   }
 
-  /// Gets a clone of the value from the store.
-  pub fn get_owned(&self, key: impl AsRef<str>) -> Option<Json> {
-    self.get(key).cloned()
-  }
-
-  /// Gets a value from the store and tries to interpret it as an instance of type `T`.
-  pub fn try_get<T>(&self, key: impl AsRef<str>) -> Result<T>
-  where
-    T: DeserializeOwned,
-  {
-    let Some(value) = self.get_owned(key.as_ref()) else {
-      return io_err!(NotFound, "key not found: {}", key.as_ref());
-    };
-
-    serde_json::from_value(value).map_err(Into::into)
+  /// Gets a value from the store and tries to parse it as an instance of type `T`.
+  pub fn try_get<T: DeserializeOwned>(&self, key: impl AsRef<str>) -> Result<T> {
+    self.state.try_get(key)
   }
 
   /// Sets a key-value pair in the store.
   pub fn set(&mut self, key: impl AsRef<str>, value: Json) -> Result<()> {
     self.state.insert(key.as_ref().to_owned(), value);
-    self.emit(None)
+    self.emit(None)?;
+    self.call_listeners();
+
+    Ok(())
   }
 
   /// Patches the store state, optionally having a window as the source.
@@ -135,7 +155,10 @@ impl<R: Runtime> Store<R> {
     S: Into<Option<&'a str>>,
   {
     self.state.extend(state);
-    self.emit(source)
+    self.emit(source)?;
+    self.call_listeners();
+
+    Ok(())
   }
 
   /// Patches the store state.
@@ -173,6 +196,32 @@ impl<R: Runtime> Store<R> {
     self.state.is_empty()
   }
 
+  /// Watches the store for changes.
+  pub fn watch<F>(&self, f: F) -> u32
+  where
+    F: Fn(AppHandle<R>) -> WatcherResult + Send + Sync + 'static,
+  {
+    let listener = Watcher::new(f);
+    let id = listener.id;
+    self
+      .listeners
+      .lock()
+      .expect("listeners mutex is poisoned")
+      .insert(id, listener);
+
+    id
+  }
+
+  /// Removes a listener from this store.
+  pub fn unwatch(&self, id: u32) -> bool {
+    self
+      .listeners
+      .lock()
+      .expect("listeners mutex is poisoned")
+      .remove(&id)
+      .is_some()
+  }
+
   fn emit<'a, S>(&self, source: S) -> Result<()>
   where
     S: Into<Option<&'a str>>,
@@ -196,6 +245,28 @@ impl<R: Runtime> Store<R> {
       payload.emit_filter(&self.app, STORE_UPDATED_EVENT, |it| it != source)
     } else {
       payload.emit_all(&self.app, STORE_UPDATED_EVENT)
+    }
+  }
+
+  fn call_listeners(&self) {
+    let listeners = self
+      .listeners
+      .lock()
+      .expect("listeners mutex is poisoned")
+      .clone();
+
+    for listener in listeners.into_values() {
+      let app = self.app.clone();
+
+      #[cfg(not(feature = "unstable-async"))]
+      async_runtime::spawn_blocking(move || {
+        let _ = listener.call(app);
+      });
+
+      #[cfg(feature = "unstable-async")]
+      async_runtime::spawn(async move {
+        let _ = listener.call(app).await;
+      });
     }
   }
 }

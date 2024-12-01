@@ -1,14 +1,14 @@
 [package]
 name = "tauri-plugin-pinia"
 description = "Persistent Pinia stores for Tauri"
-version = "0.7.0"
+version = "0.8.0"
 documentation = "https://docs.rs/tauri-plugin-pinia"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
-keywords = ["plugin", "tauri", "tauri-plugin", "vue", "pinia"]
+keywords = ["plugin", "tauri", "vue", "pinia", "nuxt"]
 links = "tauri-plugin-pinia"
 
 [package.edition]
@@ -19,7 +19,7 @@ workspace = true
 
 [package.metadata.docs.rs]
 no-default-features = true
-features = ["unstable-async"]
+features = []
 rustc-args = ["--cfg", "docsrs"]
 rustdoc-args = ["--cfg", "docsrs"]
 
@@ -30,14 +30,14 @@ workspace = true
 serde = "1.0"
 serde_json = "1.0"
 tauri = "2.0"
-thiserror = "1.0"
+thiserror = "2.0"
 
 [dependencies.ahash]
 version = "0.8"
 optional = true
 
 [dependencies.tauri-store]
-version = "0.2"
+version = "0.3"
 path = "../tauri-store"
 features = ["derive"]
 

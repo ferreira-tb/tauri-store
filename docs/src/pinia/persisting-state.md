@@ -20,7 +20,7 @@ await saveAll();
 ```rust [Rust]
 use tauri_plugin_pinia::ManagerExt;
 
-// `manager` represents any type that implements the `Manager` trait.
+// Here, `manager` represents any type that implements the `Manager` trait provided by Tauri.
 // This includes `AppHandle`, `Window`, and `WebviewWindow`.
 
 // Save a single store.
@@ -78,5 +78,5 @@ tauri::Builder::default()
 :::
 
 ::: tip
-This is not much different from calling [`saveAll`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/functions/saveAll.html) inside a JavaScript [`setInterval`](https://developer.mozilla.org/en-US/docs/Web/API/Window/setInterval). Use this feature only if you prefer using Rust to handle the autosave.
+This is not much different from calling [`saveAll`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/functions/saveAll.html) inside a JavaScript [`setInterval`](https://developer.mozilla.org/en-US/docs/Web/API/Window/setInterval). Use this only if you prefer using Rust to handle the autosave, as the `unstable-async` feature may introduce unwanted complexity.
 :::

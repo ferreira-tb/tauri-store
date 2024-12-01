@@ -1,23 +1,5 @@
-//! # tauri-plugin-pinia
-//!
-//! Persistent Pinia stores for Tauri and Vue.
-//!
-//! ## Features
-//!
-//! - Save your stores to disk.
-//! - Synchronize across multiple windows.
-//! - Debounce or throttle store updates.
-//!
-//! ## Documentation
-//!
-//! Check the [documentation](https://tb.dev.br/tauri-store/pinia/getting-started.html) for more information on how to install and use the plugin.
-//!
-//! ## Supported Tauri Version
-//!
-//! This plugin requires Tauri `2.0` or later.
-//!
-
 #![forbid(unsafe_code)]
+#![doc = include_str!("../README.md")]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
 mod command;
@@ -30,10 +12,13 @@ use std::path::{Path, PathBuf};
 use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
 use tauri_store::StoreCollection;
-pub use tauri_store::{BoxResult, Error, Json, Result, Store, StoreState};
+pub use tauri_store::{
+  BoxResult, Error, Json, OnLoadFn, OnLoadResult, Result, Store, StoreState, StoreStateExt,
+  WatcherResult,
+};
 
 #[cfg(feature = "unstable-async")]
-pub use tauri_store::{BoxFuture, FutureExt};
+pub use tauri_store::{boxed, boxed_ok, BoxFuture};
 
 #[cfg(feature = "unstable-async")]
 use {std::time::Duration, tauri::async_runtime};
@@ -43,18 +28,19 @@ use ahash::HashSet;
 #[cfg(not(feature = "ahash"))]
 use std::collections::HashSet;
 
-#[derive(Default)]
-pub struct Builder {
+pub struct Builder<R: Runtime> {
   path: Option<PathBuf>,
   pretty: bool,
   save_denylist: HashSet<String>,
   sync_denylist: HashSet<String>,
 
+  on_load: Option<Box<OnLoadFn<R>>>,
+
   #[cfg(feature = "unstable-async")]
   autosave: Option<Duration>,
 }
 
-impl Builder {
+impl<R: Runtime> Builder<R> {
   pub fn new() -> Self {
     Self::default()
   }
@@ -76,21 +62,31 @@ impl Builder {
 
   /// Sets a list of stores that should not be saved to disk.
   #[must_use]
-  pub fn save_denylist(mut self, denylist: &[&str]) -> Self {
+  pub fn save_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
     self
       .save_denylist
-      .extend(denylist.iter().map(ToString::to_string));
+      .extend(denylist.iter().map(|s| s.as_ref().to_string()));
 
     self
   }
 
   /// Sets a list of stores that should not be synchronized across windows.
   #[must_use]
-  pub fn sync_denylist(mut self, denylist: &[&str]) -> Self {
+  pub fn sync_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
     self
       .sync_denylist
-      .extend(denylist.iter().map(ToString::to_string));
+      .extend(denylist.iter().map(|s| s.as_ref().to_string()));
 
+    self
+  }
+
+  /// Sets a function to be called when a store is loaded.
+  #[must_use]
+  pub fn on_load<F>(mut self, f: F) -> Self
+  where
+    F: Fn(&Store<R>) -> OnLoadResult + Send + Sync + 'static,
+  {
+    self.on_load = Some(Box::new(f));
     self
   }
 
@@ -103,7 +99,7 @@ impl Builder {
     self
   }
 
-  pub fn build<R: Runtime>(self) -> TauriPlugin<R> {
+  pub fn build(self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
       .setup(|app, _| setup(app, self))
       .on_event(on_event)
@@ -125,8 +121,23 @@ impl Builder {
   }
 }
 
+impl<R: Runtime> Default for Builder<R> {
+  fn default() -> Self {
+    Self {
+      path: None,
+      pretty: false,
+      save_denylist: HashSet::default(),
+      sync_denylist: HashSet::default(),
+      on_load: None,
+
+      #[cfg(feature = "unstable-async")]
+      autosave: None,
+    }
+  }
+}
+
 #[expect(clippy::unnecessary_wraps)]
-fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder) -> BoxResult<()> {
+fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder<R>) -> BoxResult<()> {
   let path = builder.path.take().unwrap_or_else(|| {
     app
       .path()
@@ -135,14 +146,17 @@ fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder) -> BoxResult<()> 
       .join("pinia")
   });
 
-  let collection = StoreCollection::<R>::builder()
+  let mut collection = StoreCollection::<R>::builder()
     .path(path)
     .pretty(builder.pretty)
     .save_denylist(builder.save_denylist)
-    .sync_denylist(builder.sync_denylist)
-    .build(app);
+    .sync_denylist(builder.sync_denylist);
 
-  app.manage(Pinia(collection));
+  if let Some(on_load) = builder.on_load {
+    collection = collection.on_load(on_load);
+  }
+
+  app.manage(Pinia(collection.build(app)));
 
   #[cfg(feature = "unstable-async")]
   if let Some(duration) = builder.autosave {
