@@ -128,3 +128,21 @@ counterStore.$tauri.start();
 ::: tip
 The stores won't be saved nor synchronized until you call the `start` method.
 :::
+
+## Nuxt
+
+If you are using [Nuxt](https://nuxt.com/), you can create a plugin to enable it for Pinia:
+
+::: code-group
+
+```ts{6} [plugins/pinia.ts]
+import type { Pinia } from 'pinia';
+import { createPlugin } from 'tauri-plugin-pinia';
+
+// See: https://pinia.vuejs.org/core-concepts/plugins.html#Nuxt-js
+export default defineNuxtPlugin(({ $pinia }) => {
+  ($pinia as Pinia).use(TauriPluginPinia());
+});
+```
+
+:::
