@@ -11,6 +11,7 @@ export default defineConfig({
   features: {
     vue: true,
   },
+  ignores: ['**/.nuxt/**'],
   overrides: {
     typescript: {
       '@typescript-eslint/no-explicit-any': 'off',

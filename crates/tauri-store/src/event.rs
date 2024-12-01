@@ -13,7 +13,7 @@ pub(crate) struct Payload<'a> {
   state: &'a StoreState,
 }
 
-impl<'a> Payload<'a> {
+impl Payload<'_> {
   pub fn emit_all<R: Runtime>(&self, app: &AppHandle<R>, event: &str) -> Result<()> {
     emit_all(app, event, self)
   }
