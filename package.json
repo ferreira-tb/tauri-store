@@ -29,7 +29,7 @@
     "tailwindcss": "^3.4.15",
     "tslib": "^2.8.1",
     "typedoc": "^0.27.2",
-    "typedoc-plugin-mdn-links": "^4.0.2",
+    "typedoc-plugin-mdn-links": "^4.0.3",
     "typescript": "^5.6.3",
     "vite": "^6.0.1",
     "vite-plugin-dts": "^4.3.0",
