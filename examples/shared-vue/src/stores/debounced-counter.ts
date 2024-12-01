@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
+import { open } from '@tauri-apps/plugin-shell';
 
 function debouncedStore() {
   const debouncedCounter = ref(0);
@@ -26,3 +27,8 @@ export const useDebouncedStore = defineStore('debounced-counter-store', debounce
     syncInterval: 1000,
   },
 });
+
+export async function openDebouncedStore() {
+  const path = await useDebouncedStore().$tauri.getPath();
+  await open(path);
+}

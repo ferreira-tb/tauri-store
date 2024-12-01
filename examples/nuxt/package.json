@@ -1,20 +1,25 @@
 {
-  "name": "example-pinia",
+  "name": "example-nuxt",
   "version": "0.8.0",
   "type": "module",
   "packageManager": "pnpm@9.14.4",
   "private": true,
   "scripts": {
-    "type-check": "vue-tsc --noEmit",
-    "vite:dev": "vite",
-    "vite:build": "pnpm run type-check && vite build"
+    "nuxt:build": "nuxt build",
+    "nuxt:dev": "nuxt dev",
+    "nuxt:generate": "nuxt generate",
+    "nuxt:preview": "nuxt preview",
+    "nuxt:postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.8.0",
     "@vitejs/plugin-vue": "^5.2.1",
     "@vueuse/core": "^12.0.0",
     "example-shared-vue": "workspace:*",
+    "nuxt": "^3.14.1592",
     "pinia": "^2.2.8",
     "tauri-plugin-pinia": "workspace:*",
-    "vue": "^3.5.13"
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   }
 }

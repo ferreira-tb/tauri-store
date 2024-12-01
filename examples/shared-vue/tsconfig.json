@@ -38,6 +38,7 @@
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "types": [
+      "tauri-plugin-pinia",
       "vite/client"
     ]
   }

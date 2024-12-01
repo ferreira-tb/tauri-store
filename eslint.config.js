@@ -3,7 +3,9 @@ import { defineConfig } from '@tb-dev/eslint-config';
 export default defineConfig({
   project: [
     'docs/tsconfig.json',
+    'examples/nuxt/tsconfig.json',
     'examples/pinia/tsconfig.json',
+    'examples/shared-vue/tsconfig.json',
     'packages/tauri-plugin-pinia/tsconfig.json',
   ],
   features: {

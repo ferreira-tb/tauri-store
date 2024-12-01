@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
+import { open } from '@tauri-apps/plugin-shell';
 
 function throttledStore() {
   const throttledCounter = ref(0);
@@ -26,3 +27,8 @@ export const useThrottledStore = defineStore('throttled-counter-store', throttle
     syncInterval: 1000,
   },
 });
+
+export async function openThrottledStore() {
+  const path = await useThrottledStore().$tauri.getPath();
+  await open(path);
+}

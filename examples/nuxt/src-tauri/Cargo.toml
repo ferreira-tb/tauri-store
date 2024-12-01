@@ -1,5 +1,5 @@
 [package]
-name = "example-pinia"
+name = "example-nuxt"
 version = "0.8.0"
 publish = false
 

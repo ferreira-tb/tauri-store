@@ -1,5 +1,6 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
+import { open } from '@tauri-apps/plugin-shell';
 
 function store() {
   const counter = ref(0);
@@ -27,3 +28,8 @@ export const useStore = defineStore('counter-store', store, {
     filterKeysStrategy: 'pick',
   },
 });
+
+export async function openStore() {
+  const path = await useStore().$tauri.getPath();
+  await open(path);
+}
