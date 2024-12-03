@@ -6,6 +6,7 @@ export default defineConfig({
     'examples/nuxt/tsconfig.json',
     'examples/pinia/tsconfig.json',
     'examples/shared-vue/tsconfig.json',
+    'packages/shared/tsconfig.json',
     'packages/tauri-plugin-pinia/tsconfig.json',
   ],
   features: {
