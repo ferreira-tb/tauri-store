@@ -1,6 +1,6 @@
 {
   "name": "example-shared-vue",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "type": "module",
   "packageManager": "pnpm@9.14.4",
   "private": true,

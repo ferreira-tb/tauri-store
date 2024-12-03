@@ -1,11 +1,11 @@
 {
   "name": "monorepo",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "type": "module",
   "private": true,
   "packageManager": "pnpm@9.14.4",
   "scripts": {
-    "build": "pnpm run -F \"./packages/*\" build",
+    "build": "pnpm run -F @tauri-store/shared build && pnpm run -F \"./packages/tauri-plugin-*\" build",
     "build:docs": "pnpm run -F docs build && pnpm run -F \"./packages/*\" typedoc",
     "clippy": "cargo clippy",
     "dev": "cargo tauri dev",
@@ -31,7 +31,7 @@
     "typedoc": "^0.27.2",
     "typedoc-plugin-mdn-links": "^4.0.3",
     "typescript": "^5.6.3",
-    "vite": "^6.0.1",
+    "vite": "^6.0.2",
     "vite-plugin-dts": "^4.3.0",
     "vue-tsc": "^2.1.10"
   }
