@@ -1,4 +1,4 @@
-import type { StoreKeyFilter } from './types';
+import type { StoreKeyFilter } from '@tauri-store/shared';
 
 export function isStoreKeyMatch(filter: StoreKeyFilter, key: string): boolean {
   return (

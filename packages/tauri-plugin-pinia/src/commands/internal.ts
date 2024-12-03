@@ -1,5 +1,5 @@
-import type { State } from '../types';
 import { invoke } from '@tauri-apps/api/core';
+import type { State } from '@tauri-store/shared';
 
 /** @internal */
 export function load<T extends State>(id: string): Promise<T> {
