@@ -1,6 +1,6 @@
 {
   "productName": "example-nuxt",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "identifier": "tsukilabs.example.nuxt",
   "build": {
     "beforeDevCommand": "pnpm run -F example-nuxt nuxt:dev",
