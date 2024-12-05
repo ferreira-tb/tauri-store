@@ -160,10 +160,7 @@ impl<R: Runtime> Store<R> {
   /// Sets a key-value pair in the store.
   pub fn set(&mut self, key: impl AsRef<str>, value: Json) -> Result<()> {
     self.state.insert(key.as_ref().to_owned(), value);
-    self.emit(None)?;
-    self.call_listeners();
-
-    Ok(())
+    self.on_change(None)
   }
 
   /// Patches the store state, optionally having a window as the source.
@@ -172,10 +169,7 @@ impl<R: Runtime> Store<R> {
     S: Into<Option<&'a str>>,
   {
     self.state.extend(state);
-    self.emit(source)?;
-    self.call_listeners();
-
-    Ok(())
+    self.on_change(source)
   }
 
   /// Patches the store state.
@@ -247,6 +241,16 @@ impl<R: Runtime> Store<R> {
     }
 
     yes
+  }
+
+  fn on_change<'a, S>(&self, source: S) -> Result<()>
+  where
+    S: Into<Option<&'a str>>,
+  {
+    self.emit(source)?;
+    self.call_listeners();
+
+    Ok(())
   }
 
   fn emit<'a, S>(&self, source: S) -> Result<()>
