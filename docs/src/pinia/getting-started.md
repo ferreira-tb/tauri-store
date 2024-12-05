@@ -10,7 +10,7 @@ Install the Rust crate by adding the following to your `Cargo.toml` file:
 
 ```toml
 [dependencies]
-tauri-plugin-pinia = 0.8
+tauri-plugin-pinia = 0.9
 ```
 
 Install the JavaScript package with your preferred package manager:

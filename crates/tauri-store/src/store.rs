@@ -20,6 +20,9 @@ use ahash::HashMap;
 #[cfg(not(feature = "ahash"))]
 use std::collections::HashMap;
 
+#[cfg(feature = "tracing")]
+use tracing::debug;
+
 pub struct Store<R: Runtime> {
   app: AppHandle<R>,
   pub(crate) id: String,
@@ -35,6 +38,9 @@ impl<R: Runtime> Store<R> {
       Err(e) if e.kind() == NotFound => StoreState::default(),
       Err(e) => return Err(e.into()),
     };
+
+    #[cfg(feature = "tracing")]
+    debug!("store loaded: {id}");
 
     Ok(Self {
       app,
@@ -77,6 +83,9 @@ impl<R: Runtime> Store<R> {
     let mut file = File::create(self.path())?;
     file.write_all(&bytes)?;
 
+    #[cfg(feature = "tracing")]
+    debug!("store saved: {}", self.id);
+
     Ok(())
   }
 
@@ -101,6 +110,9 @@ impl<R: Runtime> Store<R> {
     let mut file = File::create(self.path()).await?;
     file.write_all(&bytes).await?;
     file.flush().await?;
+
+    #[cfg(feature = "tracing")]
+    debug!("store saved: {}", self.id);
 
     Ok(())
   }
@@ -209,17 +221,27 @@ impl<R: Runtime> Store<R> {
       .expect("listeners mutex is poisoned")
       .insert(id, listener);
 
+    #[cfg(feature = "tracing")]
+    debug!("watcher {} added to store {}", id, self.id);
+
     id
   }
 
   /// Removes a listener from this store.
   pub fn unwatch(&self, id: u32) -> bool {
-    self
+    let yes = self
       .listeners
       .lock()
       .expect("listeners mutex is poisoned")
       .remove(&id)
-      .is_some()
+      .is_some();
+
+    #[cfg(feature = "tracing")]
+    if yes {
+      debug!("watcher {} removed from store {}", id, self.id);
+    }
+
+    yes
   }
 
   fn emit<'a, S>(&self, source: S) -> Result<()>

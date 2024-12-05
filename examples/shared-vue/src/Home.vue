@@ -3,7 +3,7 @@ import { onMounted } from 'vue';
 import { onKeyDown } from '@vueuse/core';
 import { invoke } from '@tauri-apps/api/core';
 import { exit } from '@tauri-apps/plugin-process';
-import { saveAll } from 'tauri-plugin-pinia/src/index.ts';
+import { clearAutosave, saveAll, setAutosave } from 'tauri-plugin-pinia/src/index.ts';
 import {
   openDebouncedStore,
   openStore,
@@ -39,6 +39,8 @@ onMounted(() => {
   <main>
     <div class="action">
       <button type="button" @click="saveAll">Save All</button>
+      <button type="button" @click="() => setAutosave(10000)">Set Autosave</button>
+      <button type="button" @click="clearAutosave">Clear Autosave</button>
     </div>
     <section id="counter">
       <p>Counter: {{ store.counter }}</p>

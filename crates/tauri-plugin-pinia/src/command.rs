@@ -1,21 +1,12 @@
 use crate::manager::ManagerExt;
 use std::path::PathBuf;
+use std::time::Duration;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
 use tauri_store::{Result, StoreState};
 
 #[cfg(feature = "unstable-async")]
-use {
-  std::time::Duration,
-  tauri_store::{boxed, boxed_ok},
-};
+use tauri_store::{boxed, boxed_ok};
 
-#[cfg(not(feature = "unstable-async"))]
-#[tauri::command]
-pub(crate) async fn clear_autosave() -> Result<()> {
-  tauri_store::missing_feature!("unstable-async")
-}
-
-#[cfg(feature = "unstable-async")]
 #[tauri::command]
 pub(crate) async fn clear_autosave<R: Runtime>(app: AppHandle<R>) {
   app.pinia().clear_autosave();
@@ -155,17 +146,11 @@ pub(crate) async fn save_some<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -
   app.pinia().save_some(&ids).await
 }
 
-#[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
-pub(crate) async fn set_autosave(_interval: u32) -> Result<()> {
-  tauri_store::missing_feature!("unstable-async")
-}
-
-#[cfg(feature = "unstable-async")]
-#[tauri::command]
-pub(crate) async fn set_autosave<R: Runtime>(app: AppHandle<R>, interval: u32) {
-  let duration = Duration::from_millis(interval.into());
-  app.pinia().set_autosave(duration);
+pub(crate) async fn set_autosave<R: Runtime>(app: AppHandle<R>, interval: u64) {
+  app
+    .pinia()
+    .set_autosave(Duration::from_millis(interval));
 }
 
 #[cfg(not(feature = "unstable-async"))]

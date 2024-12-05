@@ -1,7 +1,7 @@
 [package]
 name = "tauri-plugin-pinia"
 description = "Persistent Pinia stores for Tauri"
-version = "0.8.2"
+version = "0.9.0"
 documentation = "https://docs.rs/tauri-plugin-pinia"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
@@ -37,7 +37,7 @@ version = "0.8"
 optional = true
 
 [dependencies.tauri-store]
-version = "0.3"
+version = "0.4"
 path = "../tauri-store"
 features = ["derive"]
 
@@ -48,3 +48,4 @@ features = ["build"]
 [features]
 unstable-async = ["tauri-store/unstable-async"]
 ahash = ["tauri-store/ahash", "dep:ahash", "ahash/serde"]
+tracing = ["tauri-store/tracing"]

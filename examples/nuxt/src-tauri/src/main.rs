@@ -1,9 +1,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use example_shared::build;
+use anyhow::Result;
+use example_shared::{build, setup_tracing};
 
-fn main() {
-  build()
-    .run(tauri::generate_context!())
-    .expect("error while running tauri application");
+fn main() -> Result<()> {
+  setup_tracing("example_nuxt")?;
+  build().run(tauri::generate_context!())?;
+  Ok(())
 }
