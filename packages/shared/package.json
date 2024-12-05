@@ -1,6 +1,6 @@
 {
   "name": "@tauri-store/shared",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Utilities for Tauri Store",
   "type": "module",
   "private": false,

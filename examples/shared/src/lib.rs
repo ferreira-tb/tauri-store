@@ -1,7 +1,11 @@
+mod r#impl;
+
+use anyhow::Result;
+use r#impl::prelude::*;
 use serde::{Deserialize, Serialize};
+use std::time::Duration;
 use tauri::Wry;
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
-use tauri_plugin_pinia::ManagerExt;
 
 #[cfg(feature = "unstable-async")]
 use tauri::async_runtime::block_on;
@@ -13,12 +17,19 @@ struct CounterStore {
 }
 
 pub fn build() -> tauri::Builder<Wry> {
-  let pinia = tauri_plugin_pinia::Builder::new()
-    .pretty(true)
-    .build();
+  let mut builder = tauri::Builder::default();
 
-  tauri::Builder::default()
-    .plugin(pinia)
+  #[cfg(feature = "pinia")]
+  {
+    builder = builder.plugin(
+      tauri_plugin_pinia::Builder::new()
+        .autosave(Duration::from_secs(10))
+        .pretty(true)
+        .build(),
+    );
+  }
+
+  builder
     .plugin(tauri_plugin_process::init())
     .plugin(tauri_plugin_shell::init())
     .plugin(tauri_plugin_window_state::Builder::new().build())
@@ -56,93 +67,31 @@ fn open_window(app: &AppHandle, id: u8) {
     .unwrap();
 }
 
-#[cfg(not(feature = "unstable-async"))]
-fn watch_counter(app: &AppHandle) {
-  let _ = app.pinia().watch("counter-store", |handle| {
-    handle
-      .pinia()
-      .try_get::<i32>("counter-store", "counter")
-      .inspect(|counter| println!("counter: {counter}"))
-      .map(drop)
-  });
-}
+pub fn setup_tracing(krate: &str) -> Result<()> {
+  use tracing::subscriber::set_global_default;
+  use tracing_subscriber::fmt::time::ChronoLocal;
+  use tracing_subscriber::fmt::Layer;
+  use tracing_subscriber::layer::SubscriberExt;
+  use tracing_subscriber::{EnvFilter, Registry};
 
-#[cfg(feature = "unstable-async")]
-async fn watch_counter(app: &AppHandle) {
-  let _ = app
-    .pinia()
-    .watch("counter-store", |handle| {
-      Box::pin(async move {
-        handle
-          .pinia()
-          .try_get::<i32>("counter-store", "counter")
-          .await
-          .inspect(|counter| println!("counter: {counter}"))
-          .map(drop)
-      })
-    })
-    .await;
-}
+  const TIMESTAMP: &str = "%F %T%.3f %:z";
 
-#[cfg(not(feature = "unstable-async"))]
-#[tauri::command]
-async fn get_counter(app: AppHandle) -> Option<i32> {
-  app
-    .pinia()
-    .get("counter-store", "counter")
-    .and_then(|counter| serde_json::from_value(counter).ok())
-}
+  #[cfg(feature = "pinia")]
+  let directive = "tauri_plugin_pinia=trace";
 
-#[cfg(feature = "unstable-async")]
-#[tauri::command]
-async fn get_counter(app: AppHandle) -> Option<i32> {
-  app
-    .pinia()
-    .get("counter-store", "counter")
-    .await
-    .and_then(|counter| serde_json::from_value(counter).ok())
-}
+  let filter = EnvFilter::builder()
+    .from_env()?
+    .add_directive(format!("{krate}=trace").parse()?)
+    .add_directive("tauri_store=trace".parse()?)
+    .add_directive(directive.parse()?);
 
-#[tauri::command]
-async fn print_counter(app: AppHandle) {
-  let counter = try_get_counter(app).await;
-  println!("counter: {counter}");
-}
+  let stderr = Layer::default()
+    .with_ansi(true)
+    .with_timer(ChronoLocal::new(TIMESTAMP.into()))
+    .with_writer(std::io::stderr)
+    .pretty();
 
-#[cfg(not(feature = "unstable-async"))]
-#[tauri::command]
-async fn try_get_counter(app: AppHandle) -> i32 {
-  app
-    .pinia()
-    .try_get::<i32>("counter-store", "counter")
-    .unwrap()
-}
+  set_global_default(Registry::default().with(stderr).with(filter))?;
 
-#[cfg(feature = "unstable-async")]
-#[tauri::command]
-async fn try_get_counter(app: AppHandle) -> i32 {
-  app
-    .pinia()
-    .try_get::<i32>("counter-store", "counter")
-    .await
-    .unwrap()
-}
-
-#[cfg(not(feature = "unstable-async"))]
-#[tauri::command]
-async fn try_store_state(app: AppHandle) -> CounterStore {
-  app
-    .pinia()
-    .try_store_state::<CounterStore>("counter-store")
-    .expect("store must exist")
-}
-
-#[cfg(feature = "unstable-async")]
-#[tauri::command]
-async fn try_store_state(app: AppHandle) -> CounterStore {
-  app
-    .pinia()
-    .try_store_state::<CounterStore>("counter-store")
-    .await
-    .expect("store must exist")
+  Ok(())
 }

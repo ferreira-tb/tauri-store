@@ -1,11 +1,7 @@
 import { invoke } from '@tauri-apps/api/core';
 import type { State } from '@tauri-store/shared';
 
-/**
- * Stop the autosave.
- *
- * **WARNING**: This requires the `unstable-async` feature to be enabled.
- */
+/** Abort the autosave. */
 export function clearAutosave(): Promise<void> {
   return invoke('plugin:pinia|clear_autosave');
 }
@@ -37,18 +33,9 @@ export function getStoreState<T extends State>(id: string): Promise<T | null> {
  * Save a store to the disk.
  * @param id The store id.
  **/
-export function save(id: string): Promise<void>;
-/**
- * Save some stores to the disk.
- * @param ids The store ids.
- **/
-export function save(ids: string[]): Promise<void>;
-export function save(id: string | string[]): Promise<void> {
-  if (typeof id === 'string') {
-    return invoke('plugin:pinia|save', { id });
-  }
-
-  return invoke('plugin:pinia|save_some', { ids: id });
+export function save(...id: (string | string[])[]): Promise<void> {
+  const stores = id.flat(Number.POSITIVE_INFINITY);
+  return invoke('plugin:pinia|save_some', { ids: stores });
 }
 
 /** Save all the stores to the disk. */
@@ -58,10 +45,12 @@ export function saveAll(): Promise<void> {
 
 /**
  * Save the stores periodically.
- *
- * **WARNING**: This requires the `unstable-async` feature to be enabled.
  * @param interval The interval in milliseconds.
  */
-export function setAutosave(interval: number): Promise<void> {
-  return invoke('plugin:pinia|set_autosave', { interval });
+export function setAutosave(interval: number | null): Promise<void> {
+  if (typeof interval === 'number' && interval > 0) {
+    return invoke('plugin:pinia|set_autosave', { interval });
+  }
+
+  return clearAutosave();
 }

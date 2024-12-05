@@ -9,6 +9,7 @@ mod pinia;
 pub use manager::ManagerExt;
 pub use pinia::Pinia;
 use std::path::{Path, PathBuf};
+use std::time::Duration;
 use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
 use tauri_store::StoreCollection;
@@ -21,7 +22,7 @@ pub use tauri_store::{
 pub use tauri_store::{boxed, boxed_ok, BoxFuture};
 
 #[cfg(feature = "unstable-async")]
-use {std::time::Duration, tauri::async_runtime};
+use tauri::async_runtime;
 
 #[cfg(feature = "ahash")]
 use ahash::HashSet;
@@ -35,8 +36,6 @@ pub struct Builder<R: Runtime> {
   sync_denylist: HashSet<String>,
 
   on_load: Option<Box<OnLoadFn<R>>>,
-
-  #[cfg(feature = "unstable-async")]
   autosave: Option<Duration>,
 }
 
@@ -91,8 +90,6 @@ impl<R: Runtime> Builder<R> {
   }
 
   /// Sets the autosave interval for all stores.
-  #[cfg(feature = "unstable-async")]
-  #[cfg_attr(docsrs, doc(cfg(feature = "unstable-async")))]
   #[must_use]
   pub fn autosave(mut self, interval: Duration) -> Self {
     self.autosave = Some(interval);
@@ -129,8 +126,6 @@ impl<R: Runtime> Default for Builder<R> {
       save_denylist: HashSet::default(),
       sync_denylist: HashSet::default(),
       on_load: None,
-
-      #[cfg(feature = "unstable-async")]
       autosave: None,
     }
   }
@@ -156,22 +151,22 @@ fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder<R>) -> BoxResult<(
     collection = collection.on_load(on_load);
   }
 
-  app.manage(Pinia(collection.build(app)));
-
-  #[cfg(feature = "unstable-async")]
   if let Some(duration) = builder.autosave {
-    app.pinia().set_autosave(duration);
+    collection = collection.autosave(duration);
   };
+
+  app.manage(Pinia(collection.build(app)));
 
   Ok(())
 }
 
 fn on_event<R: Runtime>(app: &AppHandle<R>, event: &RunEvent) {
   if let RunEvent::Exit = event {
+    let pinia = app.pinia();
     #[cfg(not(feature = "unstable-async"))]
-    let _ = app.pinia().save_all();
+    let _ = pinia.save_all();
     #[cfg(feature = "unstable-async")]
-    let _ = async_runtime::block_on(app.pinia().save_all());
+    let _ = async_runtime::block_on(pinia.save_all());
   }
 }
 

@@ -1,3 +1,4 @@
+use crate::autosave::Autosave;
 use crate::error::Result;
 use crate::event::{emit_all, STORE_UNLOADED_EVENT};
 use crate::io_err;
@@ -8,16 +9,14 @@ use serde_json::Value as Json;
 use std::fmt;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex as StdMutex, OnceLock};
+use std::time::Duration;
 use tauri::{AppHandle, Manager, Resource, ResourceId, Runtime};
 
 #[cfg(feature = "unstable-async")]
 use {
-  crate::manager::ManagerExt,
   crate::{boxed, boxed_ok},
   futures::future::BoxFuture,
-  std::time::Duration,
   tokio::sync::Mutex as TokioMutex,
-  tokio::task::AbortHandle,
 };
 
 #[cfg(feature = "ahash")]
@@ -48,9 +47,7 @@ pub struct StoreCollection<R: Runtime> {
   pub(crate) sync_denylist: Option<HashSet<String>>,
 
   pub(crate) on_load: Option<Box<OnLoadFn<R>>>,
-
-  #[cfg(feature = "unstable-async")]
-  pub(crate) autosave: StdMutex<Option<AbortHandle>>,
+  pub(crate) autosave: StdMutex<Option<Autosave>>,
 }
 
 macro_rules! get_store {
@@ -341,37 +338,16 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Saves the stores periodically.
-  #[cfg(feature = "unstable-async")]
-  #[cfg_attr(docsrs, doc(cfg(feature = "unstable-async")))]
   pub fn set_autosave(&self, duration: Duration) {
-    use tauri::async_runtime::{self, RuntimeHandle};
-    use tokio::time::{self, MissedTickBehavior};
-
     self.clear_autosave();
-
-    let app = self.app.clone();
-    let RuntimeHandle::Tokio(runtime) = async_runtime::handle();
-    let task = runtime.spawn(async move {
-      let mut interval = time::interval(duration);
-      interval.set_missed_tick_behavior(MissedTickBehavior::Delay);
-      loop {
-        interval.tick().await;
-        let _ = app.store_collection().save_all().await;
-      }
-    });
-
-    let mut guard = self.autosave.lock().unwrap();
-    *guard = Some(task.abort_handle());
+    let autosave = Autosave::new(&self.app, duration);
+    self.autosave.lock().unwrap().replace(autosave);
   }
 
   /// Stops the autosave.
-  #[cfg(feature = "unstable-async")]
-  #[cfg_attr(docsrs, doc(cfg(feature = "unstable-async")))]
   pub fn clear_autosave(&self) {
-    let mut guard = self.autosave.lock().unwrap();
-    if let Some(autosave) = guard.take() {
-      drop(guard);
-      autosave.abort();
+    if let Ok(mut autosave) = self.autosave.lock() {
+      autosave.take().map(Autosave::abort);
     }
   }
 
@@ -410,7 +386,6 @@ impl<R: Runtime> fmt::Debug for StoreCollection<R> {
   }
 }
 
-#[cfg(feature = "unstable-async")]
 impl<R: Runtime> Drop for StoreCollection<R> {
   fn drop(&mut self) {
     self.clear_autosave();
@@ -423,6 +398,7 @@ pub struct StoreCollectionBuilder<R: Runtime> {
   save_denylist: Option<HashSet<String>>,
   sync_denylist: Option<HashSet<String>>,
   on_load: Option<Box<OnLoadFn<R>>>,
+  autosave: Option<Duration>,
 }
 
 impl<R: Runtime> StoreCollectionBuilder<R> {
@@ -463,6 +439,12 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
     self
   }
 
+  #[must_use]
+  pub fn autosave(mut self, duration: Duration) -> Self {
+    self.autosave = Some(duration);
+    self
+  }
+
   pub fn build(mut self, app: &AppHandle<R>) -> Arc<StoreCollection<R>> {
     let path = self.path.take().unwrap_or_else(|| {
       app
@@ -474,6 +456,10 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
 
     self.save_denylist = self.save_denylist.filter(|it| !it.is_empty());
     self.sync_denylist = self.sync_denylist.filter(|it| !it.is_empty());
+
+    let autosave = self
+      .autosave
+      .map(|duration| Autosave::new(app, duration));
 
     let collection = Arc::new(StoreCollection::<R> {
       app: app.clone(),
@@ -488,9 +474,7 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
       stores: TokioMutex::new(HashMap::new()),
 
       on_load: self.on_load,
-
-      #[cfg(feature = "unstable-async")]
-      autosave: StdMutex::new(None),
+      autosave: StdMutex::new(autosave),
     });
 
     let rid = app
@@ -511,6 +495,7 @@ impl<R: Runtime> Default for StoreCollectionBuilder<R> {
       save_denylist: None,
       sync_denylist: None,
       on_load: None,
+      autosave: None,
     }
   }
 }

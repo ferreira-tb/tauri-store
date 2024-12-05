@@ -5,8 +5,8 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::DeriveInput;
 
-#[expect(clippy::too_many_lines)]
 #[proc_macro_derive(Collection)]
+#[expect(clippy::too_many_lines)]
 pub fn derive_collection(input: TokenStream) -> TokenStream {
   let ast = syn::parse::<DeriveInput>(input).unwrap();
   let name = ast.ident;
@@ -200,15 +200,11 @@ pub fn derive_collection(input: TokenStream) -> TokenStream {
       }
 
       /// Saves the stores periodically.
-      #[cfg(feature = "unstable-async")]
-      #[cfg_attr(docsrs, doc(cfg(feature = "unstable-async")))]
       pub fn set_autosave(&self, duration: std::time::Duration) {
         self.0.set_autosave(duration)
       }
 
       /// Stops the autosave.
-      #[cfg(feature = "unstable-async")]
-      #[cfg_attr(docsrs, doc(cfg(feature = "unstable-async")))]
       pub fn clear_autosave(&self) {
         self.0.clear_autosave()
       }

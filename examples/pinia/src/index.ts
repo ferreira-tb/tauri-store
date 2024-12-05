@@ -1,9 +1,10 @@
 import App from './App.vue';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { createPlugin } from 'tauri-plugin-pinia/src/index.ts';
+import { TauriPluginPinia } from 'tauri-plugin-pinia/src/index.ts';
 
+const app = createApp(App);
 const pinia = createPinia();
-pinia.use(createPlugin());
+pinia.use(TauriPluginPinia());
 
-createApp(App).use(pinia).mount('#app');
+app.use(pinia).mount('#app');
