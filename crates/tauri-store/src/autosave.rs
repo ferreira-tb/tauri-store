@@ -24,7 +24,7 @@ impl Autosave {
   pub(crate) fn start<R: Runtime>(&mut self, app: &AppHandle<R>) {
     self.stop();
 
-    if let Some(duration) = self.duration.clone() {
+    if let Some(duration) = self.duration {
       let app = app.clone();
       let RuntimeHandle::Tokio(runtime) = async_runtime::handle();
 
@@ -60,8 +60,8 @@ impl Autosave {
     }
   }
 
-  pub(crate) fn set_duration(&mut self, duration: Duration) {
-    self.duration = Some(duration);
+  pub(crate) const fn set_duration(&mut self, duration: Duration) {
+    self.duration.replace(duration);
   }
 }
 
