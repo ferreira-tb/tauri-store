@@ -8,13 +8,12 @@ import {
   debounce,
   isStoreKeyMatch,
   type State,
+  STORE_UPDATED,
   throttle,
 } from '@tauri-store/shared';
 
 export type * from './types';
 export * from './commands/public';
-
-const STORE_UPDATED = 'tauri-store://updated';
 
 declare module 'pinia' {
   export interface PiniaCustomProperties {
