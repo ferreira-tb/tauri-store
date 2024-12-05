@@ -11,7 +11,7 @@ import { save, saveAll } from 'tauri-plugin-pinia';
 await save('my-store');
 
 // Save some stores.
-await save(['my-store', 'my-store-2']);
+await save('my-store', 'my-store-2');
 
 // Save all stores.
 await saveAll();

@@ -146,6 +146,9 @@ importers:
 
   packages/shared:
     dependencies:
+      '@tauri-apps/api':
+        specifier: ^2.0.3
+        version: 2.1.1
       '@tb-dev/utils':
         specifier: ^4.0.9
         version: 4.0.9

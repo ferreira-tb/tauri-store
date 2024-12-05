@@ -1,10 +1,15 @@
 import * as commands from './commands';
-import { isStoreKeyMatch } from './utils';
 import type { PiniaPluginContext } from 'pinia';
 import { nextTick, watch, type WatchOptions } from 'vue';
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow';
 import type { TauriPluginPiniaOptions, TauriPluginPiniaStoreOptions } from './types';
-import { type ChangePayload, debounce, type State, throttle } from '@tauri-store/shared';
+import {
+  type ChangePayload,
+  debounce,
+  isStoreKeyMatch,
+  type State,
+  throttle,
+} from '@tauri-store/shared';
 
 export type * from './types';
 export * from './commands/public';
