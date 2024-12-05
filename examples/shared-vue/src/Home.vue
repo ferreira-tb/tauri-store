@@ -39,7 +39,7 @@ onMounted(() => {
   <main>
     <div class="action">
       <button type="button" @click="saveAll">Save All</button>
-      <button type="button" @click="() => setAutosave(10000)">Set Autosave</button>
+      <button type="button" @click="() => setAutosave(5000)">Set Autosave</button>
       <button type="button" @click="clearAutosave">Clear Autosave</button>
     </div>
     <section id="counter">

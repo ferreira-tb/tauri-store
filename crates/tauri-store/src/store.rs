@@ -21,7 +21,7 @@ use ahash::HashMap;
 use std::collections::HashMap;
 
 #[cfg(feature = "tracing")]
-use tracing::debug;
+use tracing::{debug, warn};
 
 pub struct Store<R: Runtime> {
   app: AppHandle<R>,
@@ -35,7 +35,12 @@ impl<R: Runtime> Store<R> {
     let path = store_path(&app, &id);
     let state = match std::fs::read(path) {
       Ok(bytes) => serde_json::from_slice(&bytes)?,
-      Err(e) if e.kind() == NotFound => StoreState::default(),
+      Err(e) if e.kind() == NotFound => {
+        #[cfg(feature = "tracing")]
+        warn!("store not found: {id}, using default state");
+
+        StoreState::default()
+      }
       Err(e) => return Err(e.into()),
     };
 

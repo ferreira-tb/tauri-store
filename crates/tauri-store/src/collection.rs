@@ -47,7 +47,7 @@ pub struct StoreCollection<R: Runtime> {
   pub(crate) sync_denylist: Option<HashSet<String>>,
 
   pub(crate) on_load: Option<Box<OnLoadFn<R>>>,
-  pub(crate) autosave: StdMutex<Option<Autosave>>,
+  pub(crate) autosave: StdMutex<Autosave>,
 }
 
 macro_rules! get_store {
@@ -339,15 +339,16 @@ impl<R: Runtime> StoreCollection<R> {
 
   /// Saves the stores periodically.
   pub fn set_autosave(&self, duration: Duration) {
-    self.clear_autosave();
-    let autosave = Autosave::new(&self.app, duration);
-    self.autosave.lock().unwrap().replace(autosave);
+    if let Ok(mut autosave) = self.autosave.lock() {
+      autosave.set_duration(duration);
+      autosave.start(&self.app);
+    }
   }
 
   /// Stops the autosave.
   pub fn clear_autosave(&self) {
     if let Ok(mut autosave) = self.autosave.lock() {
-      autosave.take().map(Autosave::abort);
+      autosave.stop();
     }
   }
 
@@ -457,9 +458,7 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
     self.save_denylist = self.save_denylist.filter(|it| !it.is_empty());
     self.sync_denylist = self.sync_denylist.filter(|it| !it.is_empty());
 
-    let autosave = self
-      .autosave
-      .map(|duration| Autosave::new(app, duration));
+    let autosave = Autosave::new(self.autosave);
 
     let collection = Arc::new(StoreCollection::<R> {
       app: app.clone(),
@@ -482,6 +481,8 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
       .add_arc(Arc::clone(&collection));
 
     let _ = RESOURCE_ID.set(rid);
+
+    collection.autosave.lock().unwrap().start(app);
 
     collection
   }
