@@ -13,12 +13,12 @@ use tokio::time::sleep;
 
 #[cfg(tauri_store_tracing)]
 use {
-  std::sync::atomic::{AtomicU32, Ordering},
+  std::sync::atomic::{AtomicU64, Ordering},
   tracing::{debug, trace},
 };
 
 #[cfg(tauri_store_tracing)]
-static DEBOUNCE_ID: AtomicU32 = AtomicU32::new(0);
+static DEBOUNCE_ID: AtomicU64 = AtomicU64::new(0);
 
 type DebouncedFn<R, Fut> = dyn Fn(AppHandle<R>) -> Fut + Send + Sync + 'static;
 
@@ -35,7 +35,7 @@ where
   duration: Duration,
 
   #[cfg(tauri_store_tracing)]
-  id: u32,
+  id: u64,
 }
 
 impl<R, T, Fut> Debounce<R, T, Fut>
@@ -134,7 +134,7 @@ where
   duration: Duration,
 
   #[cfg(tauri_store_tracing)]
-  id: u32,
+  id: u64,
 }
 
 impl<R, T, Fut> Actor<R, T, Fut>
