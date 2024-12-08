@@ -4,7 +4,7 @@
   "description": "Persistent Pinia stores for Tauri",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@9.14.4",
+  "packageManager": "pnpm@9.15.0",
   "homepage": "https://tb.dev.br/tauri-store",
   "license": "MIT",
   "repository": {
@@ -48,7 +48,7 @@
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
     "@tauri-store/shared": "workspace:*",
-    "@tb-dev/utils": "^4.0.9",
+    "@tb-dev/utils": "^4.0.10",
     "pinia": "^2.2.8",
     "vue": "^3.5.13"
   }

@@ -4,6 +4,13 @@ use std::sync::Arc;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow, Window};
 
 pub trait ManagerExt<R: Runtime>: Manager<R> {
+  /// Returns a handle to the store collection.
+  ///
+  /// # Panics
+  ///
+  /// Panics if the store collection is not in the [resources table](tauri::ResourceTable).
+  ///
+  /// This likely indicates that the method was called before the plugin was properly initialized.
   fn store_collection(&self) -> Arc<StoreCollection<R>> {
     let rid = RESOURCE_ID
       .get()

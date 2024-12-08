@@ -1,11 +1,11 @@
 use crate::manager::ManagerExt;
 use std::path::PathBuf;
 use std::time::Duration;
-use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
-use tauri_store::{Result, StoreState};
+use tauri::{AppHandle, Runtime, WebviewWindow};
+use tauri_store::{with_store, Result, StoreState};
 
 #[cfg(feature = "unstable-async")]
-use tauri_store::{boxed, boxed_ok};
+use tauri_store::boxed;
 
 #[tauri::command]
 pub(crate) async fn clear_autosave<R: Runtime>(app: AppHandle<R>) {
@@ -17,97 +17,76 @@ pub(crate) async fn get_pinia_path<R: Runtime>(app: AppHandle<R>) -> PathBuf {
   app.pinia().path().to_path_buf()
 }
 
-#[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
 pub(crate) async fn get_store_ids<R: Runtime>(app: AppHandle<R>) -> Vec<String> {
   app.pinia().ids()
 }
 
-#[cfg(feature = "unstable-async")]
-#[tauri::command]
-pub(crate) async fn get_store_ids<R: Runtime>(app: AppHandle<R>) -> Vec<String> {
-  app.pinia().ids().await
-}
-
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
 pub(crate) async fn get_store_path<R: Runtime>(app: AppHandle<R>, id: String) -> Result<PathBuf> {
-  app
-    .pinia()
-    .with_store(id, |store| Ok(store.path()))
+  with_store(&app, id, |store| store.path())
 }
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
 pub(crate) async fn get_store_path<R: Runtime>(app: AppHandle<R>, id: String) -> Result<PathBuf> {
-  app
-    .pinia()
-    .with_store(id, |store| boxed_ok! { store.path() })
-    .await
+  with_store(&app, id, |store| boxed(store.path())).await
 }
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
-pub(crate) async fn get_store_state<R: Runtime>(
-  app: AppHandle<R>,
-  id: String,
-) -> Option<StoreState> {
+pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Option<StoreState>
+where
+  R: Runtime,
+{
   app.pinia().store_state(id)
 }
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
-pub(crate) async fn get_store_state<R: Runtime>(
-  app: AppHandle<R>,
-  id: String,
-) -> Option<StoreState> {
+pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Option<StoreState>
+where
+  R: Runtime,
+{
   app.pinia().store_state(id).await
 }
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
 pub(crate) async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<StoreState> {
-  app
-    .pinia()
-    .with_store(id, |store| Ok(store.state().clone()))
+  with_store(&app, id, |store| store.state().clone())
 }
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
 pub(crate) async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<StoreState> {
-  app
-    .pinia()
-    .with_store(id, |store| boxed_ok! { store.state().clone() })
-    .await
+  with_store(&app, id, |store| boxed(store.state().clone())).await
 }
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
-pub(crate) async fn patch<R: Runtime>(
-  window: WebviewWindow<R>,
-  id: String,
-  state: StoreState,
-) -> Result<()> {
-  let app = window.app_handle().clone();
-  app.pinia().with_store(id, move |store| {
-    store.patch_with_source(state, window.label())
-  })
+pub(crate) async fn patch<R>(window: WebviewWindow<R>, id: String, state: StoreState) -> Result<()>
+where
+  R: Runtime,
+{
+  let label = window.label().to_owned();
+  with_store(&window, id, move |store| {
+    store.patch_with_source(state, label.as_str())
+  })?
 }
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
-pub(crate) async fn patch<R: Runtime>(
-  window: WebviewWindow<R>,
-  id: String,
-  state: StoreState,
-) -> Result<()> {
-  let app = window.app_handle().clone();
-  app
-    .pinia()
-    .with_store(id, move |store| {
-      boxed! { store.patch_with_source(state, window.label()) }
-    })
-    .await
+pub(crate) async fn patch<R>(window: WebviewWindow<R>, id: String, state: StoreState) -> Result<()>
+where
+  R: Runtime,
+{
+  let label = window.label().to_owned();
+  with_store(&window, id, move |store| {
+    boxed(store.patch_with_source(state, label.as_str()))
+  })
+  .await?
 }
 
 #[cfg(not(feature = "unstable-async"))]

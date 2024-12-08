@@ -2,7 +2,7 @@
   "name": "example-shared-vue",
   "version": "0.9.0",
   "type": "module",
-  "packageManager": "pnpm@9.14.4",
+  "packageManager": "pnpm@9.15.0",
   "private": true,
   "dependencies": {
     "@tauri-apps/api": "^2.1.1",

@@ -14,32 +14,34 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
 use tauri_store::StoreCollection;
 pub use tauri_store::{
-  BoxResult, Error, Json, OnLoadFn, OnLoadResult, Result, Store, StoreState, StoreStateExt,
-  WatcherResult,
+  with_store, BoxResult, Error, Json, OnLoadFn, OnLoadResult, Result, SaveStrategy, Store,
+  StoreState, StoreStateExt, WatcherResult,
 };
 
 #[cfg(feature = "unstable-async")]
-pub use tauri_store::{boxed, boxed_ok, BoxFuture};
+pub use tauri_store::boxed;
 
 #[cfg(feature = "unstable-async")]
-use tauri::async_runtime;
+use tauri::async_runtime::block_on;
 
 #[cfg(feature = "ahash")]
 use ahash::HashSet;
 #[cfg(not(feature = "ahash"))]
 use std::collections::HashSet;
 
+/// Builder for the Pinia plugin.
 pub struct Builder<R: Runtime> {
   path: Option<PathBuf>,
+  save_strategy: SaveStrategy,
+  autosave: Option<Duration>,
+  on_load: Option<Box<OnLoadFn<R>>>,
   pretty: bool,
   save_denylist: HashSet<String>,
   sync_denylist: HashSet<String>,
-
-  on_load: Option<Box<OnLoadFn<R>>>,
-  autosave: Option<Duration>,
 }
 
 impl<R: Runtime> Builder<R> {
+  /// Creates a new builder instance with default values.
   pub fn new() -> Self {
     Self::default()
   }
@@ -49,6 +51,30 @@ impl<R: Runtime> Builder<R> {
   pub fn path(mut self, path: impl AsRef<Path>) -> Self {
     let path = path.as_ref().to_path_buf();
     self.path = Some(path);
+    self
+  }
+
+  /// Sets the save strategy to be used for all stores.
+  #[must_use]
+  pub fn save_strategy(mut self, strategy: SaveStrategy) -> Self {
+    self.save_strategy = strategy;
+    self
+  }
+
+  /// Sets the autosave interval for all stores.
+  #[must_use]
+  pub fn autosave(mut self, interval: Duration) -> Self {
+    self.autosave = Some(interval);
+    self
+  }
+
+  /// Sets a function to be called when a store is loaded.
+  #[must_use]
+  pub fn on_load<F>(mut self, f: F) -> Self
+  where
+    F: Fn(&Store<R>) -> OnLoadResult + Send + Sync + 'static,
+  {
+    self.on_load = Some(Box::new(f));
     self
   }
 
@@ -79,23 +105,7 @@ impl<R: Runtime> Builder<R> {
     self
   }
 
-  /// Sets a function to be called when a store is loaded.
-  #[must_use]
-  pub fn on_load<F>(mut self, f: F) -> Self
-  where
-    F: Fn(&Store<R>) -> OnLoadResult + Send + Sync + 'static,
-  {
-    self.on_load = Some(Box::new(f));
-    self
-  }
-
-  /// Sets the autosave interval for all stores.
-  #[must_use]
-  pub fn autosave(mut self, interval: Duration) -> Self {
-    self.autosave = Some(interval);
-    self
-  }
-
+  /// Builds the plugin.
   pub fn build(self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
       .setup(|app, _| setup(app, self))
@@ -122,11 +132,12 @@ impl<R: Runtime> Default for Builder<R> {
   fn default() -> Self {
     Self {
       path: None,
+      save_strategy: SaveStrategy::default(),
+      autosave: None,
+      on_load: None,
       pretty: false,
       save_denylist: HashSet::default(),
       sync_denylist: HashSet::default(),
-      on_load: None,
-      autosave: None,
     }
   }
 }
@@ -143,6 +154,7 @@ fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder<R>) -> BoxResult<(
 
   let mut collection = StoreCollection::<R>::builder()
     .path(path)
+    .save_strategy(builder.save_strategy)
     .pretty(builder.pretty)
     .save_denylist(builder.save_denylist)
     .sync_denylist(builder.sync_denylist);
@@ -166,7 +178,7 @@ fn on_event<R: Runtime>(app: &AppHandle<R>, event: &RunEvent) {
     #[cfg(not(feature = "unstable-async"))]
     let _ = pinia.save_all();
     #[cfg(feature = "unstable-async")]
-    let _ = async_runtime::block_on(pinia.save_all());
+    let _ = block_on(pinia.save_all());
   }
 }
 

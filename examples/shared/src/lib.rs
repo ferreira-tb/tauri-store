@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 use std::time::Duration;
 use tauri::Wry;
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
+use tauri_store::SaveStrategy;
 
 #[cfg(feature = "unstable-async")]
 use tauri::async_runtime::block_on;
@@ -23,6 +24,7 @@ pub fn build() -> tauri::Builder<Wry> {
   {
     builder = builder.plugin(
       tauri_plugin_pinia::Builder::new()
+        .save_strategy(SaveStrategy::debounce_secs(3))
         .autosave(Duration::from_secs(10))
         .pretty(true)
         .build(),
@@ -83,6 +85,7 @@ pub fn setup_tracing(krate: &str) -> Result<()> {
     .from_env()?
     .add_directive(format!("{krate}=trace").parse()?)
     .add_directive("tauri_store=trace".parse()?)
+    .add_directive("tauri_store_utils=trace".parse()?)
     .add_directive(directive.parse()?);
 
   let stderr = Layer::default()

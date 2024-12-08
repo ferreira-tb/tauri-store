@@ -42,8 +42,8 @@ importers:
         specifier: ^0.27.3
         version: 0.27.3(typescript@5.6.3)
       typedoc-plugin-mdn-links:
-        specifier: ^4.0.3
-        version: 4.0.3(typedoc@0.27.3(typescript@5.6.3))
+        specifier: ^4.0.4
+        version: 4.0.4(typedoc@0.27.3(typescript@5.6.3))
       typescript:
         specifier: ^5.6.3
         version: 5.6.3
@@ -150,8 +150,8 @@ importers:
         specifier: ^2.0.3
         version: 2.1.1
       '@tb-dev/utils':
-        specifier: ^4.0.9
-        version: 4.0.9
+        specifier: ^4.0.10
+        version: 4.0.10
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -165,8 +165,8 @@ importers:
         specifier: workspace:*
         version: link:../shared
       '@tb-dev/utils':
-        specifier: ^4.0.9
-        version: 4.0.9
+        specifier: ^4.0.10
+        version: 4.0.10
       pinia:
         specifier: ^2.2.8
         version: 2.2.8(typescript@5.6.3)(vue@3.5.13(typescript@5.6.3))
@@ -1330,8 +1330,8 @@ packages:
       eslint: ^9.8.0
       typescript: ^5.5.0
 
-  '@tb-dev/utils@4.0.9':
-    resolution: {integrity: sha512-j35VbtAeLTNKh+bNEAL8PJPeOnqPJqLnrjY+h5UGAnQ31iAop0DYe7C9Bb/qnwnr3Bl4fsQMjn+O1txACnFMqg==}
+  '@tb-dev/utils@4.0.10':
+    resolution: {integrity: sha512-JNXf5xVEBWerPbsqZO9ukytr522qZcA7hFtpDoXqBviw/M6vGCrHCuzZk7hdjXnJg9m0LV6pkyO5U2Jo4qPhtw==}
 
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
@@ -4333,8 +4333,8 @@ packages:
     resolution: {integrity: sha512-RPYt6dKyemXJe7I6oNstcH24myUGSReicxcHTvCLgzm4e0n8y05dGvcGB15/SoPRBmhlMthWQ9pvKyL81ko8nQ==}
     engines: {node: '>=16'}
 
-  typedoc-plugin-mdn-links@4.0.3:
-    resolution: {integrity: sha512-q18V8nXF4MqMBGABPVodfxmU2VLK+C7RpyKgrEGP1oP3MAdavLM8Hmeh7zUJAZ4ky+zotO5ZXfhgChegmaDWug==}
+  typedoc-plugin-mdn-links@4.0.4:
+    resolution: {integrity: sha512-rp0qiELXDso1VTFZVbLmO06SsdePD0j+h9JurxI6F8puM/euj6WZYKL5uWSWvu0r3wdUkus3KPQQEMmZ+rn5/g==}
     peerDependencies:
       typedoc: 0.26.x || 0.27.x
 
@@ -6094,7 +6094,7 @@ snapshots:
       - svelte-eslint-parser
       - tailwindcss
 
-  '@tb-dev/utils@4.0.9': {}
+  '@tb-dev/utils@4.0.10': {}
 
   '@trysound/sax@0.2.0': {}
 
@@ -9409,7 +9409,7 @@ snapshots:
 
   type-fest@4.29.0: {}
 
-  typedoc-plugin-mdn-links@4.0.3(typedoc@0.27.3(typescript@5.6.3)):
+  typedoc-plugin-mdn-links@4.0.4(typedoc@0.27.3(typescript@5.6.3)):
     dependencies:
       typedoc: 0.27.3(typescript@5.6.3)
 

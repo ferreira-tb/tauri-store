@@ -32,7 +32,7 @@ path = "../../shared"
 features = ["pinia"]
 
 [dependencies.tauri]
-version = "2.1"
+version = "2"
 features = ["devtools", "protocol-asset"]
 
 [dependencies.tauri-plugin-pinia]
