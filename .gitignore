@@ -12,10 +12,6 @@ pnpm-debug.log*
 !.vscode/settings.json
 !.vscode/tasks.json
 
-# NPM
-**/node_modules
-dist/
-
 # Rust
 debug/
 target/
@@ -26,12 +22,16 @@ target/
 # Tauri
 **/gen
 
+# Node
+**/node_modules
+dist/
+
 # Vite and Vitepress
 **/*vite*timestamp*
 **/.vitepress/dist
 **/.vitepress/cache
 
-# Nuxt dev/build outputs
+# Nuxt
 .output
 .data
 .nuxt
