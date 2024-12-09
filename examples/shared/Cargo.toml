@@ -12,10 +12,6 @@ workspace = true
 [lints]
 workspace = true
 
-[build-dependencies.tauri-build]
-version = "2.0"
-features = []
-
 [dependencies]
 anyhow = "1.0"
 serde_json = "1.0"
@@ -45,8 +41,11 @@ default-features = false
 version = "0.3"
 features = ["chrono", "env-filter", "fmt", "parking_lot", "registry"]
 
+[build-dependencies.tauri-build]
+version = "2.0"
+features = []
+
 [features]
 pinia = ["dep:tauri-plugin-pinia"]
-unstable-async = ["tauri-store/unstable-async"]
 file-sync-all = ["tauri-store/file-sync-all"]
-ahash = ["tauri-store/ahash"]
+unstable-async = ["tauri-store/unstable-async"]

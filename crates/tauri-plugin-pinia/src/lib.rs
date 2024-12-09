@@ -6,6 +6,7 @@ mod command;
 mod manager;
 mod pinia;
 
+use std::collections::HashSet;
 use std::path::PathBuf;
 use std::time::Duration;
 use tauri::plugin::TauriPlugin;
@@ -24,11 +25,6 @@ use tauri::async_runtime::block_on;
 
 #[cfg(feature = "unstable-async")]
 pub use tauri_store::boxed;
-
-#[cfg(feature = "ahash")]
-use ahash::HashSet;
-#[cfg(not(feature = "ahash"))]
-use std::collections::HashSet;
 
 /// Builder for the Pinia plugin.
 #[derive(CollectionBuilder)]
@@ -60,7 +56,10 @@ impl<R: Runtime> Builder<R> {
         command::patch,
         command::save,
         command::save_all,
+        command::save_all_now,
+        command::save_now,
         command::save_some,
+        command::save_some_now,
         command::set_autosave,
         command::set_store_save_strategy,
         command::unload

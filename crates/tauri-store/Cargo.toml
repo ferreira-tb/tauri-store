@@ -33,10 +33,6 @@ serde_json = "1.0"
 tauri = "2"
 thiserror = "2.0"
 
-[dependencies.ahash]
-version = "0.8"
-optional = true
-
 [dependencies.tauri-store-macros]
 version = "0.4"
 optional = true
@@ -59,7 +55,6 @@ version = "2.0"
 features = ["build"]
 
 [features]
-ahash = ["dep:ahash", "ahash/serde"]
 derive = ["dep:tauri-store-macros"]
 file-sync-all = []
 unstable-async = ["tokio/fs", "tokio/io-util"]

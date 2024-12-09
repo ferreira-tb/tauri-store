@@ -2,15 +2,11 @@ use super::autosave::Autosave;
 use super::{OnLoadFn, OnLoadResult, StoreCollection, RESOURCE_ID};
 use crate::store::{SaveStrategy, Store};
 use dashmap::DashMap;
+use std::collections::HashSet;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tauri::{AppHandle, Manager, Runtime};
-
-#[cfg(feature = "ahash")]
-use ahash::HashSet;
-#[cfg(not(feature = "ahash"))]
-use std::collections::HashSet;
 
 #[cfg(tauri_store_tracing)]
 use tracing::trace;

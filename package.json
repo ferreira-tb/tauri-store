@@ -5,8 +5,9 @@
   "private": true,
   "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "build": "pnpm run -F @tauri-store/shared build && pnpm run -F \"./packages/tauri-plugin-*\" build",
+    "build": "pnpm run build:shared && pnpm run -F \"./packages/tauri-plugin-*\" build",
     "build:docs": "pnpm run -F docs build && pnpm run --if-present -F \"./packages/*\" typedoc",
+    "build:shared": "pnpm run -F @tauri-store/shared build",
     "clippy": "cargo clippy --all",
     "codegen": "cargo run -p tauri-store-cli -- codegen",
     "dev": "cargo tauri dev",

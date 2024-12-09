@@ -16,7 +16,6 @@ The [`tauri-store`](https://docs.rs/tauri-store/latest/tauri_store/) crate is a 
 
 ## Optional features
 
-- `ahash`: Uses [`ahash`](https://docs.rs/ahash/latest/ahash/) as the default hasher.
 - `file-sync-all`: Calls [`File::sync_all`](https://doc.rust-lang.org/std/fs/struct.File.html#method.sync_all) after writing to the store file. If enabled, this can severely degrade performance.
 - `unstable-async`: Enables async support for the plugin.
 

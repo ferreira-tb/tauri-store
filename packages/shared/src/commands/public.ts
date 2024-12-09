@@ -1,5 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
-import { parseTimeStrategyRawTuple } from '../utils';
+import { flatten, parseTimeStrategyRawTuple } from '../utils';
 import type { State, TimeStrategy, TimeStrategyRawTuple } from '../types';
 
 export function clearAutosave(plugin: string) {
@@ -52,14 +52,27 @@ export function getStoreState(plugin: string) {
 
 export function save(plugin: string) {
   return function (...storeId: (string | string[])[]): Promise<void> {
-    const stores = storeId.flat(Number.POSITIVE_INFINITY).map(Boolean);
-    return invoke(`plugin:${plugin}|save_some`, { ids: stores });
+    const args: { ids: string[] } = { ids: flatten(storeId) };
+    return invoke(`plugin:${plugin}|save_some`, args);
   };
 }
 
 export function saveAll(plugin: string) {
   return function (): Promise<void> {
     return invoke(`plugin:${plugin}|save_all`);
+  };
+}
+
+export function saveAllNow(plugin: string) {
+  return function (): Promise<void> {
+    return invoke(`plugin:${plugin}|save_all_now`);
+  };
+}
+
+export function saveNow(plugin: string) {
+  return function (...storeId: (string | string[])[]): Promise<void> {
+    const args: { ids: string[] } = { ids: flatten(storeId) };
+    return invoke(`plugin:${plugin}|save_some_now`, args);
   };
 }
 

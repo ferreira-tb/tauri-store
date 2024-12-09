@@ -37,10 +37,20 @@ export function parseTimeStrategyRawTuple(tuple: TimeStrategyRawTuple): {
   };
 }
 
+/**
+ * @internal
+ */
 export function parseBigInt(value: string): number {
   if (BigInt(value) > Number.MAX_SAFE_INTEGER) {
     throw new TypeError(`Value ${value} is too large to be represented as a number`);
   }
 
   return Number.parseInt(value, 10);
+}
+
+/**
+ * @internal
+ */
+export function flatten<T>(array: (T | T[])[]): T[] {
+  return array.flat(Number.POSITIVE_INFINITY).filter(Boolean) as T[];
 }

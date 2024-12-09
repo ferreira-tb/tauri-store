@@ -2,10 +2,6 @@ use crate::error::Result;
 use crate::io_err;
 use serde::de::DeserializeOwned;
 use serde_json::{from_value, json, Value as Json};
-
-#[cfg(feature = "ahash")]
-use ahash::HashMap;
-#[cfg(not(feature = "ahash"))]
 use std::collections::HashMap;
 
 pub type StoreState = HashMap<String, Json>;

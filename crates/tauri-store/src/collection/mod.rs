@@ -8,6 +8,7 @@ use crate::error::Result;
 use crate::store::{SaveStrategy, Store, StoreResource};
 use autosave::Autosave;
 use dashmap::DashMap;
+use std::collections::HashSet;
 use std::fmt;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex, OnceLock};
@@ -27,11 +28,6 @@ use {
 
 #[cfg(feature = "unstable-async")]
 use futures::future::BoxFuture;
-
-#[cfg(feature = "ahash")]
-use ahash::HashSet;
-#[cfg(not(feature = "ahash"))]
-use std::collections::HashSet;
 
 pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
 

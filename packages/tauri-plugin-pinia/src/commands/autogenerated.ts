@@ -3,12 +3,12 @@
 import { commands } from '@tauri-store/shared';
 
 /**
- * Abort the autosave.
+ * Stops the autosave.
  */
 export const clearAutosave = commands.clearAutosave('pinia');
 
 /**
- * Get the default save strategy for the stores.
+ * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
  */
 export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('pinia');
@@ -19,7 +19,7 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('pinia');
 export const getPiniaPath = commands.getStoreCollectionPath('pinia');
 
 /**
- * List all the store ids.
+ * Lists all the store ids.
  */
 export const getStoreIds = commands.getStoreIds('pinia');
 
@@ -29,31 +29,42 @@ export const getStoreIds = commands.getStoreIds('pinia');
 export const getStorePath = commands.getStorePath('pinia');
 
 /**
- * Get the save strategy used by a store.
+ * Gets the save strategy used by a store.
  **/
 export const getStoreSaveStrategy = commands.getStoreSaveStrategy('pinia');
 
-/** Get the state of a store. */
+/** Gets the state of a store. */
 export const getStoreState = commands.getStoreState('pinia');
 
 /**
- * Save a store to the disk.
+ * Saves a store to the disk.
  **/
 export const save = commands.save('pinia');
 
 /**
- * Save all the stores to the disk.
+ * Saves all the stores to the disk.
  */
 export const saveAll = commands.saveAll('pinia');
 
 /**
- * Save the stores periodically.
+ * Saves all the stores to the disk immediately, ignoring the save strategy.
+ */
+export const saveAllNow = commands.saveAllNow('pinia');
+
+/**
+ * Saves a store to the disk immediately, ignoring the save strategy.
+ */
+export const saveNow = commands.saveNow('pinia');
+
+/**
+ * Saves the stores periodically.
  * @param interval The interval in milliseconds.
  */
 export const setAutosave = commands.setAutosave('pinia');
 
 /**
  * Sets the save strategy for a store.
+ * Calling this will abort any pending save operation.
  */
 export const setStoreSaveStrategy = commands.setStoreSaveStrategy('pinia');
 

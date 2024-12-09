@@ -2,12 +2,12 @@
 import { commands } from '@tauri-store/shared';
 
 /**
- * Abort the autosave.
+ * Stops the autosave.
  */
 export const clearAutosave = commands.clearAutosave('PLUGIN_NAME');
 
 /**
- * Get the default save strategy for the stores.
+ * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
  */
 export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('PLUGIN_NAME');
@@ -18,7 +18,7 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('PLUGIN_NA
 export const getPASCAL_PLUGIN_NAMEPath = commands.getStoreCollectionPath('PLUGIN_NAME');
 
 /**
- * List all the store ids.
+ * Lists all the store ids.
  */
 export const getStoreIds = commands.getStoreIds('PLUGIN_NAME');
 
@@ -28,31 +28,42 @@ export const getStoreIds = commands.getStoreIds('PLUGIN_NAME');
 export const getStorePath = commands.getStorePath('PLUGIN_NAME');
 
 /**
- * Get the save strategy used by a store.
+ * Gets the save strategy used by a store.
  **/
 export const getStoreSaveStrategy = commands.getStoreSaveStrategy('PLUGIN_NAME');
 
-/** Get the state of a store. */
+/** Gets the state of a store. */
 export const getStoreState = commands.getStoreState('PLUGIN_NAME');
 
 /**
- * Save a store to the disk.
+ * Saves a store to the disk.
  **/
 export const save = commands.save('PLUGIN_NAME');
 
 /**
- * Save all the stores to the disk.
+ * Saves all the stores to the disk.
  */
 export const saveAll = commands.saveAll('PLUGIN_NAME');
 
 /**
- * Save the stores periodically.
+ * Saves all the stores to the disk immediately, ignoring the save strategy.
+ */
+export const saveAllNow = commands.saveAllNow('PLUGIN_NAME');
+
+/**
+ * Saves a store to the disk immediately, ignoring the save strategy.
+ */
+export const saveNow = commands.saveNow('PLUGIN_NAME');
+
+/**
+ * Saves the stores periodically.
  * @param interval The interval in milliseconds.
  */
 export const setAutosave = commands.setAutosave('PLUGIN_NAME');
 
 /**
  * Sets the save strategy for a store.
+ * Calling this will abort any pending save operation.
  */
 export const setStoreSaveStrategy = commands.setStoreSaveStrategy('PLUGIN_NAME');
 

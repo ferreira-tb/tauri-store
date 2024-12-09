@@ -13,6 +13,7 @@ use save::SaveHandle;
 pub use save::SaveStrategy;
 use serde::de::DeserializeOwned;
 use serde_json::Value as Json;
+use std::collections::HashMap;
 use std::fmt;
 use std::io::ErrorKind::NotFound;
 use std::path::PathBuf;
@@ -32,11 +33,6 @@ use {
 
 #[cfg(feature = "unstable-async")]
 use tauri::async_runtime::spawn;
-
-#[cfg(feature = "ahash")]
-use ahash::{HashMap, HashMapExt};
-#[cfg(not(feature = "ahash"))]
-use std::collections::HashMap;
 
 #[cfg(tauri_store_tracing)]
 use tracing::{debug, warn};

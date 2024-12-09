@@ -155,6 +155,30 @@ pub(crate) async fn save_all<R: Runtime>(app: AppHandle<R>) -> Result<()> {
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
+pub(crate) async fn save_all_now<R: Runtime>(app: AppHandle<R>) -> Result<()> {
+  app.PLUGIN_NAME().save_all_now()
+}
+
+#[cfg(feature = "unstable-async")]
+#[tauri::command]
+pub(crate) async fn save_all_now<R: Runtime>(app: AppHandle<R>) -> Result<()> {
+  app.PLUGIN_NAME().save_all_now().await
+}
+
+#[cfg(not(feature = "unstable-async"))]
+#[tauri::command]
+pub(crate) async fn save_now<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
+  app.PLUGIN_NAME().save_now(id)
+}
+
+#[cfg(feature = "unstable-async")]
+#[tauri::command]
+pub(crate) async fn save_now<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
+  app.PLUGIN_NAME().save_now(id).await
+}
+
+#[cfg(not(feature = "unstable-async"))]
+#[tauri::command]
 pub(crate) async fn save_some<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -> Result<()> {
   app.PLUGIN_NAME().save_some(&ids)
 }
@@ -163,6 +187,18 @@ pub(crate) async fn save_some<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -
 #[tauri::command]
 pub(crate) async fn save_some<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -> Result<()> {
   app.PLUGIN_NAME().save_some(&ids).await
+}
+
+#[cfg(not(feature = "unstable-async"))]
+#[tauri::command]
+pub(crate) async fn save_some_now<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -> Result<()> {
+  app.PLUGIN_NAME().save_some_now(&ids)
+}
+
+#[cfg(feature = "unstable-async")]
+#[tauri::command]
+pub(crate) async fn save_some_now<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -> Result<()> {
+  app.PLUGIN_NAME().save_some_now(&ids).await
 }
 
 #[tauri::command]

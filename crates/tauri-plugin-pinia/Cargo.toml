@@ -30,10 +30,6 @@ workspace = true
 serde = "1.0"
 tauri = "2"
 
-[dependencies.ahash]
-version = "0.8"
-optional = true
-
 [dependencies.tauri-store]
 version = "0.4"
 path = "../tauri-store"
@@ -47,6 +43,5 @@ version = "2.0"
 features = ["build"]
 
 [features]
-ahash = ["tauri-store/ahash", "dep:ahash", "ahash/serde"]
 file-sync-all = ["tauri-store/file-sync-all"]
 unstable-async = ["tauri-store/unstable-async"]
