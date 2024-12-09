@@ -3,9 +3,11 @@
 description = "Default permissions for the pinia plugin"
 permissions = [
   "allow-clear-autosave",
+  "allow-get-default-save-strategy",
   "allow-get-pinia-path",
   "allow-get-store-ids",
   "allow-get-store-path",
+  "allow-get-store-save-strategy",
   "allow-get-store-state",
   "allow-load",
   "allow-patch",
@@ -13,5 +15,6 @@ permissions = [
   "allow-save-all",
   "allow-save-some",
   "allow-set-autosave",
+  "allow-set-store-save-strategy",
   "allow-unload",
 ]

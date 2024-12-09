@@ -12,7 +12,7 @@ export default defineConfig({
   features: {
     vue: true,
   },
-  ignores: ['**/.nuxt/**'],
+  ignores: ['**/.nuxt/**', '**/cli/assets/**'],
   overrides: {
     typescript: {
       '@typescript-eslint/no-explicit-any': 'off',

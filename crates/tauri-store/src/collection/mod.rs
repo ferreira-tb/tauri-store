@@ -48,7 +48,7 @@ pub struct StoreCollection<R: Runtime> {
   pub(crate) stores: DashMap<String, ResourceId>,
   pub(crate) on_load: Option<Box<OnLoadFn<R>>>,
   pub(crate) autosave: Mutex<Autosave>,
-  pub(crate) save_strategy: SaveStrategy,
+  pub(crate) default_save_strategy: SaveStrategy,
   pub(crate) save_denylist: Option<HashSet<String>>,
   pub(crate) sync_denylist: Option<HashSet<String>>,
   pub(crate) pretty: bool,
@@ -83,9 +83,10 @@ impl<R: Runtime> StoreCollection<R> {
       .collect()
   }
 
-  /// Current save strategy for the stores.
-  pub fn save_strategy(&self) -> SaveStrategy {
-    self.save_strategy
+  /// Default save strategy for the stores.
+  /// This can be overridden on a per-store basis.
+  pub fn default_save_strategy(&self) -> SaveStrategy {
+    self.default_save_strategy
   }
 
   /// Saves the stores periodically.
@@ -256,7 +257,7 @@ impl<R: Runtime> fmt::Debug for StoreCollection<R> {
     f.debug_struct("StoreCollection")
       .field("path", &self.path)
       .field("on_load", &self.on_load.is_some())
-      .field("save_strategy", &self.save_strategy)
+      .field("default_save_strategy", &self.default_save_strategy)
       .field(
         "save_denylist",
         &self
@@ -286,7 +287,7 @@ impl<R: Runtime> Drop for StoreCollection<R> {
 
 pub struct StoreCollectionBuilder<R: Runtime> {
   path: Option<PathBuf>,
-  save_strategy: SaveStrategy,
+  default_save_strategy: SaveStrategy,
   autosave: Option<Duration>,
   on_load: Option<Box<OnLoadFn<R>>>,
   pretty: bool,
@@ -306,8 +307,8 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
   }
 
   #[must_use]
-  pub fn save_strategy(mut self, strategy: SaveStrategy) -> Self {
-    self.save_strategy = strategy;
+  pub fn default_save_strategy(mut self, strategy: SaveStrategy) -> Self {
+    self.default_save_strategy = strategy;
     self
   }
 
@@ -362,7 +363,7 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
       app: app.clone(),
       path,
       stores: DashMap::new(),
-      save_strategy: self.save_strategy,
+      default_save_strategy: self.default_save_strategy,
       autosave: Mutex::new(autosave),
       on_load: self.on_load,
       pretty: self.pretty,
@@ -389,7 +390,7 @@ impl<R: Runtime> Default for StoreCollectionBuilder<R> {
   fn default() -> Self {
     Self {
       path: None,
-      save_strategy: SaveStrategy::Immediate,
+      default_save_strategy: SaveStrategy::Immediate,
       autosave: None,
       on_load: None,
       pretty: false,

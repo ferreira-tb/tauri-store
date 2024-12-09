@@ -3,9 +3,11 @@
 Default permissions for the pinia plugin
 
 - `allow-clear-autosave`
+- `allow-get-default-save-strategy`
 - `allow-get-pinia-path`
 - `allow-get-store-ids`
 - `allow-get-store-path`
+- `allow-get-store-save-strategy`
 - `allow-get-store-state`
 - `allow-load`
 - `allow-patch`
@@ -13,6 +15,7 @@ Default permissions for the pinia plugin
 - `allow-save-all`
 - `allow-save-some`
 - `allow-set-autosave`
+- `allow-set-store-save-strategy`
 - `allow-unload`
 
 ## Permission Table
@@ -46,6 +49,32 @@ Enables the clear_autosave command without any pre-configured scope.
 <td>
 
 Denies the clear_autosave command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-get-default-save-strategy`
+
+</td>
+<td>
+
+Enables the get_default_save_strategy command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-get-default-save-strategy`
+
+</td>
+<td>
+
+Denies the get_default_save_strategy command without any pre-configured scope.
 
 </td>
 </tr>
@@ -124,6 +153,32 @@ Enables the get_store_path command without any pre-configured scope.
 <td>
 
 Denies the get_store_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-get-store-save-strategy`
+
+</td>
+<td>
+
+Enables the get_store_save_strategy command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-get-store-save-strategy`
+
+</td>
+<td>
+
+Denies the get_store_save_strategy command without any pre-configured scope.
 
 </td>
 </tr>
@@ -306,6 +361,32 @@ Enables the set_autosave command without any pre-configured scope.
 <td>
 
 Denies the set_autosave command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-set-store-save-strategy`
+
+</td>
+<td>
+
+Enables the set_store_save_strategy command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-set-store-save-strategy`
+
+</td>
+<td>
+
+Denies the set_store_save_strategy command without any pre-configured scope.
 
 </td>
 </tr>

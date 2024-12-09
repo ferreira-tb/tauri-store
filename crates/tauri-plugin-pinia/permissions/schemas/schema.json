@@ -305,6 +305,16 @@
           "const": "deny-clear-autosave"
         },
         {
+          "description": "Enables the get_default_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-default-save-strategy"
+        },
+        {
+          "description": "Denies the get_default_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-default-save-strategy"
+        },
+        {
           "description": "Enables the get_pinia_path command without any pre-configured scope.",
           "type": "string",
           "const": "allow-get-pinia-path"
@@ -333,6 +343,16 @@
           "description": "Denies the get_store_path command without any pre-configured scope.",
           "type": "string",
           "const": "deny-get-store-path"
+        },
+        {
+          "description": "Enables the get_store_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-store-save-strategy"
+        },
+        {
+          "description": "Denies the get_store_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-store-save-strategy"
         },
         {
           "description": "Enables the get_store_state command without any pre-configured scope.",
@@ -403,6 +423,16 @@
           "description": "Denies the set_autosave command without any pre-configured scope.",
           "type": "string",
           "const": "deny-set-autosave"
+        },
+        {
+          "description": "Enables the set_store_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-store-save-strategy"
+        },
+        {
+          "description": "Denies the set_store_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-store-save-strategy"
         },
         {
           "description": "Enables the unload command without any pre-configured scope.",

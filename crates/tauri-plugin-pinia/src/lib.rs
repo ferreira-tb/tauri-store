@@ -6,23 +6,24 @@ mod command;
 mod manager;
 mod pinia;
 
-pub use manager::ManagerExt;
-pub use pinia::Pinia;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::time::Duration;
 use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
-use tauri_store::StoreCollection;
+use tauri_store::{CollectionBuilder, StoreCollection};
+
+pub use manager::ManagerExt;
+pub use pinia::Pinia;
 pub use tauri_store::{
   with_store, BoxResult, Error, Json, OnLoadFn, OnLoadResult, Result, SaveStrategy, Store,
   StoreState, StoreStateExt, WatcherResult,
 };
 
 #[cfg(feature = "unstable-async")]
-pub use tauri_store::boxed;
+use tauri::async_runtime::block_on;
 
 #[cfg(feature = "unstable-async")]
-use tauri::async_runtime::block_on;
+pub use tauri_store::boxed;
 
 #[cfg(feature = "ahash")]
 use ahash::HashSet;
@@ -30,9 +31,10 @@ use ahash::HashSet;
 use std::collections::HashSet;
 
 /// Builder for the Pinia plugin.
+#[derive(CollectionBuilder)]
 pub struct Builder<R: Runtime> {
   path: Option<PathBuf>,
-  save_strategy: SaveStrategy,
+  default_save_strategy: SaveStrategy,
   autosave: Option<Duration>,
   on_load: Option<Box<OnLoadFn<R>>>,
   pretty: bool,
@@ -41,70 +43,6 @@ pub struct Builder<R: Runtime> {
 }
 
 impl<R: Runtime> Builder<R> {
-  /// Creates a new builder instance with default values.
-  pub fn new() -> Self {
-    Self::default()
-  }
-
-  /// Directory where the stores will be saved.
-  #[must_use]
-  pub fn path(mut self, path: impl AsRef<Path>) -> Self {
-    let path = path.as_ref().to_path_buf();
-    self.path = Some(path);
-    self
-  }
-
-  /// Sets the save strategy to be used for all stores.
-  #[must_use]
-  pub fn save_strategy(mut self, strategy: SaveStrategy) -> Self {
-    self.save_strategy = strategy;
-    self
-  }
-
-  /// Sets the autosave interval for all stores.
-  #[must_use]
-  pub fn autosave(mut self, interval: Duration) -> Self {
-    self.autosave = Some(interval);
-    self
-  }
-
-  /// Sets a function to be called when a store is loaded.
-  #[must_use]
-  pub fn on_load<F>(mut self, f: F) -> Self
-  where
-    F: Fn(&Store<R>) -> OnLoadResult + Send + Sync + 'static,
-  {
-    self.on_load = Some(Box::new(f));
-    self
-  }
-
-  /// Sets whether the store files should be pretty printed.
-  #[must_use]
-  pub fn pretty(mut self, yes: bool) -> Self {
-    self.pretty = yes;
-    self
-  }
-
-  /// Sets a list of stores that should not be saved to disk.
-  #[must_use]
-  pub fn save_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
-    self
-      .save_denylist
-      .extend(denylist.iter().map(|s| s.as_ref().to_string()));
-
-    self
-  }
-
-  /// Sets a list of stores that should not be synchronized across windows.
-  #[must_use]
-  pub fn sync_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
-    self
-      .sync_denylist
-      .extend(denylist.iter().map(|s| s.as_ref().to_string()));
-
-    self
-  }
-
   /// Builds the plugin.
   pub fn build(self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
@@ -112,9 +50,11 @@ impl<R: Runtime> Builder<R> {
       .on_event(on_event)
       .invoke_handler(tauri::generate_handler![
         command::clear_autosave,
+        command::get_default_save_strategy,
         command::get_pinia_path,
         command::get_store_ids,
         command::get_store_path,
+        command::get_store_save_strategy,
         command::get_store_state,
         command::load,
         command::patch,
@@ -122,6 +62,7 @@ impl<R: Runtime> Builder<R> {
         command::save_all,
         command::save_some,
         command::set_autosave,
+        command::set_store_save_strategy,
         command::unload
       ])
       .build()
@@ -132,7 +73,7 @@ impl<R: Runtime> Default for Builder<R> {
   fn default() -> Self {
     Self {
       path: None,
-      save_strategy: SaveStrategy::default(),
+      default_save_strategy: SaveStrategy::default(),
       autosave: None,
       on_load: None,
       pretty: false,
@@ -154,7 +95,7 @@ fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder<R>) -> BoxResult<(
 
   let mut collection = StoreCollection::<R>::builder()
     .path(path)
-    .save_strategy(builder.save_strategy)
+    .default_save_strategy(builder.default_save_strategy)
     .pretty(builder.pretty)
     .save_denylist(builder.save_denylist)
     .sync_denylist(builder.sync_denylist);

@@ -3,7 +3,8 @@ import { onMounted } from 'vue';
 import { onKeyDown } from '@vueuse/core';
 import { invoke } from '@tauri-apps/api/core';
 import { exit } from '@tauri-apps/plugin-process';
-import { clearAutosave, saveAll, setAutosave } from 'tauri-plugin-pinia/src/index.ts';
+import { defineGlobalProperty } from './lib/debug';
+import { clearAutosave, saveAll, setAutosave } from 'tauri-plugin-pinia';
 import {
   openDebouncedStore,
   openStore,
@@ -32,6 +33,8 @@ onMounted(() => {
   void start();
   void startDebounced();
   void startThrottled();
+
+  defineGlobalProperty();
 });
 </script>
 

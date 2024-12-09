@@ -9,26 +9,29 @@ mod unstable_async;
 use crate::error::Result;
 use crate::event::{Payload, STORE_UPDATED_EVENT};
 use crate::manager::ManagerExt;
-pub(crate) use resource::StoreResource;
 use save::SaveHandle;
 pub use save::SaveStrategy;
 use serde::de::DeserializeOwned;
-use serde::Serialize;
 use serde_json::Value as Json;
-pub use state::{StoreState, StoreStateExt};
 use std::fmt;
 use std::io::ErrorKind::NotFound;
 use std::path::PathBuf;
 use std::sync::{Arc, OnceLock};
 use tauri::{AppHandle, ResourceId, Runtime};
 use watch::Watcher;
+
+pub(crate) use resource::StoreResource;
+pub use state::{StoreState, StoreStateExt};
 pub use watch::WatcherResult;
+
+#[cfg(not(feature = "unstable-async"))]
+use {
+  save::{debounce, save_now},
+  tauri::async_runtime::spawn_blocking,
+};
 
 #[cfg(feature = "unstable-async")]
 use tauri::async_runtime::spawn;
-
-#[cfg(not(feature = "unstable-async"))]
-use {save::debounce, tauri::async_runtime::spawn_blocking};
 
 #[cfg(feature = "ahash")]
 use ahash::{HashMap, HashMapExt};
@@ -45,7 +48,9 @@ pub struct Store<R: Runtime> {
   pub(crate) id: String,
   pub(crate) state: StoreState,
   pub(crate) watchers: HashMap<u32, Watcher<R>>,
-  save_handle: OnceLock<SaveHandle<R>>,
+  save_strategy: Option<SaveStrategy>,
+  debounce_save_handle: OnceLock<SaveHandle<R>>,
+  throttle_save_handle: OnceLock<SaveHandle<R>>,
 }
 
 impl<R: Runtime> Store<R> {
@@ -70,7 +75,9 @@ impl<R: Runtime> Store<R> {
       id,
       state,
       watchers: HashMap::new(),
-      save_handle: OnceLock::new(),
+      save_strategy: None,
+      debounce_save_handle: OnceLock::new(),
+      throttle_save_handle: OnceLock::new(),
     };
 
     Ok(StoreResource::create(app, store))
@@ -161,6 +168,31 @@ impl<R: Runtime> Store<R> {
     self.state.is_empty()
   }
 
+  /// Current save strategy used by this store.
+  pub fn save_strategy(&self) -> SaveStrategy {
+    self
+      .save_strategy
+      .unwrap_or_else(|| self.app.store_collection().default_save_strategy)
+  }
+
+  /// Sets the save strategy for this store.
+  /// Calling this will abort any pending save operation.
+  pub fn set_save_strategy(&mut self, strategy: SaveStrategy) {
+    if strategy.is_debounce() {
+      self
+        .debounce_save_handle
+        .take()
+        .inspect(SaveHandle::abort);
+    } else if strategy.is_throttle() {
+      self
+        .throttle_save_handle
+        .take()
+        .inspect(SaveHandle::abort);
+    }
+
+    self.save_strategy = Some(strategy);
+  }
+
   /// Watches the store for changes.
   pub fn watch<F>(&mut self, f: F) -> u32
   where
@@ -241,44 +273,24 @@ impl<R: Runtime> Store<R> {
 
   /// Save the store state to the disk.
   pub fn save(&self) -> Result<()> {
-    match self.app.store_collection().save_strategy {
+    match self.save_strategy() {
       SaveStrategy::Debounce(duration) => {
         self
-          .save_handle
+          .debounce_save_handle
           .get_or_init(|| debounce(duration, Arc::from(self.id.as_str())))
           .call(&self.app);
       }
       SaveStrategy::Throttle(_) => unimplemented!(),
       SaveStrategy::Immediate => self.save_now()?,
-    };
+    }
 
     Ok(())
   }
 
   /// Save the store immediately, ignoring the save strategy.
+  #[inline]
   pub fn save_now(&self) -> Result<()> {
-    use std::fs::{self, File};
-    use std::io::Write;
-
-    let collection = self.app.store_collection();
-    if collection
-      .save_denylist
-      .as_ref()
-      .is_some_and(|it| it.contains(&self.id))
-    {
-      return Ok(());
-    }
-
-    fs::create_dir_all(collection.path())?;
-
-    let bytes = to_bytes(&self.state, collection.pretty)?;
-    let mut file = File::create(self.path())?;
-    file.write_all(&bytes)?;
-
-    #[cfg(tauri_store_tracing)]
-    debug!("store saved: {}", self.id);
-
-    Ok(())
+    save_now(self)
   }
 }
 
@@ -296,15 +308,4 @@ fn store_path<R: Runtime>(app: &AppHandle<R>, id: &str) -> PathBuf {
     .store_collection()
     .path()
     .join(format!("{id}.json"))
-}
-
-fn to_bytes<T>(value: &T, pretty: bool) -> Result<Vec<u8>>
-where
-  T: ?Sized + Serialize,
-{
-  if pretty {
-    serde_json::to_vec_pretty(value).map_err(Into::into)
-  } else {
-    serde_json::to_vec(value).map_err(Into::into)
-  }
 }

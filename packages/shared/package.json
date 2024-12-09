@@ -40,7 +40,8 @@
   },
   "scripts": {
     "build": "vite build",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "typedoc": "typedoc --plugin typedoc-plugin-mdn-links"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",

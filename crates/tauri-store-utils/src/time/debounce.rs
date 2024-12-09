@@ -130,7 +130,7 @@ where
   Fut: Future<Output = T> + Send + 'static,
 {
   inner: Weak<DebouncedFn<R, Fut>>,
-  receiver: UnboundedReceiver<()>,
+  receiver: UnboundedReceiver<Message>,
   duration: Duration,
 
   #[cfg(tauri_store_tracing)]
@@ -170,19 +170,23 @@ where
   }
 }
 
+enum Message {
+  Resume,
+}
+
 #[derive(Default)]
-struct OptionalSender(AtomicOption<UnboundedSender<()>>);
+struct OptionalSender(AtomicOption<UnboundedSender<Message>>);
 
 impl OptionalSender {
   fn send(&self) -> bool {
     self
-      .map(|it| it.send(()).is_ok())
+      .map(|it| it.send(Message::Resume).is_ok())
       .unwrap_or(false)
   }
 }
 
 impl Deref for OptionalSender {
-  type Target = AtomicOption<UnboundedSender<()>>;
+  type Target = AtomicOption<UnboundedSender<Message>>;
 
   fn deref(&self) -> &Self::Target {
     &self.0

@@ -16,7 +16,7 @@ pub use store::{SaveStrategy, Store, StoreState, StoreStateExt, WatcherResult};
 use tauri::{Manager, Runtime};
 
 #[cfg(feature = "derive")]
-pub use tauri_store_macros::Collection;
+pub use tauri_store_macros::{Collection, CollectionBuilder};
 
 #[cfg(feature = "unstable-async")]
 use {futures::future::BoxFuture, std::future::Future};

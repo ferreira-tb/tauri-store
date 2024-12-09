@@ -13,7 +13,20 @@ import {
 } from '@tauri-store/shared';
 
 export type * from './types';
-export * from './commands/public';
+
+export {
+  clearAutosave,
+  getDefaultSaveStrategy,
+  getPiniaPath,
+  getStoreIds,
+  getStorePath,
+  getStoreSaveStrategy,
+  getStoreState,
+  save,
+  saveAll,
+  setAutosave,
+  setStoreSaveStrategy,
+} from './commands';
 
 declare module 'pinia' {
   export interface PiniaCustomProperties {

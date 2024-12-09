@@ -26,7 +26,7 @@ export interface PluginOptions {
    *
    * @default 'immediate'
    */
-  readonly syncStrategy?: 'debounce' | 'throttle' | 'immediate' | number | null;
+  readonly syncStrategy?: TimeStrategy | number | null;
 }
 
 export type StoreKeyFilter = string | string[] | RegExp;
@@ -48,11 +48,14 @@ export interface StoreOptions extends PluginOptions {
    * You can also provide a custom function that will be called for each key.
    * If the function returns `true`, the key will be saved and synced.
    *
+   * The filtering is **shallow**, meaning that nested keys will not be filtered.
+   *
    * @default 'omit'
    */
   readonly filterKeysStrategy?: StoreKeyFilterStrategy;
 }
 
+/** State of a store. */
 export type State = Record<string, unknown>;
 
 /** @internal */
@@ -60,3 +63,8 @@ export interface ChangePayload {
   id: string;
   state: State;
 }
+
+export type TimeStrategy = 'debounce' | 'throttle' | 'immediate';
+
+/** @internal */
+export type TimeStrategyRawTuple = [TimeStrategy, string];

@@ -6,7 +6,7 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   ///
   /// # Panics
   ///
-  /// Panics if the internal store collection is not in the [resources table](tauri::ResourceTable).
+  /// Panics if the internal [store collection](tauri_store::StoreCollection) is not in the [resources table](tauri::ResourceTable).
   ///
   /// This likely indicates that the method was called before the plugin was properly initialized.
   fn pinia(&self) -> State<Pinia<R>> {
