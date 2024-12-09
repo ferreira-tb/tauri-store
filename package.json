@@ -7,7 +7,7 @@
   "scripts": {
     "build": "pnpm run -F @tauri-store/shared build && pnpm run -F \"./packages/tauri-plugin-*\" build",
     "build:docs": "pnpm run -F docs build && pnpm run --if-present -F \"./packages/*\" typedoc",
-    "clippy": "cargo clippy",
+    "clippy": "cargo clippy --all",
     "codegen": "cargo run -p tauri-store-cli -- codegen",
     "dev": "cargo tauri dev",
     "dev:async": "cargo tauri dev --features unstable-async",
@@ -29,7 +29,7 @@
     "prettier-plugin-tailwindcss": "^0.6.9",
     "tailwindcss": "^3.4.16",
     "tslib": "^2.8.1",
-    "typedoc": "^0.27.3",
+    "typedoc": "^0.27.4",
     "typedoc-plugin-mdn-links": "^4.0.4",
     "typescript": "^5.6.3",
     "vite": "^6.0.3",
