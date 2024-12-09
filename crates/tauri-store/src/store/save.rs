@@ -108,33 +108,37 @@ pub enum SaveStrategy {
 }
 
 impl SaveStrategy {
+  const IMMEDIATE: &'static str = "immediate";
+  const DEBOUNCE: &'static str = "debounce";
+  const THROTTLE: &'static str = "throttle";
+
   /// Returns [`Debounce`](SaveStrategy::Debounce) with the given duration, in milliseconds.
-  pub fn debounce_millis(millis: u64) -> Self {
+  pub const fn debounce_millis(millis: u64) -> Self {
     Self::Debounce(Duration::from_millis(millis))
   }
 
   /// Returns [`Debounce`](SaveStrategy::Debounce) with the given duration, in seconds.
-  pub fn debounce_secs(secs: u64) -> Self {
+  pub const fn debounce_secs(secs: u64) -> Self {
     Self::Debounce(Duration::from_secs(secs))
   }
 
   /// Returns [`Throttle`](SaveStrategy::Throttle) with the given duration, in milliseconds.
-  pub fn throttle_millis(millis: u64) -> Self {
+  pub const fn throttle_millis(millis: u64) -> Self {
     Self::Throttle(Duration::from_millis(millis))
   }
 
   /// Returns [`Throttle`](SaveStrategy::Throttle) with the given duration, in seconds.
-  pub fn throttle_secs(secs: u64) -> Self {
+  pub const fn throttle_secs(secs: u64) -> Self {
     Self::Throttle(Duration::from_secs(secs))
   }
 
   /// Whether the strategy is [`Debounce`](SaveStrategy::Debounce).
-  pub fn is_debounce(&self) -> bool {
+  pub const fn is_debounce(&self) -> bool {
     matches!(self, Self::Debounce(_))
   }
 
   /// Whether the strategy is [`Throttle`](SaveStrategy::Throttle).
-  pub fn is_throttle(&self) -> bool {
+  pub const fn is_throttle(&self) -> bool {
     matches!(self, Self::Throttle(_))
   }
 }
@@ -142,9 +146,9 @@ impl SaveStrategy {
 impl fmt::Display for SaveStrategy {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     match self {
-      Self::Immediate => write!(f, "immediate"),
-      Self::Debounce(_) => write!(f, "debounce"),
-      Self::Throttle(_) => write!(f, "throttle"),
+      Self::Immediate => write!(f, "{}", Self::IMMEDIATE),
+      Self::Debounce(_) => write!(f, "{}", Self::DEBOUNCE),
+      Self::Throttle(_) => write!(f, "{}", Self::THROTTLE),
     }
   }
 }
@@ -199,9 +203,9 @@ impl<'de> Deserialize<'de> for SaveStrategy {
       }
 
       match strategy.as_str() {
-        "debounce" => Ok(Self::Debounce(duration)),
-        "throttle" => Ok(Self::Throttle(duration)),
-        "immediate" => Ok(Self::Immediate),
+        Self::DEBOUNCE => Ok(Self::Debounce(duration)),
+        Self::THROTTLE => Ok(Self::Throttle(duration)),
+        Self::IMMEDIATE => Ok(Self::Immediate),
         _ => Err(err()),
       }
     } else {
