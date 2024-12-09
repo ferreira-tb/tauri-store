@@ -51,6 +51,13 @@ impl<R: Runtime> StoreCollection<R> {
     store.save().await
   }
 
+  /// Saves a store to the disk immediately, ignoring the save strategy.
+  pub async fn save_now(&self, id: impl AsRef<str>) -> Result<()> {
+    let resource = self.get_resource(id).await?;
+    let store = resource.inner.lock().await;
+    store.save_now().await
+  }
+
   /// Saves some stores to the disk.
   pub async fn save_some(&self, ids: &[impl AsRef<str>]) -> Result<()> {
     for id in ids {
@@ -60,28 +67,41 @@ impl<R: Runtime> StoreCollection<R> {
     Ok(())
   }
 
-  /// Saves all the stores to the disk.
-  pub async fn save_all(&self) -> Result<()> {
-    for rid in self.rids() {
-      StoreResource::get(&self.app, rid)?
-        .inner
-        .lock()
-        .await
-        .save()
-        .await?;
+  /// Saves some stores to the disk immediately, ignoring the save strategy.
+  pub async fn save_some_now(&self, ids: &[impl AsRef<str>]) -> Result<()> {
+    for id in ids {
+      self.save_now(id).await?;
     }
 
     Ok(())
   }
 
-  /// Gets a clone of the store state if it exists.
+  /// Saves all the stores to the disk.
+  pub async fn save_all(&self) -> Result<()> {
+    for rid in self.rids() {
+      StoreResource::save(&self.app, rid).await?;
+    }
+
+    Ok(())
+  }
+
+  /// Saves all the stores to the disk immediately, ignoring the save strategy.
+  pub async fn save_all_now(&self) -> Result<()> {
+    for rid in self.rids() {
+      StoreResource::save_now(&self.app, rid).await?;
+    }
+
+    Ok(())
+  }
+
+  /// Gets a clone of the store state.
   pub async fn store_state(&self, store_id: impl AsRef<str>) -> Option<StoreState> {
     let resource = self.get_resource(store_id).await.ok()?;
     let store = resource.inner.lock().await;
     Some(store.state().clone())
   }
 
-  /// Gets the store state if it exists, then tries to parse it as an instance of type `T`.
+  /// Gets the store state, then tries to parse it as an instance of type `T`.
   pub async fn try_store_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
@@ -139,7 +159,7 @@ impl<R: Runtime> StoreCollection<R> {
     Ok(store.watch(f))
   }
 
-  /// Removes a listener from a store.
+  /// Removes a watcher from a store.
   pub async fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> Result<bool> {
     let resource = self.get_resource(store_id).await?;
     let mut store = resource.inner.lock().await;
@@ -148,6 +168,7 @@ impl<R: Runtime> StoreCollection<R> {
 
   pub async fn unload_store(&self, id: &str) -> Result<()> {
     if let Some((_, rid)) = self.stores.remove(id) {
+      // See the comment in the sync version of this method for why we use `save_now` here.
       StoreResource::take(&self.app, rid)?
         .inner
         .lock()

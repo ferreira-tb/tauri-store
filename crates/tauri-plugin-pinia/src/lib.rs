@@ -117,9 +117,9 @@ fn on_event<R: Runtime>(app: &AppHandle<R>, event: &RunEvent) {
   if let RunEvent::Exit = event {
     let pinia = app.pinia();
     #[cfg(not(feature = "unstable-async"))]
-    let _ = pinia.save_all();
+    let _ = pinia.save_all_now();
     #[cfg(feature = "unstable-async")]
-    let _ = block_on(pinia.save_all());
+    let _ = block_on(pinia.save_all_now());
   }
 }
 

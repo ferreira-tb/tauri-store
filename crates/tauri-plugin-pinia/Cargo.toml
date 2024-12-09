@@ -47,6 +47,6 @@ version = "2.0"
 features = ["build"]
 
 [features]
-unstable-async = ["tauri-store/unstable-async"]
-file-sync-all = ["tauri-store/file-sync-all"]
 ahash = ["tauri-store/ahash", "dep:ahash", "ahash/serde"]
+file-sync-all = ["tauri-store/file-sync-all"]
+unstable-async = ["tauri-store/unstable-async"]

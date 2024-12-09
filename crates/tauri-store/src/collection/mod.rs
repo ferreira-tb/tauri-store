@@ -1,4 +1,5 @@
 mod autosave;
+mod builder;
 
 #[cfg(feature = "unstable-async")]
 mod unstable_async;
@@ -11,7 +12,9 @@ use std::fmt;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex, OnceLock};
 use std::time::Duration;
-use tauri::{AppHandle, Manager, Resource, ResourceId, Runtime};
+use tauri::{AppHandle, Resource, ResourceId, Runtime};
+
+pub use builder::StoreCollectionBuilder;
 
 #[cfg(not(feature = "unstable-async"))]
 use {
@@ -29,9 +32,6 @@ use futures::future::BoxFuture;
 use ahash::HashSet;
 #[cfg(not(feature = "ahash"))]
 use std::collections::HashSet;
-
-#[cfg(tauri_store_tracing)]
-use tracing::trace;
 
 pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
 
@@ -142,26 +142,40 @@ impl<R: Runtime> StoreCollection<R> {
     store.save()
   }
 
+  /// Saves a store to the disk immediately, ignoring the save strategy.
+  pub fn save_now(&self, id: impl AsRef<str>) -> Result<()> {
+    let resource = self.get_resource(id)?;
+    let store = resource.inner.lock().unwrap();
+    store.save_now()
+  }
+
   /// Saves some stores to the disk.
   pub fn save_some(&self, ids: &[impl AsRef<str>]) -> Result<()> {
-    for id in ids {
-      self.save(id)?;
-    }
+    ids.iter().try_for_each(|id| self.save(id))
+  }
 
-    Ok(())
+  /// Saves some stores to the disk immediately, ignoring the save strategy.
+  pub fn save_some_now(&self, ids: &[impl AsRef<str>]) -> Result<()> {
+    ids.iter().try_for_each(|id| self.save_now(id))
   }
 
   /// Saves all the stores to the disk.
   pub fn save_all(&self) -> Result<()> {
-    for rid in self.rids() {
-      StoreResource::get(&self.app, rid)?
-        .inner
-        .lock()
-        .unwrap()
-        .save()?;
-    }
+    // I suppose going through the rids should be better than through the store ids.
+    // This way, we don't need to hold references into the dashmap nor clone its keys.
+    // The downside (?) is that we need to use the StoreResource directly.
+    self
+      .rids()
+      .into_iter()
+      .try_for_each(|rid| StoreResource::save(&self.app, rid))
+  }
 
-    Ok(())
+  /// Saves all the stores to the disk immediately, ignoring the save strategy.
+  pub fn save_all_now(&self) -> Result<()> {
+    self
+      .rids()
+      .into_iter()
+      .try_for_each(|rid| StoreResource::save_now(&self.app, rid))
   }
 
   /// Gets a clone of the store state.
@@ -225,7 +239,7 @@ impl<R: Runtime> StoreCollection<R> {
     Ok(store.watch(f))
   }
 
-  /// Removes a listener from a store.
+  /// Removes a watcher from a store.
   pub fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> Result<bool> {
     let resource = self.get_resource(store_id)?;
     let mut store = resource.inner.lock().unwrap();
@@ -247,6 +261,12 @@ impl<R: Runtime> StoreCollection<R> {
     }
 
     Ok(())
+  }
+}
+
+impl<R: Runtime> Drop for StoreCollection<R> {
+  fn drop(&mut self) {
+    self.clear_autosave();
   }
 }
 
@@ -276,126 +296,5 @@ impl<R: Runtime> fmt::Debug for StoreCollection<R> {
       )
       .field("pretty", &self.pretty)
       .finish_non_exhaustive()
-  }
-}
-
-impl<R: Runtime> Drop for StoreCollection<R> {
-  fn drop(&mut self) {
-    self.clear_autosave();
-  }
-}
-
-pub struct StoreCollectionBuilder<R: Runtime> {
-  path: Option<PathBuf>,
-  default_save_strategy: SaveStrategy,
-  autosave: Option<Duration>,
-  on_load: Option<Box<OnLoadFn<R>>>,
-  pretty: bool,
-  save_denylist: Option<HashSet<String>>,
-  sync_denylist: Option<HashSet<String>>,
-}
-
-impl<R: Runtime> StoreCollectionBuilder<R> {
-  pub fn new() -> Self {
-    Self::default()
-  }
-
-  #[must_use]
-  pub fn path(mut self, path: impl AsRef<Path>) -> Self {
-    self.path = Some(path.as_ref().to_path_buf());
-    self
-  }
-
-  #[must_use]
-  pub fn default_save_strategy(mut self, strategy: SaveStrategy) -> Self {
-    self.default_save_strategy = strategy;
-    self
-  }
-
-  #[must_use]
-  pub fn autosave(mut self, duration: Duration) -> Self {
-    self.autosave = Some(duration);
-    self
-  }
-
-  #[must_use]
-  pub fn on_load<F>(mut self, f: F) -> Self
-  where
-    F: Fn(&Store<R>) -> OnLoadResult + Send + Sync + 'static,
-  {
-    self.on_load = Some(Box::new(f));
-    self
-  }
-
-  #[must_use]
-  pub fn pretty(mut self, yes: bool) -> Self {
-    self.pretty = yes;
-    self
-  }
-
-  #[must_use]
-  pub fn save_denylist(mut self, save_denylist: HashSet<String>) -> Self {
-    self.save_denylist = Some(save_denylist);
-    self
-  }
-
-  #[must_use]
-  pub fn sync_denylist(mut self, sync_denylist: HashSet<String>) -> Self {
-    self.sync_denylist = Some(sync_denylist);
-    self
-  }
-
-  pub fn build(mut self, app: &AppHandle<R>) -> Arc<StoreCollection<R>> {
-    let path = self.path.take().unwrap_or_else(|| {
-      app
-        .path()
-        .app_data_dir()
-        .expect("failed to resolve app data dir")
-        .join("tauri-store")
-    });
-
-    self.save_denylist = self.save_denylist.filter(|it| !it.is_empty());
-    self.sync_denylist = self.sync_denylist.filter(|it| !it.is_empty());
-
-    let autosave = Autosave::new(self.autosave);
-
-    let collection = Arc::new(StoreCollection::<R> {
-      app: app.clone(),
-      path,
-      stores: DashMap::new(),
-      default_save_strategy: self.default_save_strategy,
-      autosave: Mutex::new(autosave),
-      on_load: self.on_load,
-      pretty: self.pretty,
-      save_denylist: self.save_denylist,
-      sync_denylist: self.sync_denylist,
-    });
-
-    let rid = app
-      .resources_table()
-      .add_arc(Arc::clone(&collection));
-
-    let _ = RESOURCE_ID.set(rid);
-
-    collection.autosave.lock().unwrap().start(app);
-
-    #[cfg(tauri_store_tracing)]
-    trace!(?collection);
-
-    collection
-  }
-}
-
-impl<R: Runtime> Default for StoreCollectionBuilder<R> {
-  fn default() -> Self {
-    Self {
-      path: None,
-      default_save_strategy: SaveStrategy::Immediate,
-      autosave: None,
-      on_load: None,
-      pretty: false,
-      save_denylist: None,
-      sync_denylist: None,
-    }
   }
 }

@@ -46,7 +46,6 @@ version = "0.3"
 features = ["chrono", "env-filter", "fmt", "parking_lot", "registry"]
 
 [features]
-# default = ["unstable-async"]
 pinia = ["dep:tauri-plugin-pinia"]
 unstable-async = ["tauri-store/unstable-async"]
 file-sync-all = ["tauri-store/file-sync-all"]

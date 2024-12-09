@@ -67,14 +67,29 @@ fn impl_sync(name: &Ident) -> TokenStream2 {
         self.0.save(id)
       }
 
+      // Saves a store to the disk immediately, ignoring the save strategy.
+      pub fn save_now(&self, id: impl AsRef<str>) -> tauri_store::Result<()> {
+        self.0.save_now(id)
+      }
+
       /// Saves some stores to the disk.
       pub fn save_some(&self, ids: &[impl AsRef<str>]) -> tauri_store::Result<()> {
         self.0.save_some(ids)
       }
 
+      /// Saves some stores to the disk immediately, ignoring the save strategy.
+      pub fn save_some_now(&self, ids: &[impl AsRef<str>]) -> tauri_store::Result<()> {
+        self.0.save_some_now(ids)
+      }
+
       /// Saves all the stores to the disk.
       pub fn save_all(&self) -> tauri_store::Result<()> {
         self.0.save_all()
+      }
+
+      /// Saves all the stores to the disk immediately, ignoring the save strategy.
+      pub fn save_all_now(&self) -> tauri_store::Result<()> {
+        self.0.save_all_now()
       }
 
       /// Gets a clone of the store state if it exists.
@@ -121,7 +136,7 @@ fn impl_sync(name: &Ident) -> TokenStream2 {
         self.0.watch(store_id, f)
       }
 
-      /// Removes a listener from a store.
+      /// Removes a watcher from a store.
       pub fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> tauri_store::Result<bool> {
         self.0.unwatch(store_id, listener_id)
       }

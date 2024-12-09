@@ -262,6 +262,16 @@ impl<R: Runtime> Store<R> {
       spawn_blocking(move || watcher.call(app));
     }
   }
+
+  fn abort_pending_save(&self) {
+    if let Some(debounce_save_handle) = self.debounce_save_handle.get() {
+      debounce_save_handle.abort();
+    }
+
+    if let Some(throttle_save_handle) = self.throttle_save_handle.get() {
+      throttle_save_handle.abort();
+    }
+  }
 }
 
 #[cfg(not(feature = "unstable-async"))]
@@ -288,8 +298,8 @@ impl<R: Runtime> Store<R> {
   }
 
   /// Save the store immediately, ignoring the save strategy.
-  #[inline]
   pub fn save_now(&self) -> Result<()> {
+    self.abort_pending_save();
     save_now(self)
   }
 }

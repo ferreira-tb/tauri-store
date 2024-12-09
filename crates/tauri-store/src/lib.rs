@@ -45,7 +45,7 @@ where
   manager.store_collection().with_store(id, f).await
 }
 
-/// Creates a boxed future wrapping the given value.
+/// Wraps a value in a boxed future.
 #[cfg(feature = "unstable-async")]
 #[inline]
 pub fn boxed<T>(t: T) -> BoxFuture<'static, T>

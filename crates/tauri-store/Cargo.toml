@@ -59,8 +59,7 @@ version = "2.0"
 features = ["build"]
 
 [features]
-unstable-async = ["tokio/fs", "tokio/io-util"]
-file-sync-all = []
-
-derive = ["dep:tauri-store-macros"]
 ahash = ["dep:ahash", "ahash/serde"]
+derive = ["dep:tauri-store-macros"]
+file-sync-all = []
+unstable-async = ["tokio/fs", "tokio/io-util"]

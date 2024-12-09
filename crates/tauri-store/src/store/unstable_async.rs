@@ -31,14 +31,7 @@ impl<R: Runtime> Store<R> {
 
   /// Save the store immediately, ignoring the save strategy.
   pub async fn save_now(&self) -> Result<()> {
-    if let Some(handle) = self.debounce_save_handle.get() {
-      handle.abort();
-    }
-
-    if let Some(handle) = self.throttle_save_handle.get() {
-      handle.abort();
-    }
-
+    self.abort_pending_save();
     save_now(self).await
   }
 }

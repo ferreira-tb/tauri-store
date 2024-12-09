@@ -50,4 +50,36 @@ impl<R: Runtime> StoreResource<R> {
   }
 }
 
+// Using StoreResource directly avoids the StoreCollection trying
+// to load the store if it isn't in the resources table already.
+#[cfg(not(feature = "unstable-async"))]
+impl<R: Runtime> StoreResource<R> {
+  pub(crate) fn save(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
+    let resource = Self::get(app, rid)?;
+    let store = resource.inner.lock().unwrap();
+    store.save()
+  }
+
+  pub(crate) fn save_now(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
+    let resource = Self::get(app, rid)?;
+    let store = resource.inner.lock().unwrap();
+    store.save_now()
+  }
+}
+
+#[cfg(feature = "unstable-async")]
+impl<R: Runtime> StoreResource<R> {
+  pub(crate) async fn save(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
+    let resource = Self::get(app, rid)?;
+    let store = resource.inner.lock().await;
+    store.save().await
+  }
+
+  pub(crate) async fn save_now(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
+    let resource = Self::get(app, rid)?;
+    let store = resource.inner.lock().await;
+    store.save_now().await
+  }
+}
+
 impl<R: Runtime> Resource for StoreResource<R> {}
