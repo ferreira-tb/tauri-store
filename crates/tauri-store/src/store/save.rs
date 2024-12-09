@@ -54,6 +54,9 @@ pub(super) fn save_now<R: Runtime>(store: &Store<R>) -> Result<()> {
   let mut file = File::create(store.path())?;
   file.write_all(&bytes)?;
 
+  #[cfg(feature = "file-sync-all")]
+  file.sync_all()?;
+
   #[cfg(tauri_store_tracing)]
   debug!("store saved: {}", store.id);
 
@@ -80,6 +83,9 @@ pub async fn save_now<R: Runtime>(store: &Store<R>) -> Result<()> {
   let mut file = File::create(store.path()).await?;
   file.write_all(&bytes).await?;
   file.flush().await?;
+
+  #[cfg(feature = "file-sync-all")]
+  file.sync_all().await?;
 
   #[cfg(tauri_store_tracing)]
   debug!("store saved: {}", store.id);
