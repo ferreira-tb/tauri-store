@@ -1,5 +1,4 @@
-use crate::collection::StoreCollection;
-use crate::collection::RESOURCE_ID;
+use crate::collection::{StoreCollection, RESOURCE_ID};
 use std::sync::Arc;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow, Window};
 

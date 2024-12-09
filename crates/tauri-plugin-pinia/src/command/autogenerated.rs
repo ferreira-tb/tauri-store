@@ -3,7 +3,7 @@
 use crate::manager::ManagerExt;
 use std::path::PathBuf;
 use std::time::Duration;
-use tauri::{AppHandle, Runtime, WebviewWindow};
+use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
 use tauri_store::{with_store, Result, SaveStrategy, StoreState};
 
 #[cfg(feature = "unstable-async")]
@@ -110,8 +110,9 @@ pub(crate) async fn patch<R>(window: WebviewWindow<R>, id: String, state: StoreS
 where
   R: Runtime,
 {
+  let app = window.app_handle();
   let label = window.label().to_owned();
-  with_store(&window, id, move |store| {
+  with_store(app, id, move |store| {
     store.patch_with_source(state, label.as_str())
   })?
 }
@@ -122,8 +123,9 @@ pub(crate) async fn patch<R>(window: WebviewWindow<R>, id: String, state: StoreS
 where
   R: Runtime,
 {
+  let app = window.app_handle();
   let label = window.label().to_owned();
-  with_store(&window, id, move |store| {
+  with_store(app, id, move |store| {
     boxed(store.patch_with_source(state, label.as_str()))
   })
   .await?

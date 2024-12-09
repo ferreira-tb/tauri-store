@@ -40,6 +40,6 @@ path = "../../../crates/tauri-plugin-pinia"
 default-features = false
 
 [features]
-unstable-async = ["example-shared/unstable-async"]
-file-sync-all = ["example-shared/file-sync-all"]
 ahash = ["example-shared/ahash"]
+file-sync-all = ["example-shared/file-sync-all"]
+unstable-async = ["example-shared/unstable-async"]

@@ -101,6 +101,9 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
       sync_denylist: self.sync_denylist,
     });
 
+    #[cfg(tauri_store_tracing)]
+    trace!(?collection);
+
     let rid = app
       .resources_table()
       .add_arc(Arc::clone(&collection));
@@ -108,9 +111,6 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
     let _ = RESOURCE_ID.set(rid);
 
     collection.autosave.lock().unwrap().start(app);
-
-    #[cfg(tauri_store_tracing)]
-    trace!(?collection);
 
     collection
   }
