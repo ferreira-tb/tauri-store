@@ -111,8 +111,7 @@ impl<R: Runtime> StoreCollection<R> {
     } else {
       let (rid, resource) = Store::load(&self.app, id)?;
       if let Some(on_load) = &self.on_load {
-        let store = resource.inner.lock().unwrap();
-        on_load(&store)?;
+        resource.locked(|store| on_load(store))?;
       }
 
       self.stores.insert(id.to_owned(), rid);
@@ -127,24 +126,22 @@ impl<R: Runtime> StoreCollection<R> {
   where
     F: FnOnce(&mut Store<R>) -> T,
   {
-    let resource = self.get_resource(id)?;
-    let mut store = resource.inner.lock().unwrap();
-    Ok(f(&mut *store))
+    Ok(self.get_resource(id)?.locked(f))
   }
 
   /// Saves a store to the disk.
   pub fn save(&self, id: impl AsRef<str>) -> Result<()> {
-    let resource = self.get_resource(id)?;
-    let store = resource.inner.lock().unwrap();
-    store.save()
+    self
+      .get_resource(id)?
+      .locked(|store| store.save())
   }
 
   /// Saves a store to the disk immediately, ignoring the save strategy.
   pub fn save_now(&self, id: impl AsRef<str>) -> Result<()> {
-    let resource = self.get_resource(id)?;
-    let store = resource.inner.lock().unwrap();
-    store.abort_pending_save();
-    store.save_now()
+    self.get_resource(id)?.locked(|store| {
+      store.abort_pending_save();
+      store.save_now()
+    })
   }
 
   /// Saves some stores to the disk.
@@ -177,10 +174,10 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Gets a clone of the store state.
-  pub fn store_state(&self, store_id: impl AsRef<str>) -> Option<StoreState> {
-    let resource = self.get_resource(store_id).ok()?;
-    let store = resource.inner.lock().unwrap();
-    Some(store.state().clone())
+  pub fn store_state(&self, store_id: impl AsRef<str>) -> Result<StoreState> {
+    self
+      .get_resource(store_id)?
+      .locked(|store| Ok(store.state().clone()))
   }
 
   /// Gets the store state, then tries to parse it as an instance of type `T`.
@@ -188,16 +185,17 @@ impl<R: Runtime> StoreCollection<R> {
   where
     T: DeserializeOwned,
   {
-    let resource = self.get_resource(store_id)?;
-    let store = resource.inner.lock().unwrap();
-    store.try_state()
+    self
+      .get_resource(store_id)?
+      .locked(|store| store.try_state())
   }
 
   /// Gets a value from a store.
   pub fn get(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Option<Json> {
-    let resource = self.get_resource(store_id).ok()?;
-    let store = resource.inner.lock().unwrap();
-    store.get(key).cloned()
+    self
+      .get_resource(store_id)
+      .ok()?
+      .locked(|store| store.get(key).cloned())
   }
 
   /// Gets a value from a store and tries to parse it as an instance of type `T`.
@@ -215,16 +213,16 @@ impl<R: Runtime> StoreCollection<R> {
 
   /// Sets a key-value pair in a store.
   pub fn set(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, value: Json) -> Result<()> {
-    let resource = self.get_resource(store_id)?;
-    let mut store = resource.inner.lock().unwrap();
-    store.set(key, value)
+    self
+      .get_resource(store_id)?
+      .locked(|store| store.set(key, value))
   }
 
   /// Patches a store state.
   pub fn patch(&self, store_id: impl AsRef<str>, state: StoreState) -> Result<()> {
-    let resource = self.get_resource(store_id)?;
-    let mut store = resource.inner.lock().unwrap();
-    store.patch(state)
+    self
+      .get_resource(store_id)?
+      .locked(|store| store.patch(state))
   }
 
   /// Watches a store for changes.
@@ -232,16 +230,16 @@ impl<R: Runtime> StoreCollection<R> {
   where
     F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
   {
-    let resource = self.get_resource(store_id)?;
-    let mut store = resource.inner.lock().unwrap();
-    Ok(store.watch(f))
+    self
+      .get_resource(store_id)?
+      .locked(|store| Ok(store.watch(f)))
   }
 
   /// Removes a watcher from a store.
-  pub fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> Result<bool> {
-    let resource = self.get_resource(store_id)?;
-    let mut store = resource.inner.lock().unwrap();
-    Ok(store.unwatch(listener_id))
+  pub fn unwatch(&self, store_id: impl AsRef<str>, watcher_id: u32) -> Result<bool> {
+    self
+      .get_resource(store_id)?
+      .locked(|store| Ok(store.unwatch(watcher_id)))
   }
 
   pub fn unload_store(&self, id: &str) -> Result<()> {
@@ -249,12 +247,7 @@ impl<R: Runtime> StoreCollection<R> {
       // The store needs to be saved immediately here.
       // Otherwise, the plugin might try to load it again if `StoreCollection::get_resource` is called.
       // This scenario will happen whenever the save strategy is not `Immediate`.
-      StoreResource::take(&self.app, rid)?
-        .inner
-        .lock()
-        .unwrap()
-        .save_now()?;
-
+      StoreResource::take(&self.app, rid)?.locked(|store| store.save_now())?;
       emit_all(&self.app, STORE_UNLOADED_EVENT, id)?;
     }
 

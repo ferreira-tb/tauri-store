@@ -13,7 +13,7 @@ use tauri::{AppHandle, Runtime};
 use tauri_store_utils::{Debounce, RemoteCallable, Throttle};
 
 #[cfg(not(feature = "unstable-async"))]
-use {crate::error::Error, futures::future::FutureExt, tauri::async_runtime::spawn_blocking};
+use {futures::future::FutureExt, tauri::async_runtime::spawn_blocking};
 
 #[cfg(tauri_store_tracing)]
 use tracing::debug;
@@ -99,9 +99,9 @@ where
   T: ?Sized + Serialize,
 {
   if pretty {
-    serde_json::to_vec_pretty(value).map_err(Into::into)
+    Ok(serde_json::to_vec_pretty(value)?)
   } else {
-    serde_json::to_vec(value).map_err(Into::into)
+    Ok(serde_json::to_vec(value)?)
   }
 }
 
@@ -237,12 +237,10 @@ fn save_handle<R: Runtime>(id: Arc<str>) -> SaveHandleFn<R> {
     let id = Arc::clone(&id);
     Box::pin(async move {
       let task = spawn_blocking(move || {
-        let resource = app.store_collection().get_resource(&id)?;
-        if let Ok(store) = resource.inner.lock() {
-          store.save_now()?;
-        }
-
-        Ok::<_, Error>(())
+        app
+          .store_collection()
+          .get_resource(&id)?
+          .locked(|store| store.save_now())
       });
 
       task.map(drop).await;

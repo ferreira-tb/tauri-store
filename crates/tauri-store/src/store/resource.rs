@@ -55,16 +55,21 @@ impl<R: Runtime> StoreResource<R> {
 #[cfg(not(feature = "unstable-async"))]
 impl<R: Runtime> StoreResource<R> {
   pub(crate) fn save(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
-    let resource = Self::get(app, rid)?;
-    let store = resource.inner.lock().unwrap();
-    store.save()
+    Self::get(app, rid)?.locked(|store| store.save())
   }
 
   pub(crate) fn save_now(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
-    let resource = Self::get(app, rid)?;
-    let store = resource.inner.lock().unwrap();
-    store.abort_pending_save();
-    store.save_now()
+    Self::get(app, rid)?.locked(|store| {
+      store.abort_pending_save();
+      store.save_now()
+    })
+  }
+
+  pub(crate) fn locked<F, T>(&self, f: F) -> T
+  where
+    F: FnOnce(&mut Store<R>) -> T,
+  {
+    f(&mut *self.inner.lock().unwrap())
   }
 }
 

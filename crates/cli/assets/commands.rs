@@ -74,7 +74,7 @@ where
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
-pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Option<StoreState>
+pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Result<StoreState>
 where
   R: Runtime,
 {
@@ -83,7 +83,7 @@ where
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
-pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Option<StoreState>
+pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Result<StoreState>
 where
   R: Runtime,
 {
@@ -231,7 +231,10 @@ pub(crate) async fn set_store_save_strategy<R>(
 where
   R: Runtime,
 {
-  with_store(&app, id, |store| boxed(store.set_save_strategy(strategy))).await
+  with_store(&app, id, move |store| {
+    boxed(store.set_save_strategy(strategy))
+  })
+  .await
 }
 
 #[cfg(not(feature = "unstable-async"))]

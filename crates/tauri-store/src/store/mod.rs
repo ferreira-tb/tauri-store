@@ -283,6 +283,7 @@ impl<R: Runtime> Store<R> {
   /// Save the store state to the disk.
   pub fn save(&self) -> Result<()> {
     match self.save_strategy() {
+      SaveStrategy::Immediate => self.save_now()?,
       SaveStrategy::Debounce(duration) => {
         self
           .debounce_save_handle
@@ -295,7 +296,6 @@ impl<R: Runtime> Store<R> {
           .get_or_init(|| throttle(duration, Arc::from(self.id.as_str())))
           .call(&self.app);
       }
-      SaveStrategy::Immediate => self.save_now()?,
     }
 
     Ok(())

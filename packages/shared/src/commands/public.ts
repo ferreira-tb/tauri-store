@@ -45,7 +45,7 @@ export function getStoreSaveStrategy(plugin: string) {
 }
 
 export function getStoreState(plugin: string) {
-  return function <T extends State>(id: string): Promise<T | null> {
+  return function <T extends State>(id: string): Promise<T> {
     return invoke(`plugin:${plugin}|get_store_state`, { id });
   };
 }

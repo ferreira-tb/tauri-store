@@ -3,9 +3,9 @@ use crate::error::Result;
 use crate::event::{emit_all, STORE_UNLOADED_EVENT};
 use crate::io_err;
 use crate::store::{Store, StoreState, WatcherResult};
+use futures::future::BoxFuture;
 use serde::de::DeserializeOwned;
 use serde_json::Value as Json;
-use std::future::Future;
 use std::sync::Arc;
 use tauri::{AppHandle, Runtime};
 
@@ -33,10 +33,9 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Calls a closure with a mutable reference to the store with the given id.
-  pub async fn with_store<F, Fut, T>(&self, id: impl AsRef<str>, f: F) -> Result<T>
+  pub async fn with_store<F, T>(&self, id: impl AsRef<str>, f: F) -> Result<T>
   where
-    F: FnOnce(&mut Store<R>) -> Fut + Send,
-    Fut: Future<Output = T> + Send,
+    F: FnOnce(&mut Store<R>) -> BoxFuture<T> + Send + 'static,
     T: Send + 'static,
   {
     let resource = self.get_resource(id).await?;
@@ -96,10 +95,10 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Gets a clone of the store state.
-  pub async fn store_state(&self, store_id: impl AsRef<str>) -> Option<StoreState> {
-    let resource = self.get_resource(store_id).await.ok()?;
+  pub async fn store_state(&self, store_id: impl AsRef<str>) -> Result<StoreState> {
+    let resource = self.get_resource(store_id).await?;
     let store = resource.inner.lock().await;
-    Some(store.state().clone())
+    Ok(store.state().clone())
   }
 
   /// Gets the store state, then tries to parse it as an instance of type `T`.

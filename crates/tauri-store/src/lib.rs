@@ -19,7 +19,7 @@ use tauri::{Manager, Runtime};
 pub use tauri_store_macros::{Collection, CollectionBuilder};
 
 #[cfg(feature = "unstable-async")]
-use {futures::future::BoxFuture, std::future::Future};
+pub use futures::future::BoxFuture;
 
 /// Calls a closure with a mutable reference to the store with the given id.
 #[cfg(not(feature = "unstable-async"))]
@@ -34,12 +34,11 @@ where
 
 /// Calls a closure with a mutable reference to the store with the given id.
 #[cfg(feature = "unstable-async")]
-pub async fn with_store<R, M, F, Fut, T>(manager: &M, id: impl AsRef<str>, f: F) -> Result<T>
+pub async fn with_store<R, M, F, T>(manager: &M, id: impl AsRef<str>, f: F) -> Result<T>
 where
   R: Runtime,
   M: Manager<R> + ManagerExt<R>,
-  F: FnOnce(&mut Store<R>) -> Fut + Send,
-  Fut: Future<Output = T> + Send,
+  F: FnOnce(&mut Store<R>) -> BoxFuture<T> + Send + 'static,
   T: Send + 'static,
 {
   manager.store_collection().with_store(id, f).await
