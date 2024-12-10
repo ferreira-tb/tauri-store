@@ -405,6 +405,26 @@
           "const": "deny-save-all"
         },
         {
+          "description": "Enables the save_all_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-save-all-now"
+        },
+        {
+          "description": "Denies the save_all_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-save-all-now"
+        },
+        {
+          "description": "Enables the save_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-save-now"
+        },
+        {
+          "description": "Denies the save_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-save-now"
+        },
+        {
           "description": "Enables the save_some command without any pre-configured scope.",
           "type": "string",
           "const": "allow-save-some"
@@ -413,6 +433,16 @@
           "description": "Denies the save_some command without any pre-configured scope.",
           "type": "string",
           "const": "deny-save-some"
+        },
+        {
+          "description": "Enables the save_some_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-save-some-now"
+        },
+        {
+          "description": "Denies the save_some_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-save-some-now"
         },
         {
           "description": "Enables the set_autosave command without any pre-configured scope.",

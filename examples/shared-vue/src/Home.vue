@@ -4,7 +4,7 @@ import { onKeyDown } from '@vueuse/core';
 import { invoke } from '@tauri-apps/api/core';
 import { exit } from '@tauri-apps/plugin-process';
 import { defineGlobalProperty } from './lib/debug';
-import { clearAutosave, saveAll, setAutosave } from 'tauri-plugin-pinia';
+import { clearAutosave, save, saveAll, saveAllNow, saveNow, setAutosave } from 'tauri-plugin-pinia';
 import {
   openDebouncedStore,
   openStore,
@@ -42,6 +42,7 @@ onMounted(() => {
   <main>
     <div class="action">
       <button type="button" @click="saveAll">Save All</button>
+      <button type="button" @click="saveAllNow">Save All Now</button>
       <button type="button" @click="() => setAutosave(5000)">Set Autosave</button>
       <button type="button" @click="clearAutosave">Clear Autosave</button>
     </div>
@@ -51,6 +52,8 @@ onMounted(() => {
         <button type="button" @click="store.increment">Increment</button>
         <button type="button" @click="start">Start</button>
         <button type="button" @click="stop">Stop</button>
+        <button type="button" @click="save(store.$id)">Save</button>
+        <button type="button" @click="saveNow(store.$id)">Save Now</button>
         <button type="button" @click="printCounter">Print</button>
         <button type="button" @click="openStore">Open</button>
       </div>
@@ -62,6 +65,8 @@ onMounted(() => {
         <button type="button" @click="debouncedStore.increment">Increment</button>
         <button type="button" @click="startDebounced">Start</button>
         <button type="button" @click="stopDebounced">Stop</button>
+        <button type="button" @click="save(debouncedStore.$id)">Save</button>
+        <button type="button" @click="saveNow(debouncedStore.$id)">Save Now</button>
         <button type="button" @click="openDebouncedStore">Open</button>
       </div>
     </section>
@@ -72,6 +77,8 @@ onMounted(() => {
         <button type="button" @click="throttledStore.increment">Increment</button>
         <button type="button" @click="startThrottled">Start</button>
         <button type="button" @click="stopThrottled">Stop</button>
+        <button type="button" @click="save(throttledStore.$id)">Save</button>
+        <button type="button" @click="saveNow(throttledStore.$id)">Save Now</button>
         <button type="button" @click="openThrottledStore">Open</button>
       </div>
     </section>
@@ -93,6 +100,7 @@ section {
 .action {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 0.5rem;
 }

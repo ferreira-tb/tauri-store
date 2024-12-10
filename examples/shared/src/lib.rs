@@ -37,7 +37,7 @@ pub fn build() -> tauri::Builder<Wry> {
     .plugin(tauri_plugin_window_state::Builder::new().build())
     .setup(|app| {
       let handle = app.handle();
-      (1..=4).for_each(|id| open_window(handle, id));
+      (1..=3).for_each(|id| open_window(handle, id));
 
       #[cfg(not(feature = "unstable-async"))]
       watch_counter(handle);

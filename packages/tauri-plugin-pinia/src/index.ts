@@ -24,6 +24,8 @@ export {
   getStoreState,
   save,
   saveAll,
+  saveAllNow,
+  saveNow,
   setAutosave,
   setStoreSaveStrategy,
 } from './commands';

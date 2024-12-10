@@ -8,6 +8,8 @@ import {
   getStoreState,
   save,
   saveAll,
+  saveAllNow,
+  saveNow,
   setAutosave,
   setStoreSaveStrategy,
 } from 'tauri-plugin-pinia';
@@ -28,6 +30,8 @@ export function defineGlobalProperty() {
         getStoreState,
         save,
         saveAll,
+        saveAllNow,
+        saveNow,
         setAutosave,
         setStoreSaveStrategy,
       },

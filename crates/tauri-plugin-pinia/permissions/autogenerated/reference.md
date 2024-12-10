@@ -13,7 +13,10 @@ Default permissions for the pinia plugin
 - `allow-patch`
 - `allow-save`
 - `allow-save-all`
+- `allow-save-all-now`
+- `allow-save-now`
 - `allow-save-some`
+- `allow-save-some-now`
 - `allow-set-autosave`
 - `allow-set-store-save-strategy`
 - `allow-unload`
@@ -316,6 +319,58 @@ Denies the save_all command without any pre-configured scope.
 <tr>
 <td>
 
+`pinia:allow-save-all-now`
+
+</td>
+<td>
+
+Enables the save_all_now command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-save-all-now`
+
+</td>
+<td>
+
+Denies the save_all_now command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-save-now`
+
+</td>
+<td>
+
+Enables the save_now command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-save-now`
+
+</td>
+<td>
+
+Denies the save_now command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `pinia:allow-save-some`
 
 </td>
@@ -335,6 +390,32 @@ Enables the save_some command without any pre-configured scope.
 <td>
 
 Denies the save_some command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-save-some-now`
+
+</td>
+<td>
+
+Enables the save_some_now command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-save-some-now`
+
+</td>
+<td>
+
+Denies the save_some_now command without any pre-configured scope.
 
 </td>
 </tr>
