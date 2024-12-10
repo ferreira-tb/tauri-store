@@ -43,6 +43,5 @@ version = "2.0"
 features = ["build"]
 
 [features]
-default = ["unstable-async"]
 file-sync-all = ["tauri-store/file-sync-all"]
 unstable-async = ["tauri-store/unstable-async"]
