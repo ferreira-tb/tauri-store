@@ -167,14 +167,29 @@ fn impl_unstable_async(name: &Ident) -> TokenStream2 {
         self.0.save(id).await
       }
 
+      /// Saves a store to the disk immediately, ignoring the save strategy.
+      pub async fn save_now(&self, id: impl AsRef<str>) -> tauri_store::Result<()> {
+        self.0.save_now(id).await
+      }
+
       /// Saves some stores to the disk.
       pub async fn save_some(&self, ids: &[impl AsRef<str>]) -> tauri_store::Result<()> {
         self.0.save_some(ids).await
       }
 
+      /// Saves some stores to the disk immediately, ignoring the save strategy.
+      pub async fn save_some_now(&self, ids: &[impl AsRef<str>]) -> tauri_store::Result<()> {
+        self.0.save_some_now(ids).await
+      }
+
       /// Saves all the stores to the disk.
       pub async fn save_all(&self) -> tauri_store::Result<()> {
         self.0.save_all().await
+      }
+
+      /// Saves all the stores to the disk immediately, ignoring the save strategy.
+      pub async fn save_all_now(&self) -> tauri_store::Result<()> {
+        self.0.save_all_now().await
       }
 
       /// Gets a clone of the store state if it exists.

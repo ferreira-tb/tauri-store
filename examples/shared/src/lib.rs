@@ -24,7 +24,7 @@ pub fn build() -> tauri::Builder<Wry> {
   {
     builder = builder.plugin(
       tauri_plugin_pinia::Builder::new()
-        .default_save_strategy(SaveStrategy::debounce_secs(3))
+        .default_save_strategy(SaveStrategy::throttle_secs(3))
         .autosave(Duration::from_secs(60))
         .pretty(true)
         .build(),

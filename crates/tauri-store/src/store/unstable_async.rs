@@ -1,7 +1,7 @@
 use super::{ResourceTuple, SaveStrategy, Store};
 use crate::error::Result;
 use crate::manager::ManagerExt;
-use crate::store::save::{debounce, save_now};
+use crate::store::save::{debounce, save_now, throttle};
 use std::sync::Arc;
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, Runtime};
@@ -22,7 +22,12 @@ impl<R: Runtime> Store<R> {
           .get_or_init(|| debounce(duration, Arc::from(self.id.as_str())))
           .call(&self.app);
       }
-      SaveStrategy::Throttle(_) => unimplemented!(),
+      SaveStrategy::Throttle(duration) => {
+        self
+          .throttle_save_handle
+          .get_or_init(|| throttle(duration, Arc::from(self.id.as_str())))
+          .call(&self.app);
+      }
       SaveStrategy::Immediate => self.save_now().await?,
     };
 
@@ -31,7 +36,6 @@ impl<R: Runtime> Store<R> {
 
   /// Save the store immediately, ignoring the save strategy.
   pub async fn save_now(&self) -> Result<()> {
-    self.abort_pending_save();
     save_now(self).await
   }
 }

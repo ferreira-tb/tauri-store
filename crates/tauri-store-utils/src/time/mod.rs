@@ -1,10 +1,12 @@
 mod debounce;
+mod throttle;
 
 use crate::manager::ManagerExt;
 pub use debounce::Debounce;
 use std::future::Future;
 use std::time::Duration;
 use tauri::{AppHandle, Runtime};
+pub use throttle::Throttle;
 use tokio::task::AbortHandle;
 use tokio::time::{self, MissedTickBehavior};
 

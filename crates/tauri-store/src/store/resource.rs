@@ -63,6 +63,7 @@ impl<R: Runtime> StoreResource<R> {
   pub(crate) fn save_now(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
     let resource = Self::get(app, rid)?;
     let store = resource.inner.lock().unwrap();
+    store.abort_pending_save();
     store.save_now()
   }
 }
@@ -78,6 +79,7 @@ impl<R: Runtime> StoreResource<R> {
   pub(crate) async fn save_now(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
     let resource = Self::get(app, rid)?;
     let store = resource.inner.lock().await;
+    store.abort_pending_save();
     store.save_now().await
   }
 }

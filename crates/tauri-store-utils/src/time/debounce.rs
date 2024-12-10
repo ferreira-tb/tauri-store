@@ -1,6 +1,6 @@
 use crate::manager::ManagerExt;
 use crate::sync::AtomicOption;
-use crate::RemoteCallable;
+use crate::task::{OptionalAbortHandle, RemoteCallable};
 use std::future::Future;
 use std::ops::Deref;
 use std::sync::{Arc, Weak};
@@ -18,7 +18,7 @@ use {
 };
 
 #[cfg(tauri_store_tracing)]
-static DEBOUNCE_ID: AtomicU64 = AtomicU64::new(0);
+static ID: AtomicU64 = AtomicU64::new(0);
 
 type DebouncedFn<R, Fut> = dyn Fn(AppHandle<R>) -> Fut + Send + Sync + 'static;
 
@@ -55,24 +55,21 @@ where
       duration,
 
       #[cfg(tauri_store_tracing)]
-      id: DEBOUNCE_ID.fetch_add(1, Ordering::SeqCst),
+      id: ID.fetch_add(1, Ordering::SeqCst),
     }
   }
 
   pub fn call(&self, app: &AppHandle<R>) {
     if self.sender.send() {
-      #[cfg(tauri_store_tracing)]
-      trace!("debounce {} is ready, message sent", self.id);
-
       return;
     }
 
     #[cfg(tauri_store_tracing)]
-    trace!("debounce {} is not ready, spawning actor", self.id);
+    trace!("spawning debounce {}", self.id);
 
     let (tx, rx) = unbounded_channel();
     let actor = Actor {
-      inner: Arc::downgrade(&self.inner),
+      function: Arc::downgrade(&self.inner),
       receiver: rx,
       duration: self.duration,
 
@@ -81,9 +78,7 @@ where
     };
 
     self.sender.replace(tx);
-    self
-      .abort_handle
-      .replace(actor.run(app, Arc::downgrade(&self.sender)));
+    self.abort_handle.replace(actor.run(app));
   }
 
   pub fn abort(&self) {
@@ -129,7 +124,7 @@ where
   T: Send + 'static,
   Fut: Future<Output = T> + Send + 'static,
 {
-  inner: Weak<DebouncedFn<R, Fut>>,
+  function: Weak<DebouncedFn<R, Fut>>,
   receiver: UnboundedReceiver<Message>,
   duration: Duration,
 
@@ -143,7 +138,7 @@ where
   T: Send + 'static,
   Fut: Future<Output = T> + Send + 'static,
 {
-  fn run(mut self, app: &AppHandle<R>, sender: Weak<OptionalSender>) -> AbortHandle {
+  fn run(mut self, app: &AppHandle<R>) -> AbortHandle {
     app.spawn(move |app| async move {
       loop {
         select! {
@@ -151,12 +146,9 @@ where
             if message.is_none() { break };
           }
           () = sleep(self.duration) => {
-            if let Some(f) = self.inner.upgrade() {
+            self.receiver.close();
+            if let Some(f) = self.function.upgrade() {
               (f)(app).await;
-            }
-
-            if let Some(sender) = sender.upgrade() {
-              sender.take();
             }
 
             #[cfg(tauri_store_tracing)]
@@ -170,17 +162,13 @@ where
   }
 }
 
-enum Message {
-  Resume,
-}
-
 #[derive(Default)]
-struct OptionalSender(AtomicOption<UnboundedSender<Message>>);
+pub(super) struct OptionalSender(AtomicOption<UnboundedSender<Message>>);
 
 impl OptionalSender {
-  fn send(&self) -> bool {
+  pub(super) fn send(&self) -> bool {
     self
-      .map(|it| it.send(Message::Resume).is_ok())
+      .map(|it| it.send(Message::Call).is_ok())
       .unwrap_or(false)
   }
 }
@@ -193,21 +181,6 @@ impl Deref for OptionalSender {
   }
 }
 
-#[derive(Default)]
-struct OptionalAbortHandle(AtomicOption<AbortHandle>);
-
-impl OptionalAbortHandle {
-  fn abort(&self) {
-    if let Some(handle) = self.take() {
-      handle.abort();
-    }
-  }
-}
-
-impl Deref for OptionalAbortHandle {
-  type Target = AtomicOption<AbortHandle>;
-
-  fn deref(&self) -> &Self::Target {
-    &self.0
-  }
+pub(super) enum Message {
+  Call,
 }

@@ -27,7 +27,7 @@ pub use watch::WatcherResult;
 
 #[cfg(not(feature = "unstable-async"))]
 use {
-  save::{debounce, save_now},
+  save::{debounce, save_now, throttle},
   tauri::async_runtime::spawn_blocking,
 };
 
@@ -35,7 +35,7 @@ use {
 use tauri::async_runtime::spawn;
 
 #[cfg(tauri_store_tracing)]
-use tracing::{debug, warn};
+use tracing::{debug, trace, warn};
 
 type ResourceTuple<R> = (ResourceId, Arc<StoreResource<R>>);
 
@@ -259,7 +259,10 @@ impl<R: Runtime> Store<R> {
     }
   }
 
-  fn abort_pending_save(&self) {
+  pub(crate) fn abort_pending_save(&self) {
+    #[cfg(tauri_store_tracing)]
+    trace!("aborting pending save: {}", self.id);
+
     if let Some(debounce_save_handle) = self.debounce_save_handle.get() {
       debounce_save_handle.abort();
     }
@@ -286,7 +289,12 @@ impl<R: Runtime> Store<R> {
           .get_or_init(|| debounce(duration, Arc::from(self.id.as_str())))
           .call(&self.app);
       }
-      SaveStrategy::Throttle(_) => unimplemented!(),
+      SaveStrategy::Throttle(duration) => {
+        self
+          .throttle_save_handle
+          .get_or_init(|| throttle(duration, Arc::from(self.id.as_str())))
+          .call(&self.app);
+      }
       SaveStrategy::Immediate => self.save_now()?,
     }
 
@@ -295,7 +303,6 @@ impl<R: Runtime> Store<R> {
 
   /// Save the store immediately, ignoring the save strategy.
   pub fn save_now(&self) -> Result<()> {
-    self.abort_pending_save();
     save_now(self)
   }
 }

@@ -1,6 +1,7 @@
 use super::Store;
 use crate::error::Result;
 use crate::manager::ManagerExt;
+use futures::future::BoxFuture;
 use serde::ser::SerializeTuple;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json::Value as Json;
@@ -9,8 +10,7 @@ use std::result::Result as StdResult;
 use std::sync::Arc;
 use std::time::Duration;
 use tauri::{AppHandle, Runtime};
-use tauri_store_utils::Debounce;
-use tauri_store_utils::RemoteCallable;
+use tauri_store_utils::{Debounce, RemoteCallable, Throttle};
 
 #[cfg(not(feature = "unstable-async"))]
 use {crate::error::Error, futures::future::FutureExt, tauri::async_runtime::spawn_blocking};
@@ -18,9 +18,10 @@ use {crate::error::Error, futures::future::FutureExt, tauri::async_runtime::spaw
 #[cfg(tauri_store_tracing)]
 use tracing::debug;
 
-type SaveHandleFn<R> = Box<dyn RemoteCallable<AppHandle<R>> + Send + Sync>;
+type RemoteSaveHandle<R> = Box<dyn RemoteCallable<AppHandle<R>> + Send + Sync>;
+type SaveHandleFn<R> = Box<dyn Fn(AppHandle<R>) -> BoxFuture<'static, ()> + Send + Sync + 'static>;
 
-pub(super) struct SaveHandle<R: Runtime>(SaveHandleFn<R>);
+pub(super) struct SaveHandle<R: Runtime>(RemoteSaveHandle<R>);
 
 impl<R: Runtime> SaveHandle<R> {
   #[inline]
@@ -220,35 +221,44 @@ impl<'de> Deserialize<'de> for SaveStrategy {
   }
 }
 
-#[cfg(not(feature = "unstable-async"))]
+#[inline]
 pub(super) fn debounce<R: Runtime>(duration: Duration, id: Arc<str>) -> SaveHandle<R> {
-  let debounce = Debounce::new(duration, move |app| {
+  SaveHandle(Box::new(Debounce::new(duration, save_handle(id))))
+}
+
+#[inline]
+pub(super) fn throttle<R: Runtime>(duration: Duration, id: Arc<str>) -> SaveHandle<R> {
+  SaveHandle(Box::new(Throttle::new(duration, save_handle(id))))
+}
+
+#[cfg(not(feature = "unstable-async"))]
+fn save_handle<R: Runtime>(id: Arc<str>) -> SaveHandleFn<R> {
+  Box::new(move |app| {
     let id = Arc::clone(&id);
-    let task = spawn_blocking(move || {
-      let resource = app.store_collection().get_resource(&id)?;
-      if let Ok(store) = resource.inner.lock() {
-        store.save_now()?;
-      }
+    Box::pin(async move {
+      let task = spawn_blocking(move || {
+        let resource = app.store_collection().get_resource(&id)?;
+        if let Ok(store) = resource.inner.lock() {
+          store.save_now()?;
+        }
 
-      Ok::<_, Error>(())
-    });
+        Ok::<_, Error>(())
+      });
 
-    task.map(drop)
-  });
-
-  SaveHandle(Box::new(debounce))
+      task.map(drop).await;
+    })
+  })
 }
 
 #[cfg(feature = "unstable-async")]
-pub(super) fn debounce<R: Runtime>(duration: Duration, id: Arc<str>) -> SaveHandle<R> {
-  let debounce = Debounce::new(duration, move |app| {
+fn save_handle<R: Runtime>(id: Arc<str>) -> SaveHandleFn<R> {
+  Box::new(move |app| {
     let id = Arc::clone(&id);
-    async move {
-      let resource = app.store_collection().get_resource(&id).await?;
-      let store = resource.inner.lock().await;
-      store.save_now().await
-    }
-  });
-
-  SaveHandle(Box::new(debounce))
+    Box::pin(async move {
+      if let Ok(resource) = app.store_collection().get_resource(&id).await {
+        let store = resource.inner.lock().await;
+        let _ = store.save_now().await;
+      }
+    })
+  })
 }

@@ -11,7 +11,7 @@ use dashmap::DashMap;
 use std::collections::HashSet;
 use std::fmt;
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, Mutex, OnceLock};
+use std::sync::{Mutex, OnceLock};
 use std::time::Duration;
 use tauri::{AppHandle, Resource, ResourceId, Runtime};
 
@@ -24,6 +24,7 @@ use {
   crate::store::StoreState,
   serde::de::DeserializeOwned,
   serde_json::Value as Json,
+  std::sync::Arc,
 };
 
 #[cfg(feature = "unstable-async")]
@@ -142,6 +143,7 @@ impl<R: Runtime> StoreCollection<R> {
   pub fn save_now(&self, id: impl AsRef<str>) -> Result<()> {
     let resource = self.get_resource(id)?;
     let store = resource.inner.lock().unwrap();
+    store.abort_pending_save();
     store.save_now()
   }
 

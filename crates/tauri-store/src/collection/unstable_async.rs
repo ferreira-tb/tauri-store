@@ -55,6 +55,7 @@ impl<R: Runtime> StoreCollection<R> {
   pub async fn save_now(&self, id: impl AsRef<str>) -> Result<()> {
     let resource = self.get_resource(id).await?;
     let store = resource.inner.lock().await;
+    store.abort_pending_save();
     store.save_now().await
   }
 
