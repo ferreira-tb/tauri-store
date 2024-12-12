@@ -55,7 +55,7 @@ export const useStore = defineStore('store', store, {
   tauri: {
     saveOnChange: true,
 
-    // You can also debounce or throttle the when saving.
+    // You can also debounce or throttle when saving.
     // This is optional. The default behavior is to save immediately.
     saveStrategy: 'debounce',
     saveInterval: 1000,

@@ -16,7 +16,7 @@ The [`tauri-store`](https://docs.rs/tauri-store/latest/tauri_store/) crate is a 
 
 ## Optional features
 
-- `file-sync-all`: Calls [`File::sync_all`](https://doc.rust-lang.org/std/fs/struct.File.html#method.sync_all) after writing to the store file. If enabled, this can severely degrade performance.
+- `file-sync-all`: Calls [`File::sync_all`](https://doc.rust-lang.org/std/fs/struct.File.html#method.sync_all) after writing to the store file. Enabling this can severely degrade performance.
 - `unstable-async`: Enables async support for the plugin.
 
 ## Versioning
