@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import { onKeyDown } from '@vueuse/core';
-import { invoke } from '@tauri-apps/api/core';
 import { exit } from '@tauri-apps/plugin-process';
 import { defineGlobalProperty } from './lib/debug';
-import { clearAutosave, save, saveAll, saveAllNow, saveNow, setAutosave } from 'tauri-plugin-pinia';
+import { onError, printCounter } from 'example-shared-js/src/index.js';
+import {
+  clearAutosave,
+  save,
+  saveAll,
+  saveAllNow,
+  saveNow,
+  setAutosave,
+} from 'tauri-plugin-pinia/src/index.js';
 import {
   openDebouncedStore,
   openStore,
@@ -25,14 +32,12 @@ const { start: startThrottled, stop: stopThrottled } = throttledStore.$tauri;
 
 onKeyDown('Escape', () => void exit());
 
-function printCounter() {
-  void invoke('print_counter');
-}
-
 onMounted(() => {
-  void start();
-  void startDebounced();
-  void startThrottled();
+  // prettier-ignore
+  start()
+    .then(() => startDebounced())
+    .then(() => startThrottled())
+    .catch(onError);
 
   defineGlobalProperty();
 });

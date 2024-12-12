@@ -1,6 +1,6 @@
 use super::{StoreCollection, StoreResource};
 use crate::error::Result;
-use crate::event::{emit_all, STORE_UNLOADED_EVENT};
+use crate::event::{emit, STORE_UNLOAD_EVENT};
 use crate::io_err;
 use crate::store::{Store, StoreState, WatcherResult};
 use futures::future::BoxFuture;
@@ -139,14 +139,14 @@ impl<R: Runtime> StoreCollection<R> {
   {
     let resource = self.get_resource(store_id).await?;
     let mut store = resource.inner.lock().await;
-    store.set(key, value)
+    store.set(key, value).await
   }
 
   /// Patches a store state.
   pub async fn patch(&self, store_id: impl AsRef<str>, state: StoreState) -> Result<()> {
     let resource = self.get_resource(store_id).await?;
     let mut store = resource.inner.lock().await;
-    store.patch(state)
+    store.patch(state).await
   }
 
   /// Watches a store for changes.
@@ -176,7 +176,7 @@ impl<R: Runtime> StoreCollection<R> {
         .save_now()
         .await?;
 
-      emit_all(&self.app, STORE_UNLOADED_EVENT, id)?;
+      emit(&self.app, STORE_UNLOAD_EVENT, id, None::<&str>)?;
     }
 
     Ok(())

@@ -1,7 +1,7 @@
 [workspace]
 members = [
   "crates/*",
-  "examples/shared",
+  "examples/shared-rs",
   "examples/nuxt/src-tauri",
   "examples/pinia/src-tauri",
 ]

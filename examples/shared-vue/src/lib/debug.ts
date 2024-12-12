@@ -2,17 +2,17 @@ import {
   clearAutosave,
   getDefaultSaveStrategy,
   getPiniaPath,
+  getSaveStrategy,
   getStoreIds,
   getStorePath,
-  getStoreSaveStrategy,
   getStoreState,
   save,
   saveAll,
   saveAllNow,
   saveNow,
   setAutosave,
-  setStoreSaveStrategy,
-} from 'tauri-plugin-pinia';
+  setSaveStrategy,
+} from 'tauri-plugin-pinia/src/index.js';
 
 export function defineGlobalProperty() {
   if (!Object.hasOwn(window, '$p')) {
@@ -24,16 +24,16 @@ export function defineGlobalProperty() {
         clearAutosave,
         getDefaultSaveStrategy,
         getPiniaPath,
+        getSaveStrategy,
         getStoreIds,
         getStorePath,
-        getStoreSaveStrategy,
         getStoreState,
         save,
         saveAll,
         saveAllNow,
         saveNow,
         setAutosave,
-        setStoreSaveStrategy,
+        setSaveStrategy,
       },
     });
   }

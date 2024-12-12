@@ -19,7 +19,7 @@ pub use builder::StoreCollectionBuilder;
 
 #[cfg(not(feature = "unstable-async"))]
 use {
-  crate::event::{emit_all, STORE_UNLOADED_EVENT},
+  crate::event::{emit, STORE_UNLOAD_EVENT},
   crate::io_err,
   crate::store::StoreState,
   serde::de::DeserializeOwned,
@@ -247,8 +247,10 @@ impl<R: Runtime> StoreCollection<R> {
       // The store needs to be saved immediately here.
       // Otherwise, the plugin might try to load it again if `StoreCollection::get_resource` is called.
       // This scenario will happen whenever the save strategy is not `Immediate`.
-      StoreResource::take(&self.app, rid)?.locked(|store| store.save_now())?;
-      emit_all(&self.app, STORE_UNLOADED_EVENT, id)?;
+      let resource = StoreResource::take(&self.app, rid)?;
+      resource.locked(|store| store.save_now())?;
+
+      emit(&self.app, STORE_UNLOAD_EVENT, id, None::<&str>)?;
     }
 
     Ok(())

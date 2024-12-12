@@ -9,10 +9,12 @@ mod store;
 
 pub use collection::{OnLoadFn, OnLoadResult, StoreCollection, StoreCollectionBuilder};
 pub use error::{BoxResult, Error, Result};
-pub use event::{STORE_UNLOADED_EVENT, STORE_UPDATED_EVENT};
+pub use event::{
+  EventSource, STORE_CONFIG_CHANGE_EVENT, STORE_STATE_CHANGE_EVENT, STORE_UNLOAD_EVENT,
+};
 pub use manager::ManagerExt;
 pub use serde_json::Value as Json;
-pub use store::{SaveStrategy, Store, StoreState, StoreStateExt, WatcherResult};
+pub use store::{SaveStrategy, Store, StoreOptions, StoreState, StoreStateExt, WatcherResult};
 use tauri::{Manager, Runtime};
 
 #[cfg(feature = "derive")]
@@ -46,7 +48,6 @@ where
 
 /// Wraps a value in a boxed future.
 #[cfg(feature = "unstable-async")]
-#[inline]
 pub fn boxed<T>(t: T) -> BoxFuture<'static, T>
 where
   T: Send + 'static,

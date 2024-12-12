@@ -1,10 +1,14 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
-  ssr: false,
   modules: ['@pinia/nuxt'],
+  ssr: false,
   devServer: {
     port: 1422,
   },
+  devtools: {
+    enabled: false,
+  },
+  telemetry: false,
   vite: {
     clearScreen: false,
     server: {
@@ -19,7 +23,4 @@ export default defineNuxtConfig({
       target: 'esnext',
     },
   },
-
-  devtools: { enabled: true },
-  telemetry: false,
 });

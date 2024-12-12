@@ -24,7 +24,7 @@ version = "1.0"
 features = ["derive"]
 
 [dependencies.example-shared]
-path = "../../shared"
+path = "../../shared-rs"
 features = ["pinia"]
 
 [dependencies.tauri]
@@ -40,5 +40,9 @@ version = "2.0"
 features = []
 
 [features]
+# default = ["unstable-async"]
 file-sync-all = ["example-shared/file-sync-all"]
-unstable-async = ["example-shared/unstable-async"]
+unstable-async = [
+  "example-shared/unstable-async",
+  "tauri-plugin-pinia/unstable-async",
+]

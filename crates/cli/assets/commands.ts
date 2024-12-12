@@ -18,6 +18,11 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('PLUGIN_NA
 export const getPASCAL_PLUGIN_NAMEPath = commands.getStoreCollectionPath('PLUGIN_NAME');
 
 /**
+ * Gets the save strategy used by a store.
+ **/
+export const getSaveStrategy = commands.getSaveStrategy('PLUGIN_NAME');
+
+/**
  * Lists all the store ids.
  */
 export const getStoreIds = commands.getStoreIds('PLUGIN_NAME');
@@ -26,11 +31,6 @@ export const getStoreIds = commands.getStoreIds('PLUGIN_NAME');
  * Path where the store is saved.
  **/
 export const getStorePath = commands.getStorePath('PLUGIN_NAME');
-
-/**
- * Gets the save strategy used by a store.
- **/
-export const getStoreSaveStrategy = commands.getStoreSaveStrategy('PLUGIN_NAME');
 
 /** Gets the state of a store. */
 export const getStoreState = commands.getStoreState('PLUGIN_NAME');
@@ -65,7 +65,12 @@ export const setAutosave = commands.setAutosave('PLUGIN_NAME');
  * Sets the save strategy for a store.
  * Calling this will abort any pending save operation.
  */
-export const setStoreSaveStrategy = commands.setStoreSaveStrategy('PLUGIN_NAME');
+export const setSaveStrategy = commands.setSaveStrategy('PLUGIN_NAME');
+
+/**
+ * Sets the store options.
+ */
+export const setStoreOptions = commands.setStoreOptions('PLUGIN_NAME');
 
 /////////////////////////
 // INTERNAL COMMANDS

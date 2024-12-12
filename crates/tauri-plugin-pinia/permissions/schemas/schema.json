@@ -325,6 +325,16 @@
           "const": "deny-get-pinia-path"
         },
         {
+          "description": "Enables the get_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-save-strategy"
+        },
+        {
+          "description": "Denies the get_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-save-strategy"
+        },
+        {
           "description": "Enables the get_store_ids command without any pre-configured scope.",
           "type": "string",
           "const": "allow-get-store-ids"
@@ -343,16 +353,6 @@
           "description": "Denies the get_store_path command without any pre-configured scope.",
           "type": "string",
           "const": "deny-get-store-path"
-        },
-        {
-          "description": "Enables the get_store_save_strategy command without any pre-configured scope.",
-          "type": "string",
-          "const": "allow-get-store-save-strategy"
-        },
-        {
-          "description": "Denies the get_store_save_strategy command without any pre-configured scope.",
-          "type": "string",
-          "const": "deny-get-store-save-strategy"
         },
         {
           "description": "Enables the get_store_state command without any pre-configured scope.",
@@ -455,14 +455,24 @@
           "const": "deny-set-autosave"
         },
         {
-          "description": "Enables the set_store_save_strategy command without any pre-configured scope.",
+          "description": "Enables the set_save_strategy command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-set-store-save-strategy"
+          "const": "allow-set-save-strategy"
         },
         {
-          "description": "Denies the set_store_save_strategy command without any pre-configured scope.",
+          "description": "Denies the set_save_strategy command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-set-store-save-strategy"
+          "const": "deny-set-save-strategy"
+        },
+        {
+          "description": "Enables the set_store_options command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-store-options"
+        },
+        {
+          "description": "Denies the set_store_options command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-store-options"
         },
         {
           "description": "Enables the unload command without any pre-configured scope.",

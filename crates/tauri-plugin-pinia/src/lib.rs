@@ -17,7 +17,7 @@ pub use manager::ManagerExt;
 pub use pinia::Pinia;
 pub use tauri_store::{
   with_store, BoxResult, Error, Json, OnLoadFn, OnLoadResult, Result, SaveStrategy, Store,
-  StoreState, StoreStateExt, WatcherResult,
+  StoreOptions, StoreState, StoreStateExt, WatcherResult,
 };
 
 #[cfg(feature = "unstable-async")]
@@ -48,9 +48,9 @@ impl<R: Runtime> Builder<R> {
         command::clear_autosave,
         command::get_default_save_strategy,
         command::get_pinia_path,
+        command::get_save_strategy,
         command::get_store_ids,
         command::get_store_path,
-        command::get_store_save_strategy,
         command::get_store_state,
         command::load,
         command::patch,
@@ -61,7 +61,8 @@ impl<R: Runtime> Builder<R> {
         command::save_some,
         command::save_some_now,
         command::set_autosave,
-        command::set_store_save_strategy,
+        command::set_save_strategy,
+        command::set_store_options,
         command::unload
       ])
       .build()

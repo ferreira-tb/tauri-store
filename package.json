@@ -5,9 +5,10 @@
   "private": true,
   "packageManager": "pnpm@9.15.0",
   "scripts": {
-    "build": "pnpm run build:shared && pnpm run -F \"./packages/tauri-plugin-*\" build",
+    "build": "pnpm run build:shared && pnpm run build:package",
     "build:docs": "pnpm run -F docs build && pnpm run --if-present -F \"./packages/*\" typedoc",
     "build:shared": "pnpm run -F @tauri-store/shared build",
+    "build:package": "pnpm run -F \"./packages/tauri-plugin-*\" build",
     "clippy": "cargo clippy --all",
     "codegen": "cargo run -p tauri-store-cli -- codegen",
     "dev": "cargo tauri dev",
@@ -22,7 +23,7 @@
   "devDependencies": {
     "@tb-dev/eslint-config": "^5.4.22",
     "@types/lodash-es": "^4.17.12",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.2",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.16.0",
     "prettier": "^3.4.2",

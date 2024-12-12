@@ -1,6 +1,12 @@
+import { flatten } from '../utils';
+import type { Option } from '@tb-dev/utils';
 import { invoke } from '@tauri-apps/api/core';
-import { flatten, parseTimeStrategyRawTuple } from '../utils';
-import type { State, TimeStrategy, TimeStrategyRawTuple } from '../types';
+import type { State, StoreBackendOptions, StoreBackendRawOptions } from '../types';
+import {
+  TimeStrategy,
+  type TimeStrategyKind,
+  type TimeStrategyRawTuple,
+} from '../utils/time-strategy';
 
 export function clearAutosave(plugin: string) {
   return function (): Promise<void> {
@@ -9,9 +15,17 @@ export function clearAutosave(plugin: string) {
 }
 
 export function getDefaultSaveStrategy(plugin: string) {
-  return async function (): Promise<{ interval: number; strategy: TimeStrategy }> {
-    return parseTimeStrategyRawTuple(
+  return async function (): Promise<TimeStrategy> {
+    return TimeStrategy.parse(
       await invoke<TimeStrategyRawTuple>(`plugin:${plugin}|get_default_save_strategy`)
+    );
+  };
+}
+
+export function getSaveStrategy(plugin: string) {
+  return async function (storeId: string): Promise<TimeStrategy> {
+    return TimeStrategy.parse(
+      await invoke<TimeStrategyRawTuple>(`plugin:${plugin}|get_save_strategy`, { id: storeId })
     );
   };
 }
@@ -34,19 +48,9 @@ export function getStorePath(plugin: string) {
   };
 }
 
-export function getStoreSaveStrategy(plugin: string) {
-  return async function (storeId: string): Promise<{ interval: number; strategy: TimeStrategy }> {
-    return parseTimeStrategyRawTuple(
-      await invoke<TimeStrategyRawTuple>(`plugin:${plugin}|get_store_save_strategy`, {
-        id: storeId,
-      })
-    );
-  };
-}
-
 export function getStoreState(plugin: string) {
-  return function <T extends State>(id: string): Promise<T> {
-    return invoke(`plugin:${plugin}|get_store_state`, { id });
+  return function <T extends State>(storeId: string): Promise<T> {
+    return invoke(`plugin:${plugin}|get_store_state`, { id: storeId });
   };
 }
 
@@ -77,7 +81,7 @@ export function saveNow(plugin: string) {
 }
 
 export function setAutosave(plugin: string) {
-  return function (interval: number | null): Promise<void> {
+  return function (interval: Option<number>): Promise<void> {
     if (typeof interval === 'number' && interval > 0) {
       return invoke(`plugin:${plugin}|set_autosave`, { interval });
     }
@@ -86,16 +90,36 @@ export function setAutosave(plugin: string) {
   };
 }
 
-export function setStoreSaveStrategy(plugin: string) {
+export function setSaveStrategy(plugin: string) {
   function set(storeId: string, strategy: 'immediate'): Promise<void>;
   function set(storeId: string, strategy: 'debounce' | 'throttle', interval: number): Promise<void>;
-  function set(storeId: string, strategy: TimeStrategy, interval?: number): Promise<void> {
-    const _interval = interval && interval > 0 ? interval : 0;
-    return invoke(`plugin:${plugin}|set_store_save_strategy`, {
+  function set(storeId: string, strategy: TimeStrategyKind, interval?: number): Promise<void> {
+    const timeStrategy = new TimeStrategy(strategy, interval);
+    return invoke(`plugin:${plugin}|set_save_strategy`, {
       id: storeId,
-      strategy: [strategy, _interval],
+      strategy: timeStrategy.tuple(),
     });
   }
 
   return set;
+}
+
+export function setStoreOptions(plugin: string) {
+  return function (storeId: string, options: StoreBackendOptions): Promise<void> {
+    let saveStrategy: TimeStrategyRawTuple | undefined;
+    if (options.saveStrategy ?? typeof options.saveInterval === 'number') {
+      const timeStrategy = new TimeStrategy(options.saveStrategy, options.saveInterval);
+      saveStrategy = timeStrategy.tuple();
+    }
+
+    const _options: StoreBackendRawOptions = {
+      saveOnChange: typeof options.saveOnChange === 'boolean' ? options.saveOnChange : null,
+      saveStrategy,
+    };
+
+    return invoke(`plugin:${plugin}|set_store_options`, {
+      id: storeId,
+      options: _options,
+    });
+  };
 }

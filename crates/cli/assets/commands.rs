@@ -2,7 +2,7 @@ use crate::manager::ManagerExt;
 use std::path::PathBuf;
 use std::time::Duration;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
-use tauri_store::{with_store, Result, SaveStrategy, StoreState};
+use tauri_store::{with_store, Result, SaveStrategy, StoreOptions, StoreState};
 
 #[cfg(feature = "unstable-async")]
 use tauri_store::boxed;
@@ -50,10 +50,7 @@ where
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
-pub(crate) async fn get_store_save_strategy<R>(
-  app: AppHandle<R>,
-  id: String,
-) -> Result<SaveStrategy>
+pub(crate) async fn get_save_strategy<R>(app: AppHandle<R>, id: String) -> Result<SaveStrategy>
 where
   R: Runtime,
 {
@@ -62,10 +59,7 @@ where
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
-pub(crate) async fn get_store_save_strategy<R>(
-  app: AppHandle<R>,
-  id: String,
-) -> Result<SaveStrategy>
+pub(crate) async fn get_save_strategy<R>(app: AppHandle<R>, id: String) -> Result<SaveStrategy>
 where
   R: Runtime,
 {
@@ -110,9 +104,7 @@ where
 {
   let app = window.app_handle();
   let label = window.label().to_owned();
-  with_store(app, id, move |store| {
-    store.patch_with_source(state, label.as_str())
-  })?
+  with_store(app, id, move |store| store.patch_with_source(state, label))?
 }
 
 #[cfg(feature = "unstable-async")]
@@ -124,7 +116,7 @@ where
   let app = window.app_handle();
   let label = window.label().to_owned();
   with_store(app, id, move |store| {
-    boxed(store.patch_with_source(state, label.as_str()))
+    Box::pin(async { store.patch_with_source(state, label).await })
   })
   .await?
 }
@@ -210,7 +202,7 @@ pub(crate) async fn set_autosave<R: Runtime>(app: AppHandle<R>, interval: u64) {
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
-pub(crate) async fn set_store_save_strategy<R>(
+pub(crate) async fn set_save_strategy<R>(
   app: AppHandle<R>,
   id: String,
   strategy: SaveStrategy,
@@ -223,7 +215,7 @@ where
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
-pub(crate) async fn set_store_save_strategy<R>(
+pub(crate) async fn set_save_strategy<R>(
   app: AppHandle<R>,
   id: String,
   strategy: SaveStrategy,
@@ -232,9 +224,45 @@ where
   R: Runtime,
 {
   with_store(&app, id, move |store| {
+    #[expect(clippy::unit_arg)]
     boxed(store.set_save_strategy(strategy))
   })
   .await
+}
+
+#[cfg(not(feature = "unstable-async"))]
+#[tauri::command]
+pub(crate) async fn set_store_options<R>(
+  window: WebviewWindow<R>,
+  id: String,
+  options: StoreOptions,
+) -> Result<()>
+where
+  R: Runtime,
+{
+  let app = window.app_handle();
+  let label = window.label().to_owned();
+  with_store(app, id, move |store| {
+    store.set_options_with_source(options, label)
+  })?
+}
+
+#[cfg(feature = "unstable-async")]
+#[tauri::command]
+pub(crate) async fn set_store_options<R>(
+  window: WebviewWindow<R>,
+  id: String,
+  options: StoreOptions,
+) -> Result<()>
+where
+  R: Runtime,
+{
+  let app = window.app_handle();
+  let label = window.label().to_owned();
+  with_store(app, id, move |store| {
+    boxed(store.set_options_with_source(options, label))
+  })
+  .await?
 }
 
 #[cfg(not(feature = "unstable-async"))]

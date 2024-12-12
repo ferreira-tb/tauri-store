@@ -48,6 +48,8 @@ pub fn build() -> tauri::Builder<Wry> {
     })
     .invoke_handler(tauri::generate_handler![
       get_counter,
+      on_error,
+      on_warn,
       print_counter,
       try_get_counter,
       try_store_state

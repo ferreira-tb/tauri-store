@@ -24,12 +24,10 @@ type SaveHandleFn<R> = Box<dyn Fn(AppHandle<R>) -> BoxFuture<'static, ()> + Send
 pub(super) struct SaveHandle<R: Runtime>(RemoteSaveHandle<R>);
 
 impl<R: Runtime> SaveHandle<R> {
-  #[inline]
   pub fn call(&self, app: &AppHandle<R>) {
     self.0.call(app);
   }
 
-  #[inline]
   pub fn abort(&self) {
     self.0.abort();
   }
@@ -106,6 +104,7 @@ where
 }
 
 /// The strategy to use when saving a store.
+#[non_exhaustive]
 #[derive(Clone, Copy, Debug, Default)]
 pub enum SaveStrategy {
   #[default]
@@ -201,9 +200,11 @@ impl<'de> Deserialize<'de> for SaveStrategy {
 
       let duration = array
         .remove(0)
-        .as_u64()
+        .as_str()
+        .map(str::parse)
+        .ok_or_else(err)?
         .map(Duration::from_millis)
-        .ok_or_else(err)?;
+        .map_err(|_| err())?;
 
       if duration.is_zero() {
         return Ok(Self::Immediate);
@@ -221,12 +222,10 @@ impl<'de> Deserialize<'de> for SaveStrategy {
   }
 }
 
-#[inline]
 pub(super) fn debounce<R: Runtime>(duration: Duration, id: Arc<str>) -> SaveHandle<R> {
   SaveHandle(Box::new(Debounce::new(duration, save_handle(id))))
 }
 
-#[inline]
 pub(super) fn throttle<R: Runtime>(duration: Duration, id: Arc<str>) -> SaveHandle<R> {
   SaveHandle(Box::new(Throttle::new(duration, save_handle(id))))
 }

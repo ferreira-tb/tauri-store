@@ -19,6 +19,11 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('pinia');
 export const getPiniaPath = commands.getStoreCollectionPath('pinia');
 
 /**
+ * Gets the save strategy used by a store.
+ **/
+export const getSaveStrategy = commands.getSaveStrategy('pinia');
+
+/**
  * Lists all the store ids.
  */
 export const getStoreIds = commands.getStoreIds('pinia');
@@ -27,11 +32,6 @@ export const getStoreIds = commands.getStoreIds('pinia');
  * Path where the store is saved.
  **/
 export const getStorePath = commands.getStorePath('pinia');
-
-/**
- * Gets the save strategy used by a store.
- **/
-export const getStoreSaveStrategy = commands.getStoreSaveStrategy('pinia');
 
 /** Gets the state of a store. */
 export const getStoreState = commands.getStoreState('pinia');
@@ -66,7 +66,12 @@ export const setAutosave = commands.setAutosave('pinia');
  * Sets the save strategy for a store.
  * Calling this will abort any pending save operation.
  */
-export const setStoreSaveStrategy = commands.setStoreSaveStrategy('pinia');
+export const setSaveStrategy = commands.setSaveStrategy('pinia');
+
+/**
+ * Sets the store options.
+ */
+export const setStoreOptions = commands.setStoreOptions('pinia');
 
 /////////////////////////
 // INTERNAL COMMANDS

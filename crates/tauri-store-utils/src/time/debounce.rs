@@ -96,12 +96,10 @@ where
   T: Send + 'static,
   Fut: Future<Output = T> + Send + 'static,
 {
-  #[inline]
   fn call(&self, app: &AppHandle<R>) {
     self.call(app);
   }
 
-  #[inline]
   fn abort(&self) {
     self.abort();
   }

@@ -2,10 +2,23 @@ mod pinia;
 
 use tauri::AppHandle;
 use tauri_plugin_pinia::ManagerExt;
+use tracing::{error, warn};
 
 pub(crate) mod prelude {
   pub(crate) use super::pinia::*;
-  pub(crate) use super::watch_counter;
+  pub(crate) use super::{on_error, on_warn, watch_counter};
+}
+
+#[tauri::command]
+#[expect(clippy::needless_pass_by_value)]
+pub(crate) fn on_error(message: String) {
+  error!(error = message);
+}
+
+#[tauri::command]
+#[expect(clippy::needless_pass_by_value)]
+pub(crate) fn on_warn(message: String) {
+  warn!(warning = message);
 }
 
 macro_rules! watch_counter {

@@ -1,15 +1,22 @@
 export * as commands from './commands';
 
-export { debounce, isStoreKeyMatch, throttle } from './utils';
+export { debounce, throttle } from './utils';
+
+export { listen, StoreEvent } from './event';
+
+export { BasePlugin, mergePluginOptions } from './plugin';
+
+export { TimeStrategy, type TimeStrategyKind } from './utils/time-strategy';
 
 export type {
-  ChangePayload,
+  ConfigChangePayload,
+  CustomStoreProperties,
   PluginOptions,
   State,
+  StateChangePayload,
+  StoreBackendOptions,
+  StoreBackendRawOptions,
   StoreKeyFilter,
   StoreKeyFilterStrategy,
   StoreOptions,
-  TimeStrategy,
 } from './types';
-
-export const STORE_UPDATED = 'tauri-store://updated';

@@ -37,6 +37,10 @@ optional = true
 path = "../../crates/tauri-store"
 default-features = false
 
+[dependencies.tokio]
+version = "1.42"
+features = ["full"]
+
 [dependencies.tracing-subscriber]
 version = "0.3"
 features = ["chrono", "env-filter", "fmt", "parking_lot", "registry"]
