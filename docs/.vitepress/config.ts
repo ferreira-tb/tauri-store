@@ -19,7 +19,10 @@ export default defineConfig({
     },
   },
   themeConfig: {
-    socialLinks: [{ icon: 'github', link: 'https://github.com/ferreira-tb/tauri-store' }],
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/ferreira-tb/tauri-store' },
+      { icon: 'discord', link: 'https://discord.gg/ARd7McmVNv' },
+    ],
     nav: [
       {
         text: 'docs.rs',

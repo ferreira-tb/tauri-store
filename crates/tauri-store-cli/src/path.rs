@@ -2,7 +2,7 @@ use crate::package::Package;
 use std::env;
 use std::path::PathBuf;
 
-const ASSETS_DIR: &str = "crates/cli/assets";
+const ASSETS_DIR: &str = "crates/tauri-store-cli/assets";
 const CRATES_DIR: &str = "crates";
 const PACKAGES_DIR: &str = "packages";
 

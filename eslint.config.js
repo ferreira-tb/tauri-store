@@ -13,7 +13,7 @@ export default defineConfig({
   features: {
     vue: true,
   },
-  ignores: ['**/.nuxt/**', '**/cli/assets/**'],
+  ignores: ['**/.nuxt/**', '**/tauri-store-cli/assets/**'],
   overrides: {
     typescript: {
       '@typescript-eslint/no-explicit-any': 'off',
