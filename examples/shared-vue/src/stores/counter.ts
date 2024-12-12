@@ -26,6 +26,9 @@ export const useStore = defineStore('counter-store', store, {
   tauri: {
     filterKeys: ['counter', 'counter2', 'nested'],
     filterKeysStrategy: 'pick',
+    saveOnChange: true,
+    saveStrategy: 'debounce',
+    saveInterval: 1000,
   },
 });
 

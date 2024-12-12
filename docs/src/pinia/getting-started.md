@@ -60,7 +60,6 @@ tauri::Builder::default()
   .plugin(tauri_plugin_pinia::init())
   .run(tauri::generate_context!())
   .expect("error while running tauri application");
-
 ```
 
 :::
@@ -79,7 +78,8 @@ const app = createApp(App);
 const pinia = createPinia();
 pinia.use(createPlugin());
 
-app.use(pinia).mount('#app');
+app.use(pinia)
+app.mount('#app');
 ```
 
 :::
@@ -120,7 +120,7 @@ export const useCounterStore = defineStore('counter', () => {
 import { useCounterStore } from './stores/counter';
 
 const counterStore = useCounterStore();
-counterStore.$tauri.start();
+await counterStore.$tauri.start();
 ```
 
 :::
@@ -131,7 +131,7 @@ The stores won't be saved nor synchronized until you call the `start` method.
 
 ## Nuxt
 
-If you are using [Nuxt](https://nuxt.com/), you can create a plugin to enable it for Pinia:
+If you are using [Nuxt](https://nuxt.com/), you can create a [Nuxt plugin](https://nuxt.com/docs/guide/directory-structure/plugins) to enable it for Pinia:
 
 ::: code-group
 

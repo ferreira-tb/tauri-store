@@ -23,6 +23,7 @@ export const useDebouncedStore = defineStore('debounced-counter-store', debounce
   tauri: {
     filterKeys: ['debouncedCounter3'],
     filterKeysStrategy: 'omit',
+    saveOnChange: true,
     syncStrategy: 'debounce',
     syncInterval: 1000,
   },

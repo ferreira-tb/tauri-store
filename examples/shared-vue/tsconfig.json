@@ -35,8 +35,6 @@
     "exactOptionalPropertyTypes": false,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "allowImportingTsExtensions": true,
-    "noEmit": true,
     "types": [
       "tauri-plugin-pinia",
       "vite/client"

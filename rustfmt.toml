@@ -2,6 +2,7 @@ chain_width = 50
 edition = "2021"
 max_width = 100
 newline_style = "Unix"
+single_line_let_else_max_width = 80
 struct_lit_width = 36
 tab_spaces = 2
 use_field_init_shorthand = true

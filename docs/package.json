@@ -2,7 +2,7 @@
   "name": "docs",
   "version": "0.9.0",
   "type": "module",
-  "packageManager": "pnpm@9.14.4",
+  "packageManager": "pnpm@9.15.0",
   "private": true,
   "scripts": {
     "build": "vitepress build",

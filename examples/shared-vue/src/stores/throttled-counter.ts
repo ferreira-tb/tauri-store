@@ -23,6 +23,7 @@ export const useThrottledStore = defineStore('throttled-counter-store', throttle
   tauri: {
     filterKeys: ['throttledCounter3'],
     filterKeysStrategy: 'omit',
+    saveOnChange: true,
     syncStrategy: 'throttle',
     syncInterval: 1000,
   },
