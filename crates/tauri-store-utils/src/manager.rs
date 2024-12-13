@@ -4,7 +4,7 @@ use tauri::{AppHandle, Manager, Runtime, WebviewWindow, Window};
 use tokio::task::AbortHandle;
 
 pub trait ManagerExt<R: Runtime>: Manager<R> {
-  fn runtime_handle(&self) -> TokioHandle {
+  fn tokio_handle(&self) -> TokioHandle {
     let RuntimeHandle::Tokio(handle) = async_runtime::handle();
     handle
   }
@@ -15,7 +15,7 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
     Fut: Future<Output = ()> + Send + 'static,
   {
     self
-      .runtime_handle()
+      .tokio_handle()
       .spawn(f(self.app_handle().clone()))
       .abort_handle()
   }
