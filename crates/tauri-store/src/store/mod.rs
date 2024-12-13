@@ -181,7 +181,10 @@ impl<R: Runtime> Store<R> {
   }
 
   /// Sets the store options, optionally having a window as the source.
-  #[expect(clippy::needless_pass_by_value)]
+  #[expect(
+    clippy::needless_pass_by_value,
+    reason = "We are just anticipating the need for it."
+  )]
   pub fn set_options_with_source<S>(&mut self, options: StoreOptions, source: S) -> Result<()>
   where
     S: Into<EventSource>,
