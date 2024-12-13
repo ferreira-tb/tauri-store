@@ -7,6 +7,7 @@ Persistent Pinia stores for Tauri and Vue.
 - Save your stores to disk.
 - Synchronize across multiple windows.
 - Debounce or throttle store updates.
+- Access the stores from both JavaScript and Rust.
 
 ## Documentation
 
