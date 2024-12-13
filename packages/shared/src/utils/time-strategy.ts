@@ -16,7 +16,7 @@ export class TimeStrategy {
     this.strategy = toStrategyKind(strategy);
     this.interval = isValidInterval(interval) ? interval : 0;
 
-    if (!this.interval) {
+    if (this.interval === 0) {
       if (isValidInterval(strategy)) {
         this.interval = strategy;
       } else {
