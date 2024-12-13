@@ -76,7 +76,7 @@ where
 pub struct EventSource(Option<String>);
 
 impl EventSource {
-  pub fn is_backend(&self) -> bool {
+  pub const fn is_backend(&self) -> bool {
     self.0.is_none()
   }
 }
