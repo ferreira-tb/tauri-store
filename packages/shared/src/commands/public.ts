@@ -3,6 +3,7 @@ import type { Option } from '@tb-dev/utils';
 import { invoke } from '@tauri-apps/api/core';
 import type { State, StoreBackendOptions, StoreBackendRawOptions } from '../types';
 import {
+  isValidInterval,
   TimeStrategy,
   type TimeStrategyKind,
   type TimeStrategyRawTuple,
@@ -82,7 +83,7 @@ export function saveNow(plugin: string) {
 
 export function setAutosave(plugin: string) {
   return function (interval: Option<number>): Promise<void> {
-    if (typeof interval === 'number' && interval > 0) {
+    if (isValidInterval(interval)) {
       return invoke(`plugin:${plugin}|set_autosave`, { interval });
     }
 

@@ -53,6 +53,6 @@ function toStrategyKind(strategy: LooseTimeStrategyKind): TimeStrategyKind {
   return 'immediate';
 }
 
-function isValidInterval(interval: unknown): interval is number {
+export function isValidInterval(interval: unknown): interval is number {
   return typeof interval === 'number' && Number.isFinite(interval) && interval > 0;
 }
