@@ -1,4 +1,7 @@
 {
+  "[powershell]": {
+    "editor.defaultFormatter": "ms-vscode.powershell"
+  },
   "[rust]": {
     "editor.defaultFormatter": "rust-lang.rust-analyzer"
   },
@@ -25,7 +28,6 @@
   "files.exclude": {
     ".eslintcache": true
   },
-  "githubPullRequests.defaultMergeMethod": "squash",
   "prettier.requireConfig": true,
   "typescript.tsdk": "node_modules\\typescript\\lib"
 }

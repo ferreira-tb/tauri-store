@@ -305,6 +305,16 @@
           "const": "deny-clear-autosave"
         },
         {
+          "description": "Enables the get_default_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-default-save-strategy"
+        },
+        {
+          "description": "Denies the get_default_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-default-save-strategy"
+        },
+        {
           "description": "Enables the get_pinia_path command without any pre-configured scope.",
           "type": "string",
           "const": "allow-get-pinia-path"
@@ -313,6 +323,16 @@
           "description": "Denies the get_pinia_path command without any pre-configured scope.",
           "type": "string",
           "const": "deny-get-pinia-path"
+        },
+        {
+          "description": "Enables the get_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-save-strategy"
+        },
+        {
+          "description": "Denies the get_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-save-strategy"
         },
         {
           "description": "Enables the get_store_ids command without any pre-configured scope.",
@@ -385,6 +405,26 @@
           "const": "deny-save-all"
         },
         {
+          "description": "Enables the save_all_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-save-all-now"
+        },
+        {
+          "description": "Denies the save_all_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-save-all-now"
+        },
+        {
+          "description": "Enables the save_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-save-now"
+        },
+        {
+          "description": "Denies the save_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-save-now"
+        },
+        {
           "description": "Enables the save_some command without any pre-configured scope.",
           "type": "string",
           "const": "allow-save-some"
@@ -395,6 +435,16 @@
           "const": "deny-save-some"
         },
         {
+          "description": "Enables the save_some_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-save-some-now"
+        },
+        {
+          "description": "Denies the save_some_now command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-save-some-now"
+        },
+        {
           "description": "Enables the set_autosave command without any pre-configured scope.",
           "type": "string",
           "const": "allow-set-autosave"
@@ -403,6 +453,26 @@
           "description": "Denies the set_autosave command without any pre-configured scope.",
           "type": "string",
           "const": "deny-set-autosave"
+        },
+        {
+          "description": "Enables the set_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-save-strategy"
+        },
+        {
+          "description": "Denies the set_save_strategy command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-save-strategy"
+        },
+        {
+          "description": "Enables the set_store_options command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-store-options"
+        },
+        {
+          "description": "Denies the set_store_options command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-store-options"
         },
         {
           "description": "Enables the unload command without any pre-configured scope.",

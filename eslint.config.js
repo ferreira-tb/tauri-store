@@ -5,6 +5,7 @@ export default defineConfig({
     'docs/tsconfig.json',
     'examples/nuxt/tsconfig.json',
     'examples/pinia/tsconfig.json',
+    'examples/shared-js/tsconfig.json',
     'examples/shared-vue/tsconfig.json',
     'packages/shared/tsconfig.json',
     'packages/tauri-plugin-pinia/tsconfig.json',
@@ -12,7 +13,7 @@ export default defineConfig({
   features: {
     vue: true,
   },
-  ignores: ['**/.nuxt/**'],
+  ignores: ['**/.nuxt/**', '**/tauri-store-cli/assets/**'],
   overrides: {
     typescript: {
       '@typescript-eslint/no-explicit-any': 'off',

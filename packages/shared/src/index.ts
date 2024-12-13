@@ -1,11 +1,22 @@
-export * from './types';
-import { debounce as lodashDebounce, throttle as lodashThrottle } from 'lodash-es';
+export * as commands from './commands';
 
-// FIXME: We should not depend on lodash for this. A custom implementation would be better.
-export function debounce<T extends (...args: any) => any>(f: T, wait?: number): T {
-  return lodashDebounce(f, wait) as unknown as T;
-}
+export { debounce, throttle } from './utils';
 
-export function throttle<T extends (...args: any) => any>(f: T, wait?: number): T {
-  return lodashThrottle(f, wait) as unknown as T;
-}
+export { listen, StoreEvent } from './event';
+
+export { BasePlugin, mergePluginOptions } from './plugin';
+
+export { TimeStrategy, type TimeStrategyKind } from './utils/time-strategy';
+
+export type {
+  ConfigChangePayload,
+  CustomStoreProperties,
+  PluginOptions,
+  State,
+  StateChangePayload,
+  StoreBackendOptions,
+  StoreBackendRawOptions,
+  StoreKeyFilter,
+  StoreKeyFilterStrategy,
+  StoreOptions,
+} from './types';

@@ -16,6 +16,12 @@ pub enum Error {
   Tauri(#[from] tauri::Error),
 }
 
+impl Error {
+  pub const fn is_bad_rid(&self) -> bool {
+    matches!(self, Self::Tauri(tauri::Error::BadResourceId(_)))
+  }
+}
+
 impl Serialize for Error {
   fn serialize<S>(&self, serializer: S) -> StdResult<S::Ok, S::Error>
   where
