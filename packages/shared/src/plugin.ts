@@ -20,7 +20,7 @@ export abstract class BasePlugin {
   protected changeQueue: StateChangePayload[] = [];
 
   private isListeningConfigChanges = false;
-  private _unlistenConfigChanges: Option<() => void>;
+  private removeConfigListener: Option<() => void> = null;
 
   public abstract start(): Promise<void>;
   public abstract stop(): Promise<void>;
@@ -46,17 +46,22 @@ export abstract class BasePlugin {
   protected async listenConfigChanges() {
     if (!this.isListeningConfigChanges) {
       this.isListeningConfigChanges = true;
-      this._unlistenConfigChanges = await listen<ConfigChangePayload>(
-        StoreEvent.ConfigChange,
-        ({ payload }) => this.patchConfig(payload.config)
-      );
+      try {
+        this.removeConfigListener = await listen<ConfigChangePayload>(
+          StoreEvent.ConfigChange,
+          ({ payload }) => this.patchConfig(payload.config)
+        );
+      } catch (err) {
+        this.isListeningConfigChanges = false;
+        this.onError?.(err);
+      }
     }
   }
 
   protected unlistenConfigChanges() {
+    this.removeConfigListener?.();
+    this.removeConfigListener = null;
     this.isListeningConfigChanges = false;
-    this._unlistenConfigChanges?.();
-    this._unlistenConfigChanges = null;
   }
 
   protected applyKeyFilters(state: State) {
