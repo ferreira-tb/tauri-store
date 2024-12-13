@@ -6,7 +6,7 @@ use syn::DeriveInput;
 pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
   let name = &ast.ident;
   let sync = impl_sync(name);
-  let unstable_async = impl_unstable_async(name);
+  let unstable_async = impl_async(name);
 
   let stream = quote! {
     mod __impl_collection {
@@ -81,7 +81,7 @@ fn impl_sync(name: &Ident) -> TokenStream2 {
           self.0.save(id)
         }
 
-        // Saves a store to the disk immediately, ignoring the save strategy.
+        /// Saves a store to the disk immediately, ignoring the save strategy.
         pub fn save_now(&self, id: impl AsRef<str>) -> Result<()> {
           self.0.save_now(id)
         }
@@ -163,7 +163,7 @@ fn impl_sync(name: &Ident) -> TokenStream2 {
   }
 }
 
-fn impl_unstable_async(name: &Ident) -> TokenStream2 {
+fn impl_async(name: &Ident) -> TokenStream2 {
   quote! {
     #[cfg(feature = "unstable-async")]
     mod __impl_collection_async {

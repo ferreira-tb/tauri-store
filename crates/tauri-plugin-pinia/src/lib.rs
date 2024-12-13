@@ -123,6 +123,7 @@ fn on_event<R: Runtime>(app: &AppHandle<R>, event: &RunEvent) {
   }
 }
 
+/// Initializes the plugin with the default settings.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
   Builder::default().build()
 }
