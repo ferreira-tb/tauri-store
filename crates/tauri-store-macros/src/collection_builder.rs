@@ -6,69 +6,77 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
   let name = &ast.ident;
 
   let stream = quote! {
-    impl<R: tauri::Runtime> #name<R> {
-      /// Creates a new builder instance with default values.
-      pub fn new() -> Self {
-        Self::default()
-      }
+    mod __impl_collection_builder {
+      use super::#name;
+      use std::path::Path;
+      use std::time::Duration;
+      use tauri::Runtime;
+      use tauri_store::{OnLoadResult, SaveStrategy, Store};
 
-      /// Directory where the stores will be saved.
-      #[must_use]
-      pub fn path(mut self, path: impl AsRef<std::path::Path>) -> Self {
-        let path = path.as_ref().to_path_buf();
-        self.path = Some(path);
-        self
-      }
+      impl<R: Runtime> #name<R> {
+        /// Creates a new builder instance with default values.
+        pub fn new() -> Self {
+          Self::default()
+        }
 
-      /// Sets the default save strategy to be used by the stores.
-      #[must_use]
-      pub fn default_save_strategy(mut self, strategy: tauri_store::SaveStrategy) -> Self {
-        self.default_save_strategy = strategy;
-        self
-      }
+        /// Directory where the stores will be saved.
+        #[must_use]
+        pub fn path(mut self, path: impl AsRef<Path>) -> Self {
+          let path = path.as_ref().to_path_buf();
+          self.path = Some(path);
+          self
+        }
 
-      /// Sets the autosave interval for all stores.
-      #[must_use]
-      pub fn autosave(mut self, interval: std::time::Duration) -> Self {
-        self.autosave = Some(interval);
-        self
-      }
+        /// Sets the default save strategy to be used by the stores.
+        #[must_use]
+        pub fn default_save_strategy(mut self, strategy: SaveStrategy) -> Self {
+          self.default_save_strategy = strategy;
+          self
+        }
 
-      /// Sets a function to be called when a store is loaded.
-      #[must_use]
-      pub fn on_load<F>(mut self, f: F) -> Self
-      where
-        F: Fn(&tauri_store::Store<R>) -> tauri_store::OnLoadResult + Send + Sync + 'static,
-      {
-        self.on_load = Some(Box::new(f));
-        self
-      }
+        /// Sets the autosave interval for all stores.
+        #[must_use]
+        pub fn autosave(mut self, interval: Duration) -> Self {
+          self.autosave = Some(interval);
+          self
+        }
 
-      /// Sets whether the store files should be pretty printed.
-      #[must_use]
-      pub fn pretty(mut self, yes: bool) -> Self {
-        self.pretty = yes;
-        self
-      }
+        /// Sets a function to be called when a store is loaded.
+        #[must_use]
+        pub fn on_load<F>(mut self, f: F) -> Self
+        where
+          F: Fn(&Store<R>) -> OnLoadResult + Send + Sync + 'static,
+        {
+          self.on_load = Some(Box::new(f));
+          self
+        }
 
-      /// Sets a list of stores that should not be saved to disk.
-      #[must_use]
-      pub fn save_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
-        self
-          .save_denylist
-          .extend(denylist.iter().map(|s| s.as_ref().to_string()));
+        /// Sets whether the store files should be pretty printed.
+        #[must_use]
+        pub fn pretty(mut self, yes: bool) -> Self {
+          self.pretty = yes;
+          self
+        }
 
-        self
-      }
+        /// Sets a list of stores that should not be saved to disk.
+        #[must_use]
+        pub fn save_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
+          self
+            .save_denylist
+            .extend(denylist.iter().map(|s| s.as_ref().to_string()));
 
-      /// Sets a list of stores that should not be synchronized across windows.
-      #[must_use]
-      pub fn sync_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
-        self
-          .sync_denylist
-          .extend(denylist.iter().map(|s| s.as_ref().to_string()));
+          self
+        }
 
-        self
+        /// Sets a list of stores that should not be synchronized across windows.
+        #[must_use]
+        pub fn sync_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
+          self
+            .sync_denylist
+            .extend(denylist.iter().map(|s| s.as_ref().to_string()));
+
+          self
+        }
       }
     }
   };
