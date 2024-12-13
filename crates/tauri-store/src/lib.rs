@@ -7,6 +7,8 @@ mod event;
 mod manager;
 mod store;
 
+use tauri::{Manager, Runtime};
+
 pub use collection::{OnLoadFn, OnLoadResult, StoreCollection, StoreCollectionBuilder};
 pub use error::{BoxResult, Error, Result};
 pub use event::{
@@ -15,7 +17,6 @@ pub use event::{
 pub use manager::ManagerExt;
 pub use serde_json::Value as Json;
 pub use store::{SaveStrategy, Store, StoreOptions, StoreState, StoreStateExt, WatcherResult};
-use tauri::{Manager, Runtime};
 
 #[cfg(feature = "derive")]
 pub use tauri_store_macros::{Collection, CollectionBuilder};
