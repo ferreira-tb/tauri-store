@@ -17,7 +17,7 @@ pub enum Error {
 }
 
 impl Error {
-  pub fn is_bad_rid(&self) -> bool {
+  pub const fn is_bad_rid(&self) -> bool {
     matches!(self, Self::Tauri(tauri::Error::BadResourceId(_)))
   }
 }
