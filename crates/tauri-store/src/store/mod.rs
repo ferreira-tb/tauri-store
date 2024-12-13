@@ -260,6 +260,10 @@ impl<R: Runtime> Store<R> {
 
   /// Calls all watchers currently attached to the store.
   fn call_watchers(&self) {
+    if self.watchers.is_empty() {
+      return;
+    }
+
     let watchers = self
       .watchers
       .values()
