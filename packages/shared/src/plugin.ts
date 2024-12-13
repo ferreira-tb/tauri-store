@@ -66,10 +66,11 @@ export abstract class BasePlugin {
 
   protected applyKeyFilters(state: State) {
     const keyFilter = this.storeOptions.filterKeys;
-    const strategy = this.storeOptions.filterKeysStrategy ?? 'omit';
 
     if (keyFilter) {
       const result: State = {};
+      const strategy = this.storeOptions.filterKeysStrategy ?? 'omit';
+
       for (const [key, value] of Object.entries(state)) {
         if (!shouldFilterKey(keyFilter, strategy, key)) {
           result[key] = value;
