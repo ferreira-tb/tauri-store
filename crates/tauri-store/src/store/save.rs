@@ -104,6 +104,9 @@ where
 }
 
 /// The strategy to use when saving a store.
+///
+/// For a detailed explanation of the differences between debouncing and throttling,
+/// take a look at [this article](https://kettanaito.com/blog/debounce-vs-throttle).
 #[non_exhaustive]
 #[derive(Clone, Copy, Debug, Default)]
 pub enum SaveStrategy {
