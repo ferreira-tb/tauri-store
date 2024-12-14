@@ -7,5 +7,6 @@ module.exports = {
   excludePrivate: true,
   excludeProtected: true,
   githubPages: false,
+  hideGenerator: true,
   titleLink: 'https://tb.dev.br/tauri-store/',
 };

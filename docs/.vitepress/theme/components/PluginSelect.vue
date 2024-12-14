@@ -105,7 +105,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <VPFlyout label="Select a plugin" :button="selectedPlugin.name" class="ts-flyout">
+  <VPFlyout
+    v-if="route && !route.includes('changelog')"
+    label="Select a plugin"
+    :button="selectedPlugin.name"
+    class="ts-flyout"
+  >
     <div class="items">
       <template v-for="plugin of plugins" :key="plugin.name">
         <VPMenuLink
@@ -116,6 +121,7 @@ onMounted(() => {
       </template>
     </div>
   </VPFlyout>
+  <span v-else></span>
 </template>
 
 <style>

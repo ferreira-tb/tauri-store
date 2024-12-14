@@ -148,6 +148,27 @@ class Plugin extends BasePlugin {
   }
 }
 
+/**
+ * Creates the Pinia plugin.
+ *
+ * This is also exported as
+ * [`TauriPluginPinia`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/functions/TauriPluginPinia.html).
+ *
+ * @example
+ * ```ts
+ * import { createApp } from 'vue';
+ * import { createPinia } from 'pinia';
+ * import { createPlugin } from 'tauri-plugin-pinia';
+ *
+ * const app = createApp(App);
+ *
+ * const pinia = createPinia();
+ * pinia.use(createPlugin());
+ *
+ * app.use(pinia)
+ * app.mount('#app');
+ * ```
+ */
 export function createPlugin(pluginOptions: TauriPluginPiniaOptions = {}) {
   return function (ctx: PiniaPluginContext) {
     const plugin = new Plugin(ctx, pluginOptions);
@@ -163,5 +184,11 @@ export function createPlugin(pluginOptions: TauriPluginPiniaOptions = {}) {
   };
 }
 
+/**
+ * Creates the Pinia plugin.
+ *
+ * This is an alias for
+ * [`createPlugin`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/functions/createPlugin.html).
+ */
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const TauriPluginPinia = createPlugin;

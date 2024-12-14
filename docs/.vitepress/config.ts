@@ -3,7 +3,47 @@ import { PluginImpl } from './node/plugin';
 import { fileURLToPath, URL } from 'node:url';
 import { docsRs, reference } from './shared/url';
 
+type ThemeConfig = NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>;
+
 const plugins = PluginImpl.load();
+
+const nav: ThemeConfig['nav'] = [
+  {
+    text: 'Guide',
+    link: '/guide/getting-started',
+    activeMatch: '/guide/',
+  },
+  {
+    text: 'Reference',
+    items: referenceItems(),
+  },
+  {
+    text: 'Rust',
+    items: docsRsItems(),
+  },
+  {
+    text: 'Changelog',
+    activeMatch: '/changelog/',
+    items: changelogItems(),
+  },
+];
+
+const socialLinks: ThemeConfig['socialLinks'] = [
+  { icon: 'github', link: 'https://github.com/ferreira-tb/tauri-store' },
+  { icon: 'discord', link: 'https://discord.gg/ARd7McmVNv' },
+];
+
+const defaultSidebar: ThemeConfig['sidebar'] = [
+  { text: 'Getting started', link: '/guide/getting-started' },
+  { text: 'Persisting state', link: '/guide/persisting-state' },
+  { text: 'Synchronization', link: '/guide/synchronization' },
+  { text: 'Accessing from Rust', link: '/guide/accessing-from-rust' },
+];
+
+const changelogSidebar: ThemeConfig['sidebar'] = [
+  { text: 'tauri-store', link: '/changelog/tauri-store' },
+  { text: 'tauri-plugin-pinia', link: '/changelog/tauri-plugin-pinia' },
+];
 
 export default defineConfig({
   title: 'tauri-store',
@@ -27,29 +67,13 @@ export default defineConfig({
   },
 
   themeConfig: {
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/ferreira-tb/tauri-store' },
-      { icon: 'discord', link: 'https://discord.gg/ARd7McmVNv' },
-    ],
-
-    nav: [
-      {
-        text: 'docs.rs',
-        items: docsRsItems(),
-      },
-      {
-        text: 'Reference',
-        items: referenceItems(),
-      },
-    ],
-
-    sidebar: [
-      { text: 'Getting started', link: '/guide/getting-started' },
-      { text: 'Persisting state', link: '/guide/persisting-state' },
-      { text: 'Synchronization', link: '/guide/synchronization' },
-      { text: 'Accessing from Rust', link: '/guide/accessing-from-rust' },
-    ],
-
+    socialLinks,
+    nav,
+    sidebar: {
+      '/': defaultSidebar,
+      '/guide/': defaultSidebar,
+      '/changelog/': changelogSidebar,
+    },
     outline: {
       level: 2,
     },
@@ -68,4 +92,18 @@ function referenceItems() {
     text: plugin.name,
     link: reference(plugin),
   }));
+}
+
+function changelogItems() {
+  const tauriStore = {
+    text: 'tauri-store',
+    link: '/changelog/tauri-store',
+  };
+
+  const other = plugins.map((plugin) => ({
+    text: plugin.name,
+    link: `/changelog/${plugin.name}`,
+  }));
+
+  return [tauriStore, ...other];
 }
