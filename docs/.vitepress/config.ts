@@ -1,59 +1,71 @@
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
 import { defineConfig } from 'vitepress';
+import { PluginImpl } from './node/plugin';
+import { fileURLToPath, URL } from 'node:url';
+import { docsRs, reference } from './shared/url';
+
+const plugins = PluginImpl.load();
 
 export default defineConfig({
-  base: '/tauri-store/',
   title: 'tauri-store',
   description: 'Persistent stores for Tauri',
+  base: '/tauri-store/',
   lang: 'en-US',
   srcDir: 'src',
+  srcExclude: ['**/examples/**'],
+  cleanUrls: true,
+  metaChunk: true,
+
   vite: {
-    css: {
-      postcss: {
-        plugins: [tailwindcss(), autoprefixer()],
-      },
-    },
     build: {
       emptyOutDir: true,
     },
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('theme', import.meta.url)),
+      },
+    },
   },
+
   themeConfig: {
     socialLinks: [
       { icon: 'github', link: 'https://github.com/ferreira-tb/tauri-store' },
       { icon: 'discord', link: 'https://discord.gg/ARd7McmVNv' },
     ],
+
     nav: [
       {
         text: 'docs.rs',
-        items: [
-          {
-            text: 'Pinia',
-            link: 'https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/',
-          },
-        ],
+        items: docsRsItems(),
       },
       {
         text: 'Reference',
-        items: [
-          {
-            text: 'Pinia',
-            link: 'https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/index.html',
-          },
-        ],
+        items: referenceItems(),
       },
     ],
+
     sidebar: [
-      {
-        text: 'Pinia',
-        collapsed: false,
-        items: [
-          { text: 'Getting started', link: '/pinia/getting-started' },
-          { text: 'Persisting state', link: '/pinia/persisting-state' },
-          { text: 'Accessing from Rust', link: '/pinia/accessing-from-rust' },
-          { text: 'Synchronization', link: '/pinia/synchronization' },
-        ],
-      },
+      { text: 'Getting started', link: '/guide/getting-started' },
+      { text: 'Persisting state', link: '/guide/persisting-state' },
+      { text: 'Synchronization', link: '/guide/synchronization' },
+      { text: 'Accessing from Rust', link: '/guide/accessing-from-rust' },
     ],
+
+    outline: {
+      level: 2,
+    },
   },
 });
+
+function docsRsItems() {
+  return plugins.map((plugin) => ({
+    text: plugin.name,
+    link: docsRs(plugin),
+  }));
+}
+
+function referenceItems() {
+  return plugins.map((plugin) => ({
+    text: plugin.name,
+    link: reference(plugin),
+  }));
+}

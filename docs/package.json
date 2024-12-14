@@ -10,8 +10,14 @@
     "preview": "vitepress preview"
   },
   "dependencies": {
+    "@tb-dev/utils": "^4.1.0",
     "@vueuse/core": "^12.0.0",
-    "vue": "^3.5.13",
-    "vitepress": "^1.5.0"
+    "change-case": "^5.4.4",
+    "vitepress": "^1.5.0",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@types/semver": "^7.5.8",
+    "semver": "^7.6.3"
   }
 }

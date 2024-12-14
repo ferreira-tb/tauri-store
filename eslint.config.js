@@ -20,6 +20,7 @@ export default defineConfig({
       '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
     },
     vue: {
+      'vue/enforce-style-attribute': 'off',
       'vue/v-on-handler-style': 'off',
     },
   },
