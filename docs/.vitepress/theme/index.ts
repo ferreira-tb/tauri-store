@@ -3,6 +3,7 @@ import Layout from '@/Layout.vue';
 import type { Theme } from 'vitepress';
 import DefaultTheme from 'vitepress/theme';
 import DocsRs from '@/components/DocsRs.vue';
+import Feature from '@/components/Feature.vue';
 import { provideSymbols } from '@/utils/symbols';
 import PluginLink from '@/components/PluginLink.vue';
 import ExternalLink from '@/components/ExternalLink.vue';
@@ -14,6 +15,7 @@ const theme: Theme = {
     app
       .component('DocsRs', DocsRs)
       .component('ExternalLink', ExternalLink)
+      .component('Feature', Feature)
       .component('PluginLink', PluginLink);
 
     provideSymbols(app, router);
