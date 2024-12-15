@@ -12,7 +12,7 @@ _Nothing yet._
 
 ### Features
 
-- Add `saveInterval`, `saveStrategy`, and `saveOnChange` options.
+- Add [`saveInterval`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/interfaces/StoreOptions.html#saveinterval), [`saveStrategy`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/interfaces/StoreOptions.html#savestrategy), and [`saveOnChange`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/interfaces/StoreOptions.html#saveonchange) options.
 
 ### Bug fixes
 
