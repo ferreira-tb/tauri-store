@@ -30,4 +30,4 @@ This crate follows [Cargo guidelines for SemVer compatibility](https://doc.rust-
 
 ## Any questions?
 
-Feel free to open a discussion on the [GitHub repository](https://github.com/ferreira-tb/tauri-store/discussions) or ask in our [Discord server](https://discord.gg/ARd7McmVNv).
+Feel free to start a discussion on the [GitHub repository](https://github.com/ferreira-tb/tauri-store/discussions) or ask in our [Discord server](https://discord.gg/ARd7McmVNv).
