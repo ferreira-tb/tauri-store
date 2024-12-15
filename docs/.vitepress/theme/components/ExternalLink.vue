@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { docsRs } from '../../shared/url';
 import { computed, type VNode } from 'vue';
 import type { Plugin } from '@/data/plugin.data';
+import { docsRs, reference } from '../../shared/url';
 import { useSelectedPlugin } from '@/composables/plugin';
 
 interface Props {
   href: string;
-  kind?: 'docs.rs' | 'custom';
+  kind?: 'docs.rs' | 'reference' | 'custom';
   plugin?: Plugin;
 }
 
@@ -23,6 +23,8 @@ const url = computed(() => {
   switch (props.kind) {
     case 'docs.rs':
       return docsRs(targetPlugin.value, props.href);
+    case 'reference':
+      return reference(targetPlugin.value, props.href);
     case 'custom':
     default:
       return props.href;

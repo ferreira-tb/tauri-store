@@ -23,7 +23,7 @@ await saveAll();
 
 ## Save on change
 
-If there's a need to save a store whenever its state changes, you can enable the [`saveOnChange`](https://docs.rs/tauri-plugin-pinia/latest) option when defining the store.
+If there's a need to save a store whenever its state changes, you can enable the <DocsTs path="interfaces/StoreOptions.html#saveonchange">`saveOnChange`</DocsTs> option when defining the store.
 
 <div class="tauri-plugin-pinia">
 
