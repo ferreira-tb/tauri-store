@@ -1,6 +1,6 @@
 [package]
 name = "example-pinia"
-version = "0.9.0"
+version = "0.9.1"
 publish = false
 
 [package.edition]
@@ -40,9 +40,5 @@ version = "2.0"
 features = []
 
 [features]
-# default = ["unstable-async"]
 file-sync-all = ["example-shared/file-sync-all"]
-unstable-async = [
-  "example-shared/unstable-async",
-  "tauri-plugin-pinia/unstable-async",
-]
+unstable-async = ["example-shared/unstable-async", "tauri-plugin-pinia/unstable-async"]
