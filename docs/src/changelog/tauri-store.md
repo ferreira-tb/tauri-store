@@ -9,7 +9,7 @@ _Nothing yet._
 ### Breaking changes
 
 - Take `&mut self` in [`Store::watch`](https://docs.rs/tauri-store/0.4.0/tauri_store/struct.Store.html#method.watch) and [`Store::unwatch`](https://docs.rs/tauri-store/0.4.0/tauri_store/struct.Store.html#method.unwatch).
-- Return `T` instead of `Result<T, Error>` from the [`with_store`](https://docs.rs/tauri-store/0.4.0/tauri_store/fn.with_store.html) functions.
+- Return `T` instead of `Result<T, Error>` from [`with_store`](https://docs.rs/tauri-store/0.4.0/tauri_store/fn.with_store.html) functions.
 - Remove `ahash` feature.
 - <Feature name="unstable-async" /> Remove `boxed` and `boxed_ok` macros.
 - <Feature name="unstable-async" /> [`Store::set`](https://docs.rs/tauri-store/0.4.0/tauri_store/struct.Store.html#method.set), [`Store::patch`](https://docs.rs/tauri-store/0.4.0/tauri_store/struct.Store.html#method.patch), and [`Store::patch_with_source`](https://docs.rs/tauri-store/0.4.0/tauri_store/struct.Store.html#method.patch_with_source) are now async.
