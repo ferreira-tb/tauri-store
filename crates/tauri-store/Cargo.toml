@@ -1,14 +1,14 @@
 [package]
 name = "tauri-store"
 description = "Persistent stores for Tauri"
-version = "0.3.2"
+version = "0.4.0"
 documentation = "https://docs.rs/tauri-store"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
-readme = "../../README.md"
-keywords = ["plugin", "tauri", "tauri-plugin", "store"]
+readme = "./README.md"
+keywords = ["plugin", "tauri", "store"]
 
 [package.edition]
 workspace = true
@@ -26,29 +26,29 @@ rustdoc-args = ["--cfg", "docsrs"]
 workspace = true
 
 [dependencies]
+dashmap = "6.1"
+futures = "0.3"
 serde = "1.0"
 serde_json = "1.0"
-tauri = "2.0"
+tauri = "2"
 thiserror = "2.0"
 
-[dependencies.ahash]
-version = "0.8"
-optional = true
-
-[dependencies.futures]
-version = "0.3"
-optional = true
-
 [dependencies.tauri-store-macros]
-version = "0.3"
+version = "0.4"
 optional = true
 path = "../tauri-store-macros"
 
+[dependencies.tauri-store-utils]
+version = "0.1"
+path = "../tauri-store-utils"
+
 [dependencies.tokio]
 version = "1.39"
-optional = true
 default-features = false
-features = ["fs", "io-util", "time"]
+features = ["time"]
+
+[target.'cfg(tauri_store_tracing)'.dependencies]
+tracing = "0.1"
 
 [build-dependencies.tauri-plugin]
 version = "2.0"
@@ -56,5 +56,5 @@ features = ["build"]
 
 [features]
 derive = ["dep:tauri-store-macros"]
-unstable-async = ["dep:futures", "dep:tokio"]
-ahash = ["dep:ahash", "ahash/serde"]
+file-sync-all = []
+unstable-async = ["tokio/fs", "tokio/io-util"]

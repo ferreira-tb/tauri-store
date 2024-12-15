@@ -19,18 +19,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
 
-      - name: Setup Pages
+      - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - run: pnpm install
-      - run: pnpm run build
       - run: |
+          pnpm install
+          pnpm run codegen
+          pnpm run build
           pnpm run build:docs
           touch docs/.vitepress/dist/.nojekyll
 

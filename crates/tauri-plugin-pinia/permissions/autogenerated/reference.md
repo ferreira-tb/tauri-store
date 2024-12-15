@@ -3,7 +3,9 @@
 Default permissions for the pinia plugin
 
 - `allow-clear-autosave`
+- `allow-get-default-save-strategy`
 - `allow-get-pinia-path`
+- `allow-get-save-strategy`
 - `allow-get-store-ids`
 - `allow-get-store-path`
 - `allow-get-store-state`
@@ -11,8 +13,13 @@ Default permissions for the pinia plugin
 - `allow-patch`
 - `allow-save`
 - `allow-save-all`
+- `allow-save-all-now`
+- `allow-save-now`
 - `allow-save-some`
+- `allow-save-some-now`
 - `allow-set-autosave`
+- `allow-set-save-strategy`
+- `allow-set-store-options`
 - `allow-unload`
 
 ## Permission Table
@@ -53,6 +60,32 @@ Denies the clear_autosave command without any pre-configured scope.
 <tr>
 <td>
 
+`pinia:allow-get-default-save-strategy`
+
+</td>
+<td>
+
+Enables the get_default_save_strategy command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-get-default-save-strategy`
+
+</td>
+<td>
+
+Denies the get_default_save_strategy command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `pinia:allow-get-pinia-path`
 
 </td>
@@ -72,6 +105,32 @@ Enables the get_pinia_path command without any pre-configured scope.
 <td>
 
 Denies the get_pinia_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-get-save-strategy`
+
+</td>
+<td>
+
+Enables the get_save_strategy command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-get-save-strategy`
+
+</td>
+<td>
+
+Denies the get_save_strategy command without any pre-configured scope.
 
 </td>
 </tr>
@@ -261,6 +320,58 @@ Denies the save_all command without any pre-configured scope.
 <tr>
 <td>
 
+`pinia:allow-save-all-now`
+
+</td>
+<td>
+
+Enables the save_all_now command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-save-all-now`
+
+</td>
+<td>
+
+Denies the save_all_now command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-save-now`
+
+</td>
+<td>
+
+Enables the save_now command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-save-now`
+
+</td>
+<td>
+
+Denies the save_now command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `pinia:allow-save-some`
 
 </td>
@@ -287,6 +398,32 @@ Denies the save_some command without any pre-configured scope.
 <tr>
 <td>
 
+`pinia:allow-save-some-now`
+
+</td>
+<td>
+
+Enables the save_some_now command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-save-some-now`
+
+</td>
+<td>
+
+Denies the save_some_now command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `pinia:allow-set-autosave`
 
 </td>
@@ -306,6 +443,58 @@ Enables the set_autosave command without any pre-configured scope.
 <td>
 
 Denies the set_autosave command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-set-save-strategy`
+
+</td>
+<td>
+
+Enables the set_save_strategy command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-set-save-strategy`
+
+</td>
+<td>
+
+Denies the set_save_strategy command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-set-store-options`
+
+</td>
+<td>
+
+Enables the set_store_options command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-set-store-options`
+
+</td>
+<td>
+
+Denies the set_store_options command without any pre-configured scope.
 
 </td>
 </tr>

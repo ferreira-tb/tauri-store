@@ -1,56 +1,109 @@
-import tailwindcss from 'tailwindcss';
-import autoprefixer from 'autoprefixer';
 import { defineConfig } from 'vitepress';
+import { PluginImpl } from './node/plugin';
+import { fileURLToPath, URL } from 'node:url';
+import { docsRs, reference } from './shared/url';
+
+type ThemeConfig = NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>;
+
+const plugins = PluginImpl.load();
+
+const nav: ThemeConfig['nav'] = [
+  {
+    text: 'Guide',
+    link: '/guide/getting-started',
+    activeMatch: '/guide/',
+  },
+  {
+    text: 'Reference',
+    items: referenceItems(),
+  },
+  {
+    text: 'Rust',
+    items: docsRsItems(),
+  },
+  {
+    text: 'Changelog',
+    activeMatch: '/changelog/',
+    items: changelogItems(),
+  },
+];
+
+const socialLinks: ThemeConfig['socialLinks'] = [
+  { icon: 'github', link: 'https://github.com/ferreira-tb/tauri-store' },
+  { icon: 'discord', link: 'https://discord.gg/ARd7McmVNv' },
+];
+
+const defaultSidebar: ThemeConfig['sidebar'] = [
+  { text: 'Getting started', link: '/guide/getting-started' },
+  { text: 'Persisting state', link: '/guide/persisting-state' },
+  { text: 'Synchronization', link: '/guide/synchronization' },
+  { text: 'Accessing from Rust', link: '/guide/accessing-from-rust' },
+];
+
+const changelogSidebar: ThemeConfig['sidebar'] = [
+  { text: 'tauri-store', link: '/changelog/tauri-store' },
+  { text: 'tauri-plugin-pinia', link: '/changelog/tauri-plugin-pinia' },
+];
 
 export default defineConfig({
-  base: '/tauri-store/',
   title: 'tauri-store',
   description: 'Persistent stores for Tauri',
+  base: '/tauri-store/',
   lang: 'en-US',
   srcDir: 'src',
+  srcExclude: ['**/examples/**'],
+  cleanUrls: true,
+  metaChunk: true,
+
   vite: {
-    css: {
-      postcss: {
-        plugins: [tailwindcss(), autoprefixer()],
-      },
-    },
     build: {
       emptyOutDir: true,
     },
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('theme', import.meta.url)),
+      },
+    },
   },
+
   themeConfig: {
-    socialLinks: [{ icon: 'github', link: 'https://github.com/ferreira-tb/tauri-store' }],
-    nav: [
-      {
-        text: 'docs.rs',
-        items: [
-          {
-            text: 'Pinia',
-            link: 'https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/',
-          },
-        ],
-      },
-      {
-        text: 'Reference',
-        items: [
-          {
-            text: 'Pinia',
-            link: 'https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/index.html',
-          },
-        ],
-      },
-    ],
-    sidebar: [
-      {
-        text: 'Pinia',
-        collapsed: false,
-        items: [
-          { text: 'Getting started', link: '/pinia/getting-started' },
-          { text: 'Persisting state', link: '/pinia/persisting-state' },
-          { text: 'Accessing from Rust', link: '/pinia/accessing-from-rust' },
-          { text: 'Debounce and throttle', link: '/pinia/debounce-throttle' },
-        ],
-      },
-    ],
+    socialLinks,
+    nav,
+    sidebar: {
+      '/': defaultSidebar,
+      '/guide/': defaultSidebar,
+      '/changelog/': changelogSidebar,
+    },
+    outline: {
+      level: 2,
+    },
   },
 });
+
+function docsRsItems() {
+  return plugins.map((plugin) => ({
+    text: plugin.name,
+    link: docsRs(plugin),
+  }));
+}
+
+function referenceItems() {
+  return plugins.map((plugin) => ({
+    text: plugin.name,
+    link: reference(plugin),
+  }));
+}
+
+function changelogItems() {
+  const tauriStore = {
+    text: 'tauri-store',
+    link: '/changelog/tauri-store',
+  };
+
+  const other = plugins.map((plugin) => ({
+    text: plugin.name,
+    link: `/changelog/${plugin.name}`,
+  }));
+
+  return [tauriStore, ...other];
+}
