@@ -4,6 +4,12 @@
 
 _Nothing yet._
 
+## 0.9.1
+
+### Documentation
+
+- Fix broken link in the README.
+
 ## 0.9.0
 
 ### Breaking changes
