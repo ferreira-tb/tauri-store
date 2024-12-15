@@ -30,6 +30,10 @@ _Nothing yet._
 
 - `StoreCollectionBuilder::autosave`, `StoreCollection::clear_autosave`, and `StoreCollection::set_autosave` are no longer gated by the `unstable-async` feature.
 
+### Bug fixes
+
+- Consume the first autosave tick immediately, before starting the interval.
+
 ### Performance
 
 - Use the [`ResourceTable`](https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html#) to manage the each store independently, instead of using a single hash map protected by a Mutex.
