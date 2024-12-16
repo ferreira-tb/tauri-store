@@ -8,5 +8,5 @@ module.exports = {
   excludeProtected: true,
   githubPages: false,
   hideGenerator: true,
-  titleLink: 'https://tb.dev.br/tauri-store/pinia/getting-started.html',
+  titleLink: 'https://tb.dev.br/tauri-store/guide/getting-started?plugin=tauri-plugin-pinia',
 };
