@@ -54,6 +54,9 @@ export default defineConfig({
   srcExclude: ['**/examples/**'],
   cleanUrls: true,
   metaChunk: true,
+  sitemap: {
+    hostname: 'https://tb.dev.br/tauri-store/',
+  },
 
   vite: {
     build: {
@@ -67,12 +70,15 @@ export default defineConfig({
   },
 
   themeConfig: {
-    socialLinks,
     nav,
+    socialLinks,
     sidebar: {
       '/': defaultSidebar,
       '/guide/': defaultSidebar,
       '/changelog/': changelogSidebar,
+    },
+    search: {
+      provider: 'local',
     },
     outline: {
       level: 2,
