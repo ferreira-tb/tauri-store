@@ -4,14 +4,12 @@
 
   .PARAMETER Target
   Targets to publish. If not specified, all targets will be published.
-
-  .PARAMETER DryRun
-  Perform a dry run.
 #>
 
 param(
   [string[]]$Target = @(),
-  [switch]$DryRun
+  [switch]$DryRun,
+  [switch]$NoVerify
 )
 
 $ErrorActionPreference = 'Stop'
@@ -32,6 +30,10 @@ function Publish-Crate {
   $command = "cargo publish -p $Name"
   if ($DryRun) {
     $command += ' --dry-run'
+  }
+
+  if ($NoVerify) {
+    $command += ' --no-verify'
   }
   
   Invoke-Expression $command
