@@ -2,7 +2,7 @@
   .SYNOPSIS
   Release script for the tauri-store repository.
 
-  .PARAMETER Targets
+  .PARAMETER Target
   Targets to publish. If not specified, all targets will be published.
 
   .PARAMETER DryRun
@@ -10,7 +10,7 @@
 #>
 
 param(
-  [string[]]$Targets = @(),
+  [string[]]$Target = @(),
   [switch]$DryRun
 )
 
@@ -25,7 +25,7 @@ pnpm run build
 function Publish-Crate {
   param([string]$Name)
 
-  if ($Targets.Count -gt 0 -and $Targets -notcontains $Name) {
+  if ($Target.Count -gt 0 -and $Target -notcontains $Name) {
     return
   }
 
@@ -53,7 +53,7 @@ Get-ChildItem -Path './crates' -Directory -Exclude 'tauri-store*' |
 function Publish-Package {
   param([string]$Name)
 
-  if ($Targets.Count -gt 0 -and $Targets -notcontains $Name) {
+  if ($Target.Count -gt 0 -and $Target -notcontains $Name) {
     return
   }
 
