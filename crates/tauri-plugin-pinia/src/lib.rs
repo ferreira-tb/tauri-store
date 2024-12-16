@@ -11,7 +11,7 @@ use std::path::PathBuf;
 use std::time::Duration;
 use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
-use tauri_store::{CollectionBuilder, StoreCollection};
+use tauri_store::CollectionBuilder;
 
 pub use manager::ManagerExt;
 pub use pinia::Pinia;
@@ -39,6 +39,10 @@ pub struct Builder<R: Runtime> {
 }
 
 impl<R: Runtime> Builder<R> {
+  // This only exists for backward compatibility.
+  // New plugins should use their full name as the directory.
+  const STORE_DIR: &'static str = "pinia";
+
   /// Builds the plugin.
   pub fn build(self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
@@ -69,46 +73,10 @@ impl<R: Runtime> Builder<R> {
   }
 }
 
-impl<R: Runtime> Default for Builder<R> {
-  fn default() -> Self {
-    Self {
-      path: None,
-      default_save_strategy: SaveStrategy::default(),
-      autosave: None,
-      on_load: None,
-      pretty: false,
-      save_denylist: HashSet::default(),
-      sync_denylist: HashSet::default(),
-    }
-  }
-}
-
 #[expect(clippy::unnecessary_wraps)]
-fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder<R>) -> BoxResult<()> {
-  let path = builder.path.take().unwrap_or_else(|| {
-    app
-      .path()
-      .app_data_dir()
-      .expect("failed to resolve app data dir")
-      .join("pinia")
-  });
-
-  let mut collection = StoreCollection::<R>::builder()
-    .path(path)
-    .default_save_strategy(builder.default_save_strategy)
-    .pretty(builder.pretty)
-    .save_denylist(builder.save_denylist)
-    .sync_denylist(builder.sync_denylist);
-
-  if let Some(on_load) = builder.on_load {
-    collection = collection.on_load(on_load);
-  }
-
-  if let Some(duration) = builder.autosave {
-    collection = collection.autosave(duration);
-  };
-
-  app.manage(Pinia(collection.build(app)));
+fn setup<R: Runtime>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()> {
+  let collection = builder.into_collection(app);
+  app.manage(Pinia(collection));
 
   Ok(())
 }
