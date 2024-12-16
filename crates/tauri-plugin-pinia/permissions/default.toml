@@ -1,6 +1,6 @@
 "$schema" = "schemas/schema.json"
 [default]
-description = "Default permissions for the pinia plugin"
+description = "Default permissions for the Pinia plugin"
 permissions = [
   "allow-clear-autosave",
   "allow-get-default-save-strategy",

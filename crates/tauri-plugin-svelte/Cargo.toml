@@ -1,15 +1,15 @@
 [package]
-name = "tauri-plugin-pinia"
-description = "Persistent Pinia stores for Tauri"
-version = "0.9.1"
-documentation = "https://docs.rs/tauri-plugin-pinia"
+name = "tauri-plugin-svelte"
+description = "Persistent stores for Tauri and Svelte"
+version = "0.0.1"
+documentation = "https://docs.rs/tauri-plugin-svelte"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
-keywords = ["tauri", "plugin", "store", "pinia", "vue"]
-links = "tauri-plugin-pinia"
+keywords = ["tauri", "plugin", "store", "svelte"]
+links = "tauri-plugin-svelte"
 
 [package.edition]
 workspace = true

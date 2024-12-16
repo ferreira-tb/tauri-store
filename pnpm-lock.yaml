@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@tb-dev/eslint-config':
-        specifier: ^5.5.0
-        version: 5.5.0(eslint@9.17.0(jiti@2.4.1))(tailwindcss@3.4.16)(typescript@5.7.2)
+        specifier: ^5.6.0
+        version: 5.6.0(eslint@9.17.0(jiti@2.4.1))(tailwindcss@3.4.16)(typescript@5.7.2)
       '@types/lodash-es':
         specifier: ^4.17.12
         version: 4.17.12
@@ -42,8 +42,8 @@ importers:
         specifier: ^0.27.5
         version: 0.27.5(typescript@5.7.2)
       typedoc-plugin-mdn-links:
-        specifier: ^4.0.4
-        version: 4.0.4(typedoc@0.27.5(typescript@5.7.2))
+        specifier: ^4.0.5
+        version: 4.0.5(typedoc@0.27.5(typescript@5.7.2))
       typescript:
         specifier: ^5.6.3
         version: 5.7.2
@@ -213,6 +213,18 @@ importers:
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.7.2)
+
+  packages/tauri-plugin-svelte:
+    dependencies:
+      '@tauri-apps/api':
+        specifier: ^2.0.3
+        version: 2.1.1
+      '@tauri-store/shared':
+        specifier: workspace:*
+        version: link:../shared
+      '@tb-dev/utils':
+        specifier: ^4.1.0
+        version: 4.1.0
 
 packages:
 
@@ -1252,8 +1264,8 @@ packages:
   '@tauri-apps/plugin-shell@2.2.0':
     resolution: {integrity: sha512-iC3Ic1hLmasoboG7BO+7p+AriSoqAwKrIk+Hpk+S/bjTQdXqbl2GbdclghI4gM32X0bls7xHzIFqhRdrlvJeaA==}
 
-  '@tb-dev/eslint-config@5.5.0':
-    resolution: {integrity: sha512-6vTAS7oVOsKPXNd134HWSerJcz/ufz+jq90keVM0S05TiSvzcxrHSDkh9NgnDTMierfo79pccT4lY921PS7oFA==}
+  '@tb-dev/eslint-config@5.6.0':
+    resolution: {integrity: sha512-ZlWUvcpzmGdXeSNyMasLHfxrF8+0y/3aOr/mT3c2HJ7KXUi8P/F5wMVY3+pCTkc+iahgB1wLbmrGQZNMAk0l8w==}
     engines: {node: '>=22'}
     peerDependencies:
       eslint: ^9.8.0
@@ -4069,8 +4081,8 @@ packages:
     resolution: {integrity: sha512-G6zXWS1dLj6eagy6sVhOMQiLtJdxQBHIA9Z6HFUNLOlr6MFOgzV8wvmidtPONfPtEUv0uZsy77XJNzTAfwPDaA==}
     engines: {node: '>=16'}
 
-  typedoc-plugin-mdn-links@4.0.4:
-    resolution: {integrity: sha512-rp0qiELXDso1VTFZVbLmO06SsdePD0j+h9JurxI6F8puM/euj6WZYKL5uWSWvu0r3wdUkus3KPQQEMmZ+rn5/g==}
+  typedoc-plugin-mdn-links@4.0.5:
+    resolution: {integrity: sha512-ja4zdtmO6UIq3HDsssWSMxhNn7RgVQ9vbE8OEmIuVmeeNsbRBpskcw1JMiZmud7Ozxfvgd+qKx4wa6RTWQxQVw==}
     peerDependencies:
       typedoc: 0.26.x || 0.27.x
 
@@ -5719,7 +5731,7 @@ snapshots:
     dependencies:
       '@tauri-apps/api': 2.1.1
 
-  '@tb-dev/eslint-config@5.5.0(eslint@9.17.0(jiti@2.4.1))(tailwindcss@3.4.16)(typescript@5.7.2)':
+  '@tb-dev/eslint-config@5.6.0(eslint@9.17.0(jiti@2.4.1))(tailwindcss@3.4.16)(typescript@5.7.2)':
     dependencies:
       '@typescript-eslint/eslint-plugin': 8.18.0(@typescript-eslint/parser@8.18.0(eslint@9.17.0(jiti@2.4.1))(typescript@5.7.2))(eslint@9.17.0(jiti@2.4.1))(typescript@5.7.2)
       '@typescript-eslint/parser': 8.18.0(eslint@9.17.0(jiti@2.4.1))(typescript@5.7.2)
@@ -8837,7 +8849,7 @@ snapshots:
 
   type-fest@4.30.0: {}
 
-  typedoc-plugin-mdn-links@4.0.4(typedoc@0.27.5(typescript@5.7.2)):
+  typedoc-plugin-mdn-links@4.0.5(typedoc@0.27.5(typescript@5.7.2)):
     dependencies:
       typedoc: 0.27.5(typescript@5.7.2)
 

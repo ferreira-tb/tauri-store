@@ -1,15 +1,33 @@
-param([switch]$DryRun)
+<# 
+  .SYNOPSIS
+  Release script for the tauri-store repository.
+
+  .PARAMETER Targets
+  Targets to publish. If not specified, all targets will be published.
+
+  .PARAMETER DryRun
+  Perform a dry run.
+#>
+
+param(
+  [string[]]$Targets = @(),
+  [switch]$DryRun
+)
 
 $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
 pnpm run codegen
 pnpm run clippy
-pnpm run lint
+pnpm run eslint
 pnpm run build
 
 function Publish-Crate {
   param([string]$Name)
+
+  if ($Targets.Count -gt 0 -and $Targets -notcontains $Name) {
+    return
+  }
 
   $command = "cargo publish -p $Name"
   if ($DryRun) {
@@ -34,6 +52,10 @@ Get-ChildItem -Path './crates' -Directory -Exclude 'tauri-store*' |
 
 function Publish-Package {
   param([string]$Name)
+
+  if ($Targets.Count -gt 0 -and $Targets -notcontains $Name) {
+    return
+  }
 
   $command = "pnpm publish -F $Name"
   if ($DryRun) {

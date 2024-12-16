@@ -1,6 +1,6 @@
 ## Default Permission
 
-Default permissions for the pinia plugin
+Default permissions for the Pinia plugin
 
 - `allow-clear-autosave`
 - `allow-get-default-save-strategy`

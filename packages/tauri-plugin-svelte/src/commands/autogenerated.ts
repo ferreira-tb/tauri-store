@@ -8,12 +8,12 @@ import { commands } from '@tauri-store/shared';
  *
  * @example
  * ```ts
- * import { clearAutosave } from 'tauri-plugin-pinia';
+ * import { clearAutosave } from 'tauri-plugin-svelte';
  *
  * await clearAutosave();
  * ```
  */
-export const clearAutosave = commands.clearAutosave('pinia');
+export const clearAutosave = commands.clearAutosave('svelte');
 
 /**
  * Gets the default save strategy for the stores.
@@ -21,86 +21,86 @@ export const clearAutosave = commands.clearAutosave('pinia');
  *
  * @example
  * ```ts
- * import { getDefaultSaveStrategy } from 'tauri-plugin-pinia';
+ * import { getDefaultSaveStrategy } from 'tauri-plugin-svelte';
  *
  * const { strategy, interval } = await getDefaultSaveStrategy();
  * console.log(strategy, interval);
  * ```
  */
-export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('pinia');
+export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('svelte');
 
 /**
  * Directory where the stores are saved.
  *
  * @example
  * ```ts
- * import { getPiniaPath } from 'tauri-plugin-pinia';
+ * import { getSveltePath } from 'tauri-plugin-svelte';
  *
- * const path = await getPiniaPath();
+ * const path = await getSveltePath();
  * console.log(path);
  * ```
  */
-export const getPiniaPath = commands.getStoreCollectionPath('pinia');
+export const getSveltePath = commands.getStoreCollectionPath('svelte');
 
 /**
  * Gets the save strategy used by a store.
  *
  * @example
  * ```ts
- * import { getSaveStrategy } from 'tauri-plugin-pinia';
+ * import { getSaveStrategy } from 'tauri-plugin-svelte';
  *
  * const { strategy, interval } = await getSaveStrategy('my-store');
  * console.log(strategy, interval);
  * ```
  **/
-export const getSaveStrategy = commands.getSaveStrategy('pinia');
+export const getSaveStrategy = commands.getSaveStrategy('svelte');
 
 /**
  * Lists all the store ids.
  *
  * @example
  * ```ts
- * import { getStoreIds } from 'tauri-plugin-pinia';
+ * import { getStoreIds } from 'tauri-plugin-svelte';
  *
  * const ids = await getStoreIds();
  * for (const id of ids) {
  *   console.log(id);
  * }
  */
-export const getStoreIds = commands.getStoreIds('pinia');
+export const getStoreIds = commands.getStoreIds('svelte');
 
 /**
  * Path where the store is saved.
  *
  * @example
  * ```ts
- * import { getStorePath } from 'tauri-plugin-pinia';
+ * import { getStorePath } from 'tauri-plugin-svelte';
  *
  * const path = await getStorePath('my-store');
  * console.log(path);
  * ```
  **/
-export const getStorePath = commands.getStorePath('pinia');
+export const getStorePath = commands.getStorePath('svelte');
 
 /**
  * Gets the state of a store.
  *
  * @example
  * ```ts
- * import { getStoreState } from 'tauri-plugin-pinia';
+ * import { getStoreState } from 'tauri-plugin-svelte';
  *
  * const state = await getStoreState('counter-store');
  * console.log(state.counter);
  * ```
  */
-export const getStoreState = commands.getStoreState('pinia');
+export const getStoreState = commands.getStoreState('svelte');
 
 /**
  * Saves a store to the disk.
  *
  * @example
  * ```ts
- * import { save } from 'tauri-plugin-pinia';
+ * import { save } from 'tauri-plugin-svelte';
  *
  * // Save a single store.
  * await save('my-store');
@@ -109,38 +109,38 @@ export const getStoreState = commands.getStoreState('pinia');
  * await save('my-store', 'my-store-2');
  * ```
  **/
-export const save = commands.save('pinia');
+export const save = commands.save('svelte');
 
 /**
  * Saves all the stores to the disk.
  *
  * @example
  * ```ts
- * import { saveAll } from 'tauri-plugin-pinia';
+ * import { saveAll } from 'tauri-plugin-svelte';
  *
  * await saveAll();
  * ```
  */
-export const saveAll = commands.saveAll('pinia');
+export const saveAll = commands.saveAll('svelte');
 
 /**
  * Saves all the stores to the disk immediately, ignoring the save strategy.
  *
  * @example
  * ```ts
- * import { saveAllNow } from 'tauri-plugin-pinia';
+ * import { saveAllNow } from 'tauri-plugin-svelte';
  *
  * await saveAllNow();
  * ```
  */
-export const saveAllNow = commands.saveAllNow('pinia');
+export const saveAllNow = commands.saveAllNow('svelte');
 
 /**
  * Saves a store to the disk immediately, ignoring the save strategy.
  *
  * @example
  * ```ts
- * import { saveNow } from 'tauri-plugin-pinia';
+ * import { saveNow } from 'tauri-plugin-svelte';
  *
  * // Save a single store.
  * await saveNow('my-store');
@@ -149,7 +149,7 @@ export const saveAllNow = commands.saveAllNow('pinia');
  * await saveNow('my-store', 'my-store-2');
  * ```
  */
-export const saveNow = commands.saveNow('pinia');
+export const saveNow = commands.saveNow('svelte');
 
 /**
  * Saves the stores periodically.
@@ -157,13 +157,13 @@ export const saveNow = commands.saveNow('pinia');
  *
  * @example
  * ```ts
- * import { setAutosave } from 'tauri-plugin-pinia';
+ * import { setAutosave } from 'tauri-plugin-svelte';
  *
  * // Save all the stores every 5 minutes.
  * await setAutosave(5 * 60 * 1000);
  * ```
  */
-export const setAutosave = commands.setAutosave('pinia');
+export const setAutosave = commands.setAutosave('svelte');
 
 /**
  * Sets the save strategy for a store.
@@ -171,19 +171,19 @@ export const setAutosave = commands.setAutosave('pinia');
  *
  * @example
  * ```ts
- * import { setSaveStrategy } from 'tauri-plugin-pinia';
+ * import { setSaveStrategy } from 'tauri-plugin-svelte';
  *
  * await setSaveStrategy('my-store', 'debounce', 1000);
  * ```
  */
-export const setSaveStrategy = commands.setSaveStrategy('pinia');
+export const setSaveStrategy = commands.setSaveStrategy('svelte');
 
 /**
  * Sets the store options.
  *
  * @example
  * ```ts
- * import { setStoreOptions } from 'tauri-plugin-pinia';
+ * import { setStoreOptions } from 'tauri-plugin-svelte';
  *
  * await setStoreOptions('my-store', {
  *  saveOnChange: true,
@@ -192,17 +192,17 @@ export const setSaveStrategy = commands.setSaveStrategy('pinia');
  * });
  * ```
  */
-export const setStoreOptions = commands.setStoreOptions('pinia');
+export const setStoreOptions = commands.setStoreOptions('svelte');
 
 /////////////////////////
 // INTERNAL COMMANDS
 /////////////////////////
 
 /** @internal */
-export const load = commands.load('pinia');
+export const load = commands.load('svelte');
 
 /** @internal */
-export const patch = commands.patch('pinia');
+export const patch = commands.patch('svelte');
 
 /** @internal */
-export const unload = commands.unload('pinia');
+export const unload = commands.unload('svelte');

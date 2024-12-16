@@ -9,8 +9,10 @@ export default defineConfig({
     'examples/shared-vue/tsconfig.json',
     'packages/shared/tsconfig.json',
     'packages/tauri-plugin-pinia/tsconfig.json',
+    'packages/tauri-plugin-svelte/tsconfig.json',
   ],
   features: {
+    svelte: true,
     vue: true,
   },
   ignores: ['**/.nuxt/**', '**/tauri-store-cli/assets/**'],

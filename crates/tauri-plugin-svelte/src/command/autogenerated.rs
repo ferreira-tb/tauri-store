@@ -12,7 +12,7 @@ use tauri_store::boxed;
 
 #[tauri::command]
 pub(crate) async fn clear_autosave<R: Runtime>(app: AppHandle<R>) {
-  app.pinia().clear_autosave();
+  app.svelte().clear_autosave();
 }
 
 #[tauri::command]
@@ -20,17 +20,17 @@ pub(crate) async fn get_default_save_strategy<R>(app: AppHandle<R>) -> SaveStrat
 where
   R: Runtime,
 {
-  app.pinia().default_save_strategy()
+  app.svelte().default_save_strategy()
 }
 
 #[tauri::command]
-pub(crate) async fn get_pinia_path<R: Runtime>(app: AppHandle<R>) -> PathBuf {
-  app.pinia().path().to_path_buf()
+pub(crate) async fn get_svelte_path<R: Runtime>(app: AppHandle<R>) -> PathBuf {
+  app.svelte().path().to_path_buf()
 }
 
 #[tauri::command]
 pub(crate) async fn get_store_ids<R: Runtime>(app: AppHandle<R>) -> Vec<String> {
-  app.pinia().ids()
+  app.svelte().ids()
 }
 
 #[cfg(not(feature = "unstable-async"))]
@@ -75,7 +75,7 @@ pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Result<
 where
   R: Runtime,
 {
-  app.pinia().store_state(id)
+  app.svelte().store_state(id)
 }
 
 #[cfg(feature = "unstable-async")]
@@ -84,7 +84,7 @@ pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Result<
 where
   R: Runtime,
 {
-  app.pinia().store_state(id).await
+  app.svelte().store_state(id).await
 }
 
 #[cfg(not(feature = "unstable-async"))]
@@ -127,79 +127,79 @@ where
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
 pub(crate) async fn save<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
-  app.pinia().save(id)
+  app.svelte().save(id)
 }
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
 pub(crate) async fn save<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
-  app.pinia().save(id).await
+  app.svelte().save(id).await
 }
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
 pub(crate) async fn save_all<R: Runtime>(app: AppHandle<R>) -> Result<()> {
-  app.pinia().save_all()
+  app.svelte().save_all()
 }
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
 pub(crate) async fn save_all<R: Runtime>(app: AppHandle<R>) -> Result<()> {
-  app.pinia().save_all().await
+  app.svelte().save_all().await
 }
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
 pub(crate) async fn save_all_now<R: Runtime>(app: AppHandle<R>) -> Result<()> {
-  app.pinia().save_all_now()
+  app.svelte().save_all_now()
 }
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
 pub(crate) async fn save_all_now<R: Runtime>(app: AppHandle<R>) -> Result<()> {
-  app.pinia().save_all_now().await
+  app.svelte().save_all_now().await
 }
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
 pub(crate) async fn save_now<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
-  app.pinia().save_now(id)
+  app.svelte().save_now(id)
 }
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
 pub(crate) async fn save_now<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
-  app.pinia().save_now(id).await
+  app.svelte().save_now(id).await
 }
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
 pub(crate) async fn save_some<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -> Result<()> {
-  app.pinia().save_some(&ids)
+  app.svelte().save_some(&ids)
 }
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
 pub(crate) async fn save_some<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -> Result<()> {
-  app.pinia().save_some(&ids).await
+  app.svelte().save_some(&ids).await
 }
 
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
 pub(crate) async fn save_some_now<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -> Result<()> {
-  app.pinia().save_some_now(&ids)
+  app.svelte().save_some_now(&ids)
 }
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
 pub(crate) async fn save_some_now<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -> Result<()> {
-  app.pinia().save_some_now(&ids).await
+  app.svelte().save_some_now(&ids).await
 }
 
 #[tauri::command]
 pub(crate) async fn set_autosave<R: Runtime>(app: AppHandle<R>, interval: u64) {
   app
-    .pinia()
+    .svelte()
     .set_autosave(Duration::from_millis(interval));
 }
 
@@ -271,11 +271,11 @@ where
 #[cfg(not(feature = "unstable-async"))]
 #[tauri::command]
 pub(crate) async fn unload<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
-  app.pinia().unload_store(&id)
+  app.svelte().unload_store(&id)
 }
 
 #[cfg(feature = "unstable-async")]
 #[tauri::command]
 pub(crate) async fn unload<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
-  app.pinia().unload_store(&id).await
+  app.svelte().unload_store(&id).await
 }

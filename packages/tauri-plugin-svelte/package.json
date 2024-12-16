@@ -1,7 +1,7 @@
 {
-  "name": "tauri-plugin-pinia",
-  "version": "0.9.1",
-  "description": "Persistent Pinia stores for Tauri",
+  "name": "tauri-plugin-svelte",
+  "version": "0.0.1",
+  "description": "Persistent stores for Tauri and Svelte",
   "type": "module",
   "private": false,
   "packageManager": "pnpm@9.15.0",
@@ -25,9 +25,7 @@
     "tauri",
     "plugin",
     "store",
-    "pinia",
-    "vue",
-    "nuxt"
+    "svelte"
   ],
   "files": [
     "dist"
@@ -49,8 +47,6 @@
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
     "@tauri-store/shared": "workspace:*",
-    "@tb-dev/utils": "^4.1.0",
-    "pinia": "^2.2.8",
-    "vue": "^3.5.13"
+    "@tb-dev/utils": "^4.1.0"
   }
 }

@@ -36,4 +36,4 @@ _Nothing yet._
 
 ### Performance
 
-- Use the [`ResourceTable`](https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html#) to manage each store independently, instead of using a single hash map protected by a Mutex for all of them.
+- Use the [`ResourceTable`](https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html#) to manage each store independently, instead of using a single hash map for all of them.
