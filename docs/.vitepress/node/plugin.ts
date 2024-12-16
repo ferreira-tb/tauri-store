@@ -3,7 +3,7 @@ import { join, resolve } from 'node:path';
 import type { Plugin } from '../../types';
 import { parse as parseSemver } from 'semver';
 import { pascalCase, snakeCase } from 'change-case';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 
 interface PackageJson {
   name: string;
@@ -29,10 +29,14 @@ export class PluginImpl implements Plugin {
     this.shortVersion = shortVersion(json.version);
   }
 
-  private static create(name: string): Plugin {
+  private static create(name: string): Plugin | null {
     const packageJsonPath = join(packagesDir(), name, 'package.json');
-    const packageJson = readFileSync(packageJsonPath, 'utf-8');
-    return new PluginImpl(JSON.parse(packageJson));
+    if (existsSync(packageJsonPath)) {
+      const packageJson = readFileSync(packageJsonPath, 'utf-8');
+      return new PluginImpl(JSON.parse(packageJson));
+    }
+
+    return null;
   }
 
   public static load(): Plugin[] {
@@ -40,6 +44,7 @@ export class PluginImpl implements Plugin {
     const plugins = packages.filter((name) => name.startsWith(PREFIX));
     return plugins
       .map((name) => PluginImpl.create(name))
+      .filter((plugin): plugin is Plugin => Boolean(plugin))
       .toSorted((a, b) => a.name.localeCompare(b.name));
   }
 }
