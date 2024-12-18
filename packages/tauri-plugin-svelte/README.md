@@ -2,7 +2,7 @@
 
 > **IMPORTANT**: This is work in progress and **SHOULD NOT** be used before it reaches `0.1.0` version. Expect breaking changes on every release before that. Tracking issue: [ferreira-tb/tauri-store#52](https://github.com/ferreira-tb/tauri-store/issues/52).
 
-Persistent stores for Tauri and Svelte.
+Persistent Svelte stores for Tauri.
 
 ## Features
 

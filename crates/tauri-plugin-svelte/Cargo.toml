@@ -1,6 +1,6 @@
 [package]
 name = "tauri-plugin-svelte"
-description = "Persistent stores for Tauri and Svelte"
+description = "Persistent Svelte stores for Tauri"
 version = "0.0.1"
 documentation = "https://docs.rs/tauri-plugin-svelte"
 homepage = "https://tb.dev.br/tauri-store"
