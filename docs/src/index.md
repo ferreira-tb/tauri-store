@@ -23,7 +23,7 @@ The [`tauri-store`](https://docs.rs/tauri-store/latest/tauri_store/) crate is a 
 
 This crate follows [Cargo guidelines for SemVer compatibility](https://doc.rust-lang.org/cargo/reference/semver.html).
 
-::: Experimental features
+::: info Experimental features
 [Cargo features](https://doc.rust-lang.org/cargo/reference/features.html) prefixed with `unstable-` are experimental and may introduce breaking changes between patch versions or even be completely removed.
 :::
 
