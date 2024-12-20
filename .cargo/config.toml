@@ -4,4 +4,3 @@ rustflags = ["--cfg", "tauri_store_tracing"]
 
 [env]
 CARGO_TARGET_DIR = "target"
-TAURI_STORE_WORKSPACE = "true"
