@@ -15,10 +15,7 @@ use tauri_store::CollectionBuilder;
 
 pub use manager::ManagerExt;
 pub use svelte::Svelte;
-pub use tauri_store::{
-  with_store, BoxResult, Error, Json, OnLoadFn, OnLoadResult, Result, SaveStrategy, Store,
-  StoreOptions, StoreState, StoreStateExt, WatcherResult,
-};
+pub use tauri_store::prelude::*;
 
 #[cfg(feature = "unstable-async")]
 use tauri::async_runtime::block_on;
@@ -39,11 +36,11 @@ pub struct Builder<R: Runtime> {
 }
 
 impl<R: Runtime> Builder<R> {
-  const STORE_DIR: &'static str = env!("CARGO_PKG_NAME");
+  const PLUGIN_NAME: &str = "svelte";
 
   /// Builds the plugin.
   pub fn build(self) -> TauriPlugin<R> {
-    tauri::plugin::Builder::new("svelte")
+    tauri::plugin::Builder::new(Self::PLUGIN_NAME)
       .setup(|app, _| setup(app, self))
       .on_event(on_event)
       .invoke_handler(tauri::generate_handler![

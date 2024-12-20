@@ -86,7 +86,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
               .path()
               .app_data_dir()
               .expect("failed to resolve app data dir")
-              .join(Self::STORE_DIR)
+              .join(Self::PLUGIN_NAME)
           });
 
           let mut collection = StoreCollection::builder()

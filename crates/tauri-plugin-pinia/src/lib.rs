@@ -15,10 +15,7 @@ use tauri_store::CollectionBuilder;
 
 pub use manager::ManagerExt;
 pub use pinia::Pinia;
-pub use tauri_store::{
-  with_store, BoxResult, Error, Json, OnLoadFn, OnLoadResult, Result, SaveStrategy, Store,
-  StoreOptions, StoreState, StoreStateExt, WatcherResult,
-};
+pub use tauri_store::prelude::*;
 
 #[cfg(feature = "unstable-async")]
 use tauri::async_runtime::block_on;
@@ -39,13 +36,11 @@ pub struct Builder<R: Runtime> {
 }
 
 impl<R: Runtime> Builder<R> {
-  // This only exists for backward compatibility.
-  // New plugins should use their full name as the directory.
-  const STORE_DIR: &'static str = "pinia";
+  const PLUGIN_NAME: &str = "pinia";
 
   /// Builds the plugin.
   pub fn build(self) -> TauriPlugin<R> {
-    tauri::plugin::Builder::new("pinia")
+    tauri::plugin::Builder::new(Self::PLUGIN_NAME)
       .setup(|app, _| setup(app, self))
       .on_event(on_event)
       .invoke_handler(tauri::generate_handler![

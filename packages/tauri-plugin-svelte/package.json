@@ -1,6 +1,6 @@
 {
   "name": "tauri-plugin-svelte",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Persistent Svelte stores for Tauri",
   "type": "module",
   "private": false,
