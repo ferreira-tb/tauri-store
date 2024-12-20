@@ -6,7 +6,11 @@ export { listen, StoreEvent } from './event';
 
 export { BasePlugin, mergePluginOptions } from './plugin';
 
-export { TimeStrategy, type TimeStrategyKind } from './utils/time-strategy';
+export {
+  type LooseTimeStrategyKind,
+  TimeStrategy,
+  type TimeStrategyKind,
+} from './utils/time-strategy';
 
 export type {
   ConfigChangePayload,

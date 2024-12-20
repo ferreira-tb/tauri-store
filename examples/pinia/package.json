@@ -2,7 +2,7 @@
   "name": "example-pinia",
   "version": "0.9.1",
   "type": "module",
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@9.15.1",
   "private": true,
   "scripts": {
     "type-check": "vue-tsc --noEmit",

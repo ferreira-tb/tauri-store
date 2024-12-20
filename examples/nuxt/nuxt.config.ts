@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   devtools: {
     enabled: false,
   },
-  telemetry: false,
+
   vite: {
     clearScreen: false,
     server: {
