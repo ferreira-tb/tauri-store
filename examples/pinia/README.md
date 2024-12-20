@@ -1,7 +1,5 @@
 # Pinia Example
 
-## Run the example
-
-```powershell
-pwsh scripts/run-example.ps1 pinia
+```sh
+pwsh scripts/run-example.ps1 -Example pinia
 ```
