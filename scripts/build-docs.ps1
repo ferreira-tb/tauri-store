@@ -17,7 +17,10 @@ Get-ChildItem -Path './packages' -Directory |
   ForEach-Object { Build-PackageDocs -Name $_.Name }
 
 
-$SkipCrate = @('tauri-store-cli', 'tauri-store-macros')
+$SkipCrate = @(
+  'tauri-store-cli',
+  'tauri-store-macros'
+)
 
 function Build-CrateDocs {
   param([string]$Name)

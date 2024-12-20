@@ -1,9 +1,9 @@
 [workspace]
 members = [
   "crates/*",
-  "examples/shared-rs",
   "examples/nuxt/src-tauri",
   "examples/pinia/src-tauri",
+  "examples/shared/rust",
 ]
 resolver = "2"
 

@@ -1,7 +1,7 @@
 {
   "productName": "example-nuxt",
   "version": "0.9.1",
-  "identifier": "tsukilabs.example.nuxt",
+  "identifier": "com.tbdev.example",
   "build": {
     "beforeDevCommand": "pnpm run -F example-nuxt nuxt:dev",
     "beforeBuildCommand": "pnpm run -F example-nuxt nuxt:generate",
@@ -24,11 +24,11 @@
     "active": true,
     "targets": "all",
     "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
+      "../../shared/assets/icons/32x32.png",
+      "../../shared/assets/icons/128x128.png",
+      "../../shared/assets/icons/128x128@2x.png",
+      "../../shared/assets/icons/icon.icns",
+      "../../shared/assets/icons/icon.ico"
     ]
   }
 }
