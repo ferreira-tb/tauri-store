@@ -13,7 +13,7 @@ export default defineConfig({
     'packages/tauri-plugin-svelte/tsconfig.json',
   ],
   features: {
-    svelte: true,
+    svelte: false,
     vue: true,
   },
   ignores: ['**/.nuxt/**', '**/tauri-store-cli/assets/**'],
