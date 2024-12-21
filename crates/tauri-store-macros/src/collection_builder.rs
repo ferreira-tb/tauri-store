@@ -86,7 +86,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
               .path()
               .app_data_dir()
               .expect("failed to resolve app data dir")
-              .join(Self::PLUGIN_NAME)
+              .join(env!("CARGO_PKG_NAME"))
           });
 
           let mut collection = StoreCollection::builder()

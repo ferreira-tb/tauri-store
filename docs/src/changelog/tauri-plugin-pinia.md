@@ -2,7 +2,38 @@
 
 ## Next
 
-_Nothing yet._
+### Breaking changes
+
+- Change the default directory name for the stores (from `pinia` to `tauri-plugin-pinia`). If you're using a custom path, this won't affect you. Otherwise, you'll need to move your existing stores to the new default directory or manually set the path as it was before.
+
+```rust
+use tauri::Manager;
+
+fn main() {
+  tauri::Builder::default()
+    .setup(|app| {
+      // The old default path.
+      let path = app
+        .path()
+        .app_data_dir()
+        .expect("failed to resolve app data dir")
+        .join("pinia");
+
+      let pinia = tauri_plugin_pinia::Builder::new()
+        .path(path)
+        .build();
+
+      app
+        .app_handle()
+        .plugin(pinia)
+        .expect("failed to add pinia plugin");
+
+      Ok(())
+    })
+    .run(tauri::generate_context!())
+    .expect("error while running tauri application");
+}
+```
 
 ## 0.9.1
 

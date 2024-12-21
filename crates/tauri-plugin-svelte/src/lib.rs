@@ -36,11 +36,9 @@ pub struct Builder<R: Runtime> {
 }
 
 impl<R: Runtime> Builder<R> {
-  const PLUGIN_NAME: &str = "svelte";
-
   /// Builds the plugin.
   pub fn build(self) -> TauriPlugin<R> {
-    tauri::plugin::Builder::new(Self::PLUGIN_NAME)
+    tauri::plugin::Builder::new("svelte")
       .setup(|app, _| setup(app, self))
       .on_event(on_event)
       .invoke_handler(tauri::generate_handler![
