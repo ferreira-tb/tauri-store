@@ -33,6 +33,11 @@ path = "../../../crates/tauri-plugin-pinia"
 default-features = false
 optional = true
 
+[dependencies.tauri-plugin-svelte]
+path = "../../../crates/tauri-plugin-svelte"
+default-features = false
+optional = true
+
 [dependencies.tauri-store]
 path = "../../../crates/tauri-store"
 default-features = false
@@ -47,5 +52,6 @@ features = ["chrono", "env-filter", "fmt", "parking_lot", "registry"]
 
 [features]
 pinia = ["dep:tauri-plugin-pinia"]
+svelte = ["dep:tauri-plugin-svelte"]
+
 file-sync-all = ["tauri-store/file-sync-all"]
-unstable-async = ["tauri-store/unstable-async"]

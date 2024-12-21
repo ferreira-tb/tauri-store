@@ -95,13 +95,17 @@ export interface StoreFrontendOptions {
 
 export type StoreOptions = StoreBackendOptions & StoreFrontendOptions;
 
-export interface CustomStoreProperties {
+export interface TauriStoreContract {
   /** Path where the store is saved. */
   readonly getPath: () => Promise<string>;
   /** Saves the store to the disk. */
   readonly save: () => Promise<void>;
   /** Saves all stores to the disk. */
   readonly saveAll: () => Promise<void>;
+  /** Saves all the stores to the disk immediately, ignoring the save strategy. */
+  readonly saveAllNow: () => Promise<void>;
+  /** Saves the store to the disk immediately, ignoring the save strategy. */
+  readonly saveNow: () => Promise<void>;
   /** Starts watching for changes. */
   readonly start: () => Promise<void>;
   /** Stops watching for changes. */

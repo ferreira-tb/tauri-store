@@ -10,20 +10,49 @@ import {
 } from 'svelte/store';
 import {
   BaseStore,
-  type CustomStoreProperties,
   debounce,
   type State,
+  type TauriStoreContract,
   throttle,
   TimeStrategy,
 } from '@tauri-store/shared';
 
 /**
- * Implementing `Writable<S>` certifies that our store follows the Svelte store contract.
+ * Implementing `Writable<S>` ensures that the store also adheres to the Svelte store contract.
  *
  * @see https://svelte.dev/docs/svelte/stores#Store-contract
  */
-type StoreContract<S extends State> = CustomStoreProperties & Writable<S>;
+export type StoreContract<S extends State> = TauriStoreContract & Writable<S>;
 
+/**
+ * A [writable store](https://svelte.dev/docs/svelte/stores#svelte-store-writable)
+ * that can sync its state with the Rust backend and persist it to disk.
+ * It adheres to the [Svelte store contract](https://svelte.dev/docs/svelte/stores#Store-contract),
+ * so it's interchangeable with conventional Svelte stores.
+ *
+ * @example
+ * ```ts
+ * import { Store } from 'tauri-plugin-svelte';
+ *
+ * const store = new Store('counter', { count: 0 });
+ *
+ * // Start the store, allowing it to sync with the backend.
+ * await store.start();
+ *
+ * store.subscribe((state) => {
+ *  console.log(state.count);
+ * });
+ *
+ * store.set({ count: 2 });
+ *
+ * store.update((state) => {
+ *  state.count += 1;
+ * });
+ *
+ * // Save the store to disk.
+ * await store.save();
+ * ```
+ */
 export class Store<S extends State> extends BaseStore<S> implements StoreContract<S> {
   private readonly store: Writable<S>;
   protected override options: TauriPluginSvelteStoreOptions;
@@ -123,4 +152,32 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
   public async saveAll() {
     return commands.saveAll();
   }
+
+  public async saveAllNow() {
+    return commands.saveAllNow();
+  }
+
+  public async saveNow() {
+    return commands.saveNow(this.id);
+  }
+}
+
+/**
+ * Create a new store with the given `id` and initial `state`.
+ *
+ * @example
+ * ```ts
+ * import { store, Store } from 'tauri-plugin-svelte';
+ *
+ * // These are equivalent.
+ * const store = new Store('counter', { count: 0 });
+ * const store = store('counter', { count: 0 });
+ * ```
+ */
+export function store<S extends State>(
+  id: string,
+  state: S,
+  options?: TauriPluginSvelteStoreOptions
+): Store<S> {
+  return new Store(id, state, options);
 }

@@ -7,6 +7,7 @@ export default defineConfig({
     'examples/pinia-nuxt/tsconfig.json',
     'examples/shared/javascript/tsconfig.json',
     'examples/shared/pinia/tsconfig.json',
+    'examples/svelte/tsconfig.json',
     'packages/shared/tsconfig.json',
     'packages/tauri-plugin-pinia/tsconfig.json',
     'packages/tauri-plugin-svelte/tsconfig.json',

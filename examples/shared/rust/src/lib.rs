@@ -8,9 +8,6 @@ use tauri::Wry;
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 use tauri_store::SaveStrategy;
 
-#[cfg(feature = "unstable-async")]
-use tauri::async_runtime::block_on;
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
 struct CounterStore {
@@ -20,16 +17,22 @@ struct CounterStore {
 pub fn build() -> tauri::Builder<Wry> {
   let mut builder = tauri::Builder::default();
 
-  #[cfg(feature = "pinia")]
-  {
-    builder = builder.plugin(
-      tauri_plugin_pinia::Builder::new()
-        .default_save_strategy(SaveStrategy::throttle_secs(3))
-        .autosave(Duration::from_secs(60))
-        .pretty(true)
-        .build(),
-    );
+  macro_rules! plugin {
+    ($name:ident) => {
+      builder = builder.plugin(
+        $name::Builder::new()
+          .default_save_strategy(SaveStrategy::throttle_secs(3))
+          .autosave(Duration::from_secs(60))
+          .pretty(true)
+          .build(),
+      );
+    };
   }
+
+  #[cfg(feature = "pinia")]
+  plugin!(tauri_plugin_pinia);
+  #[cfg(feature = "svelte")]
+  plugin!(tauri_plugin_svelte);
 
   builder
     .plugin(tauri_plugin_process::init())
@@ -39,10 +42,7 @@ pub fn build() -> tauri::Builder<Wry> {
       let handle = app.handle();
       (1..=3).for_each(|id| open_window(handle, id));
 
-      #[cfg(not(feature = "unstable-async"))]
       watch_counter(handle);
-      #[cfg(feature = "unstable-async")]
-      block_on(watch_counter(handle));
 
       Ok(())
     })
@@ -82,6 +82,8 @@ pub fn setup_tracing(krate: &str) -> Result<()> {
 
   #[cfg(feature = "pinia")]
   let directive = "tauri_plugin_pinia=trace";
+  #[cfg(feature = "svelte")]
+  let directive = "tauri_plugin_svelte=trace";
 
   let filter = EnvFilter::builder()
     .from_env()?

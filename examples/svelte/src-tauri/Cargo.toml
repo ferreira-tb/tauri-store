@@ -1,13 +1,9 @@
 [package]
-name = "example-pinia-nuxt"
-version = "0.9.1"
+name = "example-svelte"
+version = "0.0.2"
 publish = false
-
-[package.edition]
-workspace = true
-
-[package.rust-version]
-workspace = true
+edition.workspace = true
+rust-version.workspace = true
 
 [lints]
 workspace = true
@@ -31,8 +27,8 @@ default-features = false
 version = "2"
 features = ["devtools", "protocol-asset"]
 
-[dependencies.tauri-plugin-pinia]
-path = "../../../crates/tauri-plugin-pinia"
+[dependencies.tauri-plugin-svelte]
+path = "../../../crates/tauri-plugin-svelte"
 default-features = false
 
 [build-dependencies.tauri-build]
@@ -40,5 +36,5 @@ version = "2"
 features = []
 
 [features]
-pinia-nuxt = ["example-shared/pinia"]
+svelte = ["example-shared/svelte"]
 file-sync-all = ["example-shared/file-sync-all"]

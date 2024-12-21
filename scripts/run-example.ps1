@@ -13,7 +13,7 @@ $PSNativeCommandUseErrorActionPreference = $true
 
 pnpm run build:shared
 
-$ArgumentList = 'tauri dev'
+$ArgumentList = "tauri dev -f $Example"
 foreach ($Feature in $Features) {
   $ArgumentList += " -f $Feature"
 }

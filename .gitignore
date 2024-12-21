@@ -32,11 +32,14 @@ dist/
 **/.vitepress/cache
 
 # Nuxt
+.nuxt
 .output
 .data
-.nuxt
 .nitro
 .cache
+
+# Svelte
+.svelte-kit
 
 # Local files
 .env

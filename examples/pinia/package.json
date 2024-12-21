@@ -5,8 +5,8 @@
   "packageManager": "pnpm@9.15.1",
   "private": true,
   "scripts": {
-    "vite:dev": "vite",
-    "vite:build": "pnpm run type-check && vite build"
+    "vite:dev": "vite dev",
+    "vite:build": "vite build"
   },
   "dependencies": {
     "@vitejs/plugin-vue": "^5.2.1",

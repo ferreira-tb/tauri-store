@@ -1,5 +1,5 @@
 {
-  "plugins": ["prettier-plugin-css-order", "prettier-plugin-tailwindcss"],
+  "plugins": ["prettier-plugin-svelte", "prettier-plugin-css-order", "prettier-plugin-tailwindcss"],
   "endOfLine": "lf",
   "printWidth": 100,
   "tabWidth": 2,

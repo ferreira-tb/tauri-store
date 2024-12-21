@@ -1,5 +1,7 @@
 export type * from './types';
 
+export { Store, store, type StoreContract } from './store';
+
 export {
   clearAutosave,
   getDefaultSaveStrategy,

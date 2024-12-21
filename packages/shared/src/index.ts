@@ -14,7 +14,6 @@ export {
 
 export type {
   ConfigChangePayload,
-  CustomStoreProperties,
   State,
   StateChangePayload,
   StoreBackendOptions,
@@ -23,4 +22,5 @@ export type {
   StoreKeyFilter,
   StoreKeyFilterStrategy,
   StoreOptions,
+  TauriStoreContract,
 } from './types';

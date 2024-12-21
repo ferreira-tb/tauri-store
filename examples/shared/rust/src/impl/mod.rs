@@ -1,11 +1,17 @@
+#[cfg(feature = "pinia")]
 mod pinia;
+#[cfg(feature = "svelte")]
+mod svelte;
 
 use tauri::AppHandle;
-use tauri_plugin_pinia::ManagerExt;
 use tracing::{error, warn};
 
 pub(crate) mod prelude {
+  #[cfg(feature = "pinia")]
   pub(crate) use super::pinia::*;
+  #[cfg(feature = "svelte")]
+  pub(crate) use super::svelte::*;
+
   pub(crate) use super::{on_error, on_warn, watch_counter};
 }
 
@@ -22,9 +28,9 @@ pub(crate) fn on_warn(message: String) {
 }
 
 macro_rules! watch_counter {
-  ($kind:ident) => {
-    #[cfg(not(feature = "unstable-async"))]
+  ($plugin:ident, $kind:ident) => {
     pub(crate) fn watch_counter(app: &AppHandle) {
+      use $plugin::ManagerExt;
       let _ = app.$kind().watch("counter-store", |handle| {
         handle
           .$kind()
@@ -33,25 +39,10 @@ macro_rules! watch_counter {
           .map(drop)
       });
     }
-
-    #[cfg(feature = "unstable-async")]
-    pub(crate) async fn watch_counter(app: &AppHandle) {
-      let _ = app
-        .$kind()
-        .watch("counter-store", |handle| {
-          Box::pin(async move {
-            handle
-              .$kind()
-              .try_get::<i32>("counter-store", "counter")
-              .await
-              .inspect(|counter| println!("counter: {counter}"))
-              .map(drop)
-          })
-        })
-        .await;
-    }
   };
 }
 
 #[cfg(feature = "pinia")]
-watch_counter!(pinia);
+watch_counter!(tauri_plugin_pinia, pinia);
+#[cfg(feature = "svelte")]
+watch_counter!(tauri_plugin_svelte, svelte);

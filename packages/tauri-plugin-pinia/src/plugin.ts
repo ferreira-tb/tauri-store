@@ -2,7 +2,7 @@ import { Store } from './store';
 import * as commands from './commands';
 import type { PiniaPluginContext } from 'pinia';
 import type { TauriPluginPiniaOptions } from './types';
-import type { CustomStoreProperties } from '@tauri-store/shared';
+import type { TauriStoreContract } from '@tauri-store/shared';
 
 /**
  * Creates the Pinia plugin.
@@ -28,10 +28,12 @@ import type { CustomStoreProperties } from '@tauri-store/shared';
 export function createPlugin(pluginOptions: TauriPluginPiniaOptions = {}) {
   return function (ctx: PiniaPluginContext) {
     const store = new Store(ctx, pluginOptions);
-    const $tauri: CustomStoreProperties = {
+    const $tauri: TauriStoreContract = {
       getPath: () => commands.getStorePath(store.id),
       save: () => commands.save(store.id),
       saveAll: () => commands.saveAll(),
+      saveAllNow: () => commands.saveAllNow(),
+      saveNow: () => commands.save(store.id),
       start: () => store.start(),
       stop: () => store.stop(),
     };

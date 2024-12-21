@@ -1,0 +1,26 @@
+{
+  "name": "example-svelte",
+  "version": "0.0.2",
+  "type": "module",
+  "packageManager": "pnpm@9.15.1",
+  "private": true,
+  "scripts": {
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "vite:dev": "vite dev",
+    "vite:build": "vite build"
+  },
+  "dependencies": {
+    "@sveltejs/adapter-auto": "^3.3.1",
+    "@sveltejs/kit": "^2.14.0",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/plugin-process": "^2.2.0",
+    "@tauri-apps/plugin-shell": "^2.2.0",
+    "@tb-dev/utils": "^4.1.0",
+    "example-shared-js": "workspace:*",
+    "svelte": "^5.15.0",
+    "svelte-check": "^4.1.1",
+    "tauri-plugin-svelte": "workspace:*"
+  }
+}
