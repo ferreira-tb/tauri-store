@@ -105,6 +105,7 @@ export abstract class BaseStore<S extends State = State> {
       const payload = this.changeQueue.pop();
       if (this.enabled && payload && payload.id === this.id) {
         this.unwatch?.();
+        this.unwatch = null;
         this.patchSelf(payload.state);
         this.changeQueue = [];
         this.unwatch = this.watch();

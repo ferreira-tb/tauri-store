@@ -55,7 +55,7 @@ export type StoreContract<S extends State> = TauriStoreContract & Writable<S>;
  */
 export class Store<S extends State> extends BaseStore<S> implements StoreContract<S> {
   private readonly store: Writable<S>;
-  protected override options: TauriPluginSvelteStoreOptions;
+  protected options: TauriPluginSvelteStoreOptions;
   protected override readonly flush = tick;
 
   constructor(
@@ -84,7 +84,7 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     this.store.set(value);
   }
 
-  public update(updater: Updater<S>): void {
+  public update(updater: Updater<S>) {
     this.store.update(updater);
   }
 
@@ -104,22 +104,33 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     await commands.unload(this.id);
   }
 
-  protected override watch() {
-    const patchBackend = (value: S) => this.patchBackend(value);
+  protected watch() {
+    // A Svelte subscriber is called immediately upon subscription.
+    // If we try to sync on the first call, we'll end up with an infinite loop.
+    let isFirstCall = true;
+    const patchBackend = (value: S) => {
+      if (isFirstCall) {
+        isFirstCall = false;
+        return;
+      }
+
+      this.patchBackend(value);
+    };
+
     if (this.syncStrategy === 'debounce') {
       const fn = debounce(patchBackend, this.syncInterval);
-      return this.store.subscribe(fn);
+      return this.subscribe(fn);
     } else if (this.syncStrategy === 'throttle') {
       const fn = throttle(patchBackend, this.syncInterval);
-      return this.store.subscribe(fn);
+      return this.subscribe(fn);
     }
 
-    return this.store.subscribe(patchBackend);
+    return this.subscribe(patchBackend);
   }
 
-  protected override patchSelf(state: S) {
+  protected patchSelf(state: S) {
     const _state = this.applyKeyFilters(state);
-    this.store.update((value) => Object.assign(value, _state));
+    this.update((value) => Object.assign(value, _state));
   }
 
   protected patchBackend(state: S) {

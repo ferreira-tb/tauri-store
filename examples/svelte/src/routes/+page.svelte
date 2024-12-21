@@ -17,7 +17,7 @@
     throttledStore,
   } from '../lib/stores';
 
-  function onKeydown(event: KeyboardEvent) {
+  function onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') void exit(0);
   }
 
@@ -30,7 +30,7 @@
   });
 </script>
 
-<svelte:window onkeydown={onKeydown} />
+<svelte:window onkeydown={onKeyDown} />
 
 <main>
   <div class="action">
