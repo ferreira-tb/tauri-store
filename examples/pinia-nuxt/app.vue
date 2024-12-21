@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Home from 'example-shared-vue/src/Home.vue';
+import Home from 'example-shared-pinia/src/Home.vue';
 </script>
 
 <template>

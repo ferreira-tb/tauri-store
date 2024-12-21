@@ -3,11 +3,13 @@ $PSNativeCommandUseErrorActionPreference = $true
 
 pnpm run -F docs build
 
+$WithNamespace = @('shared')
+
 function Build-PackageDocs {
   param([string]$Name)
 
-  if ($Name -eq 'shared') {
-    $Name = '@tauri-store/shared'
+  if ($WithNamespace -contains $Name) {
+    $Name = "@tauri-store/$Name"
   }
 
   Invoke-Expression "pnpm run -F $Name typedoc"

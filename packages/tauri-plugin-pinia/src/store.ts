@@ -1,25 +1,19 @@
 import * as commands from './commands';
-import type { Option } from '@tb-dev/utils';
 import type { PiniaPluginContext } from 'pinia';
 import { nextTick, watch, type WatchOptions } from 'vue';
 import type { TauriPluginPiniaOptions, TauriPluginPiniaStoreOptions } from './types';
 import {
   BaseStore,
   debounce,
-  listen,
   mergeStoreOptions,
   type State,
-  type StateChangePayload,
-  StoreEvent,
   throttle,
   TimeStrategy,
 } from '@tauri-store/shared';
 
 export class Store extends BaseStore {
   protected readonly options: TauriPluginPiniaStoreOptions;
-
-  private unsubscribe: Option<() => void>;
-  private unlisten: Option<() => void>;
+  protected override readonly flush = () => nextTick();
 
   constructor(
     private readonly ctx: PiniaPluginContext,
@@ -43,39 +37,19 @@ export class Store extends BaseStore {
     };
   }
 
-  public async start() {
-    if (this.enabled) return;
-    try {
-      this.enabled = true;
-      this.unsubscribe?.();
-
-      await this.load();
-      await this.listenConfigChanges();
-      await this.setOptions();
-
-      const fn = await listen<StateChangePayload>(StoreEvent.StateChange, ({ payload }) => {
-        if (this.enabled && payload.id === this.id) {
-          this.changeQueue.push(payload);
-          this.processChangeQueue().catch((err) => this.onError?.(err));
-        }
-      });
-
-      this.unlisten?.();
-      this.unlisten = fn;
-    } catch (err) {
-      this.onError?.(err);
-    }
-  }
-
-  private async load() {
+  protected async load() {
     const state = await commands.load(this.id);
     this.patchSelf(state);
 
-    await nextTick();
-    this.unsubscribe = this.subscribe();
+    await this.flush();
+    this.unwatch = this.watch();
   }
 
-  private subscribe() {
+  protected async unload() {
+    await commands.unload(this.id);
+  }
+
+  protected watch() {
     const patchBackend = this.patchBackend.bind(this);
     const options: WatchOptions = {
       deep: this.options.deep,
@@ -91,19 +65,6 @@ export class Store extends BaseStore {
     }
 
     return watch(this.ctx.store.$state, patchBackend, options);
-  }
-
-  protected async processChangeQueue() {
-    while (this.changeQueue.length > 0) {
-      await nextTick();
-      const payload = this.changeQueue.pop();
-      if (this.enabled && payload && payload.id === this.id) {
-        this.unsubscribe?.();
-        this.patchSelf(payload.state);
-        this.changeQueue = [];
-        this.unsubscribe = this.subscribe();
-      }
-    }
   }
 
   protected patchSelf(state: State) {
@@ -125,18 +86,6 @@ export class Store extends BaseStore {
         saveStrategy: this.options.saveStrategy,
         saveOnChange: this.options.saveOnChange,
       });
-    } catch (err) {
-      this.onError?.(err);
-    }
-  }
-
-  public async stop() {
-    try {
-      this.unlisten?.();
-      this.unsubscribe?.();
-      this.enabled = false;
-      this.changeQueue = [];
-      await commands.unload(this.id);
     } catch (err) {
       this.onError?.(err);
     }

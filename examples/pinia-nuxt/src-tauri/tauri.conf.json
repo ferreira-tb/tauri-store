@@ -1,10 +1,10 @@
 {
-  "productName": "example-nuxt",
+  "productName": "example-pinia-nuxt",
   "version": "0.9.1",
   "identifier": "com.tbdev.example",
   "build": {
-    "beforeDevCommand": "pnpm run -F example-nuxt nuxt:dev",
-    "beforeBuildCommand": "pnpm run -F example-nuxt nuxt:generate",
+    "beforeDevCommand": "pnpm run -F example-pinia-nuxt nuxt:dev",
+    "beforeBuildCommand": "pnpm run -F example-pinia-nuxt nuxt:generate",
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1422"
   },

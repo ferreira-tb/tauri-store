@@ -1,5 +1,5 @@
 {
-  "name": "example-shared-vue",
+  "name": "example-shared-pinia",
   "version": "0.9.1",
   "type": "module",
   "packageManager": "pnpm@9.15.1",

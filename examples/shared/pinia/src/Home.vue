@@ -2,7 +2,7 @@
 import { onMounted } from 'vue';
 import { onKeyDown } from '@vueuse/core';
 import { exit } from '@tauri-apps/plugin-process';
-import { defineGlobalProperty } from './lib/debug';
+import { defineGlobalProperty } from 'example-shared-pinia/src/lib/debug';
 import { onError, printCounter } from 'example-shared-js/src/index.js';
 import {
   clearAutosave,
@@ -19,7 +19,7 @@ import {
   useDebouncedStore,
   useStore,
   useThrottledStore,
-} from './stores';
+} from 'example-shared-pinia/src/stores';
 
 const store = useStore();
 const { start, stop } = store.$tauri;

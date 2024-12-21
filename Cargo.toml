@@ -1,8 +1,8 @@
 [workspace]
 members = [
   "crates/*",
-  "examples/nuxt/src-tauri",
   "examples/pinia/src-tauri",
+  "examples/pinia-nuxt/src-tauri",
   "examples/shared/rust",
 ]
 resolver = "2"

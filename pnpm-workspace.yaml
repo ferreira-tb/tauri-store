@@ -1,6 +1,6 @@
 packages:
   - 'docs'
   - 'examples/pinia'
-  - 'examples/nuxt'
+  - 'examples/pinia-nuxt'
   - 'examples/shared/*'
   - 'packages/*'
