@@ -3,7 +3,6 @@ import { TimeStrategy } from './utils/time-strategy';
 import type { Option, Writeable } from '@tb-dev/utils';
 import type {
   ConfigChangePayload,
-  PluginOptions,
   State,
   StateChangePayload,
   StoreBackendRawOptions,
@@ -12,9 +11,9 @@ import type {
   StoreOptions,
 } from './types';
 
-export abstract class BasePlugin {
+export abstract class BaseStore {
   public abstract readonly id: string;
-  protected abstract readonly storeOptions: StoreOptions;
+  protected abstract readonly options: StoreOptions;
 
   protected enabled = false;
   protected changeQueue: StateChangePayload[] = [];
@@ -29,17 +28,17 @@ export abstract class BasePlugin {
   protected abstract patchSelf(state: State): void;
   protected abstract patchBackend(state: State): void;
 
-  protected abstract setStoreOptions(): Promise<void>;
+  protected abstract setOptions(): Promise<void>;
 
   protected patchConfig(config: StoreBackendRawOptions) {
     if (typeof config.saveOnChange === 'boolean') {
-      this.storeOptions.saveOnChange = config.saveOnChange;
+      this.options.saveOnChange = config.saveOnChange;
     }
 
     if (Array.isArray(config.saveStrategy)) {
       const saveStrategy = TimeStrategy.parse(config.saveStrategy);
-      this.storeOptions.saveInterval = saveStrategy.interval;
-      this.storeOptions.saveStrategy = saveStrategy.strategy;
+      this.options.saveInterval = saveStrategy.interval;
+      this.options.saveStrategy = saveStrategy.strategy;
     }
   }
 
@@ -65,48 +64,47 @@ export abstract class BasePlugin {
   }
 
   protected applyKeyFilters(state: State) {
-    const keyFilter = this.storeOptions.filterKeys;
-
-    if (keyFilter) {
-      const result: State = {};
-      const strategy = this.storeOptions.filterKeysStrategy ?? 'omit';
-
-      for (const [key, value] of Object.entries(state)) {
-        if (!shouldFilterKey(keyFilter, strategy, key)) {
-          result[key] = value;
-        }
-      }
-
-      return result;
+    if (!this.options.filterKeys) {
+      return state;
     }
 
-    return state;
+    const result: State = {};
+    const filter = this.options.filterKeys;
+    const strategy = this.options.filterKeysStrategy ?? 'omit';
+
+    for (const [key, value] of Object.entries(state)) {
+      if (!shouldFilterKey(filter, strategy, key)) {
+        result[key] = value;
+      }
+    }
+
+    return result;
   }
 
   protected get syncStrategy() {
-    return this.storeOptions.syncStrategy;
+    return this.options.syncStrategy;
   }
 
   protected get syncInterval() {
-    return this.storeOptions.syncInterval;
+    return this.options.syncInterval;
   }
 
   protected get onError() {
-    return this.storeOptions.onError;
+    return this.options.onError;
   }
 }
 
 /**
  * @internal
  */
-export function mergePluginOptions<T extends PluginOptions, U extends PluginOptions>(
+export function mergeStoreOptions<T extends StoreOptions, U extends StoreOptions>(
   target: T = {} as T,
   source: U = {} as U
 ): T & U {
-  type Key = keyof PluginOptions;
+  type Key = keyof StoreOptions;
   for (const [key, value] of Object.entries(source)) {
     if (typeof target[key as Key] === 'undefined') {
-      (target as Writeable<PluginOptions>)[key as Key] = value;
+      (target as Writeable<StoreOptions>)[key as Key] = value;
     }
   }
 
@@ -114,21 +112,21 @@ export function mergePluginOptions<T extends PluginOptions, U extends PluginOpti
 }
 
 function shouldFilterKey(
-  keyFilter: StoreKeyFilter,
+  filter: StoreKeyFilter,
   strategy: StoreKeyFilterStrategy,
   key: string
 ): boolean {
   return (
-    (strategy === 'omit' && isStoreKeyMatch(keyFilter, key)) ||
-    (strategy === 'pick' && !isStoreKeyMatch(keyFilter, key)) ||
+    (strategy === 'omit' && isStoreKeyMatch(filter, key)) ||
+    (strategy === 'pick' && !isStoreKeyMatch(filter, key)) ||
     (typeof strategy === 'function' && !strategy(key))
   );
 }
 
-function isStoreKeyMatch(keyFilter: StoreKeyFilter, key: string): boolean {
+function isStoreKeyMatch(filter: StoreKeyFilter, key: string): boolean {
   return (
-    (typeof keyFilter === 'string' && key === keyFilter) ||
-    (Array.isArray(keyFilter) && keyFilter.includes(key)) ||
-    (keyFilter instanceof RegExp && keyFilter.test(key))
+    (typeof filter === 'string' && key === filter) ||
+    (Array.isArray(filter) && filter.includes(key)) ||
+    (filter instanceof RegExp && filter.test(key))
   );
 }

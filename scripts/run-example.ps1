@@ -18,8 +18,10 @@ foreach ($Feature in $Features) {
   $ArgumentList += " -f $Feature"
 }
 
-$Location = Get-Location
-$WorkingDir = Join-Path -Path $Location.Path -ChildPath "examples/$Example"
+$WorkingDir = Get-Location |
+  Select-Object -ExpandProperty Path |
+  Join-Path -ChildPath "examples/$Example"
+
 $Params = @{
   FilePath         = 'cargo'
   ArgumentList     = $ArgumentList

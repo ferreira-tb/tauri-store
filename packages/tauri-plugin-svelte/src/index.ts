@@ -1,3 +1,5 @@
+export type * from './types';
+
 export {
   clearAutosave,
   getDefaultSaveStrategy,

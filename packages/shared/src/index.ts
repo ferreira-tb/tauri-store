@@ -4,7 +4,7 @@ export { debounce, throttle } from './utils';
 
 export { listen, StoreEvent } from './event';
 
-export { BasePlugin, mergePluginOptions } from './plugin';
+export { BaseStore, mergeStoreOptions } from './store';
 
 export {
   type LooseTimeStrategyKind,
@@ -15,11 +15,11 @@ export {
 export type {
   ConfigChangePayload,
   CustomStoreProperties,
-  PluginOptions,
   State,
   StateChangePayload,
   StoreBackendOptions,
   StoreBackendRawOptions,
+  StoreFrontendOptions,
   StoreKeyFilter,
   StoreKeyFilterStrategy,
   StoreOptions,

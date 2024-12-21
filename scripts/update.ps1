@@ -16,6 +16,7 @@ $PSNativeCommandUseErrorActionPreference = $true
 $Skip = @(
   '@tauri-apps/api',
   'pinia',
+  'svelte',
   'tokio',
   'typescript'
 )
