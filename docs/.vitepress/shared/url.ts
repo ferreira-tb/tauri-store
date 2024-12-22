@@ -1,7 +1,8 @@
 import type { Plugin } from '../../types';
 
-export function docsRs(plugin: Plugin, extra?: string) {
-  const url = `https://docs.rs/${plugin.name}/latest/${plugin.snakeName}`;
+export function docsRs(plugin: Plugin | string, extra?: string) {
+  const name = typeof plugin === 'string' ? plugin : plugin.snakeName;
+  const url = `https://tb.dev.br/tauri-store/rust-docs/${name}`;
   return extra ? `${url}/${extra}` : url;
 }
 
