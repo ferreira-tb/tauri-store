@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -32,6 +32,8 @@ jobs:
       - name: Build
         shell: pwsh
         run: |
+          sudo apt update
+          sudo apt-get install libgtk-3-dev
           pnpm install
           pnpm run codegen
           pnpm run build
@@ -48,7 +50,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     needs: build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     name: Deploy
     steps:
       - name: Deploy to GitHub Pages
