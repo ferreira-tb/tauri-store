@@ -28,7 +28,7 @@ function Build-CrateDocs {
   param([string]$Name)
 
   if ($SkipCrate -notcontains $Name) {
-    Invoke-Expression "cargo doc -p $Name --no-deps"
+    Invoke-Expression "cargo +nightly doc -p $Name --no-deps"
   }
 }
 
