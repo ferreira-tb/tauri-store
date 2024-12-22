@@ -3,3 +3,5 @@ dist
 target
 pnpm-lock.yaml
 schemas
+.svelte-kit
+.output

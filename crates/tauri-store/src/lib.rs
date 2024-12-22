@@ -5,6 +5,7 @@ mod collection;
 mod error;
 mod event;
 mod manager;
+pub mod prelude;
 mod store;
 
 use tauri::{Manager, Runtime};

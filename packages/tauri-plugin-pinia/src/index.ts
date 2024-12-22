@@ -1,5 +1,5 @@
 import type { TauriPluginPiniaStoreOptions } from './types';
-import type { CustomStoreProperties } from '@tauri-store/shared';
+import type { TauriStoreContract } from '@tauri-store/shared';
 
 export type * from './types';
 
@@ -23,7 +23,7 @@ export {
 
 declare module 'pinia' {
   export interface PiniaCustomProperties {
-    readonly $tauri: CustomStoreProperties;
+    readonly $tauri: TauriStoreContract;
   }
 
   export interface DefineStoreOptionsBase<S, Store> {

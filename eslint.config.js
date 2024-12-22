@@ -3,14 +3,17 @@ import { defineConfig } from '@tb-dev/eslint-config';
 export default defineConfig({
   project: [
     'docs/tsconfig.json',
-    'examples/nuxt/tsconfig.json',
     'examples/pinia/tsconfig.json',
-    'examples/shared-js/tsconfig.json',
-    'examples/shared-vue/tsconfig.json',
+    'examples/pinia-nuxt/tsconfig.json',
+    'examples/shared/javascript/tsconfig.json',
+    'examples/shared/pinia/tsconfig.json',
+    'examples/svelte/tsconfig.json',
     'packages/shared/tsconfig.json',
     'packages/tauri-plugin-pinia/tsconfig.json',
+    'packages/tauri-plugin-svelte/tsconfig.json',
   ],
   features: {
+    svelte: false,
     vue: true,
   },
   ignores: ['**/.nuxt/**', '**/tauri-store-cli/assets/**'],

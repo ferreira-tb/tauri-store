@@ -4,7 +4,7 @@
   "description": "Persistent Pinia stores for Tauri",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@9.15.1",
   "homepage": "https://tb.dev.br/tauri-store",
   "license": "MIT",
   "repository": {
@@ -22,10 +22,11 @@
     }
   ],
   "keywords": [
-    "vue",
     "tauri",
-    "pinia",
     "plugin",
+    "store",
+    "pinia",
+    "vue",
     "nuxt"
   ],
   "files": [

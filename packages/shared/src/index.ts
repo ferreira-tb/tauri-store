@@ -4,19 +4,23 @@ export { debounce, throttle } from './utils';
 
 export { listen, StoreEvent } from './event';
 
-export { BasePlugin, mergePluginOptions } from './plugin';
+export { BaseStore, mergeStoreOptions } from './store';
 
-export { TimeStrategy, type TimeStrategyKind } from './utils/time-strategy';
+export {
+  type LooseTimeStrategyKind,
+  TimeStrategy,
+  type TimeStrategyKind,
+} from './utils/time-strategy';
 
 export type {
   ConfigChangePayload,
-  CustomStoreProperties,
-  PluginOptions,
   State,
   StateChangePayload,
   StoreBackendOptions,
   StoreBackendRawOptions,
+  StoreFrontendOptions,
   StoreKeyFilter,
   StoreKeyFilterStrategy,
   StoreOptions,
+  TauriStoreContract,
 } from './types';

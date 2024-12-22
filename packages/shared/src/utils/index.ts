@@ -15,7 +15,7 @@ export function throttle<T extends (...args: any) => any>(f: T, wait?: number): 
  */
 export function parseBigInt(value: string): number {
   if (BigInt(value) > Number.MAX_SAFE_INTEGER) {
-    throw new TypeError(`Value ${value} is too large to be represented as a number`);
+    throw new TypeError(`value ${value} is too large to be represented as a number`);
   }
 
   return Number.parseInt(value, 10);

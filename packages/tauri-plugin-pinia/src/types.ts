@@ -1,12 +1,19 @@
 import type { WatchOptions } from 'vue';
-import type { PluginOptions, StoreOptions } from '@tauri-store/shared';
+import type { StoreFrontendOptions, StoreOptions } from '@tauri-store/shared';
 
-export type { StoreOptions } from '@tauri-store/shared';
+export type { StoreBackendOptions, StoreFrontendOptions, StoreOptions } from '@tauri-store/shared';
 
-export interface TauriPluginPiniaOptions extends PluginOptions {
-  /** @default true */
+export interface TauriPluginPiniaOptions extends StoreFrontendOptions {
+  /**
+   * @see https://vuejs.org/api/reactivity-core.html#watch
+   * @default true
+   */
   readonly deep?: WatchOptions['deep'];
-  /** @default 'pre' */
+
+  /**
+   * @see https://vuejs.org/api/reactivity-core.html#watch
+   * @default 'pre'
+   */
   readonly flush?: WatchOptions['flush'];
 }
 

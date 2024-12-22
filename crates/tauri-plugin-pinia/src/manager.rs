@@ -2,7 +2,7 @@ use crate::pinia::Pinia;
 use tauri::{AppHandle, Manager, Runtime, State, WebviewWindow, Window};
 
 pub trait ManagerExt<R: Runtime>: Manager<R> {
-  /// Returns a handle to the pinia plugin.
+  /// Returns a handle to the Pinia plugin.
   ///
   /// # Panics
   ///

@@ -1,4 +1,7 @@
 packages:
   - 'docs'
-  - 'examples/*'
+  - 'examples/pinia'
+  - 'examples/pinia-nuxt'
+  - 'examples/shared/*'
+  - 'examples/svelte'
   - 'packages/*'

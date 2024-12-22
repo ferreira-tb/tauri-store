@@ -2,18 +2,17 @@
   "name": "example-pinia",
   "version": "0.9.1",
   "type": "module",
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@9.15.1",
   "private": true,
   "scripts": {
-    "type-check": "vue-tsc --noEmit",
-    "vite:dev": "vite",
-    "vite:build": "pnpm run type-check && vite build"
+    "vite:dev": "vite dev",
+    "vite:build": "vite build"
   },
   "dependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
     "@vueuse/core": "^12.0.0",
     "example-shared-js": "workspace:*",
-    "example-shared-vue": "workspace:*",
+    "example-shared-pinia": "workspace:*",
     "pinia": "^2.3.0",
     "tauri-plugin-pinia": "workspace:*",
     "vue": "^3.5.13"

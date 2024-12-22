@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@nightly
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -29,7 +29,9 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - run: |
+      - name: Build
+        shell: pwsh
+        run: |
           pnpm install
           pnpm run codegen
           pnpm run build

@@ -7,7 +7,7 @@ export interface ConfigChangePayload {
 }
 
 /** @internal */
-export interface StateChangePayload {
+export interface StateChangePayload<T extends State = State> {
   id: string;
-  state: State;
+  state: T;
 }

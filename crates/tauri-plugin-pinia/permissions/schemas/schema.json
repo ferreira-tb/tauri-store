@@ -485,7 +485,7 @@
           "const": "deny-unload"
         },
         {
-          "description": "Default permissions for the pinia plugin",
+          "description": "Default permissions for the Pinia plugin",
           "type": "string",
           "const": "default"
         }

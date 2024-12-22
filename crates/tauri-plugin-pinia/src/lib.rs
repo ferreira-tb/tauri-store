@@ -11,14 +11,11 @@ use std::path::PathBuf;
 use std::time::Duration;
 use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
-use tauri_store::{CollectionBuilder, StoreCollection};
+use tauri_store::CollectionBuilder;
 
 pub use manager::ManagerExt;
 pub use pinia::Pinia;
-pub use tauri_store::{
-  with_store, BoxResult, Error, Json, OnLoadFn, OnLoadResult, Result, SaveStrategy, Store,
-  StoreOptions, StoreState, StoreStateExt, WatcherResult,
-};
+pub use tauri_store::prelude::*;
 
 #[cfg(feature = "unstable-async")]
 use tauri::async_runtime::block_on;
@@ -69,46 +66,10 @@ impl<R: Runtime> Builder<R> {
   }
 }
 
-impl<R: Runtime> Default for Builder<R> {
-  fn default() -> Self {
-    Self {
-      path: None,
-      default_save_strategy: SaveStrategy::default(),
-      autosave: None,
-      on_load: None,
-      pretty: false,
-      save_denylist: HashSet::default(),
-      sync_denylist: HashSet::default(),
-    }
-  }
-}
-
 #[expect(clippy::unnecessary_wraps)]
-fn setup<R: Runtime>(app: &AppHandle<R>, mut builder: Builder<R>) -> BoxResult<()> {
-  let path = builder.path.take().unwrap_or_else(|| {
-    app
-      .path()
-      .app_data_dir()
-      .expect("failed to resolve app data dir")
-      .join("pinia")
-  });
-
-  let mut collection = StoreCollection::<R>::builder()
-    .path(path)
-    .default_save_strategy(builder.default_save_strategy)
-    .pretty(builder.pretty)
-    .save_denylist(builder.save_denylist)
-    .sync_denylist(builder.sync_denylist);
-
-  if let Some(on_load) = builder.on_load {
-    collection = collection.on_load(on_load);
-  }
-
-  if let Some(duration) = builder.autosave {
-    collection = collection.autosave(duration);
-  };
-
-  app.manage(Pinia(collection.build(app)));
+fn setup<R: Runtime>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()> {
+  let collection = builder.into_collection(app);
+  app.manage(Pinia(collection));
 
   Ok(())
 }
