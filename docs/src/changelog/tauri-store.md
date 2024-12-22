@@ -4,14 +4,17 @@
 
 _Nothing yet._
 
-## 0.5.0
+## 0.5.0 {#v0-5-0}
+
+### Breaking changes
+
+- Remove `unstable-async` feature.
 
 ### Enhancements
 
-- Add prelude module.
-- Remove `unstable-async` feature.
+- Add [`prelude`](https://docs.rs/tauri-store/0.5.0/tauri_store/prelude/index.html) module.
 
-## 0.4.0
+## 0.4.0 {#v0-4-0}
 
 ### Breaking changes
 
