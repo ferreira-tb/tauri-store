@@ -43,6 +43,7 @@ const defaultSidebar: ThemeConfig['sidebar'] = [
 const changelogSidebar: ThemeConfig['sidebar'] = [
   { text: 'tauri-store', link: '/changelog/tauri-store' },
   { text: 'tauri-plugin-pinia', link: '/changelog/tauri-plugin-pinia' },
+  { text: 'tauri-plugin-svelte', link: '/changelog/tauri-plugin-svelte' },
 ];
 
 export default defineConfig({
