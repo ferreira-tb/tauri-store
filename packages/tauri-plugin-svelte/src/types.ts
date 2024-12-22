@@ -1,6 +1,7 @@
 import type { StoreOptions } from '@tauri-store/shared';
 
 export type {
+  State,
   StoreBackendOptions,
   StoreFrontendOptions,
   StoreOptions,
