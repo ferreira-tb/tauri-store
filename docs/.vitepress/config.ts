@@ -88,10 +88,19 @@ export default defineConfig({
 });
 
 function docsRsItems() {
-  return plugins.map((plugin) => ({
-    text: plugin.name,
-    link: docsRs(plugin),
-  }));
+  const items = [
+    {
+      text: 'tauri-store',
+      link: docsRs('tauri_store'),
+    },
+  ];
+
+  return items.concat(
+    plugins.map((plugin) => ({
+      text: plugin.name,
+      link: docsRs(plugin),
+    }))
+  );
 }
 
 function referenceItems() {

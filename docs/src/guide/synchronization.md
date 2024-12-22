@@ -8,6 +8,12 @@ Whenever the state changes, the store notifies Rust to keep the frontend and bac
 
 </div>
 
+<div class="tauri-plugin-svelte">
+
+<!--@include: ../examples/synchronization/svelte.md-->
+
+</div>
+
 ::: tip
 For a detailed explanation of the differences between debouncing and throttling, take a look at [this article](https://kettanaito.com/blog/debounce-vs-throttle).
 :::

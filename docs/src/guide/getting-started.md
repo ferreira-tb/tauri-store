@@ -16,7 +16,7 @@ Install the Rust crate by adding the following to your `Cargo.toml` file:
 
 ```toml-vue
 [dependencies]
-{{ `${plugin.name} = ${plugin.shortVersion}` }}
+{{ `${plugin.name} = "${plugin.shortVersion}"` }}
 ```
 
 Install the JavaScript package with your preferred package manager:
@@ -73,5 +73,11 @@ tauri::Builder::default()
 <div class="tauri-plugin-pinia">
 
 <!--@include: ../examples/getting-started/pinia.md-->
+
+</div>
+
+<div class="tauri-plugin-svelte">
+
+<!--@include: ../examples/getting-started/svelte.md-->
 
 </div>

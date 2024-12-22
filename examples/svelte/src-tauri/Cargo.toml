@@ -1,9 +1,13 @@
 [package]
 name = "example-svelte"
-version = "0.0.2"
+version = "0.1.0"
 publish = false
-edition.workspace = true
-rust-version.workspace = true
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
 
 [lints]
 workspace = true

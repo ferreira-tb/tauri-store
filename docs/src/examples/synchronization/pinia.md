@@ -1,10 +1,7 @@
-```ts
+```ts{8,9}
 function store() {
   const counter = ref(0);
-
-  return {
-    counter,
-  };
+  return { counter };
 }
 
 export const useStore = defineStore('store', store, {

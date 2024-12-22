@@ -1,6 +1,6 @@
 {
   "productName": "example-svelte",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "identifier": "com.tbdev.example",
   "build": {
     "beforeDevCommand": "pnpm run -F example-svelte vite:dev",
