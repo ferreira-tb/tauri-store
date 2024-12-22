@@ -1,13 +1,10 @@
-```ts
+```ts{11}
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
 function store() {
   const counter = ref(0);
-
-  return {
-    counter,
-  };
+  return { counter };
 }
 
 export const useStore = defineStore('store', store, {

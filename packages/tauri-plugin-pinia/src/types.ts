@@ -1,7 +1,12 @@
 import type { WatchOptions } from 'vue';
 import type { StoreFrontendOptions, StoreOptions } from '@tauri-store/shared';
 
-export type { StoreBackendOptions, StoreFrontendOptions, StoreOptions } from '@tauri-store/shared';
+export type {
+  StoreBackendOptions,
+  StoreFrontendOptions,
+  StoreOptions,
+  TauriStoreContract,
+} from '@tauri-store/shared';
 
 export interface TauriPluginPiniaOptions extends StoreFrontendOptions {
   /**

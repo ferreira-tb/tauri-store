@@ -40,19 +40,15 @@ export const useCounterStore = defineStore('counter', () => {
 
 5. Start the plugin:
 
-::: code-group
-
-```ts{4} [src/App.vue]
-import { useCounterStore } from './stores/counter';
+```ts{4}
+import { useCounterStore } from '@/stores/counter';
 
 const counterStore = useCounterStore();
 await counterStore.$tauri.start();
 ```
 
-:::
-
-::: tip
-The stores won't be saved nor synchronized until you call the `start` method.
+::: info
+The stores won't be saved nor synchronized until you call the `start` method, but they can still be used as regular Pinia stores.
 :::
 
 ### Nuxt
