@@ -2,6 +2,10 @@
 
 ## Next
 
+_Nothing yet._
+
+## 0.10.0
+
 ### Breaking changes
 
 - Update [`tauri-store`](https://docs.rs/tauri-store/0.5.0/tauri_store/) to [`0.5.0`](./tauri-store.md#050).

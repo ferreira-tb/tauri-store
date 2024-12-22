@@ -15,7 +15,7 @@ pub trait StoreStateExt {
 
 impl StoreStateExt for StoreState {
   fn parse<T: DeserializeOwned>(&self) -> Result<T> {
-    from_value(json!(self)).map_err(Into::into)
+    Ok(from_value(json!(self))?)
   }
 
   fn try_get<T: DeserializeOwned>(&self, key: impl AsRef<str>) -> Result<T> {
@@ -24,6 +24,6 @@ impl StoreStateExt for StoreState {
       return io_err!(NotFound, "key not found: {key}");
     };
 
-    from_value(value).map_err(Into::into)
+    Ok(from_value(value)?)
   }
 }

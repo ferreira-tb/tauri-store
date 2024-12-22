@@ -2,6 +2,10 @@
 
 ## Next
 
+_Nothing yet._
+
+## 0.5.0
+
 ### Enhancements
 
 - Add prelude module.
@@ -39,4 +43,4 @@
 
 ### Performance
 
-- Use the [`ResourceTable`](https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html#) to manage each store independently, instead of using a single hash map for all of them.
+- Use the [`ResourceTable`](https://docs.rs/tauri/2.1.1/tauri/struct.ResourceTable.html) to manage each store independently, instead of using a single hash map for all of them.
