@@ -29,7 +29,9 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      - run: |
+      - name: Build
+        shell: pwsh
+        run: |
           pnpm install
           pnpm run codegen
           pnpm run build

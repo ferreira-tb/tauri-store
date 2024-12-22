@@ -2,7 +2,9 @@
 
 ## Next
 
-_Nothing yet._
+### Enhancements
+
+- Add prelude module.
 
 ## 0.4.0
 
