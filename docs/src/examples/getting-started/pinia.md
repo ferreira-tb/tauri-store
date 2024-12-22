@@ -47,7 +47,7 @@ const counterStore = useCounterStore();
 await counterStore.$tauri.start();
 ```
 
-::: info
+::: tip
 Stores won't be saved nor synchronized until you call the [`start`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/interfaces/TauriStoreContract.html#start) method.
 :::
 
