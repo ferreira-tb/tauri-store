@@ -1,14 +1,14 @@
 [package]
 name = "tauri-store-macros"
 description = "Persistent stores for Tauri"
-version = "0.4.0"
+version = "0.5.0"
 documentation = "https://docs.rs/tauri-store"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
-keywords = ["plugin", "tauri", "tauri-plugin", "store"]
+keywords = ["plugin", "tauri", "store"]
 
 [package.edition]
 workspace = true

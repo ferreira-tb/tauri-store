@@ -1,5 +1,6 @@
 use super::autosave::Autosave;
-use super::{OnLoadFn, OnLoadResult, StoreCollection, RESOURCE_ID};
+use super::{OnLoadFn, StoreCollection, RESOURCE_ID};
+use crate::error::Result;
 use crate::store::{SaveStrategy, Store};
 use dashmap::DashMap;
 use std::collections::HashSet;
@@ -27,8 +28,8 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
   }
 
   #[must_use]
-  pub fn path(mut self, path: impl AsRef<Path>) -> Self {
-    self.path = Some(path.as_ref().to_path_buf());
+  pub fn autosave(mut self, duration: Duration) -> Self {
+    self.autosave = Some(duration);
     self
   }
 
@@ -39,17 +40,17 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
   }
 
   #[must_use]
-  pub fn autosave(mut self, duration: Duration) -> Self {
-    self.autosave = Some(duration);
+  pub fn on_load<F>(mut self, f: F) -> Self
+  where
+    F: Fn(&Store<R>) -> Result<()> + Send + Sync + 'static,
+  {
+    self.on_load = Some(Box::new(f));
     self
   }
 
   #[must_use]
-  pub fn on_load<F>(mut self, f: F) -> Self
-  where
-    F: Fn(&Store<R>) -> OnLoadResult + Send + Sync + 'static,
-  {
-    self.on_load = Some(Box::new(f));
+  pub fn path(mut self, path: impl AsRef<Path>) -> Self {
+    self.path = Some(path.as_ref().to_path_buf());
     self
   }
 
@@ -77,7 +78,7 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
         .path()
         .app_data_dir()
         .expect("failed to resolve app data dir")
-        .join("tauri-store")
+        .join(env!("CARGO_PKG_NAME"))
     });
 
     self.save_denylist = self.save_denylist.filter(|it| !it.is_empty());

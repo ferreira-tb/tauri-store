@@ -31,7 +31,7 @@ serde = "1.0"
 tauri = "2"
 
 [dependencies.tauri-store]
-version = "0.4"
+version = "0.5"
 path = "../tauri-store"
 features = ["derive"]
 
@@ -44,4 +44,3 @@ features = ["build"]
 
 [features]
 file-sync-all = ["tauri-store/file-sync-all"]
-unstable-async = ["tauri-store/unstable-async"]

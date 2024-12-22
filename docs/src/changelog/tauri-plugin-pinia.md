@@ -4,7 +4,8 @@
 
 ### Breaking changes
 
-- Change the default directory name for the stores (from `pinia` to `tauri-plugin-pinia`). If you're using a custom path, this won't affect you. Otherwise, you'll need to move your existing stores to the new default directory or manually set the path as it was before.
+- Update [`tauri-store`](https://docs.rs/tauri-store/0.5.0/tauri_store/) to [`0.5.0`](./tauri-store.md#050).
+- Change the default directory name for stores from `pinia` to `tauri-plugin-pinia`. If you’re using a custom path, this change won’t affect you. Otherwise, you’ll need to either move your existing stores to the new default directory or manually set the path to match the previous configuration.
 
 ```rust
 use tauri::Manager;
@@ -13,20 +14,12 @@ fn main() {
   tauri::Builder::default()
     .setup(|app| {
       // The old default path.
-      let path = app
-        .path()
-        .app_data_dir()
-        .expect("failed to resolve app data dir")
-        .join("pinia");
-
-      let pinia = tauri_plugin_pinia::Builder::new()
-        .path(path)
-        .build();
-
-      app
-        .app_handle()
-        .plugin(pinia)
-        .expect("failed to add pinia plugin");
+      let path = app.path().app_data_dir()?.join("pinia");
+      app.app_handle().plugin(
+        tauri_plugin_pinia::Builder::new()
+          .path(path)
+          .build(),
+      )?;
 
       Ok(())
     })
@@ -45,7 +38,7 @@ fn main() {
 
 ### Breaking changes
 
-- Update [`tauri-store`](https://crates.io/crates/tauri-store) to [`0.4.0`](./tauri-store.md#040).
+- Update [`tauri-store`](https://docs.rs/tauri-store/0.4.0/tauri_store/) to [`0.4.0`](./tauri-store.md#040).
 
 ### Features
 

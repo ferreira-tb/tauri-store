@@ -1,29 +1,15 @@
 use super::{ResourceTuple, Store};
 use crate::error::Result;
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 use tauri::{AppHandle, Manager, Resource, ResourceId, Runtime};
 
-#[cfg(feature = "unstable-async")]
-use tokio::sync::Mutex as TokioMutex;
-
-#[cfg(not(feature = "unstable-async"))]
-use std::sync::Mutex as StdMutex;
-
 pub(crate) struct StoreResource<R: Runtime> {
-  #[cfg(feature = "unstable-async")]
-  pub(crate) inner: TokioMutex<Store<R>>,
-  #[cfg(not(feature = "unstable-async"))]
-  pub(crate) inner: StdMutex<Store<R>>,
+  pub(crate) inner: Mutex<Store<R>>,
 }
 
 impl<R: Runtime> StoreResource<R> {
   fn new(store: Store<R>) -> Self {
-    Self {
-      #[cfg(feature = "unstable-async")]
-      inner: TokioMutex::new(store),
-      #[cfg(not(feature = "unstable-async"))]
-      inner: StdMutex::new(store),
-    }
+    Self { inner: Mutex::new(store) }
   }
 
   pub(super) fn create(app: &AppHandle<R>, store: Store<R>) -> ResourceTuple<R> {
@@ -52,8 +38,14 @@ impl<R: Runtime> StoreResource<R> {
 
 // Using StoreResource directly avoids the StoreCollection trying
 // to load the store if it isn't in the resources table already.
-#[cfg(not(feature = "unstable-async"))]
 impl<R: Runtime> StoreResource<R> {
+  pub(crate) fn locked<F, T>(&self, f: F) -> T
+  where
+    F: FnOnce(&mut Store<R>) -> T,
+  {
+    f(&mut *self.inner.lock().unwrap())
+  }
+
   pub(crate) fn save(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
     Self::get(app, rid)?.locked(|store| store.save())
   }
@@ -63,29 +55,6 @@ impl<R: Runtime> StoreResource<R> {
       store.abort_pending_save();
       store.save_now()
     })
-  }
-
-  pub(crate) fn locked<F, T>(&self, f: F) -> T
-  where
-    F: FnOnce(&mut Store<R>) -> T,
-  {
-    f(&mut *self.inner.lock().unwrap())
-  }
-}
-
-#[cfg(feature = "unstable-async")]
-impl<R: Runtime> StoreResource<R> {
-  pub(crate) async fn save(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
-    let resource = Self::get(app, rid)?;
-    let store = resource.inner.lock().await;
-    store.save().await
-  }
-
-  pub(crate) async fn save_now(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
-    let resource = Self::get(app, rid)?;
-    let store = resource.inner.lock().await;
-    store.abort_pending_save();
-    store.save_now().await
   }
 }
 

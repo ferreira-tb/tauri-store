@@ -1,6 +1,6 @@
 [package]
 name = "example-shared"
-version = "0.9.0"
+version = "0.10.0"
 publish = false
 
 [package.edition]
@@ -53,5 +53,4 @@ features = ["chrono", "env-filter", "fmt", "parking_lot", "registry"]
 [features]
 pinia = ["dep:tauri-plugin-pinia"]
 svelte = ["dep:tauri-plugin-svelte"]
-
 file-sync-all = ["tauri-store/file-sync-all"]

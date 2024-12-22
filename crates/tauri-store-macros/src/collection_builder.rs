@@ -4,7 +4,6 @@ use syn::DeriveInput;
 
 pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
   let name = &ast.ident;
-
   let stream = quote! {
     mod __impl_collection_builder {
       use super::#name;
@@ -13,7 +12,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
       use std::sync::Arc;
       use std::time::Duration;
       use tauri::{AppHandle, Manager as _, Runtime};
-      use tauri_store::{OnLoadResult, SaveStrategy, Store, StoreCollection};
+      use tauri_store::{Result, SaveStrategy, Store, StoreCollection};
 
       impl<R: Runtime> #name<R> {
         /// Creates a new builder instance with default values.
@@ -21,11 +20,10 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
           Self::default()
         }
 
-        /// Directory where the stores will be saved.
+        /// Sets the autosave interval for all stores.
         #[must_use]
-        pub fn path(mut self, path: impl AsRef<Path>) -> Self {
-          let path = path.as_ref().to_path_buf();
-          self.path = Some(path);
+        pub fn autosave(mut self, interval: Duration) -> Self {
+          self.autosave = Some(interval);
           self
         }
 
@@ -36,20 +34,21 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
           self
         }
 
-        /// Sets the autosave interval for all stores.
-        #[must_use]
-        pub fn autosave(mut self, interval: Duration) -> Self {
-          self.autosave = Some(interval);
-          self
-        }
-
         /// Sets a function to be called when a store is loaded.
         #[must_use]
         pub fn on_load<F>(mut self, f: F) -> Self
         where
-          F: Fn(&Store<R>) -> OnLoadResult + Send + Sync + 'static,
+          F: Fn(&Store<R>) -> Result<()> + Send + Sync + 'static,
         {
           self.on_load = Some(Box::new(f));
+          self
+        }
+
+        /// Directory where the stores will be saved.
+        #[must_use]
+        pub fn path(mut self, path: impl AsRef<Path>) -> Self {
+          let path = path.as_ref().to_path_buf();
+          self.path = Some(path);
           self
         }
 

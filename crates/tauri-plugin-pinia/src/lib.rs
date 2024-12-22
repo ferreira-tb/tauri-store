@@ -17,12 +17,6 @@ pub use manager::ManagerExt;
 pub use pinia::Pinia;
 pub use tauri_store::prelude::*;
 
-#[cfg(feature = "unstable-async")]
-use tauri::async_runtime::block_on;
-
-#[cfg(feature = "unstable-async")]
-pub use tauri_store::boxed;
-
 /// Builder for the Pinia plugin.
 #[derive(CollectionBuilder)]
 pub struct Builder<R: Runtime> {
@@ -76,11 +70,7 @@ fn setup<R: Runtime>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()> {
 
 fn on_event<R: Runtime>(app: &AppHandle<R>, event: &RunEvent) {
   if let RunEvent::Exit = event {
-    let pinia = app.pinia();
-    #[cfg(not(feature = "unstable-async"))]
-    let _ = pinia.save_all_now();
-    #[cfg(feature = "unstable-async")]
-    let _ = block_on(pinia.save_all_now());
+    let _ = app.pinia().save_all_now();
   }
 }
 

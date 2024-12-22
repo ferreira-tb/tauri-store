@@ -1,6 +1,7 @@
 use crate::pinia::Pinia;
 use tauri::{AppHandle, Manager, Runtime, State, WebviewWindow, Window};
 
+/// Extension for the [`Manager`](tauri::Manager) trait providing access to the Pinia plugin.
 pub trait ManagerExt<R: Runtime>: Manager<R> {
   /// Returns a handle to the Pinia plugin.
   ///

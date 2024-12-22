@@ -5,6 +5,7 @@
 ### Enhancements
 
 - Add prelude module.
+- Remove `unstable-async` feature.
 
 ## 0.4.0
 

@@ -1,6 +1,7 @@
 use crate::svelte::Svelte;
 use tauri::{AppHandle, Manager, Runtime, State, WebviewWindow, Window};
 
+/// Extension for the [`Manager`](tauri::Manager) trait providing access to the Svelte plugin.
 pub trait ManagerExt<R: Runtime>: Manager<R> {
   /// Returns a handle to the Svelte plugin.
   ///

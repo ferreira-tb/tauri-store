@@ -7,7 +7,6 @@ use tokio::task::AbortHandle;
 pub trait RemoteCallable<T> {
   /// Call the function with the provided context.
   fn call(&self, ctx: &T);
-
   /// Abort any pending calls.
   fn abort(&self);
 }

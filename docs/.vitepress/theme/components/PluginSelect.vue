@@ -6,7 +6,7 @@ import { useSelectedPlugin } from '@/composables/plugin';
 import { computedWithControl, watchDeep } from '@vueuse/core';
 import VPFlyout from 'vitepress/dist/client/theme-default/components/VPFlyout.vue';
 import VPMenuLink from 'vitepress/dist/client/theme-default/components/VPMenuLink.vue';
-import { computed, nextTick, onMounted, ref, watchPostEffect, watchSyncEffect } from 'vue';
+import { computed, nextTick, onMounted, ref, watchEffect, watchSyncEffect } from 'vue';
 
 const mounted = ref(false);
 const selectedPlugin = useSelectedPlugin();
@@ -34,7 +34,7 @@ const isParamMismatch = computed(() => {
   );
 });
 
-watchPostEffect(() => {
+watchEffect(() => {
   if (mounted.value && isParamMismatch.value) {
     setPlugin(plugins.find(({ name }) => name === pluginParam.value));
   }
