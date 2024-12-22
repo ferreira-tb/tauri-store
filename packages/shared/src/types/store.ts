@@ -43,7 +43,7 @@ export interface StoreFrontendOptions {
   /**
    * Keys the plugin should save or ignore.
    *
-   * The behavior depends on the value of {@link StoreOptions.filterKeysStrategy}.
+   * The behavior depends on the value of {@link StoreFrontendOptions.filterKeysStrategy}.
    */
   readonly filterKeys?: StoreKeyFilter;
 
@@ -69,7 +69,7 @@ export interface StoreFrontendOptions {
 
   /**
    * Interval in milliseconds to use when syncing the store with the backend.
-   * This option is only valid when {@link PluginOptions.syncStrategy} is set to `debounce` or `throttle`.
+   * This option is only valid when {@link StoreFrontendOptions.syncStrategy} is set to `debounce` or `throttle`.
    *
    * @default 0
    */
