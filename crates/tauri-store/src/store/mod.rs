@@ -3,40 +3,30 @@ mod save;
 mod state;
 mod watch;
 
-#[cfg(feature = "unstable-async")]
-mod unstable_async;
-
 use crate::error::Result;
 use crate::event::{
   emit, ConfigPayload, EventSource, StatePayload, STORE_CONFIG_CHANGE_EVENT,
   STORE_STATE_CHANGE_EVENT,
 };
 use crate::manager::ManagerExt;
-use save::SaveHandle;
-pub use save::SaveStrategy;
+use save::{debounce, throttle, to_bytes, SaveHandle};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use serde_json::Value as Json;
 use std::collections::HashMap;
 use std::fmt;
+use std::fs::{self, File};
 use std::io::ErrorKind::NotFound;
+use std::io::Write;
 use std::path::PathBuf;
 use std::sync::{Arc, OnceLock};
+use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, ResourceId, Runtime};
 use watch::Watcher;
 
 pub(crate) use resource::StoreResource;
+pub use save::SaveStrategy;
 pub use state::{StoreState, StoreStateExt};
-pub use watch::WatcherResult;
-
-#[cfg(not(feature = "unstable-async"))]
-use {
-  save::{debounce, save_now, throttle},
-  tauri::async_runtime::spawn_blocking,
-};
-
-#[cfg(feature = "unstable-async")]
-use tauri::async_runtime::spawn;
 
 #[cfg(tauri_store_tracing)]
 use tracing::{debug, warn};
@@ -55,9 +45,10 @@ pub struct Store<R: Runtime> {
 }
 
 impl<R: Runtime> Store<R> {
-  fn blocking_load(app: &AppHandle<R>, id: String) -> Result<ResourceTuple<R>> {
-    let path = store_path(app, &id);
-    let state = match std::fs::read(path) {
+  pub(crate) fn load(app: &AppHandle<R>, id: impl AsRef<str>) -> Result<ResourceTuple<R>> {
+    let id = id.as_ref();
+    let path = store_path(app, id);
+    let state = match fs::read(path) {
       Ok(bytes) => serde_json::from_slice(&bytes)?,
       Err(e) if e.kind() == NotFound => {
         #[cfg(tauri_store_tracing)]
@@ -73,7 +64,7 @@ impl<R: Runtime> Store<R> {
 
     let store = Self {
       app: app.clone(),
-      id,
+      id: id.to_owned(),
       state,
       watchers: HashMap::new(),
       save_on_change: false,
@@ -120,6 +111,26 @@ impl<R: Runtime> Store<R> {
     self.state.try_get(key)
   }
 
+  /// Sets a key-value pair in the store.
+  pub fn set(&mut self, key: impl AsRef<str>, value: Json) -> Result<()> {
+    self.state.insert(key.as_ref().to_owned(), value);
+    self.on_state_change(None)
+  }
+
+  /// Patches the store state, optionally having a window as the source.
+  pub fn patch_with_source<E>(&mut self, state: StoreState, source: E) -> Result<()>
+  where
+    E: Into<EventSource>,
+  {
+    self.state.extend(state);
+    self.on_state_change(source)
+  }
+
+  /// Patches the store state.
+  pub fn patch(&mut self, state: StoreState) -> Result<()> {
+    self.patch_with_source(state, None)
+  }
+
   /// Whether the store has a key.
   pub fn has(&self, key: impl AsRef<str>) -> bool {
     self.state.contains_key(key.as_ref())
@@ -148,6 +159,53 @@ impl<R: Runtime> Store<R> {
   /// Whether the store is empty.
   pub fn is_empty(&self) -> bool {
     self.state.is_empty()
+  }
+
+  /// Save the store state to the disk.
+  pub fn save(&self) -> Result<()> {
+    match self.save_strategy() {
+      SaveStrategy::Immediate => self.save_now()?,
+      SaveStrategy::Debounce(duration) => {
+        self
+          .debounce_save_handle
+          .get_or_init(|| debounce(duration, Arc::from(self.id.as_str())))
+          .call(&self.app);
+      }
+      SaveStrategy::Throttle(duration) => {
+        self
+          .throttle_save_handle
+          .get_or_init(|| throttle(duration, Arc::from(self.id.as_str())))
+          .call(&self.app);
+      }
+    }
+
+    Ok(())
+  }
+
+  /// Save the store immediately, ignoring the save strategy.
+  pub fn save_now(&self) -> Result<()> {
+    let collection = self.app.store_collection();
+    if collection
+      .save_denylist
+      .as_ref()
+      .is_some_and(|it| it.contains(&self.id))
+    {
+      return Ok(());
+    }
+
+    fs::create_dir_all(collection.path())?;
+
+    let bytes = to_bytes(&self.state, collection.pretty)?;
+    let mut file = File::create(self.path())?;
+    file.write_all(&bytes)?;
+
+    #[cfg(feature = "file-sync-all")]
+    file.sync_all()?;
+
+    #[cfg(tauri_store_tracing)]
+    debug!("store saved: {}", self.id);
+
+    Ok(())
   }
 
   /// Whether to save the store on state change.
@@ -180,14 +238,30 @@ impl<R: Runtime> Store<R> {
     self.save_strategy = Some(strategy);
   }
 
+  /// Watches the store for changes.
+  pub fn watch<F>(&mut self, f: F) -> u32
+  where
+    F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
+  {
+    let listener = Watcher::new(f);
+    let id = listener.id;
+    self.watchers.insert(id, listener);
+    id
+  }
+
+  /// Removes a listener from this store.
+  pub fn unwatch(&mut self, id: u32) -> bool {
+    self.watchers.remove(&id).is_some()
+  }
+
   /// Sets the store options, optionally having a window as the source.
   #[expect(
     clippy::needless_pass_by_value,
     reason = "We are just anticipating the need for it."
   )]
-  pub fn set_options_with_source<S>(&mut self, options: StoreOptions, source: S) -> Result<()>
+  pub fn set_options_with_source<E>(&mut self, options: StoreOptions, source: E) -> Result<()>
   where
-    S: Into<EventSource>,
+    E: Into<EventSource>,
   {
     if let Some(strategy) = options.save_strategy {
       self.set_save_strategy(strategy);
@@ -205,33 +279,15 @@ impl<R: Runtime> Store<R> {
     self.set_options_with_source(options, None::<&str>)
   }
 
-  /// Watches the store for changes.
-  pub fn watch<F>(&mut self, f: F) -> u32
-  where
-    F: Fn(AppHandle<R>) -> WatcherResult + Send + Sync + 'static,
-  {
-    let listener = Watcher::new(f);
-    let id = listener.id;
-    self.watchers.insert(id, listener);
-    id
-  }
+  fn on_state_change(&self, source: impl Into<EventSource>) -> Result<()> {
+    self.emit_state_change(source)?;
+    self.call_watchers();
 
-  /// Removes a listener from this store.
-  pub fn unwatch(&mut self, id: u32) -> bool {
-    self.watchers.remove(&id).is_some()
-  }
+    if self.save_on_change {
+      self.save()?;
+    }
 
-  fn on_config_change(&self, source: impl Into<EventSource>) -> Result<()> {
-    self.emit_config_change(source)
-  }
-
-  fn emit_config_change(&self, source: impl Into<EventSource>) -> Result<()> {
-    emit(
-      &self.app,
-      STORE_CONFIG_CHANGE_EVENT,
-      &ConfigPayload::from(self),
-      source,
-    )
+    Ok(())
   }
 
   fn emit_state_change(&self, source: impl Into<EventSource>) -> Result<()> {
@@ -258,6 +314,19 @@ impl<R: Runtime> Store<R> {
     )
   }
 
+  fn on_config_change(&self, source: impl Into<EventSource>) -> Result<()> {
+    self.emit_config_change(source)
+  }
+
+  fn emit_config_change(&self, source: impl Into<EventSource>) -> Result<()> {
+    emit(
+      &self.app,
+      STORE_CONFIG_CHANGE_EVENT,
+      &ConfigPayload::from(self),
+      source,
+    )
+  }
+
   /// Calls all watchers currently attached to the store.
   fn call_watchers(&self) {
     if self.watchers.is_empty() {
@@ -272,10 +341,6 @@ impl<R: Runtime> Store<R> {
 
     for watcher in watchers {
       let app = self.app.clone();
-
-      #[cfg(feature = "unstable-async")]
-      spawn(async move { watcher.call(app).await });
-      #[cfg(not(feature = "unstable-async"))]
       spawn_blocking(move || watcher.call(app));
     }
   }
@@ -288,70 +353,6 @@ impl<R: Runtime> Store<R> {
     if let Some(throttle_save_handle) = self.throttle_save_handle.get() {
       throttle_save_handle.abort();
     }
-  }
-}
-
-#[cfg(not(feature = "unstable-async"))]
-impl<R: Runtime> Store<R> {
-  pub(crate) fn load(app: &AppHandle<R>, id: impl AsRef<str>) -> Result<ResourceTuple<R>> {
-    Self::blocking_load(app, id.as_ref().to_owned())
-  }
-
-  /// Sets a key-value pair in the store.
-  pub fn set(&mut self, key: impl AsRef<str>, value: Json) -> Result<()> {
-    self.state.insert(key.as_ref().to_owned(), value);
-    self.on_state_change(None)
-  }
-
-  /// Patches the store state, optionally having a window as the source.
-  pub fn patch_with_source<S>(&mut self, state: StoreState, source: S) -> Result<()>
-  where
-    S: Into<EventSource>,
-  {
-    self.state.extend(state);
-    self.on_state_change(source)
-  }
-
-  /// Patches the store state.
-  pub fn patch(&mut self, state: StoreState) -> Result<()> {
-    self.patch_with_source(state, None)
-  }
-
-  fn on_state_change(&self, source: impl Into<EventSource>) -> Result<()> {
-    self.emit_state_change(source)?;
-    self.call_watchers();
-
-    if self.save_on_change {
-      self.save()?;
-    }
-
-    Ok(())
-  }
-
-  /// Save the store state to the disk.
-  pub fn save(&self) -> Result<()> {
-    match self.save_strategy() {
-      SaveStrategy::Immediate => self.save_now()?,
-      SaveStrategy::Debounce(duration) => {
-        self
-          .debounce_save_handle
-          .get_or_init(|| debounce(duration, Arc::from(self.id.as_str())))
-          .call(&self.app);
-      }
-      SaveStrategy::Throttle(duration) => {
-        self
-          .throttle_save_handle
-          .get_or_init(|| throttle(duration, Arc::from(self.id.as_str())))
-          .call(&self.app);
-      }
-    }
-
-    Ok(())
-  }
-
-  /// Save the store immediately, ignoring the save strategy.
-  pub fn save_now(&self) -> Result<()> {
-    save_now(self)
   }
 }
 

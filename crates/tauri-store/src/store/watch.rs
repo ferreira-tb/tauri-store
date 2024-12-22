@@ -4,17 +4,9 @@ use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::Arc;
 use tauri::{AppHandle, Runtime};
 
-#[cfg(feature = "unstable-async")]
-use futures::future::BoxFuture;
-
 static WATCHER_ID: AtomicU32 = AtomicU32::new(0);
 
-#[cfg(not(feature = "unstable-async"))]
-pub type WatcherResult = Result<()>;
-#[cfg(feature = "unstable-async")]
-pub type WatcherResult = BoxFuture<'static, Result<()>>;
-
-type WatcherFn<R> = dyn Fn(AppHandle<R>) -> WatcherResult + Send + Sync;
+type WatcherFn<R> = dyn Fn(AppHandle<R>) -> Result<()> + Send + Sync;
 
 pub(crate) struct Watcher<R: Runtime> {
   pub(crate) id: u32,
@@ -24,7 +16,7 @@ pub(crate) struct Watcher<R: Runtime> {
 impl<R: Runtime> Watcher<R> {
   pub fn new<F>(f: F) -> Self
   where
-    F: Fn(AppHandle<R>) -> WatcherResult + Send + Sync + 'static,
+    F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
   {
     Self {
       id: WATCHER_ID.fetch_add(1, Ordering::Relaxed),
@@ -32,14 +24,8 @@ impl<R: Runtime> Watcher<R> {
     }
   }
 
-  #[cfg(not(feature = "unstable-async"))]
   pub fn call(&self, app: AppHandle<R>) {
     let _ = (self.inner)(app);
-  }
-
-  #[cfg(feature = "unstable-async")]
-  pub async fn call(&self, app: AppHandle<R>) {
-    let _ = (self.inner)(app).await;
   }
 }
 

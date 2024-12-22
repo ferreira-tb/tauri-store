@@ -2,7 +2,7 @@
 import VPBadge from 'vitepress/dist/client/theme-default/components/VPBadge.vue';
 
 interface Props {
-  name: 'file-sync-all' | 'unstable-async';
+  name: string;
 }
 
 defineProps<Props>();

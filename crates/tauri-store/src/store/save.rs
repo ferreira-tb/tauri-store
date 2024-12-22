@@ -1,7 +1,6 @@
-use super::Store;
 use crate::error::Result;
 use crate::manager::ManagerExt;
-use futures::future::BoxFuture;
+use futures::future::{BoxFuture, FutureExt};
 use serde::ser::SerializeTuple;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json::Value as Json;
@@ -9,14 +8,9 @@ use std::fmt;
 use std::result::Result as StdResult;
 use std::sync::Arc;
 use std::time::Duration;
+use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, Runtime};
 use tauri_store_utils::{Debounce, RemoteCallable, Throttle};
-
-#[cfg(not(feature = "unstable-async"))]
-use {futures::future::FutureExt, tauri::async_runtime::spawn_blocking};
-
-#[cfg(tauri_store_tracing)]
-use tracing::debug;
 
 type RemoteSaveHandle<R> = Box<dyn RemoteCallable<AppHandle<R>> + Send + Sync>;
 type SaveHandleFn<R> = Box<dyn Fn(AppHandle<R>) -> BoxFuture<'static, ()> + Send + Sync + 'static>;
@@ -33,74 +27,28 @@ impl<R: Runtime> SaveHandle<R> {
   }
 }
 
-#[cfg(not(feature = "unstable-async"))]
-pub(super) fn save_now<R: Runtime>(store: &Store<R>) -> Result<()> {
-  use std::fs::{self, File};
-  use std::io::Write;
-
-  let collection = store.app.store_collection();
-  if collection
-    .save_denylist
-    .as_ref()
-    .is_some_and(|it| it.contains(&store.id))
-  {
-    return Ok(());
-  }
-
-  fs::create_dir_all(collection.path())?;
-
-  let bytes = to_bytes(&store.state, collection.pretty)?;
-  let mut file = File::create(store.path())?;
-  file.write_all(&bytes)?;
-
-  #[cfg(feature = "file-sync-all")]
-  file.sync_all()?;
-
-  #[cfg(tauri_store_tracing)]
-  debug!("store saved: {}", store.id);
-
-  Ok(())
+pub(super) fn debounce<R: Runtime>(duration: Duration, id: Arc<str>) -> SaveHandle<R> {
+  SaveHandle(Box::new(Debounce::new(duration, save_handle(id))))
 }
 
-#[cfg(feature = "unstable-async")]
-pub async fn save_now<R: Runtime>(store: &Store<R>) -> Result<()> {
-  use tokio::fs::{self, File};
-  use tokio::io::AsyncWriteExt;
-
-  let collection = store.app.store_collection();
-  if collection
-    .save_denylist
-    .as_ref()
-    .is_some_and(|it| it.contains(&store.id))
-  {
-    return Ok(());
-  }
-
-  fs::create_dir_all(collection.path()).await?;
-
-  let bytes = to_bytes(&store.state, collection.pretty)?;
-  let mut file = File::create(store.path()).await?;
-  file.write_all(&bytes).await?;
-  file.flush().await?;
-
-  #[cfg(feature = "file-sync-all")]
-  file.sync_all().await?;
-
-  #[cfg(tauri_store_tracing)]
-  debug!("store saved: {}", store.id);
-
-  Ok(())
+pub(super) fn throttle<R: Runtime>(duration: Duration, id: Arc<str>) -> SaveHandle<R> {
+  SaveHandle(Box::new(Throttle::new(duration, save_handle(id))))
 }
 
-fn to_bytes<T>(value: &T, pretty: bool) -> Result<Vec<u8>>
-where
-  T: ?Sized + Serialize,
-{
-  if pretty {
-    Ok(serde_json::to_vec_pretty(value)?)
-  } else {
-    Ok(serde_json::to_vec(value)?)
-  }
+fn save_handle<R: Runtime>(id: Arc<str>) -> SaveHandleFn<R> {
+  Box::new(move |app| {
+    let id = Arc::clone(&id);
+    Box::pin(async move {
+      let task = spawn_blocking(move || {
+        app
+          .store_collection()
+          .get_resource(&id)?
+          .locked(|store| store.save_now())
+      });
+
+      task.map(drop).await;
+    })
+  })
 }
 
 /// The strategy to use when saving a store.
@@ -168,8 +116,8 @@ impl Serialize for SaveStrategy {
     S: Serializer,
   {
     let interval = match self {
-      Self::Debounce(duration) | Self::Throttle(duration) => duration.as_millis(),
       Self::Immediate => 0,
+      Self::Debounce(duration) | Self::Throttle(duration) => duration.as_millis(),
     };
 
     let mut tuple = serializer.serialize_tuple(2)?;
@@ -225,40 +173,13 @@ impl<'de> Deserialize<'de> for SaveStrategy {
   }
 }
 
-pub(super) fn debounce<R: Runtime>(duration: Duration, id: Arc<str>) -> SaveHandle<R> {
-  SaveHandle(Box::new(Debounce::new(duration, save_handle(id))))
-}
-
-pub(super) fn throttle<R: Runtime>(duration: Duration, id: Arc<str>) -> SaveHandle<R> {
-  SaveHandle(Box::new(Throttle::new(duration, save_handle(id))))
-}
-
-#[cfg(not(feature = "unstable-async"))]
-fn save_handle<R: Runtime>(id: Arc<str>) -> SaveHandleFn<R> {
-  Box::new(move |app| {
-    let id = Arc::clone(&id);
-    Box::pin(async move {
-      let task = spawn_blocking(move || {
-        app
-          .store_collection()
-          .get_resource(&id)?
-          .locked(|store| store.save_now())
-      });
-
-      task.map(drop).await;
-    })
-  })
-}
-
-#[cfg(feature = "unstable-async")]
-fn save_handle<R: Runtime>(id: Arc<str>) -> SaveHandleFn<R> {
-  Box::new(move |app| {
-    let id = Arc::clone(&id);
-    Box::pin(async move {
-      if let Ok(resource) = app.store_collection().get_resource(&id).await {
-        let store = resource.inner.lock().await;
-        let _ = store.save_now().await;
-      }
-    })
-  })
+pub(super) fn to_bytes<T>(value: &T, pretty: bool) -> Result<Vec<u8>>
+where
+  T: ?Sized + Serialize,
+{
+  if pretty {
+    Ok(serde_json::to_vec_pretty(value)?)
+  } else {
+    Ok(serde_json::to_vec(value)?)
+  }
 }

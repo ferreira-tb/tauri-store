@@ -2,6 +2,7 @@ use crate::collection::{StoreCollection, RESOURCE_ID};
 use std::sync::Arc;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow, Window};
 
+/// Extension for the [`Manager`](tauri::Manager) trait providing access to the store collection.
 pub trait ManagerExt<R: Runtime>: Manager<R> {
   /// Returns a handle to the store collection.
   ///

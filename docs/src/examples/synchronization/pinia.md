@@ -1,4 +1,6 @@
-```ts{8,9}
+```ts{10,11}
+import { defineStore } from 'pinia';
+
 function store() {
   const counter = ref(0);
   return { counter };

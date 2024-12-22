@@ -27,6 +27,7 @@ must_use_candidate = "allow"
 rc_buffer = "deny"
 rc_mutex = "deny"
 rest_pat_in_fully_bound_structs = "deny"
+single_match_else = "allow"
 
 [workspace.lints.clippy.pedantic]
 level = "deny"

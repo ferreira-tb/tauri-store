@@ -1,14 +1,14 @@
 [package]
 name = "tauri-store"
 description = "Persistent stores for Tauri"
-version = "0.4.0"
+version = "0.5.0"
 documentation = "https://docs.rs/tauri-store"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
-keywords = ["plugin", "tauri", "store"]
+keywords = ["tauri", "plugin", "store"]
 
 [package.edition]
 workspace = true
@@ -34,7 +34,7 @@ tauri = "2"
 thiserror = "2.0"
 
 [dependencies.tauri-store-macros]
-version = "0.4"
+version = "0.5"
 optional = true
 path = "../tauri-store-macros"
 
@@ -47,7 +47,7 @@ version = "1.39"
 default-features = false
 features = ["time"]
 
-[target.'cfg(tauri_store_tracing)'.dependencies]
+[target."cfg(tauri_store_tracing)".dependencies]
 tracing = "0.1"
 
 [build-dependencies.tauri-plugin]
@@ -57,4 +57,3 @@ features = ["build"]
 [features]
 derive = ["dep:tauri-store-macros"]
 file-sync-all = []
-unstable-async = ["tokio/fs", "tokio/io-util"]

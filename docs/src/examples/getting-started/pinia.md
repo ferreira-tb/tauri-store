@@ -48,7 +48,7 @@ await counterStore.$tauri.start();
 ```
 
 ::: info
-The stores won't be saved nor synchronized until you call the `start` method, but they can still be used as regular Pinia stores.
+Stores won't be saved nor synchronized until you call the [`start`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/interfaces/TauriStoreContract.html#start) method.
 :::
 
 ### Nuxt

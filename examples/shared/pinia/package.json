@@ -1,6 +1,6 @@
 {
   "name": "example-shared-pinia",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "type": "module",
   "packageManager": "pnpm@9.15.1",
   "private": true,

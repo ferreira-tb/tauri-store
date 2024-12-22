@@ -19,7 +19,7 @@ await counterStore.start();
 ```
 
 ::: tip
-The stores won't be saved nor synchronized until you call the [`start`](https://tb.dev.br/tauri-store/reference/tauri-plugin-svelte/classes/Store.html#start) method, but they can still be used as regular Svelte stores.
+Stores won't be saved nor synchronized until you call the [`start`](https://tb.dev.br/tauri-store/reference/tauri-plugin-svelte/classes/Store.html#start) method.
 :::
 
 5. Use the store in your Svelte components:
