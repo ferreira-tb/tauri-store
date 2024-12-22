@@ -4,6 +4,12 @@
 
 _Nothing yet._
 
+## 0.10.1 {#v0-10-1}
+
+### Features
+
+- Expose `State` type.
+
 ## 0.10.0 {#v0-10-0}
 
 ### Breaking changes
