@@ -9,7 +9,9 @@
 param(
   [string[]]$Target = @(),
   [switch]$DryRun,
-  [switch]$NoVerify
+  [switch]$NoVerify,
+  [switch]$OnlyCrate,
+  [switch]$OnlyPackage
 )
 
 $ErrorActionPreference = 'Stop'
@@ -23,20 +25,22 @@ pnpm run build
 function Publish-Crate {
   param([string]$Name)
 
-  if ($Target.Count -gt 0 -and $Target -notcontains $Name) {
+  if ($OnlyPackage) {
     return
   }
 
-  $command = "cargo publish -p $Name"
-  if ($DryRun) {
-    $command += ' --dry-run'
-  }
-
-  if ($NoVerify) {
-    $command += ' --no-verify'
-  }
+  if ($Target.Count -eq 0 -or $Target -contains $Name) {
+    $command = "cargo publish -p $Name"
+    if ($DryRun) {
+      $command += ' --dry-run'
+    }
   
-  Invoke-Expression $command
+    if ($NoVerify) {
+      $command += ' --no-verify'
+    }
+    
+    Invoke-Expression $command
+  }
 }
 
 $Crates = @(
@@ -55,20 +59,22 @@ Get-ChildItem -Path './crates' -Directory -Exclude 'tauri-store*' |
 function Publish-Package {
   param([string]$Name)
 
-  if ($Target.Count -gt 0 -and $Target -notcontains $Name) {
+  if ($OnlyCrate) {
     return
   }
 
-  $command = "pnpm publish -F $Name"
-  if ($DryRun) {
-    $command += ' --dry-run'
+  if ($Target.Count -eq 0 -or $Target -contains $Name) {
+    $command = "pnpm publish -F $Name"
+    if ($DryRun) {
+      $command += ' --dry-run'
+    }
+  
+    if ($Name.StartsWith('@tauri-store')) {
+      $command += ' --access public'
+    }
+  
+    Invoke-Expression $command
   }
-
-  if ($Name.StartsWith('@tauri-store')) {
-    $command += ' --access public'
-  }
-
-  Invoke-Expression $command
 }
 
 Publish-Package -Name '@tauri-store/shared'
