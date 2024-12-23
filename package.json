@@ -16,7 +16,7 @@
     "docs:vite": "pnpm run -F docs dev --open",
     "eslint": "eslint . --config eslint.config.js --cache",
     "eslint:fix": "eslint . --config eslint.config.js --fix",
-    "example": "pwsh scripts/run-example.ps1",
+    "example": "pwsh scripts/start-example.ps1",
     "format": "prettier . --write && cargo fmt --all",
     "type-check": "pnpm run -r type-check",
     "update": "pwsh scripts/update.ps1"
