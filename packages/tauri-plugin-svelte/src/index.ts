@@ -1,6 +1,6 @@
 export type * from './types';
 
-export { Store, store, type StoreContract } from './store';
+export { Store, store } from './store';
 
 export {
   clearAutosave,
