@@ -4,11 +4,17 @@
 
 _Nothing yet._
 
+## 0.10.2 {#v0-10-2}
+
+### Bug fixes
+
+- Fix the filter for store keys.
+
 ## 0.10.1 {#v0-10-1}
 
 ### Features
 
-- Expose `State` type.
+- Expose [`State`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/types/State.html) type.
 
 ## 0.10.0 {#v0-10-0}
 

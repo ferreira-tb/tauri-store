@@ -44,6 +44,8 @@ export interface StoreFrontendOptions {
    * Keys the plugin should save or ignore.
    *
    * The behavior depends on the value of {@link StoreFrontendOptions.filterKeysStrategy}.
+   *
+   * @default null
    */
   readonly filterKeys?: StoreKeyFilter;
 
@@ -115,6 +117,6 @@ export interface TauriStoreContract {
 /** State of a store. */
 export type State = Record<string, unknown>;
 
-export type StoreKeyFilter = string | string[] | RegExp;
+export type StoreKeyFilter = string | string[] | RegExp | null;
 
 export type StoreKeyFilterStrategy = 'pick' | 'omit' | ((key: string) => boolean);
