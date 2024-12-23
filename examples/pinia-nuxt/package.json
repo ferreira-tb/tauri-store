@@ -14,7 +14,7 @@
   "dependencies": {
     "@pinia/nuxt": "^0.9.0",
     "@vitejs/plugin-vue": "^5.2.1",
-    "@vueuse/core": "^12.0.0",
+    "@vueuse/core": "^12.2.0",
     "example-shared-js": "workspace:*",
     "example-shared-pinia": "workspace:*",
     "nuxt": "^3.14.1592",
