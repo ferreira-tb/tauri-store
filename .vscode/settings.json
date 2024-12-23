@@ -17,7 +17,11 @@
   "[vue]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "conventionalCommits.promptScopes": false,
+  "conventionalCommits.promptScopes": true,
+  "conventionalCommits.scopes": [
+    "pinia",
+    "svelte"
+  ],
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },
