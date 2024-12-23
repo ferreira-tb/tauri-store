@@ -1,7 +1,6 @@
 import { tick } from 'svelte';
 import * as commands from './commands';
 import type { StoreContract, TauriPluginSvelteStoreOptions } from './types';
-import { BaseStore, debounce, type State, throttle, TimeStrategy } from '@tauri-store/shared';
 import {
   type Subscriber,
   type Unsubscriber,
@@ -9,6 +8,17 @@ import {
   writable,
   type Writable,
 } from 'svelte/store';
+import {
+  BaseStore,
+  debounce,
+  DEFAULT_FILTER_KEYS,
+  DEFAULT_FILTER_KEYS_STRATEGY,
+  DEFAULT_ON_ERROR,
+  DEFAULT_SAVE_ON_CHANGE,
+  type State,
+  throttle,
+  TimeStrategy,
+} from '@tauri-store/shared';
 
 /**
  * A [writable store](https://svelte.dev/docs/svelte/stores#svelte-store-writable)
@@ -57,13 +67,15 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     const syncStrategy = new TimeStrategy(options.syncStrategy, options.syncInterval);
 
     this.options = {
-      onError: options.onError ?? console.error,
-      saveOnChange: options.saveOnChange ?? false,
+      filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
+      filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
+      onError: options.onError ?? DEFAULT_ON_ERROR,
       saveInterval: saveStrategy.interval,
+      saveOnChange: options.saveOnChange ?? DEFAULT_SAVE_ON_CHANGE,
       saveStrategy: saveStrategy.strategy,
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
-    };
+    } satisfies Required<TauriPluginSvelteStoreOptions>;
   }
 
   public set(value: S) {

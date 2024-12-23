@@ -5,6 +5,10 @@ import type { TauriPluginPiniaOptions, TauriPluginPiniaStoreOptions } from './ty
 import {
   BaseStore,
   debounce,
+  DEFAULT_FILTER_KEYS,
+  DEFAULT_FILTER_KEYS_STRATEGY,
+  DEFAULT_ON_ERROR,
+  DEFAULT_SAVE_ON_CHANGE,
   mergeStoreOptions,
   type State,
   throttle,
@@ -27,14 +31,16 @@ export class Store extends BaseStore {
 
     this.options = {
       deep: options.deep ?? true,
+      filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
+      filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
       flush: options.flush ?? 'pre',
-      onError: options.onError ?? console.error,
-      saveOnChange: options.saveOnChange ?? false,
+      onError: options.onError ?? DEFAULT_ON_ERROR,
       saveInterval: saveStrategy.interval,
+      saveOnChange: options.saveOnChange ?? DEFAULT_SAVE_ON_CHANGE,
       saveStrategy: saveStrategy.strategy,
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
-    };
+    } satisfies Required<TauriPluginPiniaStoreOptions>;
   }
 
   protected async load() {

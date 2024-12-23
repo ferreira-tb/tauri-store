@@ -1,6 +1,7 @@
 import { listen, StoreEvent } from './event';
 import { TimeStrategy } from './utils/time-strategy';
 import type { Option, Writeable } from '@tb-dev/utils';
+import { DEFAULT_FILTER_KEYS_STRATEGY } from './defaults';
 import type {
   ConfigChangePayload,
   State,
@@ -137,7 +138,7 @@ export abstract class BaseStore<S extends State = State> {
 
     const result: Partial<S> = {};
     const filter = this.options.filterKeys;
-    const strategy = this.options.filterKeysStrategy ?? 'omit';
+    const strategy = this.options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY;
 
     for (const [key, value] of Object.entries(state)) {
       if (!shouldFilterKey(filter, strategy, key)) {

@@ -1,6 +1,6 @@
 [package]
 name = "example-shared"
-version = "0.10.1"
+version = "0.10.2"
 publish = false
 
 [package.edition]

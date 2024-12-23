@@ -1,6 +1,6 @@
 {
   "productName": "example-pinia-nuxt",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "identifier": "com.tbdev.example",
   "build": {
     "beforeDevCommand": "pnpm run -F example-pinia-nuxt nuxt:dev",
