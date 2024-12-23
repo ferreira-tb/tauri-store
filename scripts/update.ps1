@@ -17,8 +17,7 @@ $Skip = @(
   '@tauri-apps/api',
   'pinia',
   'svelte',
-  'tokio',
-  'typescript'
+  'tokio'
 )
 
 $Command = 'miho update major -t'

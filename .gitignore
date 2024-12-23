@@ -15,7 +15,6 @@ pnpm-debug.log*
 # Rust
 debug/
 target/
-**/Cargo.lock
 **/*.rs.bk
 *.pdb
 
