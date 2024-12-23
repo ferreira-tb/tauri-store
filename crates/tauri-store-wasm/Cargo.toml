@@ -1,7 +1,6 @@
 [package]
-name = "tauri-store-cli"
+name = "tauri-store-wasm"
 version = "0.1.0"
-description = "Command line tools for the Tauri Store repository"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
@@ -14,18 +13,11 @@ workspace = true
 [package.rust-version]
 workspace = true
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
 [lints]
 workspace = true
 
 [dependencies]
-anyhow = "1.0"
-convert_case = "0.6"
-regex = "1.11"
-
-[dependencies.clap]
-version = "4.5"
-features = ["derive"]
-
-[dependencies.strum]
-version = "0.26"
-features = ["derive"]
+wasm-bindgen = "0.2"
