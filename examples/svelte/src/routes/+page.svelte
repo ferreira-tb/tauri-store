@@ -10,9 +10,9 @@
   } from 'tauri-plugin-svelte/src/index.js';
   import {
     debouncedStore,
+    openDebouncedStore,
     openStore,
     openThrottledStore,
-    openDebouncedStore,
     store,
     throttledStore,
   } from '../lib/stores';
