@@ -45,7 +45,6 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
-    "@tb-dev/utils": "^4.1.0",
     "lodash-es": "^4.17.21"
   }
 }

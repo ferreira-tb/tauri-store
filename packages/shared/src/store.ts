@@ -1,15 +1,17 @@
+import { flushPromises } from './utils';
 import { listen, StoreEvent } from './event';
-import { TimeStrategy } from './utils/time-strategy';
-import type { Option, Writeable } from '@tb-dev/utils';
+import { TimeStrategy } from './time-strategy';
 import { DEFAULT_FILTER_KEYS_STRATEGY } from './defaults';
 import type {
   ConfigChangePayload,
+  Option,
   State,
   StateChangePayload,
   StoreBackendRawOptions,
   StoreKeyFilter,
   StoreKeyFilterStrategy,
   StoreOptions,
+  Writeable,
 } from './types';
 
 /**
@@ -206,8 +208,4 @@ function isStoreKeyMatch(filter: StoreKeyFilter, key: string): boolean {
     (Array.isArray(filter) && filter.includes(key)) ||
     (filter instanceof RegExp && filter.test(key))
   );
-}
-
-function flushPromises(): Promise<void> {
-  return new Promise((resolve) => void setTimeout(resolve, 0));
 }

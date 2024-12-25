@@ -16,9 +16,15 @@ export default defineConfig({
     svelte: true,
     vue: true,
   },
-  ignores: ['**/.nuxt/**', '**/tauri-store-cli/assets/**'],
+  ignores: [
+    '**/.nuxt/**',
+    '**/.svelte-kit',
+    '**/lib/components/ui/**',
+    '**/tauri-store-cli/assets/**',
+  ],
   overrides: {
     typescript: {
+      '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
     },

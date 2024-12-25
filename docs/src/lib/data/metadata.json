@@ -1,0 +1,10 @@
+[
+  {
+    "name": "tauri-plugin-pinia",
+    "version": "0.10.2"
+  },
+  {
+    "name": "tauri-plugin-svelte",
+    "version": "0.1.3"
+  }
+]

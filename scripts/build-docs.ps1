@@ -1,6 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
+cargo run -p tauri-store-cli -- docs
 pnpm run -F docs build
 
 $WithNamespace = @('shared')

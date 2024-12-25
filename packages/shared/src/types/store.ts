@@ -1,5 +1,5 @@
-import type { MaybePromise, Option } from '@tb-dev/utils';
-import type { LooseTimeStrategyKind, TimeStrategyRawTuple } from '../utils/time-strategy';
+import type { MaybePromise, Option } from './utils';
+import type { LooseTimeStrategyKind, TimeStrategyRawTuple } from '../time-strategy';
 
 /**
  * Options that can also be updated from Rust.

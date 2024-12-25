@@ -6,11 +6,7 @@ export { listen, StoreEvent } from './event';
 
 export { BaseStore, mergeStoreOptions } from './store';
 
-export {
-  type LooseTimeStrategyKind,
-  TimeStrategy,
-  type TimeStrategyKind,
-} from './utils/time-strategy';
+export { type LooseTimeStrategyKind, TimeStrategy, type TimeStrategyKind } from './time-strategy';
 
 export {
   DEFAULT_FILTER_KEYS,
@@ -25,6 +21,9 @@ export {
 
 export type {
   ConfigChangePayload,
+  MaybePromise,
+  Nil,
+  Option,
   State,
   StateChangePayload,
   StoreBackendOptions,

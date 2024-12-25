@@ -2,6 +2,8 @@ import type { Writable } from 'svelte/store';
 import type { State, StoreOptions, TauriStoreContract } from '@tauri-store/shared';
 
 export type {
+  MaybePromise,
+  Option,
   State,
   StoreBackendOptions,
   StoreFrontendOptions,

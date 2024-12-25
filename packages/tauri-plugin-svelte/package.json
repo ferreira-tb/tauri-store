@@ -47,7 +47,6 @@
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
     "@tauri-store/shared": "workspace:*",
-    "@tb-dev/utils": "^4.1.0",
     "svelte": "^5.15.0"
   }
 }

@@ -49,7 +49,6 @@
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
     "@tauri-store/shared": "workspace:*",
-    "@tb-dev/utils": "^4.1.0",
     "pinia": "^2.2.8",
     "vue": "^3.5.13"
   }
