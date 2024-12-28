@@ -14,7 +14,7 @@ export default defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: [/^@tauri-apps/, /^@tauri-store/, /^@tb-dev/, 'svelte', 'svelte/store'],
+      external: [/^@tauri-apps/, /^@tauri-store/, 'svelte', 'svelte/store'],
     },
   },
 });

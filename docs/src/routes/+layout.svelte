@@ -2,17 +2,17 @@
   import '../app.css';
   import type { Snippet } from 'svelte';
   import { ModeWatcher } from 'mode-watcher';
-  import Sidebar from '$lib/components/sidebar.svelte';
-  import SidebarProvider from '$lib/components/ui/sidebar/sidebar-provider.svelte';
+  import { Layout } from '$lib/components/layout';
+  import * as Sidebar from '$lib/components/sidebar';
 
   const { children }: { children: Snippet } = $props();
 </script>
 
-<SidebarProvider>
-  <Sidebar />
+<Sidebar.Provider>
+  <Sidebar.Root />
   <ModeWatcher defaultMode="dark" />
 
-  <main class="flex-1 p-4">
+  <Layout>
     {@render children()}
-  </main>
-</SidebarProvider>
+  </Layout>
+</Sidebar.Provider>

@@ -3,7 +3,7 @@
   "version": "0.10.2",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@9.15.1",
+  "packageManager": "pnpm@9.15.2",
   "scripts": {
     "build": "pnpm run build:shared && pnpm run build:package",
     "build:docs": "pwsh scripts/build-docs.ps1",
@@ -13,7 +13,7 @@
     "codegen": "cargo run -p tauri-store-cli -- codegen",
     "dev": "cargo tauri dev",
     "docs:cargo": "cargo doc -p tauri-plugin-* --open --no-deps",
-    "docs:vite": "pnpm run -F docs dev --open",
+    "docs:vite": "pnpm run -F docs dev --open --host",
     "eslint": "eslint . --config eslint.config.js --cache",
     "eslint:fix": "eslint . --config eslint.config.js --fix",
     "example": "pwsh scripts/start-example.ps1",
@@ -31,10 +31,10 @@
     "prettier-plugin-svelte": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.9",
     "tslib": "^2.8.1",
-    "typedoc": "^0.27.5",
+    "typedoc": "^0.27.6",
     "typedoc-plugin-mdn-links": "^4.0.6",
     "typescript": "~5.7.2",
-    "vite": "^6.0.5",
+    "vite": "^6.0.6",
     "vite-plugin-dts": "^4.4.0"
   }
 }

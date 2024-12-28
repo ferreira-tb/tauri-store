@@ -1,10 +1,9 @@
-use anyhow::Result;
 use semver::Version;
 use serde::{Deserialize, Serialize};
-use serde_json::{to_value, Value as Json};
 
 pub trait Manifest {
-  fn json(&self) -> Result<Json>;
+  fn name(&self) -> &str;
+  fn version(&self) -> &Version;
 }
 
 #[derive(Deserialize, Serialize)]
@@ -14,14 +13,34 @@ pub struct Package {
   version: Version,
 }
 
-impl Package {
+impl Manifest for Package {
+  fn name(&self) -> &str {
+    &self.name
+  }
+
+  fn version(&self) -> &Version {
+    &self.version
+  }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Crate {
+  package: Package,
+}
+
+impl Crate {
   pub fn boxed(self) -> Box<dyn Manifest> {
     Box::new(self)
   }
 }
 
-impl Manifest for Package {
-  fn json(&self) -> Result<Json> {
-    to_value(self).map_err(Into::into)
+impl Manifest for Crate {
+  fn name(&self) -> &str {
+    self.package.name()
+  }
+
+  fn version(&self) -> &Version {
+    self.package.version()
   }
 }

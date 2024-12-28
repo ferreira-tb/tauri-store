@@ -12,8 +12,10 @@ export class IsMobile {
         const onChange = () => {
           this.#current = window.innerWidth < MOBILE_BREAKPOINT;
         };
+
         mql.addEventListener('change', onChange);
         onChange();
+
         return () => {
           mql.removeEventListener('change', onChange);
         };

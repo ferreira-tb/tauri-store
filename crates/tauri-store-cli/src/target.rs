@@ -1,8 +1,7 @@
-use crate::manifest::{Manifest, Package};
-use crate::path::packages_dir;
+use crate::manifest::{Crate, Manifest};
+use crate::path::crates_dir;
 use anyhow::Result;
-use serde_json::from_slice;
-use std::fs::read;
+use std::fs::read_to_string;
 use strum::{AsRefStr, VariantArray};
 
 #[derive(Clone, Copy, Debug, AsRefStr, VariantArray)]
@@ -11,23 +10,27 @@ use strum::{AsRefStr, VariantArray};
 pub enum Target {
   TauriPluginPinia,
   TauriPluginSvelte,
+  TauriStore,
 }
 
 impl Target {
   pub fn manifest(&self) -> Result<Box<dyn Manifest>> {
-    let path = packages_dir()
+    let path = crates_dir()
       .join(self.as_ref())
-      .join("package.json");
+      .join("Cargo.toml");
 
-    from_slice::<Package>(&read(path)?)
-      .map(Package::boxed)
+    toml::from_str::<Crate>(&read_to_string(path)?)
+      .map(Crate::boxed)
       .map_err(Into::into)
   }
 
-  pub fn plugin_name(&self) -> &str {
-    match self {
+  pub fn plugin_name(&self) -> Option<&str> {
+    let name = match self {
       Self::TauriPluginPinia => "pinia",
       Self::TauriPluginSvelte => "svelte",
-    }
+      Self::TauriStore => return None,
+    };
+
+    Some(name)
   }
 }

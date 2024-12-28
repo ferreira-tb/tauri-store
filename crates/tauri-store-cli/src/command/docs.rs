@@ -1,8 +1,12 @@
 use crate::path::docs_data_dir;
 use crate::target::Target;
 use anyhow::Result;
+use bon::Builder;
 use clap::Args;
-use serde_json::{to_vec_pretty, Value as Json};
+use convert_case::{Case, Casing};
+use semver::Version;
+use serde::Serialize;
+use serde_json::to_vec_pretty;
 use std::cmp::Ordering;
 use std::fs;
 use strum::VariantArray;
@@ -18,26 +22,84 @@ impl Docs {
 }
 
 fn generate_metadata() -> Result<()> {
-  let mut manifests = Vec::with_capacity(Target::VARIANTS.len());
+  let mut targets = Vec::with_capacity(Target::VARIANTS.len());
   for target in Target::VARIANTS {
-    manifests.push(target.manifest()?.json()?);
+    let manifest = target.manifest()?;
+    let plugin_name = target.plugin_name();
+
+    let name = manifest.name();
+    let docs_url = DocsUrl::builder()
+      .maybe_javascript(plugin_name.map(|_| docs_js(name)))
+      .rust(docs_rs(name))
+      .changelog(changelog(name))
+      .build();
+
+    let metadata = Metadata::builder()
+      .name(name)
+      .version(manifest.version().clone())
+      .is_plugin(plugin_name.is_some())
+      .docs(docs_url)
+      .build();
+
+    targets.push(metadata);
   }
 
-  manifests.sort_unstable_by(sort);
+  targets.sort_unstable();
 
   let path = docs_data_dir().join("metadata.json");
-  fs::write(path, to_vec_pretty(&manifests)?)?;
+  fs::write(path, to_vec_pretty(&targets)?)?;
 
   Ok(())
 }
 
-fn sort(a: &Json, b: &Json) -> Ordering {
-  name(a).cmp(name(b))
+#[derive(Builder, Serialize)]
+#[serde(rename_all = "camelCase")]
+#[builder(on(String, into))]
+struct Metadata {
+  name: String,
+  version: Version,
+  is_plugin: bool,
+  docs: DocsUrl,
 }
 
-fn name(target: &Json) -> &str {
-  target
-    .get("name")
-    .and_then(|name| name.as_str())
-    .expect("name is required")
+impl PartialEq for Metadata {
+  fn eq(&self, other: &Self) -> bool {
+    self.name == other.name
+  }
+}
+
+impl Eq for Metadata {}
+
+impl PartialOrd for Metadata {
+  fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+    Some(self.cmp(other))
+  }
+}
+
+impl Ord for Metadata {
+  fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+    self.name.cmp(&other.name)
+  }
+}
+
+#[derive(Builder, Serialize)]
+#[serde(rename_all = "camelCase")]
+#[builder(on(String, into))]
+struct DocsUrl {
+  javascript: Option<String>,
+  rust: String,
+  changelog: String,
+}
+
+fn docs_js(name: &str) -> String {
+  format!("https://tb.dev.br/tauri-store/reference/{name}/index.html")
+}
+
+fn docs_rs(name: &str) -> String {
+  let snake = name.to_case(Case::Snake);
+  format!("https://tb.dev.br/tauri-store/rust-docs/{snake}")
+}
+
+fn changelog(name: &str) -> String {
+  format!("/tauri-store/changelog/{name}")
 }
