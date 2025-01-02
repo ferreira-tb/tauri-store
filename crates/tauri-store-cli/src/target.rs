@@ -5,16 +5,18 @@ use std::fs::read_to_string;
 use strum::{AsRefStr, VariantArray};
 
 #[derive(Clone, Copy, Debug, AsRefStr, VariantArray)]
-#[strum(serialize_all = "kebab-case")]
 #[remain::sorted]
 pub enum Target {
-  TauriPluginPinia,
-  TauriPluginSvelte,
-  TauriStore,
+  #[strum(serialize = "tauri-plugin-pinia")]
+  PluginPinia,
+  #[strum(serialize = "tauri-plugin-svelte")]
+  PluginSvelte,
+  #[strum(serialize = "tauri-store")]
+  Store,
 }
 
 impl Target {
-  pub fn manifest(&self) -> Result<Box<dyn Manifest>> {
+  pub fn manifest(self) -> Result<Box<dyn Manifest>> {
     let path = crates_dir()
       .join(self.as_ref())
       .join("Cargo.toml");
@@ -25,12 +27,6 @@ impl Target {
   }
 
   pub fn plugin_name(&self) -> Option<&str> {
-    let name = match self {
-      Self::TauriPluginPinia => "pinia",
-      Self::TauriPluginSvelte => "svelte",
-      Self::TauriStore => return None,
-    };
-
-    Some(name)
+    self.as_ref().strip_prefix("tauri-plugin-")
   }
 }

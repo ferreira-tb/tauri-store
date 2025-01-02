@@ -1,6 +1,5 @@
 {
   "name": "docs",
-  "version": "0.1.0",
   "type": "module",
   "packageManager": "pnpm@9.15.2",
   "private": true,
@@ -21,7 +20,7 @@
     "lucide-svelte": "^0.469.0",
     "mode-watcher": "^0.5.0",
     "postcss": "^8.4.49",
-    "svelte": "^5.15.0",
+    "svelte": "^5.16.1",
     "svelte-check": "^4.1.1",
     "tailwind-merge": "^2.6.0",
     "tailwind-variants": "^0.3.0",

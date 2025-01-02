@@ -37,6 +37,7 @@ fn generate_metadata() -> Result<()> {
     let metadata = Metadata::builder()
       .name(name)
       .version(manifest.version().clone())
+      .maybe_title(plugin_name.map(|it| it.to_case(Case::Title)))
       .is_plugin(plugin_name.is_some())
       .docs(docs_url)
       .build();
@@ -58,6 +59,7 @@ fn generate_metadata() -> Result<()> {
 struct Metadata {
   name: String,
   version: Version,
+  title: Option<String>,
   is_plugin: bool,
   docs: DocsUrl,
 }

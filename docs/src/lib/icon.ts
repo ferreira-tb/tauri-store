@@ -1,5 +1,5 @@
-import * as Icon from '../icons';
-import type { Mode } from './mode';
+import * as Icon from './components/icons';
+import type { Mode } from './components/sidebar/mode';
 import { BookOpen, Code, FileClock } from 'lucide-svelte';
 
 export function resolvePluginIcon(plugin: TauriPlugin) {

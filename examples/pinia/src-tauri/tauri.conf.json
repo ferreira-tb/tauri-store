@@ -1,6 +1,5 @@
 {
   "productName": "example-pinia",
-  "version": "0.10.2",
   "identifier": "com.tbdev.example",
   "build": {
     "beforeDevCommand": "pnpm run -F example-pinia vite:dev",
@@ -9,7 +8,7 @@
     "devUrl": "http://localhost:1422"
   },
   "app": {
-    "withGlobalTauri": false,
+    "withGlobalTauri": true,
     "security": {
       "assetProtocol": {
         "enable": true

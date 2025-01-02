@@ -13,3 +13,7 @@ export const rustDocs = metadata
 export const changelogs = metadata
   .filter((it) => Boolean(it.docs.changelog))
   .map((it) => ({ label: it.name, url: it.docs.changelog }));
+
+export function findMetadata(name: PackageName) {
+  return metadata.find((it) => it.name === name)!;
+}

@@ -37,4 +37,4 @@ Get-ChildItem -Path './crates' -Directory |
   ForEach-Object { Build-CrateDocs -Name $_.Name }
 
 
-Copy-Item -Path './target/doc' -Destination './docs/.vitepress/dist/rust-docs' -Recurse
+Copy-Item -Path './target/doc' -Destination './docs/dist/rust-docs' -Recurse

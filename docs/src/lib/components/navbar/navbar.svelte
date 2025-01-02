@@ -1,51 +1,76 @@
 <script lang="ts">
+  import { tick } from 'svelte';
   import { cn } from '$lib/utils';
   import * as Icon from '../icons';
   import Link from '../link.svelte';
+  import { NAVBAR_HEIGHT } from './constants';
   import NavbarMenu from './navbar-menu.svelte';
+  import { resolvePluginIcon } from '$lib/icon';
+  import NavbarMobile from './navbar-mobile.svelte';
+  import { currentPlugin } from '$lib/stores/plugin';
+  import NavbarDesktop from './navbar-desktop.svelte';
+  import type { Headings } from '../content/aside.svelte';
   import { Separator } from '$lib/components/ui/separator';
-  import { DISCORD, GITHUB, NAVBAR_HEIGHT } from './constants';
   import { changelogs, javascriptDocs, rustDocs } from '$lib/data';
   import { Trigger as SidebarTrigger, useSidebar } from '../sidebar';
 
   interface Props {
-    class?: string;
+    headings: Headings;
+    height: string;
     left: string;
   }
 
-  const { class: className, left }: Props = $props();
+  const { headings, height, left }: Props = $props();
 
   const sidebar = useSidebar();
+
+  async function openSidebar() {
+    await tick();
+    sidebar.toggle();
+  }
 </script>
 
-<header style:left style:height={NAVBAR_HEIGHT} class={cn('flex justify-between', className)}>
-  {#if sidebar.isMobile || !sidebar.open}
-    <div class="flex h-full select-none items-center pl-4 pt-2">
-      <a href="/tauri-store" class="text-xl font-semibold">tauri-store</a>
-    </div>
-  {/if}
+<header
+  style:left
+  style:height
+  class={cn(
+    'fixed right-0 top-0 z-50',
+    sidebar.isMobile
+      ? 'bg-sidebar'
+      : 'bg-background border-sidebar-border border-b shadow-sm transition-[left] duration-200 ease-linear'
+  )}
+>
+  <div style:height={NAVBAR_HEIGHT} class="flex items-center justify-between whitespace-nowrap">
+    {#if sidebar.isMobile || !sidebar.open}
+      <div class="flex h-full select-none items-center gap-2 pl-4">
+        {#if !sidebar.isMobile}
+          <SidebarTrigger />
+        {/if}
 
-  <div class={cn('flex w-full items-center justify-end', sidebar.isMobile ? 'pr-2' : 'pr-8')}>
-    {#if sidebar.isMobile}
-      <SidebarTrigger />
-    {:else}
-      <nav class="flex items-center gap-6 font-semibold">
-        <a href="/tauri-store/guide/getting-started">Guide</a>
-        <NavbarMenu label="JavaScript" items={javascriptDocs} external />
-        <NavbarMenu label="Rust" items={rustDocs} external />
-        <NavbarMenu label="Changelog" items={changelogs} />
-      </nav>
-      <div class="h-[calc(100%-2rem)]">
-        <Separator orientation="vertical" class="mx-4" />
-      </div>
-      <div class="flex items-center justify-end gap-4">
-        <Link href={GITHUB} external>
-          <Icon.Github size="1.25rem" />
-        </Link>
-        <Link href={DISCORD} external>
-          <Icon.Discord size="1.25rem" />
-        </Link>
+        <a href="/tauri-store" class="text-xl font-semibold">tauri-store</a>
       </div>
     {/if}
+    <div class={cn('flex size-full items-center justify-end', sidebar.isMobile ? 'pr-4' : 'pr-8')}>
+      {#if sidebar.isMobile && $currentPlugin}
+        {@const PluginIcon = resolvePluginIcon($currentPlugin)}
+        {#key $currentPlugin}
+          <button type="button" onclick={openSidebar} class="text-muted-foreground">
+            <PluginIcon size="1.5rem" />
+          </button>
+        {/key}
+      {:else if !sidebar.isMobile}
+        <NavbarDesktop />
+      {/if}
+    </div>
   </div>
+
+  {#if sidebar.isMobile}
+    <NavbarMobile {headings} {openSidebar} />
+  {/if}
 </header>
+
+<style lang="postcss">
+  :global(.navbar-button-mobile) {
+    @apply text-muted-foreground hover:text-foreground flex items-center text-sm transition-colors duration-200 ease-linear;
+  }
+</style>

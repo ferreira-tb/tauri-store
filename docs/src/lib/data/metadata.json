@@ -2,6 +2,7 @@
   {
     "name": "tauri-plugin-pinia",
     "version": "0.10.2",
+    "title": "Pinia",
     "isPlugin": true,
     "docs": {
       "javascript": "https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/index.html",
@@ -12,6 +13,7 @@
   {
     "name": "tauri-plugin-svelte",
     "version": "0.1.3",
+    "title": "Svelte",
     "isPlugin": true,
     "docs": {
       "javascript": "https://tb.dev.br/tauri-store/reference/tauri-plugin-svelte/index.html",
@@ -22,6 +24,7 @@
   {
     "name": "tauri-store",
     "version": "0.5.0",
+    "title": null,
     "isPlugin": false,
     "docs": {
       "javascript": null,

@@ -6,18 +6,20 @@
     class?: string;
     external?: boolean;
     href: string;
-    onclick?: () => void;
+    onclick?: (e: MouseEvent) => void;
+    title?: string;
   }
 
-  const { href, external, onclick, class: className, children }: Props = $props();
+  const p: Props = $props();
 </script>
 
 <a
-  {href}
-  class={className}
-  target={external ? '_blank' : null}
-  rel={external ? 'noopener noreferrer' : null}
-  {onclick}
+  href={p.href}
+  title={p.title}
+  target={p.external ? '_blank' : null}
+  rel={p.external ? 'noopener noreferrer' : null}
+  onclick={(e) => p.onclick?.(e)}
+  class={p.class}
 >
-  {@render children()}
+  {@render p.children()}
 </a>

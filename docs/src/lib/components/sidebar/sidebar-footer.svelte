@@ -1,7 +1,7 @@
 <script lang="ts">
   import { plugins } from '$lib/data';
   import { ChevronUp } from 'lucide-svelte';
-  import { resolvePluginIcon } from './icon';
+  import { resolvePluginIcon } from '$lib/icon';
   import { currentPlugin } from '$lib/stores/plugin';
   import * as Sidebar from '$lib/components/ui/sidebar';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';

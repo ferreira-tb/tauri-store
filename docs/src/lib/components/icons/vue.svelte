@@ -5,14 +5,15 @@
     width?: string;
   }
 
-  const { size = '1em', width, height }: Props = $props();
+  const { size = '1em', width, height, ...restProps }: Props = $props();
 </script>
 
 <svg
-  xmlns="http://www.w3.org/2000/svg"
   width={width ?? size}
   height={height ?? size}
   viewBox="0 0 256 221"
+  xmlns="http://www.w3.org/2000/svg"
+  {...restProps}
 >
   <path fill="#41B883" d="M204.8 0H256L128 220.8L0 0h97.92L128 51.2L157.44 0z" />
   <path fill="#41B883" d="m0 0l128 220.8L256 0h-51.2L128 132.48L50.56 0z" />

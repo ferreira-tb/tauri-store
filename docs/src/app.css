@@ -68,19 +68,66 @@
   * {
     @apply border-border;
   }
-  body {
-    @apply bg-background text-foreground;
+
+  html {
+    font-size: 16px;
   }
-}
 
-html {
-  font-size: 16px;
-  line-height: 1.75;
-}
+  body {
+    @apply bg-background text-foreground min-h-screen font-normal;
+    font-synthesis: style;
+    text-rendering: optimizeLegibility;
+  }
 
-body {
-  min-height: 100vh;
-  font-weight: 400;
-  font-synthesis: style;
-  text-rendering: optimizeLegibility;
+  main h1 {
+    @apply mt-2 scroll-m-20 text-4xl font-bold;
+  }
+
+  main h2 {
+    @apply mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight;
+  }
+
+  main h3 {
+    @apply mt-8 scroll-m-20 text-xl font-semibold tracking-tight;
+  }
+
+  main h4 {
+    @apply mt-8 scroll-m-20 text-lg font-semibold tracking-tight;
+  }
+
+  main h5 {
+    @apply mt-8 scroll-m-20 text-lg font-semibold tracking-tight;
+  }
+
+  main h6 {
+    @apply mt-8 scroll-m-20 text-base font-semibold tracking-tight;
+  }
+
+  main p {
+    @apply leading-7 [&:not(:first-child)]:mt-6;
+  }
+
+  main a:not(aside a) {
+    @apply font-medium underline underline-offset-4;
+  }
+
+  main aside a {
+    @apply text-muted-foreground;
+  }
+
+  main code {
+    @apply bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm;
+  }
+
+  main ol {
+    @apply my-6 ml-6 list-decimal;
+  }
+
+  main ul {
+    @apply my-6 ml-6 list-disc;
+  }
+
+  main li {
+    @apply mt-2;
+  }
 }

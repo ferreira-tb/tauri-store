@@ -5,7 +5,7 @@
     width?: string;
   }
 
-  const { size = '1em', width, height }: Props = $props();
+  const { size = '1em', width, height, ...restProps }: Props = $props();
 </script>
 
 <svg
@@ -13,6 +13,7 @@
   height={height ?? size}
   viewBox="0 0 256 250"
   xmlns="http://www.w3.org/2000/svg"
+  {...restProps}
 >
   <path
     fill="currentColor"

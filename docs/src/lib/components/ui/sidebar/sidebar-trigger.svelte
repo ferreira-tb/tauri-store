@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Button } from '$lib/components/ui/button/index.js';
   import { cn } from '$lib/utils.js';
-  import { Menu } from '$lib/components/icons';
+  import { Menu } from 'lucide-svelte';
   import type { ComponentProps } from 'svelte';
   import { useSidebar } from './context.svelte.js';
 

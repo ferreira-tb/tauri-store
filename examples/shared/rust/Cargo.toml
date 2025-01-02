@@ -1,7 +1,9 @@
 [package]
 name = "example-shared"
-version = "0.10.2"
 publish = false
+
+[package.version]
+workspace = true
 
 [package.edition]
 workspace = true

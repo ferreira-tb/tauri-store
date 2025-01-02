@@ -5,7 +5,7 @@
     width?: string;
   }
 
-  const { size = '1em', width, height }: Props = $props();
+  const { size = '1em', width, height, ...restProps }: Props = $props();
 </script>
 
 <svg
@@ -16,6 +16,7 @@
   xmlns="http://www.w3.org/2000/svg"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   preserveAspectRatio="xMidYMid"
+  {...restProps}
 >
   <g>
     <path

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { resolveHeaderIcon } from './icon';
   import { ChevronDown } from 'lucide-svelte';
+  import { resolveHeaderIcon } from '$lib/icon';
   import * as Sidebar from '$lib/components/ui/sidebar';
   import { DEFAULT_MODE, type Mode, mode } from './mode';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';

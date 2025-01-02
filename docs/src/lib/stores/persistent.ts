@@ -1,5 +1,4 @@
-import { tick } from 'svelte';
-import { get, type Subscriber, writable } from 'svelte/store';
+import { type Subscriber, writable } from 'svelte/store';
 
 class Persistent<T extends string = string> {
   private readonly key: string;
@@ -17,14 +16,11 @@ class Persistent<T extends string = string> {
 
   public set(value: T) {
     this.value.set(value);
-    void tick().then(() => {
-      const _value = get(this.value);
-      if (_value === null || _value.length === 0) {
-        localStorage.removeItem(this.key);
-      } else {
-        localStorage.setItem(this.key, _value);
-      }
-    });
+    if (value.length === 0) {
+      localStorage.removeItem(this.key);
+    } else {
+      localStorage.setItem(this.key, value);
+    }
   }
 
   private load() {

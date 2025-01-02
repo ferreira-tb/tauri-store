@@ -2,8 +2,8 @@ import { persistent } from './persistent';
 import type { Subscriber } from 'svelte/store';
 import metadata from '$lib/data/metadata.json';
 
-const DEFAULT_PLUGIN = 'tauri-plugin-pinia';
 const STORAGE_KEY = 'current-plugin';
+export const DEFAULT_PLUGIN = 'tauri-plugin-pinia';
 
 class CurrentPlugin {
   private readonly plugin = persistent<TauriPlugin>(STORAGE_KEY, DEFAULT_PLUGIN);

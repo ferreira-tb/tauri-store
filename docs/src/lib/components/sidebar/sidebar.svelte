@@ -13,7 +13,9 @@
   });
 
   function closeMobileSidebar() {
-    sidebar.openMobile &&= false;
+    if (sidebar.isMobile) {
+      sidebar.openMobile &&= false;
+    }
   }
 </script>
 

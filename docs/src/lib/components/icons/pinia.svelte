@@ -5,14 +5,15 @@
     width?: string;
   }
 
-  const { size = '1em', width, height }: Props = $props();
+  const { size = '1em', width, height, ...restProps }: Props = $props();
 </script>
 
 <svg
-  xmlns="http://www.w3.org/2000/svg"
   width={width ?? size}
   height={height ?? size}
   viewBox="0 0 256 331"
+  xmlns="http://www.w3.org/2000/svg"
+  {...restProps}
 >
   <defs>
     <linearGradient id="logosPinia0" x1="55.342%" x2="42.817%" y1="0%" y2="42.863%">

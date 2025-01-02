@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { cn } from '$lib/utils';
+  import { Content } from '../content';
   import type { Snippet } from 'svelte';
-  import { Navbar, NAVBAR_HEIGHT } from '../navbar';
+  import { useHeadings } from '../content/aside.svelte';
   import { SIDEBAR_WIDTH, useSidebar } from '../sidebar';
+  import { Navbar, NAVBAR_HEIGHT, NAVBAR_HEIGHT_MOBILE } from '../navbar';
 
   const { children }: { children: Snippet } = $props();
 
@@ -11,14 +12,17 @@
     if (!sidebar.open || sidebar.isMobile) return '0px';
     return SIDEBAR_WIDTH;
   });
+
+  const navbarHeight = $derived.by(() => {
+    return sidebar.isMobile ? NAVBAR_HEIGHT_MOBILE : NAVBAR_HEIGHT;
+  });
+
+  const headings = useHeadings();
 </script>
 
 <div class="flex min-h-screen w-full flex-col">
-  <Navbar left={sidebarWidth} class="bg-sidebar fixed right-0 top-0 z-50 whitespace-nowrap" />
-  <main
-    style:padding-top={NAVBAR_HEIGHT}
-    class={cn('z-0 m-0 w-full flex-shrink-0 flex-grow', sidebar.isMobile ? 'px-2' : 'px-8')}
-  >
+  <Navbar height={navbarHeight} left={sidebarWidth} {headings} />
+  <Content {headings} {navbarHeight}>
     {@render children()}
-  </main>
+  </Content>
 </div>
