@@ -13,19 +13,19 @@
     url: string;
   }
 
-  const p: Props = $props();
+  const { items, label, external }: Props = $props();
 </script>
 
 <DropdownMenu.Root>
   <DropdownMenu.Trigger>
     {#snippet child({ props })}
-      <span {...props} class="cursor-pointer">{p.label}</span>
+      <span {...props} class="cursor-pointer">{label}</span>
     {/snippet}
   </DropdownMenu.Trigger>
   <DropdownMenu.Content align="end" preventScroll={false}>
-    {#each p.items as item (item.label)}
+    {#each items as item (item.label)}
       <DropdownMenu.Item>
-        <Link href={item.url} external={p.external}>
+        <Link href={item.url} {external}>
           <button type="button" class="flex w-full items-center justify-start px-2">
             {item.label}
           </button>

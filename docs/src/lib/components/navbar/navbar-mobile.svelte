@@ -1,6 +1,7 @@
 <script lang="ts">
   import { tick } from 'svelte';
   import Link from '../link.svelte';
+  import { useSidebar } from '../sidebar';
   import * as Sheet from '$lib/components/ui/sheet';
   import { Menu, PanelRightOpen } from 'lucide-svelte';
   import type { Headings } from '../content/aside.svelte';
@@ -9,16 +10,21 @@
 
   interface Props {
     headings: Headings;
-    openSidebar: () => void;
   }
 
-  const { headings, openSidebar }: Props = $props();
+  const { headings }: Props = $props();
 
+  const sidebar = useSidebar();
   let isSheetOpen = $state(false);
 
   async function closeSheet() {
     await tick();
     isSheetOpen &&= false;
+  }
+
+  async function openSidebar() {
+    await tick();
+    sidebar.toggle();
   }
 </script>
 

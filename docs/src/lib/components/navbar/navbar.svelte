@@ -1,17 +1,11 @@
 <script lang="ts">
-  import { tick } from 'svelte';
   import { cn } from '$lib/utils';
-  import * as Icon from '../icons';
-  import Link from '../link.svelte';
   import { NAVBAR_HEIGHT } from './constants';
-  import NavbarMenu from './navbar-menu.svelte';
-  import { resolvePluginIcon } from '$lib/icon';
   import NavbarMobile from './navbar-mobile.svelte';
+  import NavbarPlugin from './navbar-plugin.svelte';
   import { currentPlugin } from '$lib/stores/plugin';
   import NavbarDesktop from './navbar-desktop.svelte';
   import type { Headings } from '../content/aside.svelte';
-  import { Separator } from '$lib/components/ui/separator';
-  import { changelogs, javascriptDocs, rustDocs } from '$lib/data';
   import { Trigger as SidebarTrigger, useSidebar } from '../sidebar';
 
   interface Props {
@@ -23,11 +17,6 @@
   const { headings, height, left }: Props = $props();
 
   const sidebar = useSidebar();
-
-  async function openSidebar() {
-    await tick();
-    sidebar.toggle();
-  }
 </script>
 
 <header
@@ -52,12 +41,7 @@
     {/if}
     <div class={cn('flex size-full items-center justify-end', sidebar.isMobile ? 'pr-4' : 'pr-8')}>
       {#if sidebar.isMobile && $currentPlugin}
-        {@const PluginIcon = resolvePluginIcon($currentPlugin)}
-        {#key $currentPlugin}
-          <button type="button" onclick={openSidebar} class="text-muted-foreground">
-            <PluginIcon size="1.5rem" />
-          </button>
-        {/key}
+        <NavbarPlugin />
       {:else if !sidebar.isMobile}
         <NavbarDesktop />
       {/if}
@@ -65,7 +49,7 @@
   </div>
 
   {#if sidebar.isMobile}
-    <NavbarMobile {headings} {openSidebar} />
+    <NavbarMobile {headings} />
   {/if}
 </header>
 
