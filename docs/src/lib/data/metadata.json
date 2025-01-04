@@ -5,7 +5,7 @@
     "title": "Pinia",
     "isPlugin": true,
     "docs": {
-      "javascript": "https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/index.html",
+      "javascript": "https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia",
       "rust": "https://tb.dev.br/tauri-store/rust-docs/tauri_plugin_pinia",
       "changelog": "/tauri-store/changelog/tauri-plugin-pinia"
     }
@@ -16,7 +16,7 @@
     "title": "Svelte",
     "isPlugin": true,
     "docs": {
-      "javascript": "https://tb.dev.br/tauri-store/reference/tauri-plugin-svelte/index.html",
+      "javascript": "https://tb.dev.br/tauri-store/reference/tauri-plugin-svelte",
       "rust": "https://tb.dev.br/tauri-store/rust-docs/tauri_plugin_svelte",
       "changelog": "/tauri-store/changelog/tauri-plugin-svelte"
     }

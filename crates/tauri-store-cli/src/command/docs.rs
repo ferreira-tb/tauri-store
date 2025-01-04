@@ -94,7 +94,7 @@ struct DocsUrl {
 }
 
 fn docs_js(name: &str) -> String {
-  format!("https://tb.dev.br/tauri-store/reference/{name}/index.html")
+  format!("https://tb.dev.br/tauri-store/reference/{name}")
 }
 
 fn docs_rs(name: &str) -> String {

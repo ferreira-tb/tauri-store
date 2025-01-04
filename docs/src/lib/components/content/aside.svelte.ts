@@ -24,6 +24,19 @@ class Headings {
         };
       });
   }
+
+  public update() {
+    const get = this.get.bind(this);
+    if (typeof requestIdleCallback === 'function') {
+      requestIdleCallback(get, { timeout: 100 });
+    } else {
+      setTimeout(get, 0);
+    }
+  }
+
+  public cleanup() {
+    this.value = [];
+  }
 }
 
 const headings = new Headings();
@@ -32,31 +45,21 @@ export function useHeadings() {
   $effect(() => {
     const url = page.url.toString();
     if (headings.lastRoute !== url) {
-      untrack(() => update());
+      untrack(() => {
+        headings.lastRoute = url;
+        headings.update();
+      });
     }
 
-    return cleanup;
+    return headings.cleanup.bind(headings);
   });
 
   onMount(() => {
-    update();
-    return cleanup;
+    headings.update();
+    return headings.cleanup.bind(headings);
   });
 
   return headings;
-}
-
-function cleanup() {
-  headings.value = [];
-}
-
-function update() {
-  const get = headings.get.bind(headings);
-  if (typeof requestIdleCallback === 'function') {
-    requestIdleCallback(get, { timeout: 100 });
-  } else {
-    setTimeout(get, 0);
-  }
 }
 
 export type { Headings };

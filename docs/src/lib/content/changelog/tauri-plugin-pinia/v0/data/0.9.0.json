@@ -1,8 +1,5 @@
 {
   "url": {
-    "saveInterval": "https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/interfaces/StoreBackendOptions.html#saveinterval",
-    "saveOnChange": "https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/interfaces/StoreBackendOptions.html#saveonchange",
-    "saveStrategy": "https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/interfaces/StoreBackendOptions.html#savestrategy",
     "tauri-store": "https://docs.rs/tauri-store/0.4.0/tauri_store/"
   }
 }

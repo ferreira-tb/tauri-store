@@ -72,7 +72,7 @@
 
 <Changelog.BugFixes {version}>
   <ul>
-    <li>Consume the first autosave tick immediately, before starting the interval.</li>
+    <li>Consume the first autosave tick immediately before starting the interval.</li>
   </ul>
 </Changelog.BugFixes>
 

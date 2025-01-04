@@ -30,7 +30,7 @@
 
 {#if accordion}
   <Accordion.Root type="single">
-    <Accordion.Item>
+    <Accordion.Item class="border-b-0">
       <Accordion.Trigger>{trigger}</Accordion.Trigger>
       <Accordion.Content>
         {@render codeBlock()}

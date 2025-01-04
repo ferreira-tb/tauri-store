@@ -26,53 +26,42 @@ interface HighlighterOptions {
   lang: Lang;
 }
 
-function highlighterFactory() {
-  let core: HighlighterCore | null = null;
-  let loadPromise: Promise<unknown> | null = null;
+class Highlighter {
+  private core: HighlighterCore | null = null;
+  private loading: Promise<HighlighterCore> | null = null;
 
-  return async (): Promise<HighlighterCore> => {
-    await loadPromise;
-    loadPromise &&= null;
+  public async load(): Promise<HighlighterCore> {
+    if (this.core) return this.core;
+    if (this.loading) return this.loading;
 
-    if (!core) {
-      loadPromise = new Promise((resolve, reject) => {
-        create()
-          .then((it) => void (core = it))
-          .then(resolve, reject);
-      });
+    this.loading = createHighlighterCore({
+      engine: createOnigurumaEngine(import('shiki/wasm')),
+      themes: [import('shiki/themes/vitesse-dark.mjs'), import('shiki/themes/vitesse-light.mjs')],
+      langs: [
+        import('shiki/langs/json.mjs'),
+        import('shiki/langs/powershell.mjs'),
+        import('shiki/langs/rust.mjs'),
+        import('shiki/langs/shell.mjs'),
+        import('shiki/langs/svelte.mjs'),
+        import('shiki/langs/toml.mjs'),
+        import('shiki/langs/tsx.mjs'),
+        import('shiki/langs/typescript.mjs'),
+        import('shiki/langs/vue.mjs'),
+      ],
+    });
 
-      await loadPromise;
-    }
-
-    await tick();
-
-    if (core) return core;
-    throw new Error('failed to load highlighter');
-  };
+    return this.loading.then((core) => {
+      this.core = core;
+      this.loading = null;
+      return core;
+    });
+  }
 }
 
-function create() {
-  return createHighlighterCore({
-    engine: createOnigurumaEngine(import('shiki/wasm')),
-    themes: [import('shiki/themes/vitesse-dark.mjs'), import('shiki/themes/vitesse-light.mjs')],
-    langs: [
-      import('shiki/langs/json.mjs'),
-      import('shiki/langs/powershell.mjs'),
-      import('shiki/langs/rust.mjs'),
-      import('shiki/langs/shell.mjs'),
-      import('shiki/langs/svelte.mjs'),
-      import('shiki/langs/toml.mjs'),
-      import('shiki/langs/tsx.mjs'),
-      import('shiki/langs/typescript.mjs'),
-      import('shiki/langs/vue.mjs'),
-    ],
-  });
-}
-
-const highlighter = highlighterFactory();
+const highlighter = new Highlighter();
 
 export async function highlight(code: string, options: HighlighterOptions) {
-  const core = await highlighter();
+  const core = await highlighter.load();
   return core.codeToHtml(code, {
     ...options,
     theme: get(mode) === 'light' ? 'vitesse-light' : 'vitesse-dark',

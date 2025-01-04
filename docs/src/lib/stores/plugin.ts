@@ -24,8 +24,8 @@ class CurrentPlugin {
 
 export const currentPlugin = new CurrentPlugin();
 
-export const currentMetadata = derived(currentPlugin, derive, null);
+export const currentMetadata = derived(currentPlugin, derive, findMetadata(DEFAULT_PLUGIN));
 
 function derive(current: TauriPlugin | null) {
-  return current ? findMetadata(current) : null;
+  return findMetadata(current ?? DEFAULT_PLUGIN);
 }

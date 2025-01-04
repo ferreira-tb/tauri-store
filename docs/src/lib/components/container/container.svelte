@@ -5,13 +5,11 @@
 
   type Props = HTMLAttributes<HTMLElement> & {
     children?: Snippet;
-    class?: string;
-    id?: string;
     level?: 1 | 2 | 3 | 4 | 5 | 6;
     title: string;
   };
 
-  const { id, level = 2, title, children, ...restProps }: Props = $props();
+  const { id, title, level = 2, children, ...restProps }: Props = $props();
 </script>
 
 <article {...restProps}>

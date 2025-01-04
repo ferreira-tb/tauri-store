@@ -6,23 +6,21 @@
   const version = '0.9.0';
 </script>
 
-{#snippet ext(key: keyof typeof data.url)}
-  <Ext href={data.url[key]} code>{key}</Ext>
-{/snippet}
-
 <Changelog.Version {version} />
 
 <Changelog.BreakingChanges {version}>
   <ul>
-    <li>Update {@render ext('tauri-store')} to <code>0.4.0</code>.</li>
+    <li>
+      Update <Ext href={data.url['tauri-store']} code>tauri-store</Ext> to <code>0.4.0</code>.
+    </li>
   </ul>
 </Changelog.BreakingChanges>
 
 <Changelog.Features {version}>
   <ul>
     <li>
-      Add {@render ext('saveInterval')}, {@render ext('saveStrategy')}, and
-      {@render ext('saveOnChange')} options.
+      Add <code>saveInterval</code>, <code>saveStrategy</code>, and
+      <code>saveOnChange</code> options.
     </li>
   </ul>
 </Changelog.Features>

@@ -1,15 +1,17 @@
 <script lang="ts">
+  import { cn } from '$lib/utils';
   import type { Snippet } from 'svelte';
   import { Root } from '$lib/components/ui/alert';
+  import type { HTMLAttributes } from 'svelte/elements';
 
-  interface Props {
+  type Props = HTMLAttributes<HTMLElement> & {
     children: Snippet;
-  }
+  };
 
-  const { children }: Props = $props();
+  const { class: className, children }: Props = $props();
 </script>
 
-<div class="[&:not(:first-child)]:pt-4">
+<div class={cn('[&:not(:first-child)]:pt-4', className)}>
   <Root>
     {@render children()}
   </Root>

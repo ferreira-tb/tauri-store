@@ -14,14 +14,12 @@ function derive(fn: SnippetFn) {
   };
 }
 
-type SnippetGroupFn = (metadata: Metadata) => Code[];
+type SnippetGroupFn = (metadata: Metadata) => Code | Code[];
 
 export function snippetGroup(fn: SnippetGroupFn) {
   return derived(currentMetadata, deriveGroup(fn), []);
 }
 
 function deriveGroup(fn: SnippetGroupFn) {
-  return function (current: Metadata | null) {
-    return current ? fn(current) : [];
-  };
+  return (current: Metadata) => fn(current);
 }

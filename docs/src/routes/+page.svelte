@@ -2,7 +2,7 @@
   import { findMetadata } from '$lib/data';
   import * as Alert from '$lib/components/alert';
   import { Container } from '$lib/components/container';
-  import { Ext, Link, PluginLink } from '$lib/components/link';
+  import { Ext, PluginLink } from '$lib/components/link';
 
   const url = {
     cargoFeatures: 'https://doc.rust-lang.org/cargo/reference/features.html',

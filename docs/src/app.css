@@ -129,14 +129,19 @@
   }
 
   main ol {
-    @apply my-6 ml-6 list-decimal;
+    @apply my-6 ml-6 list-outside list-decimal;
   }
 
   main ul {
-    @apply my-6 ml-6 list-disc;
+    @apply my-6 ml-6 list-outside list-disc;
   }
 
   main li {
     @apply mt-2 break-words;
+  }
+
+  main li > .ts-code-group:last-child,
+  .ts-code-block:last-child {
+    @apply mb-6;
   }
 }

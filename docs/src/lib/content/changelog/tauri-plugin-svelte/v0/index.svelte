@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { sortVersions } from '$lib/content/changelog/version';
+  import { sortVersions } from '$lib/glob/version';
 
   const versions = import.meta.glob('./0.*.svelte', { eager: true });
   const components = sortVersions(versions);
