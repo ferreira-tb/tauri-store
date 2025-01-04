@@ -25,7 +25,7 @@
   <DropdownMenu.Content align="end" preventScroll={false}>
     {#each items as item (item.label)}
       <DropdownMenu.Item>
-        <Link href={item.url} {external}>
+        <Link href={item.url} {external} class="w-full">
           <button type="button" class="flex w-full items-center justify-start px-2">
             {item.label}
           </button>
