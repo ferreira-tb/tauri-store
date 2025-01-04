@@ -34,11 +34,7 @@
           {/snippet}
         </DropdownMenu.Trigger>
 
-        <DropdownMenu.Content
-          side="top"
-          preventScroll={false}
-          class="w-[--bits-dropdown-menu-anchor-width]"
-        >
+        <DropdownMenu.Content side="top" class="w-[--bits-dropdown-menu-anchor-width]">
           {#each plugins as plugin (plugin.name)}
             {@const PluginIcon = resolvePluginIcon(plugin.name as TauriPlugin)}
             <DropdownMenu.Item>
