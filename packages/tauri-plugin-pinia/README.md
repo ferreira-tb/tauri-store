@@ -11,7 +11,7 @@ Persistent Pinia stores for Tauri and Vue.
 
 ## Documentation
 
-Check the [documentation](https://tb.dev.br/tauri-store/guide/getting-started) for more information on how to install and use the plugin.
+Check the [documentation](https://tb.dev.br/tauri-store/guide/getting-started?plugin=tauri-plugin-pinia) for more information on how to install and use the plugin.
 
 ## Supported Tauri Version
 

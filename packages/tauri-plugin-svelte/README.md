@@ -11,7 +11,7 @@ Persistent Svelte stores for Tauri.
 
 ## Documentation
 
-Check the [documentation](https://tb.dev.br/tauri-store/guide/getting-started) for more information on how to install and use the plugin.
+Check the [documentation](https://tb.dev.br/tauri-store/guide/getting-started?plugin=tauri-plugin-svelte) for more information on how to install and use the plugin.
 
 ## Supported Tauri Version
 
