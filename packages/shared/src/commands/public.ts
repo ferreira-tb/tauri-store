@@ -1,13 +1,12 @@
 import { flatten } from '../utils';
-import type { Option } from '@tb-dev/utils';
 import { invoke } from '@tauri-apps/api/core';
-import type { State, StoreBackendOptions, StoreBackendRawOptions } from '../types';
+import type { Option, State, StoreBackendOptions, StoreBackendRawOptions } from '../types';
 import {
   isValidInterval,
   TimeStrategy,
   type TimeStrategyKind,
   type TimeStrategyRawTuple,
-} from '../utils/time-strategy';
+} from '../time-strategy';
 
 export function clearAutosave(plugin: string) {
   return function (): Promise<void> {

@@ -4,7 +4,7 @@
   "description": "Persistent Svelte stores for Tauri",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@9.15.1",
+  "packageManager": "pnpm@9.15.2",
   "homepage": "https://tb.dev.br/tauri-store",
   "license": "MIT",
   "repository": {
@@ -47,7 +47,6 @@
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
     "@tauri-store/shared": "workspace:*",
-    "@tb-dev/utils": "^4.1.0",
     "svelte": "^5.15.0"
   }
 }

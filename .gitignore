@@ -25,10 +25,8 @@ target/
 **/node_modules
 dist/
 
-# Vite and Vitepress
+# Vite
 **/*vite*timestamp*
-**/.vitepress/dist
-**/.vitepress/cache
 
 # Nuxt
 .nuxt

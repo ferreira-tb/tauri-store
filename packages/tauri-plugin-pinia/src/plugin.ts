@@ -46,5 +46,4 @@ export function createPlugin(pluginOptions: TauriPluginPiniaOptions = {}) {
  * This is an alias for
  * [`createPlugin`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/functions/createPlugin.html).
  */
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export const TauriPluginPinia = createPlugin;

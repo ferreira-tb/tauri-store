@@ -1,23 +1,35 @@
 {
   "name": "docs",
-  "version": "0.10.2",
   "type": "module",
-  "packageManager": "pnpm@9.15.1",
+  "packageManager": "pnpm@9.15.2",
   "private": true,
   "scripts": {
-    "build": "vitepress build",
-    "dev": "vitepress dev",
-    "preview": "vitepress preview"
-  },
-  "dependencies": {
-    "@tb-dev/utils": "^4.1.0",
-    "@vueuse/core": "^12.2.0",
-    "change-case": "^5.4.4",
-    "vitepress": "^1.5.0",
-    "vue": "^3.5.13"
+    "build": "vite build",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "dev": "vite dev",
+    "preview": "vite preview"
   },
   "devDependencies": {
+    "@sveltejs/adapter-static": "^3.0.8",
+    "@sveltejs/kit": "^2.15.1",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@tb-dev/utils": "^4.1.2",
     "@types/semver": "^7.5.8",
-    "semver": "^7.6.3"
+    "autoprefixer": "^10.4.20",
+    "bits-ui": "1.0.0-next.77",
+    "change-case": "^5.4.4",
+    "clsx": "^2.1.1",
+    "lucide-svelte": "^0.469.0",
+    "mode-watcher": "^0.5.0",
+    "postcss": "^8.4.49",
+    "semver": "^7.6.3",
+    "shiki": "^1.26.1",
+    "svelte": "^5.16.1",
+    "svelte-check": "^4.1.1",
+    "tailwind-merge": "^2.6.0",
+    "tailwind-variants": "^0.3.0",
+    "tailwindcss": "^3.4.17",
+    "tailwindcss-animate": "^1.0.7"
   }
 }

@@ -1,7 +1,9 @@
 [package]
 name = "example-pinia"
-version = "0.10.2"
 publish = false
+
+[package.version]
+workspace = true
 
 [package.edition]
 workspace = true

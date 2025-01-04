@@ -1,0 +1,35 @@
+[
+  {
+    "name": "tauri-plugin-pinia",
+    "version": "0.10.2",
+    "title": "Pinia",
+    "isPlugin": true,
+    "docs": {
+      "javascript": "https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia",
+      "rust": "https://tb.dev.br/tauri-store/rust-docs/tauri_plugin_pinia",
+      "changelog": "/tauri-store/changelog/tauri-plugin-pinia"
+    }
+  },
+  {
+    "name": "tauri-plugin-svelte",
+    "version": "0.1.3",
+    "title": "Svelte",
+    "isPlugin": true,
+    "docs": {
+      "javascript": "https://tb.dev.br/tauri-store/reference/tauri-plugin-svelte",
+      "rust": "https://tb.dev.br/tauri-store/rust-docs/tauri_plugin_svelte",
+      "changelog": "/tauri-store/changelog/tauri-plugin-svelte"
+    }
+  },
+  {
+    "name": "tauri-store",
+    "version": "0.5.0",
+    "title": null,
+    "isPlugin": false,
+    "docs": {
+      "javascript": null,
+      "rust": "https://tb.dev.br/tauri-store/rust-docs/tauri_store",
+      "changelog": "/tauri-store/changelog/tauri-store"
+    }
+  }
+]

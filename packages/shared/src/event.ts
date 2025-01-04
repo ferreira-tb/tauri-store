@@ -7,6 +7,9 @@ export enum StoreEvent {
   Unload = 'tauri-store://unload',
 }
 
+/**
+ * Listen for store events emitted to the current webview window.
+ */
 export function listen<T>(event: StoreEvent, listener: EventCallback<T>): Promise<UnlistenFn> {
   return getCurrentWebviewWindow().listen<T>(event, listener);
 }

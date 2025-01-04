@@ -2,6 +2,8 @@ import type { WatchOptions } from 'vue';
 import type { StoreFrontendOptions, StoreOptions } from '@tauri-store/shared';
 
 export type {
+  MaybePromise,
+  Option,
   State,
   StoreBackendOptions,
   StoreFrontendOptions,

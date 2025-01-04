@@ -4,7 +4,7 @@
   "description": "Utilities for Tauri Store",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@9.15.1",
+  "packageManager": "pnpm@9.15.2",
   "homepage": "https://tb.dev.br/tauri-store",
   "license": "MIT",
   "repository": {
@@ -45,7 +45,6 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
-    "@tb-dev/utils": "^4.1.0",
     "lodash-es": "^4.17.21"
   }
 }

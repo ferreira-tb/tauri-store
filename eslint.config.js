@@ -16,10 +16,23 @@ export default defineConfig({
     svelte: true,
     vue: true,
   },
-  ignores: ['**/.nuxt/**', '**/tauri-store-cli/assets/**'],
+  ignores: [
+    '**/.nuxt/**',
+    '**/.svelte-kit',
+    '**/lib/components/ui/**',
+    '**/tauri-store-cli/assets/**',
+  ],
   overrides: {
+    svelte: {
+      'svelte/block-lang': 'off',
+      'svelte/no-at-html-tags': 'off',
+      'svelte/no-inline-styles': 'off',
+    },
     typescript: {
+      '@typescript-eslint/naming-convention': 'off',
+      '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
     },
     vue: {

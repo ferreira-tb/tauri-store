@@ -1,6 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
+cargo run -p tauri-store-cli -- docs
 pnpm run -F docs build
 
 $WithNamespace = @('shared')
@@ -36,4 +37,4 @@ Get-ChildItem -Path './crates' -Directory |
   ForEach-Object { Build-CrateDocs -Name $_.Name }
 
 
-Copy-Item -Path './target/doc' -Destination './docs/.vitepress/dist/rust-docs' -Recurse
+Copy-Item -Path './target/doc' -Destination './docs/dist/rust-docs' -Recurse

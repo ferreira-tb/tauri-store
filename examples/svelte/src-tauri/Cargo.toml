@@ -1,7 +1,9 @@
 [package]
 name = "example-svelte"
-version = "0.1.3"
 publish = false
+
+[package.version]
+workspace = true
 
 [package.edition]
 workspace = true
