@@ -38,12 +38,12 @@ jobs:
           pnpm run codegen
           pnpm run build
           pnpm run build:docs
-          touch docs/.vitepress/dist/.nojekyll
+          touch docs/dist/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/.vitepress/dist
+          path: docs/dist
 
   deploy:
     environment:
