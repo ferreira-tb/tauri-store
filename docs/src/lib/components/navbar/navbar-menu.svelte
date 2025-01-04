@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Link from '../link.svelte';
+  import { Link } from '../link';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 
   interface Props {

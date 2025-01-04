@@ -1,9 +1,8 @@
 <script lang="ts">
   import { findMetadata } from '$lib/data';
-  import Link from '$lib/components/link.svelte';
   import * as Alert from '$lib/components/alert';
-  import Container from '$lib/components/container.svelte';
-  import PluginLink from '$lib/components/plugin-link.svelte';
+  import { Container } from '$lib/components/container';
+  import { Ext, Link, PluginLink } from '$lib/components/link';
 
   const url = {
     cargoFeatures: 'https://doc.rust-lang.org/cargo/reference/features.html',
@@ -31,8 +30,8 @@
 
   <Container title="Framework support" id="framework-support" level={2}>
     <p>
-      The <Link href={url.tauriStore} external><code>tauri-store</code></Link> crate is a framework-agnostic
-      backend for store plugins. Currently, the following plugins are available:
+      The <Ext href={url.tauriStore} code>tauri-store</Ext> crate is a framework-agnostic backend for
+      store plugins. Currently, the following plugins are available:
     </p>
     <ul>
       {#snippet pluginLink(label: string, name: TauriPlugin)}
@@ -50,7 +49,7 @@
     <ul>
       <li>
         <code>file-sync-all</code>: Calls
-        <Link href={url.fileSyncAll} external><code>File::sync_all</code></Link>
+        <Ext href={url.fileSyncAll} code>File::sync_all</Ext>
         after writing to the store file to ensure that all in-memory data reaches the filesystem. Enabling
         this can significantly degrade performance.
       </li>
@@ -60,13 +59,13 @@
   <Container title="Versioning" id="versioning" level={2}>
     <p>
       This crate follows
-      <Link href={url.semver} external>Cargo guidelines for SemVer compatibility</Link>.
+      <Ext href={url.semver}>Cargo guidelines for SemVer compatibility</Ext>.
     </p>
 
     <Alert.Root>
       <Alert.Title>Experimental features</Alert.Title>
       <Alert.Description>
-        <Link href={url.cargoFeatures} external>Cargo features</Link> prefixed with
+        <Ext href={url.cargoFeatures}>Cargo features</Ext> prefixed with
         <code>unstable-</code> are experimental and may introduce breaking changes between patch versions
         or even be completely removed.
       </Alert.Description>
@@ -76,8 +75,8 @@
   <Container title="Any questions?" id="any-questions" level={2}>
     <p>
       Feel free to start a discussion on the
-      <Link href={url.discussions} external>GitHub repository</Link>
-      or ask in our <Link href={url.discord} external>Discord server</Link>.
+      <Ext href={url.discussions}>GitHub repository</Ext>
+      or ask in our <Ext href={url.discord}>Discord server</Ext>.
     </p>
   </Container>
 </div>

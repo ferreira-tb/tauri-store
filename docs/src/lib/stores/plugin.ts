@@ -1,9 +1,12 @@
+import { findMetadata } from '$lib/data';
 import { persistent } from './persistent';
-import type { Subscriber } from 'svelte/store';
 import metadata from '$lib/data/metadata.json';
+import { derived, type Subscriber } from 'svelte/store';
 
 const STORAGE_KEY = 'current-plugin';
 export const DEFAULT_PLUGIN = 'tauri-plugin-pinia';
+
+export type Metadata = (typeof metadata)[0];
 
 class CurrentPlugin {
   private readonly plugin = persistent<TauriPlugin>(STORAGE_KEY, DEFAULT_PLUGIN);
@@ -20,3 +23,9 @@ class CurrentPlugin {
 }
 
 export const currentPlugin = new CurrentPlugin();
+
+export const currentMetadata = derived(currentPlugin, derive, null);
+
+function derive(current: TauriPlugin | null) {
+  return current ? findMetadata(current) : null;
+}

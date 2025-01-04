@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { Link } from '../link';
   import * as Icon from '../icons';
-  import Link from '../link.svelte';
   import NavbarMenu from './navbar-menu.svelte';
   import { Separator } from '$lib/components/ui/separator';
   import { changelogs, javascriptDocs, rustDocs } from '$lib/data';

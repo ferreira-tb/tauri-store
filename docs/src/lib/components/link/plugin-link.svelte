@@ -6,18 +6,23 @@
   import Link from './link.svelte';
   import type { Snippet } from 'svelte';
   import { currentPlugin } from '$lib/stores/plugin';
+  import type { HTMLAnchorAttributes } from 'svelte/elements';
 
-  interface Props {
+  type Props = HTMLAnchorAttributes & {
     children: Snippet;
     class?: string;
     href?: string;
     plugin: TauriPlugin;
     title?: string;
-  }
+  };
 
-  const { href = DEFAULT_HREF, ...p }: Props = $props();
+  const { href = DEFAULT_HREF, title, plugin, children, ...restProps }: Props = $props();
+
+  function onClick() {
+    currentPlugin.set(plugin);
+  }
 </script>
 
-<Link {href} title={p.title} class={p.class} onclick={() => ($currentPlugin = p.plugin)}>
-  {@render p.children()}
+<Link {...restProps} {href} {title} onclick={onClick}>
+  {@render children()}
 </Link>

@@ -79,32 +79,41 @@
     text-rendering: optimizeLegibility;
   }
 
+  main h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply scroll-m-32 break-words md:scroll-m-20;
+  }
+
   main h1 {
-    @apply mt-2 scroll-m-20 text-4xl font-bold;
+    @apply mt-2 text-4xl font-bold;
   }
 
   main h2 {
-    @apply mt-12 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight;
+    @apply mt-12 border-b pb-2 text-2xl font-semibold tracking-tight;
   }
 
   main h3 {
-    @apply mt-8 scroll-m-20 text-xl font-semibold tracking-tight;
+    @apply mt-8 text-xl font-semibold tracking-tight;
   }
 
   main h4 {
-    @apply mt-8 scroll-m-20 text-lg font-semibold tracking-tight;
+    @apply mt-8 text-lg font-semibold tracking-tight;
   }
 
   main h5 {
-    @apply mt-8 scroll-m-20 text-lg font-semibold tracking-tight;
+    @apply mt-8 text-lg font-semibold tracking-tight;
   }
 
   main h6 {
-    @apply mt-8 scroll-m-20 text-base font-semibold tracking-tight;
+    @apply mt-8 text-base font-semibold tracking-tight;
   }
 
   main p {
-    @apply leading-7 [&:not(:first-child)]:mt-6;
+    @apply break-words leading-7 [&:not(:first-child)]:mt-6;
   }
 
   main a:not(aside a) {
@@ -115,7 +124,7 @@
     @apply text-muted-foreground;
   }
 
-  main code {
+  main :not(pre) > code {
     @apply bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm;
   }
 
@@ -128,6 +137,6 @@
   }
 
   main li {
-    @apply mt-2;
+    @apply mt-2 break-words;
   }
 }

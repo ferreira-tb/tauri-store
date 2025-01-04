@@ -1,6 +1,6 @@
 <script lang="ts">
   import { mode } from './mode';
-  import Link from '../link.svelte';
+  import { Link } from '../link';
   import Footer from './sidebar-footer.svelte';
   import Header from './sidebar-header.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar';

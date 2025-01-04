@@ -25,6 +25,7 @@ export default defineConfig({
   overrides: {
     svelte: {
       'svelte/block-lang': 'off',
+      'svelte/no-at-html-tags': 'off',
       'svelte/no-inline-styles': 'off',
     },
     typescript: {

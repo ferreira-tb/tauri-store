@@ -1,6 +1,6 @@
 <script lang="ts">
   import { tick } from 'svelte';
-  import Link from '../link.svelte';
+  import { Link } from '../link';
   import { useSidebar } from '../sidebar';
   import * as Sheet from '$lib/components/ui/sheet';
   import { Menu, PanelRightOpen } from 'lucide-svelte';

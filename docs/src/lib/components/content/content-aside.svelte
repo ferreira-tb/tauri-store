@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Link from '../link.svelte';
+  import { Link } from '../link';
   import type { Headings } from './aside.svelte';
 
   interface Props {
