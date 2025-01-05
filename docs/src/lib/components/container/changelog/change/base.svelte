@@ -4,6 +4,7 @@
   export type ChangeKind =
     | 'Breaking changes'
     | 'Bug fixes'
+    | 'Dependencies'
     | 'Documentation'
     | 'Enhancements'
     | 'Features'
