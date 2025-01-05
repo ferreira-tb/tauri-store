@@ -1,6 +1,5 @@
 <script lang="ts">
   import { cn } from '$lib/utils';
-  import { useSidebar } from '../sidebar';
   import { highlight, type Lang } from '$lib/code';
   import type { HTMLAttributes } from 'svelte/elements';
   import * as Accordion from '$lib/components/ui/accordion';
