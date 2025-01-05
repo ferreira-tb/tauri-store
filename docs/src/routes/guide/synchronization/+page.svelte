@@ -6,6 +6,11 @@
   import { syncOptions } from '$lib/content/guide/synchronization/snippets';
 </script>
 
+<svelte:head>
+  <title>Synchronization | tauri-store</title>
+  <meta name="description" content="Synchronization" />
+</svelte:head>
+
 <Container title="Synchronization" level={1}>
   <p>
     Whenever the state changes, the store notifies Rust to keep the frontend and backend in sync.

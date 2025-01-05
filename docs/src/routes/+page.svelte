@@ -14,6 +14,11 @@
   };
 </script>
 
+<svelte:head>
+  <title>tauri-store | Persistent stores for Tauri</title>
+  <meta name="description" content="Persistent stores for Tauri" />
+</svelte:head>
+
 <div>
   <Container title="tauri-store" id="tauri-store" level={1}>
     <p>Persistent stores for Tauri.</p>

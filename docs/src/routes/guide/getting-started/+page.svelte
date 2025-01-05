@@ -22,6 +22,11 @@
   });
 </script>
 
+<svelte:head>
+  <title>Getting started | tauri-store</title>
+  <meta name="description" content="Getting started" />
+</svelte:head>
+
 <div>
   <Container title="Getting started" level={1}>
     <Alert.Root>
