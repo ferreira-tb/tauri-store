@@ -1,13 +1,11 @@
-import { debounce as lodashDebounce, throttle as lodashThrottle } from 'lodash-es';
+import { debounce as kitDebounce, throttle as kitThrottle } from 'es-toolkit';
 
-// FIXME: We should not depend on lodash for this. A custom implementation would be better.
 export function debounce<T extends (...args: any) => any>(f: T, wait?: number): T {
-  return lodashDebounce(f, wait) as unknown as T;
+  return kitDebounce(f, wait ?? 0) as unknown as T;
 }
 
-// FIXME: Same as debounce. We need a custom implementation.
 export function throttle<T extends (...args: any) => any>(f: T, wait?: number): T {
-  return lodashThrottle(f, wait) as unknown as T;
+  return kitThrottle(f, wait ?? 0) as unknown as T;
 }
 
 /**
