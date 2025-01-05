@@ -10,7 +10,6 @@ interface Heading {
 
 class Headings {
   public value: Heading[] = $state.raw([]);
-  public lastRoute: string | null = null;
 
   public get() {
     this.value = Array.from(document.querySelectorAll('main h2'))
@@ -43,15 +42,8 @@ const headings = new Headings();
 
 export function useHeadings() {
   $effect(() => {
-    const url = page.url.toString();
-    if (headings.lastRoute !== url) {
-      untrack(() => {
-        headings.lastRoute = url;
-        headings.update();
-      });
-    }
-
-    return headings.cleanup.bind(headings);
+    const _ = page.url;
+    untrack(() => headings.update());
   });
 
   onMount(() => {
