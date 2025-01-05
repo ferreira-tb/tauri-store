@@ -37,7 +37,7 @@
           <Button
             variant="ghost"
             onclick={() => onClick(plugin.name)}
-            class="flex items-center gap-1 p-0"
+            class="flex items-center gap-2 p-4"
           >
             <Icon />
             <span>{plugin.name}</span>
