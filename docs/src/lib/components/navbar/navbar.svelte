@@ -3,6 +3,7 @@
   import { NAVBAR_HEIGHT } from './constants';
   import NavbarMobile from './navbar-mobile.svelte';
   import NavbarPlugin from './navbar-plugin.svelte';
+  import NavbarSocial from './navbar-social.svelte';
   import { currentPlugin } from '$lib/stores/plugin';
   import NavbarDesktop from './navbar-desktop.svelte';
   import type { Headings } from '../content/aside.svelte';
@@ -40,8 +41,12 @@
       </div>
     {/if}
     <div class={cn('flex size-full items-center justify-end', sidebar.isMobile ? 'pr-4' : 'pr-8')}>
-      {#if sidebar.isMobile && $currentPlugin}
-        <NavbarPlugin />
+      {#if sidebar.isMobile}
+        <NavbarSocial size="1.5rem">
+          {#if $currentPlugin}
+            <NavbarPlugin />
+          {/if}
+        </NavbarSocial>
       {:else if !sidebar.isMobile}
         <NavbarDesktop />
       {/if}

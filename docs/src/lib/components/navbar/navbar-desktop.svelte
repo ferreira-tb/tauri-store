@@ -1,14 +1,8 @@
 <script lang="ts">
-  import { Link } from '../link';
-  import * as Icon from '../icons';
   import NavbarMenu from './navbar-menu.svelte';
+  import NavbarSocial from './navbar-social.svelte';
   import { Separator } from '$lib/components/ui/separator';
   import { changelogs, javascriptDocs, rustDocs } from '$lib/data';
-
-  const url = {
-    discord: 'https://discord.gg/ARd7McmVNv',
-    github: 'https://github.com/ferreira-tb/tauri-store',
-  };
 </script>
 
 <nav class="flex items-center gap-6 font-semibold">
@@ -22,11 +16,4 @@
   <Separator orientation="vertical" class="mx-4" />
 </div>
 
-<div class="flex items-center justify-end gap-4">
-  <Link href={url.github} external>
-    <Icon.Github size="1.25rem" />
-  </Link>
-  <Link href={url.discord} external>
-    <Icon.Discord size="1.25rem" />
-  </Link>
-</div>
+<NavbarSocial />

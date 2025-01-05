@@ -1,6 +1,9 @@
 <script lang="ts">
   import { findMetadata } from '$lib/data';
+  import { resolvePluginIcon } from '$lib/icon';
   import * as Alert from '$lib/components/alert';
+  import metadata from '$lib/data/metadata.json';
+  import { Button } from '$lib/components/ui/button';
   import { Container } from '$lib/components/container';
   import { Ext, PluginLink } from '$lib/components/link';
 
@@ -20,11 +23,11 @@
 </svelte:head>
 
 <div>
-  <Container title="tauri-store" id="tauri-store" level={1}>
+  <Container title="tauri-store" level={1}>
     <p>Persistent stores for Tauri.</p>
   </Container>
 
-  <Container title="Features" id="features" level={2}>
+  <Container title="Features">
     <ul>
       <li>Save your stores to disk.</li>
       <li>Synchronize across multiple windows.</li>
@@ -33,24 +36,28 @@
     </ul>
   </Container>
 
-  <Container title="Framework support" id="framework-support" level={2}>
+  <Container title="Framework support">
     <p>
       The <Ext href={url.tauriStore} code>tauri-store</Ext> crate is a framework-agnostic backend for
       store plugins. Currently, the following plugins are available:
     </p>
-    <ul>
-      {#snippet pluginLink(label: string, name: TauriPlugin)}
-        <li>
-          {label}: <PluginLink plugin={name}>{name}</PluginLink>
-        </li>
-      {/snippet}
 
-      {@render pluginLink('Pinia', 'tauri-plugin-pinia')}
-      {@render pluginLink('Svelte', 'tauri-plugin-svelte')}
-    </ul>
+    <div class="mt-4 flex flex-wrap justify-center gap-2">
+      {#each metadata as plugin (plugin.name)}
+        {#if plugin.isPlugin}
+          {@const Icon = resolvePluginIcon(plugin.name as TauriPlugin)}
+          <PluginLink plugin={plugin.name as TauriPlugin}>
+            <Button variant="ghost">
+              <Icon />
+              <span>{plugin.name}</span>
+            </Button>
+          </PluginLink>
+        {/if}
+      {/each}
+    </div>
   </Container>
 
-  <Container title="Optional features" id="optional-features" level={2}>
+  <Container title="Optional features">
     <ul>
       <li>
         <code>file-sync-all</code>: Calls
@@ -61,7 +68,7 @@
     </ul>
   </Container>
 
-  <Container title="Versioning" id="versioning" level={2}>
+  <Container title="Versioning">
     <p>
       This crate follows
       <Ext href={url.semver}>Cargo guidelines for SemVer compatibility</Ext>.
@@ -77,7 +84,7 @@
     </Alert.Root>
   </Container>
 
-  <Container title="Any questions?" id="any-questions" level={2}>
+  <Container title="Any questions?" id="any-questions">
     <p>
       Feel free to start a discussion on the
       <Ext href={url.discussions}>GitHub repository</Ext>

@@ -31,13 +31,13 @@
         <span>Select a plugin</span>
       </Dialog.Title>
 
-      <div class="flex max-h-[70vh] flex-col gap-2 py-2">
+      <div class="flex max-h-[70vh] flex-wrap justify-center gap-2 py-2">
         {#each plugins as plugin (plugin.name)}
           {@const Icon = resolvePluginIcon(plugin.name as TauriPlugin)}
           <Button
-            variant="outline"
+            variant="ghost"
             onclick={() => onClick(plugin.name)}
-            class="flex items-center gap-1"
+            class="flex items-center gap-1 p-0"
           >
             <Icon />
             <span>{plugin.name}</span>
