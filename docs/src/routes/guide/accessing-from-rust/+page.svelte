@@ -25,6 +25,11 @@
   });
 </script>
 
+<svelte:head>
+  <title>Accessing from Rust | tauri-store</title>
+  <meta name="description" content="Accessing stores from Rust" />
+</svelte:head>
+
 {#snippet ext(key: keyof typeof url)}
   <Ext href={url[key]} code>{key}</Ext>
 {/snippet}

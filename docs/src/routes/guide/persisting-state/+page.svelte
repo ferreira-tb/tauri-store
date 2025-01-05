@@ -23,6 +23,11 @@
   });
 </script>
 
+<svelte:head>
+  <title>Persisting state | tauri-store</title>
+  <meta name="description" content="Persisting store state" />
+</svelte:head>
+
 {#snippet ext(key: keyof typeof url, label?: string)}
   <Ext href={url[key]} code>{label ?? key}</Ext>
 {/snippet}
