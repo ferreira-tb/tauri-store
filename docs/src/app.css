@@ -65,6 +65,12 @@
 }
 
 @layer base {
+  :root {
+    --content-padding: 1rem;
+  }
+}
+
+@layer base {
   * {
     @apply border-border;
   }
@@ -129,7 +135,7 @@
   }
 
   main ol {
-    @apply my-6 ml-6 list-outside list-decimal;
+    @apply my-6 list-inside list-decimal;
   }
 
   main ul {

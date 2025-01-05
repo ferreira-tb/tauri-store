@@ -29,9 +29,9 @@
 
 {#snippet codeGroup()}
   <div class="ts-code-group">
-    <Tabs.Root bind:value={activeTab} class="relative mr-auto w-full">
+    <Tabs.Root bind:value={activeTab} class="relative mx-0 w-full">
       <div class="flex items-center justify-between">
-        <Tabs.List class="w-full justify-start rounded-none border-b bg-transparent p-0">
+        <Tabs.List class=" w-full justify-start rounded-none border-b bg-transparent p-0">
           {#each group as { id, label } (id ?? label)}
             <Tabs.Trigger
               value={id ?? label}
@@ -65,6 +65,11 @@
 {/if}
 
 <style>
+  :global(.ts-mobile .ts-code-group [data-tabs-list]) {
+    margin: 0 calc(var(--content-padding) * -1);
+    width: 100vw;
+  }
+
   .ts-code-group :global(pre.shiki) {
     border-top-right-radius: 0px;
     border-top-left-radius: 0px;

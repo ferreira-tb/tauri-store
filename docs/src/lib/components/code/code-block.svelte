@@ -1,5 +1,6 @@
 <script lang="ts">
   import { cn } from '$lib/utils';
+  import { useSidebar } from '../sidebar';
   import { highlight, type Lang } from '$lib/code';
   import type { HTMLAttributes } from 'svelte/elements';
   import * as Accordion from '$lib/components/ui/accordion';
@@ -42,10 +43,21 @@
 {/if}
 
 <style>
+  :global(.ts-mobile .ts-code-block) {
+    margin: 0 calc(var(--content-padding) * -1);
+  }
+
   .ts-code-block > :global(pre) {
+    position: relative;
+    z-index: 1;
+    margin: 0;
     border-radius: 0.5rem;
     padding: 1rem;
     overflow-x: auto;
+  }
+
+  :global(.ts-mobile) .ts-code-block > :global(pre) {
+    border-radius: 0;
   }
 
   .ts-code-block :global(code) {
