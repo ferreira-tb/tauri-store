@@ -1,7 +1,7 @@
 {
   "name": "docs",
   "type": "module",
-  "packageManager": "pnpm@9.15.2",
+  "packageManager": "pnpm@9.15.3",
   "private": true,
   "scripts": {
     "build": "vite build",
@@ -25,7 +25,7 @@
     "postcss": "^8.4.49",
     "semver": "^7.6.3",
     "shiki": "^1.26.1",
-    "svelte": "^5.16.1",
+    "svelte": "^5.16.3",
     "svelte-check": "^4.1.1",
     "tailwind-merge": "^2.6.0",
     "tailwind-variants": "^0.3.0",

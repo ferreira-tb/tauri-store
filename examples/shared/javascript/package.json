@@ -1,7 +1,7 @@
 {
   "name": "example-shared-js",
   "type": "module",
-  "packageManager": "pnpm@9.15.2",
+  "packageManager": "pnpm@9.15.3",
   "private": true,
   "dependencies": {
     "@tauri-apps/api": "^2.1.1",

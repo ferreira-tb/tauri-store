@@ -1,40 +1,17 @@
 <script lang="ts">
   import { mode } from './mode';
-  import { Link } from '../link';
   import Footer from './sidebar-footer.svelte';
   import Header from './sidebar-header.svelte';
+  import MenuItem from './sidebar-menu-item.svelte';
   import * as Sidebar from '$lib/components/ui/sidebar';
+  import { useSidebar } from '$lib/components/ui/sidebar';
   import { changelogs, javascriptDocs, rustDocs } from '$lib/data';
-  import { useSidebar } from '$lib/components/ui/sidebar/index.js';
 
   const sidebar = useSidebar();
   const isLearnMode = $derived.by(() => {
     return !sidebar.isMobile || !$mode || $mode === 'learn';
   });
-
-  function closeMobileSidebar() {
-    if (sidebar.isMobile) {
-      sidebar.openMobile &&= false;
-    }
-  }
 </script>
-
-{#snippet menuItem(href: string, label: string, external = false)}
-  <Sidebar.MenuItem>
-    <Sidebar.MenuButton>
-      {#snippet child({ props })}
-        <Link {...props} {href} {external} onclick={closeMobileSidebar}>
-          {label}
-        </Link>
-      {/snippet}
-    </Sidebar.MenuButton>
-  </Sidebar.MenuItem>
-{/snippet}
-
-{#snippet guide(path: string, label: string)}
-  {@const href = `/tauri-store/guide/${path}`}
-  {@render menuItem(href, label)}
-{/snippet}
 
 <Sidebar.Root>
   <Header />
@@ -58,7 +35,7 @@
         <Sidebar.GroupContent>
           <Sidebar.Menu>
             {#each javascriptDocs as doc (doc.label)}
-              {@render menuItem(doc.url, doc.label, true)}
+              <MenuItem href={doc.url} label={doc.label} external />
             {/each}
           </Sidebar.Menu>
         </Sidebar.GroupContent>
@@ -69,7 +46,7 @@
         <Sidebar.GroupContent>
           <Sidebar.Menu>
             {#each rustDocs as doc (doc.label)}
-              {@render menuItem(doc.url, doc.label, true)}
+              <MenuItem href={doc.url} label={doc.label} external />
             {/each}
           </Sidebar.Menu>
         </Sidebar.GroupContent>
@@ -80,7 +57,7 @@
         <Sidebar.GroupContent>
           <Sidebar.Menu>
             {#each changelogs as changelog (changelog.label)}
-              {@render menuItem(changelog.url, changelog.label)}
+              <MenuItem href={changelog.url} label={changelog.label} />
             {/each}
           </Sidebar.Menu>
         </Sidebar.GroupContent>
@@ -90,3 +67,8 @@
 
   <Footer />
 </Sidebar.Root>
+
+{#snippet guide(path: string, label: string)}
+  {@const href = `/tauri-store/guide/${path}`}
+  <MenuItem {href} {label} />
+{/snippet}

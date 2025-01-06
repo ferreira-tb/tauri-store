@@ -1,6 +1,6 @@
 <script lang="ts">
   import { plugins } from '$lib/data';
-  import { ChevronUp } from 'lucide-svelte';
+  import { Button } from '../ui/button';
   import { resolvePluginIcon } from '$lib/icon';
   import { currentPlugin } from '$lib/stores/plugin';
   import * as Sidebar from '$lib/components/ui/sidebar';
@@ -13,24 +13,17 @@
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           {#snippet child({ props })}
-            <Sidebar.MenuButton
-              {...props}
-              class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
+            <div {...props}>
               {#if $currentPlugin}
                 {@const PluginIcon = resolvePluginIcon($currentPlugin)}
                 {#key $currentPlugin}
-                  <div class="flex items-center gap-1">
+                  <Button variant="secondary" class="w-full">
                     <PluginIcon />
                     <span>{$currentPlugin}</span>
-                  </div>
+                  </Button>
                 {/key}
-              {:else}
-                <span>Select a plugin</span>
               {/if}
-
-              <ChevronUp class="ml-auto" />
-            </Sidebar.MenuButton>
+            </div>
           {/snippet}
         </DropdownMenu.Trigger>
 
