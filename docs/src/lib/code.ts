@@ -1,4 +1,3 @@
-import { tick } from 'svelte';
 import { get } from 'svelte/store';
 import { mode } from 'mode-watcher';
 import { createOnigurumaEngine } from 'shiki/engine/oniguruma';
