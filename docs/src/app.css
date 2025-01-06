@@ -85,13 +85,16 @@
     text-rendering: optimizeLegibility;
   }
 
-  main h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  main :where(h1, h2, h3, h4, h5, h6) {
     @apply scroll-m-32 break-words md:scroll-m-20;
+  }
+
+  main :where(h1, h2) + div {
+    @apply mt-6;
+  }
+
+  main :where(h3, h4, h5, h6) + div {
+    @apply mt-3;
   }
 
   main h1 {
@@ -103,19 +106,19 @@
   }
 
   main h3 {
-    @apply mt-8 text-xl font-semibold tracking-tight;
+    @apply mt-4 text-xl font-semibold tracking-tight;
   }
 
   main h4 {
-    @apply mt-8 text-lg font-semibold tracking-tight;
+    @apply mt-4 text-lg font-semibold tracking-tight;
   }
 
   main h5 {
-    @apply mt-8 text-lg font-semibold tracking-tight;
+    @apply mt-4 text-lg font-semibold tracking-tight;
   }
 
   main h6 {
-    @apply mt-8 text-base font-semibold tracking-tight;
+    @apply mt-4 text-base font-semibold tracking-tight;
   }
 
   main p {
