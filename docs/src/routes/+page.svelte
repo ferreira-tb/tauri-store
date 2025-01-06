@@ -3,7 +3,6 @@
   import { resolvePluginIcon } from '$lib/icon';
   import * as Alert from '$lib/components/alert';
   import metadata from '$lib/data/metadata.json';
-  import { Button } from '$lib/components/ui/button';
   import { Container } from '$lib/components/container';
   import { Ext, PluginLink } from '$lib/components/link';
 
@@ -18,7 +17,7 @@
 </script>
 
 <svelte:head>
-  <title>tauri-store | Persistent stores for Tauri</title>
+  <title>tauri-store</title>
   <meta name="description" content="Persistent stores for Tauri" />
 </svelte:head>
 
@@ -42,19 +41,22 @@
       store plugins. Currently, the following plugins are available:
     </p>
 
-    <div class="mt-4 flex flex-wrap justify-center gap-2">
+    <ul class="mx-0 mt-4 list-none">
       {#each metadata as plugin (plugin.name)}
         {#if plugin.isPlugin}
           {@const Icon = resolvePluginIcon(plugin.name as TauriPlugin)}
-          <PluginLink plugin={plugin.name as TauriPlugin}>
-            <Button variant="ghost">
-              <Icon />
+          <li>
+            <PluginLink
+              plugin={plugin.name as TauriPlugin}
+              class="flex items-center justify-start gap-1"
+            >
+              <Icon size="1.25em" />
               <span>{plugin.name}</span>
-            </Button>
-          </PluginLink>
+            </PluginLink>
+          </li>
         {/if}
       {/each}
-    </div>
+    </ul>
   </Container>
 
   <Container title="Cargo features">

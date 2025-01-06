@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { ChevronDown } from 'lucide-svelte';
-  import { resolveHeaderIcon } from '$lib/icon';
+  import { resolveIcon } from './header';
+  import { ChevronsUpDown } from 'lucide-svelte';
   import * as Sidebar from '$lib/components/ui/sidebar';
   import { DEFAULT_MODE, type Mode, mode } from './mode';
+  import { useSidebar } from '$lib/components/ui/sidebar';
   import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-  import { useSidebar } from '$lib/components/ui/sidebar/index.js';
 
   const sidebar = useSidebar();
 
@@ -32,21 +32,24 @@
         <DropdownMenu.Root>
           <DropdownMenu.Trigger>
             {#snippet child({ props })}
-              {@const HeaderIcon = resolveHeaderIcon($mode)}
-              <Sidebar.MenuButton {...props}>
+              <Sidebar.MenuButton
+                size="lg"
+                class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                {...props}
+              >
                 {#key $mode}
-                  <div class="flex w-full items-center gap-2">
-                    <HeaderIcon class="size-3" />
+                  <div class="flex w-full items-center gap-2 text-lg font-semibold leading-none">
                     <span>{find($mode).label}</span>
                   </div>
                 {/key}
-                <ChevronDown class="ml-auto" />
+                <ChevronsUpDown class="ml-auto" />
               </Sidebar.MenuButton>
             {/snippet}
           </DropdownMenu.Trigger>
-          <DropdownMenu.Content class="w-[--bits-dropdown-menu-anchor-width]">
+
+          <DropdownMenu.Content align="start" class="w-[--bits-dropdown-menu-anchor-width]">
             {#each items as item (item.mode)}
-              {@const HeaderIcon = resolveHeaderIcon(item.mode)}
+              {@const HeaderIcon = resolveIcon(item.mode)}
               <DropdownMenu.Item>
                 <button
                   type="button"
