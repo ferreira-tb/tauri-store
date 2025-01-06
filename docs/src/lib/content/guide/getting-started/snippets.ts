@@ -1,5 +1,5 @@
 import { kebabCase, snakeCase } from 'change-case';
-import { snippet, snippetGroup } from '$lib/stores/snippet';
+import { snippetGroup } from '$lib/stores/snippet';
 
 export const installCrate = snippetGroup((metadata) => {
   return {
