@@ -4,15 +4,17 @@
   import { CodeBlock } from '$lib/components/code';
   import { currentMetadata } from '$lib/stores/plugin';
   import { Container } from '$lib/components/container';
-  import { get, tryGet } from '$lib/content/guide/accessing-from-rust/snippets';
+  import { get, tryGet, watchStore } from '$lib/content/guide/accessing-from-rust/snippets';
 
   const url = $derived.by(() => {
     const docs = $currentMetadata.docs;
     const title = $currentMetadata.title ?? '';
+    const pascalTitle = pascalCase(title);
     return {
       ManagerExt: `${docs.rust}/trait.ManagerExt.html`,
       Store: `${docs.rust}/struct.Store.html`,
-      try_get: `${docs.rust}/struct.${pascalCase(title)}.html#method.try_get`,
+      try_get: `${docs.rust}/struct.${pascalTitle}.html#method.try_get`,
+      watch: `${docs.rust}/struct.${pascalTitle}.html#method.watch`,
 
       AppHandle: 'https://docs.rs/tauri/latest/tauri/struct.AppHandle.html',
       Manager: 'https://docs.rs/tauri/latest/tauri/trait.Manager.html',
@@ -58,4 +60,15 @@
   </p>
 
   <CodeBlock lang="rust" code={$tryGet} />
+</Container>
+
+<Container title="Watching for changes">
+  <p>
+    Sometimes, we need to perform an action whenever the state of a store changes. While this is
+    often quite straightforward to achieve in the frontend, we may need to address it directly in
+    Rust. In these cases, the {@render ext('watch')} method can be used to set a closure that will be
+    called whenever there is a change.
+  </p>
+
+  <CodeBlock lang="rust" code={$watchStore} />
 </Container>
