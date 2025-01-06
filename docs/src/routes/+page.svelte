@@ -57,15 +57,17 @@
     </div>
   </Container>
 
-  <Container title="Optional features">
-    <ul>
-      <li>
-        <code>file-sync-all</code>: Calls
-        <Ext href={url.fileSyncAll} code>File::sync_all</Ext>
-        after writing to the store file to ensure that all in-memory data reaches the filesystem. Enabling
-        this can significantly degrade performance.
-      </li>
-    </ul>
+  <Container title="Cargo features">
+    <p>
+      You can enable some <Ext href={url.cargoFeatures}>Cargo features</Ext>
+      to customize the plugin's behavior.
+    </p>
+  </Container>
+
+  <Container title="file-sync-all" level={3}>
+    Calls <Ext href={url.fileSyncAll} code>File::sync_all</Ext>
+    after writing to the store file to ensure that all in-memory data reaches the filesystem. Enabling
+    this can significantly degrade performance.
   </Container>
 
   <Container title="Versioning">
@@ -77,9 +79,8 @@
     <Alert.Root>
       <Alert.Title>Experimental features</Alert.Title>
       <Alert.Description>
-        <Ext href={url.cargoFeatures}>Cargo features</Ext> prefixed with
-        <code>unstable-</code> are experimental and may introduce breaking changes between patch versions
-        or even be completely removed.
+        Features prefixed with <code>unstable-</code> are experimental and may introduce breaking changes
+        between patch versions or even be completely removed.
       </Alert.Description>
     </Alert.Root>
   </Container>

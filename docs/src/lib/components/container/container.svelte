@@ -18,7 +18,7 @@
   </svelte:element>
 
   {#if children}
-    <div class="mt-6">
+    <div>
       {@render children()}
     </div>
   {/if}
