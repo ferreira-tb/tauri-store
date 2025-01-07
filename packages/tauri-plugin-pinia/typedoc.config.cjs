@@ -9,5 +9,7 @@ module.exports = {
   excludeProtected: true,
   githubPages: false,
   hideGenerator: true,
+  markdownLinkExternal: true,
+  sourceLinkExternal: true,
   treatWarningsAsErrors: true,
 };
