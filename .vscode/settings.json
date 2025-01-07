@@ -20,7 +20,8 @@
   "conventionalCommits.promptScopes": true,
   "conventionalCommits.scopes": [
     "pinia",
-    "svelte"
+    "svelte",
+    "valtio"
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
