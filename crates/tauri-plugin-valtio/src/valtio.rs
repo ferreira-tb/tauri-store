@@ -5,6 +5,6 @@ use std::sync::Arc;
 use tauri::Runtime;
 use tauri_store::{Collection, StoreCollection};
 
-/// The Pinia plugin.
+/// The Valtio plugin.
 #[derive(Collection)]
-pub struct Pinia<R: Runtime>(pub(crate) Arc<StoreCollection<R>>);
+pub struct Valtio<R: Runtime>(pub(crate) Arc<StoreCollection<R>>);

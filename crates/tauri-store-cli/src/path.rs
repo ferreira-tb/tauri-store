@@ -27,14 +27,18 @@ join_dir!(crates_dir, CRATES_DIR);
 join_dir!(docs_data_dir, DOCS_DATA_DIR);
 join_dir!(packages_dir, PACKAGES_DIR);
 
+pub fn crate_src_dir(krate: Target) -> PathBuf {
+  crates_dir().join(krate.as_ref()).join("src")
+}
+
 pub fn crate_commands_dir(krate: Target) -> PathBuf {
-  crates_dir()
-    .join(krate.as_ref())
-    .join("src/command")
+  crate_src_dir(krate).join("command")
+}
+
+pub fn package_src_dir(package: Target) -> PathBuf {
+  packages_dir().join(package.as_ref()).join("src")
 }
 
 pub fn package_commands_dir(package: Target) -> PathBuf {
-  packages_dir()
-    .join(package.as_ref())
-    .join("src/commands")
+  package_src_dir(package).join("commands")
 }

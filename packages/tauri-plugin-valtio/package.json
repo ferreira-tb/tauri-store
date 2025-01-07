@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
-    "@tauri-store/shared": "workspace:*"
+    "@tauri-store/shared": "workspace:*",
+    "valtio": "^2.1.2"
   }
 }
