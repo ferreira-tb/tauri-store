@@ -292,6 +292,15 @@ importers:
         specifier: ^5.15.0
         version: 5.16.1
 
+  packages/tauri-plugin-valtio:
+    dependencies:
+      '@tauri-apps/api':
+        specifier: ^2.0.3
+        version: 2.2.0
+      '@tauri-store/shared':
+        specifier: workspace:*
+        version: link:../shared
+
 packages:
 
   '@alloc/quick-lru@5.2.0':

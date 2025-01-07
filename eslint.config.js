@@ -11,6 +11,7 @@ export default defineConfig({
     'packages/shared/tsconfig.json',
     'packages/tauri-plugin-pinia/tsconfig.json',
     'packages/tauri-plugin-svelte/tsconfig.json',
+    'packages/tauri-plugin-valtio/tsconfig.json',
   ],
   features: {
     svelte: true,

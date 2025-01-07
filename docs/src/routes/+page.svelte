@@ -81,7 +81,7 @@
     <Alert.Root>
       <Alert.Title>Experimental features</Alert.Title>
       <Alert.Description>
-        Features prefixed with <code>unstable-</code> are experimental and may introduce breaking changes
+        Features prefixed with <code>unstable</code> are experimental and may introduce breaking changes
         between patch versions or even be completely removed.
       </Alert.Description>
     </Alert.Root>

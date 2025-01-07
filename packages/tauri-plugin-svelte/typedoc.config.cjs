@@ -2,7 +2,7 @@
 module.exports = {
   entryPoints: ['src/index.ts'],
   out: '../../docs/dist/reference/tauri-plugin-svelte',
-  titleLink: 'https://tb.dev.br/tauri-store/guide/getting-started',
+  titleLink: 'https://tb.dev.br/tauri-store/guide/getting-started?plugin=tauri-plugin-svelte',
   includeVersion: true,
   excludeInternal: true,
   excludePrivate: true,

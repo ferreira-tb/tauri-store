@@ -3724,6 +3724,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "tauri-plugin-valtio"
+version = "0.0.1"
+dependencies = [
+ "serde",
+ "tauri",
+ "tauri-plugin",
+ "tauri-store",
+ "tracing",
+]
+
+[[package]]
 name = "tauri-plugin-window-state"
 version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
