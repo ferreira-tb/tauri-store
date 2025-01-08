@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { Link } from '../link';
   import { cn } from '$lib/utils';
-  import * as Icon from '../icons';
   import type { Snippet } from 'svelte';
+  import { Link } from '$lib/components/link';
+  import * as Icon from '$lib/components/icons';
 
   interface Props {
     children?: Snippet;

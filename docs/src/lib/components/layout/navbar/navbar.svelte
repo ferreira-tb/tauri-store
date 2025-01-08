@@ -6,8 +6,8 @@
   import NavbarSocial from './navbar-social.svelte';
   import { currentPlugin } from '$lib/stores/plugin';
   import NavbarDesktop from './navbar-desktop.svelte';
-  import type { Headings } from '../content/aside.svelte';
-  import { Trigger as SidebarTrigger, useSidebar } from '../sidebar';
+  import type { Headings } from '$lib/components/layout/content/aside.svelte';
+  import { Trigger as SidebarTrigger, useSidebar } from '$lib/components/layout/sidebar';
 
   interface Props {
     headings: Headings;

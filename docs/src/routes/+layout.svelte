@@ -3,9 +3,9 @@
   import { ModeWatcher } from 'mode-watcher';
   import metadata from '$lib/data/metadata.json';
   import { Layout } from '$lib/components/layout';
-  import * as Sidebar from '$lib/components/sidebar';
   import { currentPlugin } from '$lib/stores/plugin';
   import { onMount, type Snippet, tick } from 'svelte';
+  import * as Sidebar from '$lib/components/layout/sidebar';
 
   const { children }: { children: Snippet } = $props();
 

@@ -42,7 +42,8 @@ const headings = new Headings();
 
 export function useHeadings() {
   $effect(() => {
-    const _ = page.url;
+    // @ts-expect-error hello darkness, my old friend
+    const _url = page.url;
     untrack(() => headings.update());
   });
 

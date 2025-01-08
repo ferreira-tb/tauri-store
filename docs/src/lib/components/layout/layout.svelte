@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { Content } from '../content';
+  import { Content } from './content';
   import type { Snippet } from 'svelte';
   import type { Action } from 'svelte/action';
-  import { useHeadings } from '../content/aside.svelte';
-  import { SIDEBAR_WIDTH, useSidebar } from '../sidebar';
-  import { Navbar, NAVBAR_HEIGHT, NAVBAR_HEIGHT_MOBILE } from '../navbar';
+  import { useHeadings } from './content/aside.svelte';
+  import { SIDEBAR_WIDTH, useSidebar } from './sidebar';
+  import { Navbar, NAVBAR_HEIGHT, NAVBAR_HEIGHT_MOBILE } from './navbar';
 
   const { children }: { children: Snippet } = $props();
 

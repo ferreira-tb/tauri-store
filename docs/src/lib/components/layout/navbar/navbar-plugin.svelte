@@ -1,7 +1,7 @@
 <script lang="ts">
   import { plugins } from '$lib/data';
-  import { Button } from '../ui/button';
   import { resolvePluginIcon } from '$lib/icon';
+  import { Button } from '$lib/components/ui/button';
   import * as Dialog from '$lib/components/ui/dialog';
   import { currentPlugin, DEFAULT_PLUGIN } from '$lib/stores/plugin';
 

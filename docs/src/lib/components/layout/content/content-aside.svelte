@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Link } from '../link';
   import { onDestroy } from 'svelte';
+  import { Link } from '$lib/components/link';
   import type { Headings } from './aside.svelte';
   import { currentPlugin } from '$lib/stores/plugin';
 

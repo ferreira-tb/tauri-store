@@ -1,12 +1,12 @@
 <script lang="ts">
   import { tick } from 'svelte';
-  import { Link } from '../link';
-  import { useSidebar } from '../sidebar';
+  import { Link } from '$lib/components/link';
   import * as Sheet from '$lib/components/ui/sheet';
   import { Menu, PanelRightOpen } from 'lucide-svelte';
-  import type { Headings } from '../content/aside.svelte';
   import { Separator } from '$lib/components/ui/separator';
+  import { useSidebar } from '$lib/components/layout/sidebar';
   import { NAVBAR_HEIGHT, NAVBAR_HEIGHT_MOBILE } from './constants';
+  import type { Headings } from '$lib/components/layout/content/aside.svelte';
 
   interface Props {
     headings: Headings;

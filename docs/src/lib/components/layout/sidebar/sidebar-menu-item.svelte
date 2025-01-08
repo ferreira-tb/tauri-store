@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Link } from '../link';
+  import { Link } from '$lib/components/link';
   import * as Sidebar from '$lib/components/ui/sidebar';
   import { useSidebar } from '$lib/components/ui/sidebar';
 

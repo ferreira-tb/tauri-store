@@ -45,7 +45,7 @@
       {#each metadata as plugin (plugin.name)}
         {#if plugin.isPlugin}
           {@const Icon = resolvePluginIcon(plugin.name as TauriPlugin)}
-          <li>
+          <li class="flex items-center gap-2">
             <PluginLink
               plugin={plugin.name as TauriPlugin}
               class="flex items-center justify-start gap-1"
@@ -53,6 +53,15 @@
               <Icon size="1.25em" />
               <span>{plugin.name}</span>
             </PluginLink>
+            <Ext href={`https://www.npmjs.com/package/${plugin.name}`}>
+              <img
+                src={`https://img.shields.io/npm/v/${plugin.name}`}
+                alt={plugin.name}
+                fetchpriority="low"
+                decoding="async"
+                loading="lazy"
+              />
+            </Ext>
           </li>
         {/if}
       {/each}
