@@ -19,6 +19,7 @@ $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
 pnpm run codegen
+pnpm run format
 pnpm run clippy
 pnpm run eslint
 pnpm run build
