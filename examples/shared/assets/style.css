@@ -1,0 +1,18 @@
+main,
+section {
+  display: flex;
+  flex-direction: column;
+}
+
+section {
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.action {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}

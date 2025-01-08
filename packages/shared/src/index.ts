@@ -21,6 +21,7 @@ export {
 
 export type {
   ConfigChangePayload,
+  Fn,
   MaybePromise,
   Nil,
   Option,
@@ -33,4 +34,5 @@ export type {
   StoreKeyFilterStrategy,
   StoreOptions,
   TauriStoreContract,
+  Writeable,
 } from './types';

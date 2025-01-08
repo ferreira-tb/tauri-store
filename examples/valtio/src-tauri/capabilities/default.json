@@ -1,0 +1,6 @@
+{
+  "identifier": "default",
+  "description": "Capability for the windows",
+  "windows": ["*"],
+  "permissions": ["core:event:default", "process:allow-exit", "shell:allow-open", "valtio:default"]
+}

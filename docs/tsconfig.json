@@ -20,8 +20,6 @@
     "noImplicitReturns": true,
     "exactOptionalPropertyTypes": false,
     "noFallthroughCasesInSwitch": true,
-    "types": [
-      "vite/client"
-    ]
+    "types": ["vite/client"]
   }
 }

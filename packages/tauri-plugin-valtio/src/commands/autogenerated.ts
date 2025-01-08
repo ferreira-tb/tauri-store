@@ -66,6 +66,7 @@ export const getSaveStrategy = commands.getSaveStrategy('valtio');
  * for (const id of ids) {
  *   console.log(id);
  * }
+ * ```
  */
 export const getStoreIds = commands.getStoreIds('valtio');
 

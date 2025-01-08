@@ -64,6 +64,7 @@ export const getSaveStrategy = commands.getSaveStrategy('PLUGIN_NAME');
  * for (const id of ids) {
  *   console.log(id);
  * }
+ * ```
  */
 export const getStoreIds = commands.getStoreIds('PLUGIN_NAME');
 

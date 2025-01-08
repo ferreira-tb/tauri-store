@@ -1,3 +1,6 @@
+/** Void function. */
+export type Fn = () => void;
+
 /** Something may be a promise. */
 export type MaybePromise<T> = T | PromiseLike<T>;
 

@@ -66,6 +66,7 @@ export const getSaveStrategy = commands.getSaveStrategy('svelte');
  * for (const id of ids) {
  *   console.log(id);
  * }
+ * ```
  */
 export const getStoreIds = commands.getStoreIds('svelte');
 

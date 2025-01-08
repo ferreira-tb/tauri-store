@@ -1,9 +1,7 @@
 import type { MaybePromise, Option } from './utils';
 import type { LooseTimeStrategyKind, TimeStrategyRawTuple } from '../time-strategy';
 
-/**
- * Options that can also be updated from Rust.
- */
+/** Options that can also be updated from Rust. */
 export interface StoreBackendOptions {
   /**
    * Interval in milliseconds to use when saving the store.
@@ -36,9 +34,7 @@ export interface StoreBackendRawOptions {
   readonly saveStrategy?: Option<TimeStrategyRawTuple>;
 }
 
-/**
- * Options that can only be set from JavaScript.
- */
+/** Options that can only be set from JavaScript. */
 export interface StoreFrontendOptions {
   /**
    * Keys the plugin should save or ignore.
@@ -95,8 +91,10 @@ export interface StoreFrontendOptions {
   readonly syncStrategy?: LooseTimeStrategyKind;
 }
 
+/** Options to configure how the store should behave. */
 export type StoreOptions = StoreBackendOptions & StoreFrontendOptions;
 
+/** A contract that a store must adhere to in order to be considered a valid implementation. */
 export interface TauriStoreContract {
   /** Path where the store is saved. */
   readonly getPath: () => Promise<string>;
@@ -117,6 +115,8 @@ export interface TauriStoreContract {
 /** State of a store. */
 export type State = Record<string, unknown>;
 
+/** Keys to filter. */
 export type StoreKeyFilter = string | string[] | RegExp | null;
 
+/** Strategy to use when filtering keys. */
 export type StoreKeyFilterStrategy = 'pick' | 'omit' | ((key: string) => boolean);

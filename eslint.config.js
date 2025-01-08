@@ -7,22 +7,20 @@ export default defineConfig({
     'examples/pinia-nuxt/tsconfig.json',
     'examples/shared/javascript/tsconfig.json',
     'examples/shared/pinia/tsconfig.json',
+    'examples/shared/react/tsconfig.json',
     'examples/svelte/tsconfig.json',
+    'examples/valtio/tsconfig.json',
     'packages/shared/tsconfig.json',
     'packages/tauri-plugin-pinia/tsconfig.json',
     'packages/tauri-plugin-svelte/tsconfig.json',
     'packages/tauri-plugin-valtio/tsconfig.json',
   ],
   features: {
+    react: true,
     svelte: true,
     vue: true,
   },
-  ignores: [
-    '**/.nuxt/**',
-    '**/.svelte-kit',
-    '**/lib/components/ui/**',
-    '**/tauri-store-cli/assets/**',
-  ],
+  ignores: ['**/.nuxt/**', '**/.svelte-kit', '**/components/ui/**', '**/tauri-store-cli/assets/**'],
   overrides: {
     svelte: {
       'svelte/block-lang': 'off',

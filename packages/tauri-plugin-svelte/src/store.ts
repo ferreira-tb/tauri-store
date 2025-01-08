@@ -50,17 +50,15 @@ import {
  * ```
  */
 export class Store<S extends State> extends BaseStore<S> implements StoreContract<S> {
+  public readonly id: string;
   private readonly store: Writable<S>;
   protected options: TauriPluginSvelteStoreOptions;
   protected override readonly flush = tick;
 
-  constructor(
-    public readonly id: string,
-    state: S,
-    options: TauriPluginSvelteStoreOptions = {}
-  ) {
+  constructor(id: string, state: S, options: TauriPluginSvelteStoreOptions = {}) {
     super();
 
+    this.id = id;
     this.store = writable(state);
 
     const saveStrategy = new TimeStrategy(options.saveStrategy, options.saveInterval);

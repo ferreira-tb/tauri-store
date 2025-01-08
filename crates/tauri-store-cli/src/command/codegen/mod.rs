@@ -1,3 +1,4 @@
+mod example;
 mod krate;
 mod package;
 
@@ -22,7 +23,10 @@ impl Codegen {
   #[expect(clippy::unused_self)]
   pub fn run(&self) -> Result<()> {
     krate::generate()?;
-    package::generate()
+    package::generate()?;
+    example::generate()?;
+
+    Ok(())
   }
 }
 

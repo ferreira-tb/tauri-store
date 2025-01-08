@@ -4,8 +4,6 @@
   "packageManager": "pnpm@9.15.3",
   "private": true,
   "scripts": {
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "vite:dev": "vite dev",
     "vite:build": "vite build"
   },

@@ -5,6 +5,7 @@ members = [
   "examples/pinia-nuxt/src-tauri",
   "examples/shared/rust",
   "examples/svelte/src-tauri",
+  "examples/valtio/src-tauri",
 ]
 resolver = "2"
 

@@ -33,6 +33,8 @@ pub fn build() -> tauri::Builder<Wry> {
   plugin!(tauri_plugin_pinia);
   #[cfg(feature = "svelte")]
   plugin!(tauri_plugin_svelte);
+  #[cfg(feature = "valtio")]
+  plugin!(tauri_plugin_valtio);
 
   builder
     .plugin(tauri_plugin_process::init())
@@ -84,6 +86,8 @@ pub fn setup_tracing(krate: &str) -> Result<()> {
   let directive = "tauri_plugin_pinia=trace";
   #[cfg(feature = "svelte")]
   let directive = "tauri_plugin_svelte=trace";
+  #[cfg(feature = "valtio")]
+  let directive = "tauri_plugin_valtio=trace";
 
   let filter = EnvFilter::builder()
     .from_env()?
