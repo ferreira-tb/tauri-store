@@ -1,7 +1,7 @@
 {
   "name": "docs",
   "type": "module",
-  "packageManager": "pnpm@9.15.3",
+  "packageManager": "pnpm@10.0.0",
   "private": true,
   "scripts": {
     "build": "vite build",
@@ -12,7 +12,7 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.8",
-    "@sveltejs/kit": "^2.15.1",
+    "@sveltejs/kit": "^2.15.2",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tb-dev/utils": "^4.1.2",
     "@types/semver": "^7.5.8",
@@ -25,8 +25,8 @@
     "postcss": "^8.4.49",
     "semver": "^7.6.3",
     "shiki": "^1.26.1",
-    "svelte": "^5.16.3",
-    "svelte-check": "^4.1.1",
+    "svelte": "^5.17.1",
+    "svelte-check": "^4.1.3",
     "tailwind-merge": "^2.6.0",
     "tailwind-variants": "^0.3.0",
     "tailwindcss": "^3.4.17",

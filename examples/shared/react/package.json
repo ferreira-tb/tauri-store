@@ -1,7 +1,7 @@
 {
   "name": "example-shared-react",
   "type": "module",
-  "packageManager": "pnpm@9.15.3",
+  "packageManager": "pnpm@10.0.0",
   "private": true,
   "dependencies": {
     "@tauri-apps/api": "^2.1.1",
