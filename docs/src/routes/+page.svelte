@@ -64,12 +64,14 @@
       You can enable some <Ext href={url.cargoFeatures}>Cargo features</Ext>
       to customize the plugin's behavior.
     </p>
-  </Container>
 
-  <Container title="file-sync-all" level={3}>
-    Calls <Ext href={url.fileSyncAll} code>File::sync_all</Ext>
-    after writing to the store file to ensure that all in-memory data reaches the filesystem. Enabling
-    this can significantly degrade performance.
+    <ul>
+      <li>
+        <strong>file-sync-all</strong>: calls <Ext href={url.fileSyncAll} code>File::sync_all</Ext>
+        after writing to the store file to ensure that all in-memory data reaches the filesystem. Enabling
+        this can significantly degrade performance.
+      </li>
+    </ul>
   </Container>
 
   <Container title="Versioning">

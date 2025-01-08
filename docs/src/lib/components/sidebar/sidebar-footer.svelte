@@ -1,6 +1,5 @@
 <script lang="ts">
   import { plugins } from '$lib/data';
-  import { Button } from '../ui/button';
   import { resolvePluginIcon } from '$lib/icon';
   import { currentPlugin } from '$lib/stores/plugin';
   import * as Sidebar from '$lib/components/ui/sidebar';
@@ -13,17 +12,24 @@
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           {#snippet child({ props })}
-            <div {...props}>
+            <Sidebar.MenuButton
+              size="lg"
+              class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-16 justify-start"
+              {...props}
+            >
               {#if $currentPlugin}
                 {@const PluginIcon = resolvePluginIcon($currentPlugin)}
                 {#key $currentPlugin}
-                  <Button variant="secondary" class="w-full">
-                    <PluginIcon />
-                    <span>{$currentPlugin}</span>
-                  </Button>
+                  <div class="flex size-8 items-center">
+                    <PluginIcon size="2rem" />
+                  </div>
+                  <div class="flex flex-col items-start gap-1">
+                    <span class="text-muted-foreground text-sm">Select a plugin</span>
+                    <span class="text-base font-semibold">{$currentPlugin}</span>
+                  </div>
                 {/key}
               {/if}
-            </div>
+            </Sidebar.MenuButton>
           {/snippet}
         </DropdownMenu.Trigger>
 

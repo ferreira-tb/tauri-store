@@ -153,4 +153,8 @@
   .ts-code-block:last-child {
     @apply mb-6;
   }
+
+  main strong {
+    @apply font-semibold;
+  }
 }

@@ -17,6 +17,7 @@ export default defineConfig({
   ],
   features: {
     react: true,
+    reactHooks: false,
     svelte: true,
     vue: true,
   },
