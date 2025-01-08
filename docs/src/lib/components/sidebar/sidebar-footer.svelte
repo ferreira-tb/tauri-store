@@ -24,7 +24,7 @@
                     <PluginIcon size="2rem" />
                   </div>
                   <div class="flex flex-col items-start gap-1">
-                    <span class="text-muted-foreground text-sm">Select a plugin</span>
+                    <span class="text-muted-foreground text-xs">Select a plugin</span>
                     <span class="text-base font-semibold">{$currentPlugin}</span>
                   </div>
                 {/key}
