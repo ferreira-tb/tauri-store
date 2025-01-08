@@ -8,6 +8,7 @@
 
 param(
   [string[]]$Target = @(),
+  [switch]$AllowDirty,
   [switch]$DryRun,
   [switch]$NoVerify,
   [switch]$OnlyCrate,
@@ -31,6 +32,10 @@ function Publish-Crate {
 
   if ($Target.Count -eq 0 -or $Target -contains $Name) {
     $command = "cargo publish -p $Name"
+    if ($AllowDirty) {
+      $command += ' --allow-dirty'
+    }
+
     if ($DryRun) {
       $command += ' --dry-run'
     }
