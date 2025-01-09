@@ -1,6 +1,6 @@
 [package]
 name = "tauri-plugin-valtio"
-description = "Persistent valtio stores for Tauri"
+description = "Persistent Valtio stores for Tauri"
 version = "0.0.2"
 documentation = "https://docs.rs/tauri-plugin-valtio"
 homepage = "https://tb.dev.br/tauri-store"

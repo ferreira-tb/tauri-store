@@ -1,7 +1,7 @@
 {
   "name": "tauri-plugin-valtio",
   "version": "0.0.2",
-  "description": "Persistent valtio stores for Tauri",
+  "description": "Persistent Valtio stores for Tauri",
   "type": "module",
   "private": false,
   "packageManager": "pnpm@10.0.0",
