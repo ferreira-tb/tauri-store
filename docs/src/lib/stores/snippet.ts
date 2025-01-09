@@ -1,6 +1,6 @@
 import type { Code } from '$lib/code';
 import { derived } from 'svelte/store';
-import { currentMetadata, type Metadata } from './plugin';
+import { currentMetadata, type Metadata } from '$lib/stores/plugin';
 
 type SnippetFn = (metadata: Metadata) => string;
 

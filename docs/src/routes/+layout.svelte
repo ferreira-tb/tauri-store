@@ -1,13 +1,18 @@
 <script lang="ts">
   import '../app.css';
+  import { Layout } from '$lib/layout';
   import { ModeWatcher } from 'mode-watcher';
   import metadata from '$lib/data/metadata.json';
-  import { Layout } from '$lib/components/layout';
+  import * as Sidebar from '$lib/layout/sidebar';
   import { currentPlugin } from '$lib/stores/plugin';
   import { onMount, type Snippet, tick } from 'svelte';
-  import * as Sidebar from '$lib/components/layout/sidebar';
+  import { isHighlighterReady, loadHighlighter } from '$lib/code';
 
   const { children }: { children: Snippet } = $props();
+
+  if (!isHighlighterReady()) {
+    void loadHighlighter();
+  }
 
   onMount(async () => {
     await tick();
