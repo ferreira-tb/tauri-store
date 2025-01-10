@@ -41,22 +41,22 @@ pub fn assets_plugin_ts_dir() -> PathBuf {
   assets_dir().join("plugin-ts")
 }
 
-pub fn crate_src_dir(krate: Target) -> PathBuf {
-  crates_dir().join(krate.as_ref()).join("src")
+pub fn crate_src_dir(target: Target) -> PathBuf {
+  crates_dir().join(target.as_ref()).join("src")
 }
 
-pub fn crate_commands_dir(krate: Target) -> PathBuf {
-  crate_src_dir(krate).join("command")
+pub fn crate_commands_dir(target: Target) -> PathBuf {
+  crate_src_dir(target).join("command")
 }
 
 pub fn examples_shared_rust_impl_dir() -> PathBuf {
   examples_shared_rust_dir().join("src/impl")
 }
 
-pub fn package_src_dir(package: Target) -> PathBuf {
-  packages_dir().join(package.as_ref()).join("src")
+pub fn package_src_dir(target: Target) -> PathBuf {
+  packages_dir().join(target.as_ref()).join("src")
 }
 
-pub fn package_commands_dir(package: Target) -> PathBuf {
-  package_src_dir(package).join("commands")
+pub fn package_commands_dir(target: Target) -> PathBuf {
+  package_src_dir(target).join("commands")
 }
