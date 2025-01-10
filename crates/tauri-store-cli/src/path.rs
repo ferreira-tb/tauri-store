@@ -29,6 +29,18 @@ join_dir!(docs_data_dir, DOCS_DATA_DIR);
 join_dir!(examples_shared_rust_dir, EXAMPLES_SHARED_RUST_DIR);
 join_dir!(packages_dir, PACKAGES_DIR);
 
+pub fn assets_examples_dir() -> PathBuf {
+  assets_dir().join("examples")
+}
+
+pub fn assets_plugin_rs_dir() -> PathBuf {
+  assets_dir().join("plugin-rs")
+}
+
+pub fn assets_plugin_ts_dir() -> PathBuf {
+  assets_dir().join("plugin-ts")
+}
+
 pub fn crate_src_dir(krate: Target) -> PathBuf {
   crates_dir().join(krate.as_ref()).join("src")
 }

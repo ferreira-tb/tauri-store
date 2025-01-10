@@ -4,13 +4,15 @@
 use crate::pinia::Pinia;
 use tauri::{AppHandle, Manager, Runtime, State, WebviewWindow, Window};
 
-/// Extension for the [`Manager`](tauri::Manager) trait providing access to the Pinia plugin.
+/// Extension for the [`Manager`](https://docs.rs/tauri/latest/tauri/trait.Manager.html)
+/// trait providing access to the Pinia plugin.
 pub trait ManagerExt<R: Runtime>: Manager<R> {
   /// Returns a handle to the Pinia plugin.
   ///
   /// # Panics
   ///
-  /// Panics if the internal [store collection](tauri_store::StoreCollection) is not in the [resources table](tauri::ResourceTable).
+  /// Panics if the internal [store collection](https://tb.dev.br/tauri-store/rust-docs/tauri_store/struct.StoreCollection.html)
+  /// is not in the [resources table](https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html).
   ///
   /// This likely indicates that the method was called before the plugin was properly initialized.
   fn pinia(&self) -> State<Pinia<R>> {

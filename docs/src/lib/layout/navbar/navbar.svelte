@@ -1,13 +1,14 @@
 <script lang="ts">
   import { cn } from '$lib/utils';
   import { NAVBAR_HEIGHT } from './constants';
+  import { Link } from '$lib/components/link';
+  import { useSidebar } from '$lib/layout/sidebar';
   import NavbarMobile from './navbar-mobile.svelte';
   import NavbarPlugin from './navbar-plugin.svelte';
   import NavbarSocial from './navbar-social.svelte';
   import { currentPlugin } from '$lib/stores/plugin';
   import NavbarDesktop from './navbar-desktop.svelte';
   import type { Headings } from '$lib/layout/content/aside.svelte';
-  import { Trigger as SidebarTrigger, useSidebar } from '$lib/layout/sidebar';
 
   interface Props {
     headings: Headings;
@@ -33,11 +34,7 @@
   <div style:height={NAVBAR_HEIGHT} class="flex items-center justify-between whitespace-nowrap">
     {#if sidebar.isMobile || !sidebar.open}
       <div class="flex h-full select-none items-center gap-2 pl-4">
-        {#if !sidebar.isMobile}
-          <SidebarTrigger />
-        {/if}
-
-        <a href="/tauri-store" class="text-xl font-semibold">tauri-store</a>
+        <Link href="/tauri-store" class="text-xl font-semibold">tauri-store</Link>
       </div>
     {/if}
     <div class={cn('flex size-full items-center justify-end', sidebar.isMobile ? 'pr-4' : 'pr-8')}>
