@@ -20,7 +20,7 @@
     "bits-ui": "1.0.0-next.77",
     "change-case": "^5.4.4",
     "clsx": "^2.1.1",
-    "lucide-svelte": "^0.469.0",
+    "lucide-svelte": "^0.470.0",
     "mode-watcher": "^0.5.0",
     "postcss": "^8.4.49",
     "semver": "^7.6.3",
