@@ -23,7 +23,7 @@
   },
   {
     "name": "tauri-plugin-valtio",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "title": "Valtio",
     "isPlugin": true,
     "docs": {
