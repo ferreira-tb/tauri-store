@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Code } from '$lib/code';
-  import StartIt from '../start-it.svelte';
   import { CodeBlock, CodeGroup } from '$lib/components/code';
+  import StartIt from '$lib/content/guide/getting-started/start-it.svelte';
 
   const createStore: Code = {
     id: 'create-store',
@@ -10,7 +10,7 @@
     value: `
 import { Store } from 'tauri-plugin-svelte';
 
-const counterStore = new Store('counter', { counter: 0 });
+export const counterStore = new Store('counter', { counter: 0 });
     `,
   };
 

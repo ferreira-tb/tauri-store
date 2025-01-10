@@ -4,6 +4,7 @@
   import { CodeGroup } from '$lib/components/code';
   import { currentMetadata } from '$lib/stores/plugin';
   import { Container } from '$lib/components/container';
+  import { Breadcrumb } from '$lib/components/breadcrumb';
   import { Extra } from '$lib/content/guide/getting-started/extra';
   import { UsageSteps } from '$lib/content/guide/getting-started/usage-steps';
   import {
@@ -26,6 +27,8 @@
   <title>Getting started | tauri-store</title>
   <meta name="description" content="Getting started" />
 </svelte:head>
+
+<Breadcrumb current="Getting started" parents={['Guide']} />
 
 <div>
   <Container title="Getting started" level={1}>

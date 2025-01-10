@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Code } from '$lib/code';
-  import StartIt from '../start-it.svelte';
   import * as Alert from '$lib/components/alert';
   import { CodeBlock, CodeGroup } from '$lib/components/code';
+  import StartIt from '$lib/content/guide/getting-started/start-it.svelte';
 
   const enablePlugin: Code = {
     id: 'enable-plugin',

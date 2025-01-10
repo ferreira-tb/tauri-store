@@ -74,7 +74,7 @@
       to customize the plugin's behavior.
     </p>
 
-    <ul>
+    <ul class="mx-0 list-inside">
       <li>
         <strong>file-sync-all</strong>: calls <Ext href={url.fileSyncAll} code>File::sync_all</Ext>
         after writing to the store file to ensure that all in-memory data reaches the filesystem. Enabling

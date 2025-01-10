@@ -1,6 +1,7 @@
 #![forbid(unsafe_code)]
-#![doc = include_str!("../README.md")]
 #![cfg_attr(docsrs, feature(doc_cfg))]
+#![doc = include_str!("../README.md")]
+#![doc(html_favicon_url = "https://tb.dev.br/tauri-store/favicon.ico")]
 
 mod PLUGIN_NAME;
 mod command;

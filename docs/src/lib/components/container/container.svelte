@@ -7,14 +7,19 @@
     children?: Snippet;
     level?: 1 | 2 | 3 | 4 | 5 | 6;
     title: string;
+    titleSnippet?: Snippet<[{ title: string }]>;
   };
 
-  const { id, title, level = 2, children, ...restProps }: Props = $props();
+  const { id, title, level = 2, titleSnippet, children, ...restProps }: Props = $props();
 </script>
 
 <article {...restProps}>
   <svelte:element this={`h${level}`} id={id ?? kebabCase(title)} tabindex="-1">
-    {title}
+    {#if titleSnippet}
+      {@render titleSnippet({ title })}
+    {:else}
+      {title}
+    {/if}
   </svelte:element>
 
   {#if children}

@@ -3,6 +3,8 @@
   import type { Snippet } from 'svelte';
   import type { Headings } from './aside.svelte';
   import ContentAside from './content-aside.svelte';
+  import ContentFooter from './content-footer.svelte';
+  import { Separator } from '$lib/components/ui/separator';
 
   interface Props {
     children: Snippet;
@@ -15,12 +17,19 @@
 
 <main
   style:padding-top={navbarHeight}
-  class={cn('z-0 m-0 flex w-full flex-shrink-0 flex-grow justify-center pb-32')}
+  class={cn('z-0 m-0 flex min-h-screen w-full flex-shrink-0 flex-grow justify-center pb-32')}
 >
   <div
-    class="mx-auto w-full min-w-0 px-[--content-padding] pt-8 md:px-8 lg:px-20 xl:px-24 2xl:px-36"
+    class="mx-auto flex w-full min-w-0 flex-col justify-between px-[--content-padding] pt-8 md:px-8 lg:px-20 xl:px-24 2xl:px-36"
   >
-    {@render children()}
+    <div>
+      {@render children()}
+    </div>
+
+    <div>
+      <Separator class="mt-24" />
+      <ContentFooter />
+    </div>
   </div>
 
   <ContentAside {headings} />

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Breadcrumb } from '$lib/components/breadcrumb';
   import * as Store from '$lib/content/changelog/tauri-store';
   import { Changelog, Container } from '$lib/components/container';
 </script>
@@ -7,6 +8,8 @@
   <title>Changelog | tauri-store</title>
   <meta name="description" content="Changelog for tauri-store" />
 </svelte:head>
+
+<Breadcrumb current="tauri-store" parents={['Changelog']} />
 
 <Container title="Changelog" level={1} />
 

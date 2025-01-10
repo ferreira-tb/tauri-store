@@ -35,8 +35,8 @@ macro_rules! watch_counter {
   ($plugin:ident, $kind:ident) => {
     pub(crate) fn watch_counter(app: &AppHandle) {
       use $plugin::ManagerExt;
-      let _ = app.$kind().watch("counter-store", |handle| {
-        handle
+      let _ = app.$kind().watch("counter-store", |app_handle| {
+        app_handle
           .$kind()
           .try_get::<i32>("counter-store", "counter")
           .inspect(|counter| println!("counter: {counter}"))

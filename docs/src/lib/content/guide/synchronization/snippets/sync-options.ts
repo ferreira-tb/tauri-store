@@ -32,5 +32,17 @@ const store = new Store('store', value, {
 });
       `;
     }
+
+    case 'tauri-plugin-valtio': {
+      return `
+import { store } from 'tauri-plugin-valtio';
+
+const value = { counter: 0 };
+const store = store('store', value, {
+  syncStrategy: 'debounce',
+  syncInterval: 1000,
+});
+      `;
+    }
   }
 });

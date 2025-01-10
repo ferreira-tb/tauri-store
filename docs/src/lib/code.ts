@@ -38,7 +38,9 @@ class Highlighter {
       themes: [import('shiki/themes/vitesse-dark.mjs'), import('shiki/themes/vitesse-light.mjs')],
       langs: [
         import('shiki/langs/json.mjs'),
+        import('shiki/langs/powershell.mjs'),
         import('shiki/langs/rust.mjs'),
+        import('shiki/langs/shell.mjs'),
         import('shiki/langs/svelte.mjs'),
         import('shiki/langs/toml.mjs'),
         import('shiki/langs/tsx.mjs'),
