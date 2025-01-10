@@ -10,7 +10,7 @@
   const { class: className }: Props = $props();
 </script>
 
-<div class={cn('text-muted-foreground mt-12 w-full text-center text-xs', className)}>
+<div class={cn('text-muted-foreground my-12 w-full text-center text-xs', className)}>
   <Ext href="https://github.com/ferreira-tb/tauri-store/blob/main/LICENSE">
     <span>MIT © 2025 Andrew Ferreira</span>
   </Ext>

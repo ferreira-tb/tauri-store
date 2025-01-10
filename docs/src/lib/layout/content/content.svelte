@@ -17,10 +17,10 @@
 
 <main
   style:padding-top={navbarHeight}
-  class={cn('z-0 m-0 flex min-h-screen w-full flex-shrink-0 flex-grow justify-center pb-32')}
+  class={cn('z-0 m-0 flex min-h-screen w-full flex-shrink-0 flex-grow justify-center')}
 >
   <div
-    class="mx-auto flex w-full min-w-0 flex-col justify-between px-[--content-padding] pt-8 md:px-8 lg:px-20 xl:px-24 2xl:px-36"
+    class="mx-auto flex w-full min-w-0 flex-col justify-between px-[--content-padding] md:px-8 lg:px-20 xl:px-24 2xl:px-36"
   >
     <div>
       {@render children()}
