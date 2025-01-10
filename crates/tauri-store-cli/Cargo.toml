@@ -1,14 +1,10 @@
 [package]
 name = "tauri-store-cli"
 version = "0.1.0"
-description = "Command line tools for the Tauri Store repository"
+description = "Command line tools for tauri-store"
 publish = false
-
-[package.edition]
-workspace = true
-
-[package.rust-version]
-workspace = true
+rust-version = "1.84"
+edition = "2021"
 
 [lints]
 workspace = true
@@ -16,6 +12,7 @@ workspace = true
 [dependencies]
 anyhow = "1.0"
 bon = "3.3"
+colored = "3.0"
 convert_case = "0.6"
 regex = "1.11"
 remain = "0.2"

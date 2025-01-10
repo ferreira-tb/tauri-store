@@ -29,7 +29,7 @@ const { start: startDebounced, stop: stopDebounced } = debouncedStore.$tauri;
 const throttledStore = useThrottledStore();
 const { start: startThrottled, stop: stopThrottled } = throttledStore.$tauri;
 
-onKeyDown('Escape', () => void exit(0));
+onKeyDown('Escape', () => void exit(0).catch(onError));
 
 onMounted(() => {
   // prettier-ignore
@@ -86,24 +86,3 @@ onMounted(() => {
     </section>
   </main>
 </template>
-
-<style scoped>
-main,
-section {
-  display: flex;
-  flex-direction: column;
-}
-
-section {
-  gap: 0.25rem;
-  margin-bottom: 0.5rem;
-}
-
-.action {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-}
-</style>

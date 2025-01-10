@@ -18,10 +18,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "conventionalCommits.promptScopes": true,
-  "conventionalCommits.scopes": [
-    "pinia",
-    "svelte"
-  ],
+  "conventionalCommits.scopes": ["pinia", "svelte", "valtio"],
   "editor.codeActionsOnSave": {
     "source.fixAll": "explicit"
   },

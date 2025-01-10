@@ -61,7 +61,7 @@
 
   .ts-code-block :global(code) {
     font-size: 0.875rem;
-    line-height: 1.7;
+    line-height: 1.5;
     hyphens: none;
     direction: ltr;
   }

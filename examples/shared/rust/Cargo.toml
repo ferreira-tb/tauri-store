@@ -40,6 +40,11 @@ path = "../../../crates/tauri-plugin-svelte"
 default-features = false
 optional = true
 
+[dependencies.tauri-plugin-valtio]
+path = "../../../crates/tauri-plugin-valtio"
+default-features = false
+optional = true
+
 [dependencies.tauri-store]
 path = "../../../crates/tauri-store"
 default-features = false
@@ -55,4 +60,5 @@ features = ["chrono", "env-filter", "fmt", "parking_lot", "registry"]
 [features]
 pinia = ["dep:tauri-plugin-pinia"]
 svelte = ["dep:tauri-plugin-svelte"]
+valtio = ["dep:tauri-plugin-valtio"]
 file-sync-all = ["tauri-store/file-sync-all"]

@@ -12,8 +12,6 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "declaration": false,
-    "jsx": "preserve",
-    "jsxImportSource": "vue",
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,

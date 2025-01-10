@@ -3,12 +3,14 @@ use crate::target::Target;
 use anyhow::Result;
 use bon::Builder;
 use clap::Args;
+use colored::Colorize;
 use convert_case::{Case, Casing};
 use semver::Version;
 use serde::Serialize;
 use serde_json::to_vec_pretty;
 use std::cmp::Ordering;
 use std::fs;
+use std::time::Instant;
 use strum::VariantArray;
 
 #[derive(Debug, Args)]
@@ -17,7 +19,15 @@ pub struct Docs;
 impl Docs {
   #[expect(clippy::unused_self)]
   pub fn run(&self) -> Result<()> {
-    generate_metadata()
+    let start = Instant::now();
+    println!("{}", "generating docs metadata".cyan());
+
+    generate_metadata()?;
+
+    let duration = start.elapsed();
+    println!("{}", format!("done in {duration:?}").green());
+
+    Ok(())
   }
 }
 

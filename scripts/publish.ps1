@@ -8,6 +8,7 @@
 
 param(
   [string[]]$Target = @(),
+  [switch]$AllowDirty,
   [switch]$DryRun,
   [switch]$NoVerify,
   [switch]$OnlyCrate,
@@ -18,6 +19,7 @@ $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
 pnpm run codegen
+pnpm run format
 pnpm run clippy
 pnpm run eslint
 pnpm run build
@@ -31,6 +33,10 @@ function Publish-Crate {
 
   if ($Target.Count -eq 0 -or $Target -contains $Name) {
     $command = "cargo publish -p $Name"
+    if ($AllowDirty) {
+      $command += ' --allow-dirty'
+    }
+
     if ($DryRun) {
       $command += ' --dry-run'
     }

@@ -1,15 +1,31 @@
 <script lang="ts">
   import * as Alert from '$lib/components/alert';
   import { Ext, Link } from '$lib/components/link';
-  import { CodeBlock } from '$lib/components/code';
+  import { currentMetadata } from '$lib/stores/plugin';
   import { Container } from '$lib/components/container';
-  import { syncOptions } from '$lib/content/guide/synchronization/snippets';
+  import { Breadcrumb } from '$lib/components/breadcrumb';
+  import { CodeBlock, CodeGroup } from '$lib/components/code';
+  import { syncDenylist, syncOptions } from '$lib/content/guide/synchronization/snippets';
+
+  const url = $derived.by(() => {
+    const docs = $currentMetadata.docs;
+    return {
+      // Rust
+      sync_denylist: `${docs.rust}/struct.Builder.html#method.sync_denylist`,
+    };
+  });
 </script>
 
 <svelte:head>
   <title>Synchronization | tauri-store</title>
   <meta name="description" content="Synchronization" />
 </svelte:head>
+
+<Breadcrumb current="Synchronization" parents={['Guide']} />
+
+{#snippet ext(key: keyof typeof url, label?: string, code = true)}
+  <Ext href={url[key]} {code}>{label ?? key}</Ext>
+{/snippet}
 
 <Container title="Synchronization" level={1}>
   <p>
@@ -36,4 +52,14 @@
     moment. If the synchronization hasn’t finished yet, Rust might still be working with outdated
     values.
   </p>
+</Container>
+
+<Container title="Denylist">
+  <p>
+    If a store should be <Link href="/tauri-store/guide/persisting-state">saved to disk</Link>, but
+    not synchronized across windows, you can add it to the
+    {@render ext('sync_denylist', 'denylist', false)}.
+  </p>
+
+  <CodeGroup code={$syncDenylist} />
 </Container>

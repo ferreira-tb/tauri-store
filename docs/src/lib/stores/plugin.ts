@@ -1,6 +1,6 @@
 import { findMetadata } from '$lib/data';
-import { persistent } from './persistent';
 import metadata from '$lib/data/metadata.json';
+import { persistent } from '$lib/stores/persistent';
 import { derived, type Subscriber } from 'svelte/store';
 
 const STORAGE_KEY = 'current-plugin';

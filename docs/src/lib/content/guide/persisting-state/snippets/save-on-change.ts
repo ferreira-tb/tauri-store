@@ -41,5 +41,21 @@ const store = new Store('store', value, {
 });
       `;
     }
+
+    case 'tauri-plugin-valtio': {
+      return `
+import { store } from 'tauri-plugin-valtio';
+
+const value = { counter: 0 };
+const store = store('store', value, {
+  saveOnChange: true,
+
+  // You can also debounce or throttle when saving.
+  // This is optional. The default behavior is to save immediately.
+  saveStrategy: 'debounce',
+  saveInterval: 1000,
+});
+      `;
+    }
   }
 });

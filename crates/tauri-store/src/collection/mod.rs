@@ -20,8 +20,11 @@ pub use builder::StoreCollectionBuilder;
 
 pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
 
+/// Closure to be called when a store is loaded.
 pub type OnLoadFn<R> = dyn Fn(&Store<R>) -> Result<()> + Send + Sync;
 
+/// A collection of stores.
+/// This is the core component for store plugins.
 pub struct StoreCollection<R: Runtime> {
   pub(crate) app: AppHandle<R>,
   pub(crate) path: PathBuf,

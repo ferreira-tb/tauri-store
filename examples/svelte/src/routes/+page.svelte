@@ -15,10 +15,12 @@
     openThrottledStore,
     store,
     throttledStore,
-  } from '../lib/stores';
+  } from '../stores';
 
   function onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Escape') void exit(0);
+    if (event.key === 'Escape') {
+      exit(0).catch(onError);
+    }
   }
 
   onMount(() => {
@@ -39,6 +41,7 @@
     <button type="button" onclick={() => setAutosave(5000)}>Set Autosave</button>
     <button type="button" onclick={clearAutosave}>Clear Autosave</button>
   </div>
+
   <section id="counter">
     <p>Counter: {$store.counter}</p>
     <div class="action">
@@ -76,24 +79,3 @@
     </div>
   </section>
 </main>
-
-<style>
-  main,
-  section {
-    display: flex;
-    flex-direction: column;
-  }
-
-  section {
-    gap: 0.25rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .action {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-</style>

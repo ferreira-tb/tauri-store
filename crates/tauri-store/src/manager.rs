@@ -2,13 +2,15 @@ use crate::collection::{StoreCollection, RESOURCE_ID};
 use std::sync::Arc;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow, Window};
 
-/// Extension for the [`Manager`](tauri::Manager) trait providing access to the store collection.
+/// Extension for the [`Manager`](https://docs.rs/tauri/latest/tauri/trait.Manager.html)
+/// trait providing access to the store collection.
 pub trait ManagerExt<R: Runtime>: Manager<R> {
   /// Returns a handle to the store collection.
   ///
   /// # Panics
   ///
-  /// Panics if the store collection is not in the [resources table](tauri::ResourceTable).
+  /// Panics if the [store collection](crate::collection::StoreCollection)
+  /// is not in the [resources table](https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html).
   ///
   /// This likely indicates that the method was called before the plugin was properly initialized.
   fn store_collection(&self) -> Arc<StoreCollection<R>> {

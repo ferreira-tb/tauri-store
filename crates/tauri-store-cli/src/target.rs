@@ -11,6 +11,8 @@ pub enum Target {
   PluginPinia,
   #[strum(serialize = "tauri-plugin-svelte")]
   PluginSvelte,
+  #[strum(serialize = "tauri-plugin-valtio")]
+  PluginValtio,
   #[strum(serialize = "tauri-store")]
   Store,
 }

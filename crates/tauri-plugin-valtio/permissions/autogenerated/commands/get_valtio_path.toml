@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-get-valtio-path"
+description = "Enables the get_valtio_path command without any pre-configured scope."
+commands.allow = ["get_valtio_path"]
+
+[[permission]]
+identifier = "deny-get-valtio-path"
+description = "Denies the get_valtio_path command without any pre-configured scope."
+commands.deny = ["get_valtio_path"]

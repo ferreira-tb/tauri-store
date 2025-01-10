@@ -34,7 +34,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
           self
         }
 
-        /// Sets a function to be called when a store is loaded.
+        /// Registers a closure to be called when a store is loaded.
         #[must_use]
         pub fn on_load<F>(mut self, f: F) -> Self
         where

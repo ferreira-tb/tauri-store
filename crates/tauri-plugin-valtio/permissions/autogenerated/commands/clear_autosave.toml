@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-clear-autosave"
+description = "Enables the clear_autosave command without any pre-configured scope."
+commands.allow = ["clear_autosave"]
+
+[[permission]]
+identifier = "deny-clear-autosave"
+description = "Denies the clear_autosave command without any pre-configured scope."
+commands.deny = ["clear_autosave"]

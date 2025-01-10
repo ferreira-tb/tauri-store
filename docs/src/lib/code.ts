@@ -55,9 +55,21 @@ class Highlighter {
       return core;
     });
   }
+
+  get ready() {
+    return Boolean(this.core);
+  }
 }
 
 const highlighter = new Highlighter();
+
+export function isHighlighterReady() {
+  return highlighter.ready;
+}
+
+export async function loadHighlighter() {
+  await highlighter.load();
+}
 
 export async function highlight(code: string, options: HighlighterOptions) {
   const core = await highlighter.load();

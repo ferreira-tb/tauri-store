@@ -1,5 +1,5 @@
 import { snakeCase } from 'change-case';
-import { snippet, snippetGroup } from '$lib/stores/snippet';
+import { snippetGroup } from '$lib/stores/snippet';
 
 export * from './save-on-change';
 
@@ -47,31 +47,44 @@ manager.${title}().save_all();
   ];
 });
 
-export const autosave = snippet((metadata) => {
-  return `
+export const autosave = snippetGroup((metadata) => {
+  return {
+    id: 'autosave',
+    label: 'src-tauri/src/main.rs',
+    lang: 'rust',
+    value: `
 use std::time::Duration;
 
 // Save every five minutes.
-tauri::Builder::default()
-  .plugin(
-    ${snakeCase(metadata.name)}::Builder::new()
-      .autosave(Duration::from_secs(300))
-      .build(),
-  )
-  .run(tauri::generate_context!())
-  .expect("error while running tauri application");
-  `;
+${snakeCase(metadata.name)}::Builder::new()
+  .autosave(Duration::from_secs(300))
+  .build();
+  `,
+  };
 });
 
-export const customDirectory = snippet((metadata) => {
-  return `
-tauri::Builder::default()
-  .plugin(
-    ${snakeCase(metadata.name)}::Builder::new()
-      .path("/path/to/custom/directory")
-      .build(),
-  )
-  .run(tauri::generate_context!())
-  .expect("error while running tauri application");
-  `;
+export const customDirectory = snippetGroup((metadata) => {
+  return {
+    id: 'custom-directory',
+    label: 'src-tauri/src/main.rs',
+    lang: 'rust',
+    value: `
+${snakeCase(metadata.name)}::Builder::new()
+  .path("/path/to/custom/directory")
+  .build(),
+  `,
+  };
+});
+
+export const saveDenylist = snippetGroup((metadata) => {
+  return {
+    id: 'save-denylist',
+    label: 'src-tauri/src/main.rs',
+    lang: 'rust',
+    value: `
+${snakeCase(metadata.name)}::Builder::new()
+  .save_denylist(&["store-1", "store-2"])
+  .build();
+  `,
+  };
 });

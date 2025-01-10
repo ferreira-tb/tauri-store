@@ -3,9 +3,9 @@ import compare from 'semver/functions/compare';
 
 const versionFileRegex = /.*?(\d+\.\d+\.\d+.*?)\.svelte$/;
 
-export function sortVersions(versions: Record<string, unknown>): GlobComponentTuple[] {
+export function sortVersions(versions: Record<string, unknown>): ComponentTuple[] {
   return (Object.entries(versions) as [string, { default: Component }][])
-    .map(([version, component]) => [parse(version), component.default] as GlobComponentTuple)
+    .map(([version, component]) => [parse(version), component.default] as ComponentTuple)
     .toSorted((a, b) => compare(b[0], a[0]));
 }
 

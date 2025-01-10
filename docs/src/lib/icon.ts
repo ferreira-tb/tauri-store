@@ -1,4 +1,4 @@
-import * as Icon from './components/icons';
+import * as Icon from '$lib/components/icons';
 
 export function resolvePluginIcon(plugin: TauriPlugin) {
   switch (plugin) {
@@ -7,6 +7,9 @@ export function resolvePluginIcon(plugin: TauriPlugin) {
     }
     case 'tauri-plugin-svelte': {
       return Icon.Svelte;
+    }
+    case 'tauri-plugin-valtio': {
+      return Icon.React;
     }
   }
 }

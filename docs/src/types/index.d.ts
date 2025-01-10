@@ -1,5 +1,5 @@
-type TauriPlugin = 'tauri-plugin-pinia' | 'tauri-plugin-svelte';
+type TauriPlugin = 'tauri-plugin-pinia' | 'tauri-plugin-svelte' | 'tauri-plugin-valtio';
 
 type PackageName = TauriPlugin | 'tauri-store';
 
-type GlobComponentTuple = [string, Component];
+type ComponentTuple = [string, Component];

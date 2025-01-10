@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { Ext } from '$lib/components/link';
+  import { Ext, Link } from '$lib/components/link';
   import { currentMetadata } from '$lib/stores/plugin';
   import { Container } from '$lib/components/container';
+  import { Breadcrumb } from '$lib/components/breadcrumb';
   import { CodeBlock, CodeGroup } from '$lib/components/code';
   import {
     autosave,
     customDirectory,
+    saveDenylist,
     saveOnChange,
     saveStores,
   } from '$lib/content/guide/persisting-state/snippets';
@@ -13,10 +15,15 @@
   const url = $derived.by(() => {
     const docs = $currentMetadata.docs;
     return {
-      autosave: `${docs.rust}/struct.Builder.html#method.autosave`,
-      path: `${docs.rust}/struct.Builder.html#method.path`,
+      // JavaScript
       saveOnChange: `${docs.javascript}/interfaces/StoreBackendOptions.html#saveonchange`,
 
+      // Rust
+      autosave: `${docs.rust}/struct.Builder.html#method.autosave`,
+      path: `${docs.rust}/struct.Builder.html#method.path`,
+      save_denylist: `${docs.rust}/struct.Builder.html#method.save_denylist`,
+
+      // Tauri
       appDataDir:
         'https://docs.rs/tauri/latest/tauri/path/struct.PathResolver.html#method.app_data_dir',
     };
@@ -28,8 +35,10 @@
   <meta name="description" content="Persisting store state" />
 </svelte:head>
 
-{#snippet ext(key: keyof typeof url, label?: string)}
-  <Ext href={url[key]} code>{label ?? key}</Ext>
+<Breadcrumb current="Persisting state" parents={['Guide']} />
+
+{#snippet ext(key: keyof typeof url, label?: string, code = true)}
+  <Ext href={url[key]} {code}>{label ?? key}</Ext>
 {/snippet}
 
 <Container title="Persisting state" level={1}>
@@ -53,7 +62,7 @@
 <Container title="Autosave">
   <p>You can also enable {@render ext('autosave')} to periodically write the stores to disk.</p>
 
-  <CodeBlock lang="rust" code={$autosave} />
+  <CodeGroup code={$autosave} />
 </Container>
 
 <Container title="Custom directory">
@@ -62,5 +71,14 @@
     can change this by setting the {@render ext('path')} option during the plugin's initialization.
   </p>
 
-  <CodeBlock lang="rust" code={$customDirectory} />
+  <CodeGroup code={$customDirectory} />
+</Container>
+
+<Container title="Denylist">
+  <p>
+    If a store should be <Link href="/tauri-store/guide/synchronization">synchronized</Link>, but
+    not saved to disk, you can add it to the {@render ext('save_denylist', 'denylist', false)}.
+  </p>
+
+  <CodeGroup code={$saveDenylist} />
 </Container>
