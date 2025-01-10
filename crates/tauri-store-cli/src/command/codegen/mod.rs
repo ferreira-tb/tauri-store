@@ -41,7 +41,7 @@ struct Generator<'a> {
   transform: &'a [&'a dyn Fn(&mut String)],
 }
 
-impl<'a> Generator<'a> {
+impl Generator<'_> {
   pub fn generate(self) -> Result<()> {
     let mut contents = read_asset(self.input)?;
     self
