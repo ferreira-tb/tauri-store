@@ -18,11 +18,15 @@
 
   const { href = DEFAULT_HREF, title, plugin, children, ...restProps }: Props = $props();
 
+  const url = $derived.by(() => {
+    return href.includes('?plugin') ? href : `${href}?plugin=${plugin}`;
+  });
+
   function onClick() {
     currentPlugin.set(plugin);
   }
 </script>
 
-<Link {...restProps} {href} {title} onclick={onClick}>
+<Link {...restProps} href={url} {title} onclick={onClick}>
   {@render children()}
 </Link>
