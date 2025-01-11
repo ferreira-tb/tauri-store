@@ -31,6 +31,6 @@ pub(crate) async fn try_get_counter(app: AppHandle) -> i32 {
 pub(crate) async fn try_store_state(app: AppHandle) -> CounterStore {
   app
     .valtio()
-    .try_store_state::<CounterStore>("counter-store")
+    .try_state::<CounterStore>("counter-store")
     .expect("store must exist")
 }

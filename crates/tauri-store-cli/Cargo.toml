@@ -1,10 +1,12 @@
 [package]
 name = "tauri-store-cli"
-version = "0.1.0"
 description = "Command line tools for tauri-store"
 publish = false
 rust-version = "1.84"
 edition = "2021"
+
+[package.version]
+workspace = true
 
 [lints]
 workspace = true

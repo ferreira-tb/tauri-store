@@ -1,9 +1,10 @@
 <script lang="ts">
-  import data from './data/0.5.0.json';
   import { Ext } from '$lib/components/link';
   import { Changelog } from '$lib/components/container';
 
   const version = '0.5.0';
+
+  const prelude = 'https://docs.rs/tauri-store/0.5.0/tauri_store/prelude/index.html';
 </script>
 
 <Changelog.Version {version} />
@@ -16,6 +17,6 @@
 
 <Changelog.Enhancements {version}>
   <ul>
-    <li>Add <Ext href={data.url.prelude} code>prelude</Ext> module.</li>
+    <li>Add <Ext href={prelude} code>prelude</Ext> module.</li>
   </ul>
 </Changelog.Enhancements>

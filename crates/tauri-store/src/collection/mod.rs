@@ -3,7 +3,6 @@ mod builder;
 
 use crate::error::Result;
 use crate::event::{emit, STORE_UNLOAD_EVENT};
-use crate::io_err;
 use crate::store::{SaveStrategy, Store, StoreResource, StoreState};
 use autosave::Autosave;
 use dashmap::DashMap;
@@ -94,14 +93,14 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Gets a clone of the store state.
-  pub fn store_state(&self, store_id: impl AsRef<str>) -> Result<StoreState> {
+  pub fn state(&self, store_id: impl AsRef<str>) -> Result<StoreState> {
     self
       .get_resource(store_id)?
       .locked(|store| Ok(store.state().clone()))
   }
 
   /// Gets the store state, then tries to parse it as an instance of type `T`.
-  pub fn try_store_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
+  pub fn try_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
   {
@@ -123,23 +122,57 @@ impl<R: Runtime> StoreCollection<R> {
   where
     T: DeserializeOwned,
   {
-    let key = key.as_ref();
-    let Some(value) = self.get(store_id, key) else {
-      return io_err!(NotFound, "key not found: {key}");
-    };
+    self
+      .get_resource(store_id)?
+      .locked(|store| store.try_get(key))
+  }
 
-    Ok(serde_json::from_value(value)?)
+  /// Gets a value from a store and tries to parse it as an instance of type `T`.
+  /// If the key does not exist, returns the provided default value.
+  pub fn try_get_or<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, default: T) -> T
+  where
+    T: DeserializeOwned,
+  {
+    self.try_get(store_id, key).unwrap_or(default)
+  }
+
+  /// Gets a value from a store and tries to parse it as an instance of type `T`.
+  /// If the key does not exist, returns the default value of `T`.
+  pub fn try_get_or_default<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> T
+  where
+    T: Default + DeserializeOwned,
+  {
+    self.try_get(store_id, key).unwrap_or_default()
+  }
+
+  /// Gets a value from a store and tries to parse it as an instance of type `T`.
+  /// If the key does not exist, returns the result of the provided closure.
+  pub fn try_get_or_else<T, F>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, f: F) -> T
+  where
+    T: DeserializeOwned,
+    F: FnOnce() -> T,
+  {
+    self
+      .try_get(store_id, key)
+      .unwrap_or_else(|_| f())
   }
 
   /// Sets a key-value pair in a store.
-  pub fn set(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, value: Json) -> Result<()> {
+  pub fn set<K, V>(&self, store_id: impl AsRef<str>, key: K, value: V) -> Result<()>
+  where
+    K: AsRef<str>,
+    V: Into<Json>,
+  {
     self
       .get_resource(store_id)?
       .locked(|store| store.set(key, value))
   }
 
   /// Patches a store state.
-  pub fn patch(&self, store_id: impl AsRef<str>, state: StoreState) -> Result<()> {
+  pub fn patch<S>(&self, store_id: impl AsRef<str>, state: S) -> Result<()>
+  where
+    S: Into<StoreState>,
+  {
     self
       .get_resource(store_id)?
       .locked(|store| store.patch(state))

@@ -1,11 +1,15 @@
 <script lang="ts">
-  import data from './data/0.10.0.json';
   import type { Code } from '$lib/code';
   import { Ext } from '$lib/components/link';
   import { CodeGroup } from '$lib/components/code';
   import { Changelog } from '$lib/components/container';
 
   const version = '0.10.0';
+
+  const url = {
+    path: 'https://docs.rs/tauri-plugin-pinia/0.10.0/tauri_plugin_pinia/struct.Builder.html#method.path',
+    'tauri-store': 'https://docs.rs/tauri-store/0.5.0/tauri_store/',
+  };
 
   const code: Code = {
     id: 'custom-path',
@@ -34,8 +38,8 @@ fn main() {
   };
 </script>
 
-{#snippet ext(key: keyof typeof data.url, label?: string)}
-  <Ext href={data.url[key]} code>{label ?? key}</Ext>
+{#snippet ext(key: keyof typeof url, label?: string)}
+  <Ext href={url[key]} code>{label ?? key}</Ext>
 {/snippet}
 
 <Changelog.Version {version} />
