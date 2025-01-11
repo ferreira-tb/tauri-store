@@ -10,15 +10,17 @@ struct Foo {
   key: u8,
 }
 
-#[test]
-fn id() {
+#[tokio::test]
+async fn id() {
+  let _permit = CONTEXT.acquire_permit().await;
   CONTEXT.with_store(|store| {
     assert_eq!(store.id(), STORE_ID);
   });
 }
 
-#[test]
-fn try_state() {
+#[tokio::test]
+async fn try_state() {
+  let _permit = CONTEXT.acquire_permit().await;
   CONTEXT.with_store(|store| {
     let state = store.try_state::<Foo>();
     assert!(state.is_err());
@@ -29,8 +31,9 @@ fn try_state() {
   });
 }
 
-#[test]
-fn get() {
+#[tokio::test]
+async fn get() {
+  let _permit = CONTEXT.acquire_permit().await;
   CONTEXT.with_store(|store| {
     let value = store.get("key");
     assert!(value.is_none());
@@ -41,8 +44,9 @@ fn get() {
   });
 }
 
-#[test]
-fn try_get() {
+#[tokio::test]
+async fn try_get() {
+  let _permit = CONTEXT.acquire_permit().await;
   CONTEXT.with_store(|store| {
     let value = store.try_get::<u8>("key");
     assert!(value.is_err());
@@ -53,8 +57,9 @@ fn try_get() {
   });
 }
 
-#[test]
-fn try_get_or() {
+#[tokio::test]
+async fn try_get_or() {
+  let _permit = CONTEXT.acquire_permit().await;
   CONTEXT.with_store(|store| {
     let value = store.try_get_or::<u8>("key", 20);
     assert_eq!(value, 20);
@@ -65,8 +70,9 @@ fn try_get_or() {
   });
 }
 
-#[test]
-fn try_get_or_default() {
+#[tokio::test]
+async fn try_get_or_default() {
+  let _permit = CONTEXT.acquire_permit().await;
   CONTEXT.with_store(|store| {
     let value = store.try_get_or_default::<u8>("key");
     assert_eq!(value, 0);
@@ -77,9 +83,10 @@ fn try_get_or_default() {
   });
 }
 
-#[test]
-fn try_get_or_else() {
+#[tokio::test]
+async fn try_get_or_else() {
   let else_fn = || 20;
+  let _permit = CONTEXT.acquire_permit().await;
   CONTEXT.with_store(|store| {
     let value = store.try_get_or_else::<u8, _>("key", else_fn);
     assert_eq!(value, 20);
@@ -90,8 +97,9 @@ fn try_get_or_else() {
   });
 }
 
-#[test]
-fn set() {
+#[tokio::test]
+async fn set() {
+  let _permit = CONTEXT.acquire_permit().await;
   CONTEXT.with_store(|store| {
     let value = store.get("key");
     assert!(value.is_none());
@@ -102,8 +110,9 @@ fn set() {
   });
 }
 
-#[test]
-fn patch() {
+#[tokio::test]
+async fn patch() {
+  let _permit = CONTEXT.acquire_permit().await;
   CONTEXT.with_store(|store| {
     let value = store.get("key");
     assert!(value.is_none());
@@ -114,8 +123,9 @@ fn patch() {
   });
 }
 
-#[test]
-fn patch_many() {
+#[tokio::test]
+async fn patch_many() {
+  let _permit = CONTEXT.acquire_permit().await;
   CONTEXT.with_store(|store| {
     let keys = ["key0", "key1", "key2", "key3", "key4"];
     for key in keys {
