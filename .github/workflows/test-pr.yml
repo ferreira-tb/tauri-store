@@ -1,0 +1,20 @@
+name: Test PR
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: clippy
+
+      - run: |
+          sudo apt-get update
+          sudo apt-get -y install libgtk-3-dev libwebkit2gtk-4.1-dev
+          cargo clippy --all
+          cargo test -p tauri-store

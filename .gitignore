@@ -13,17 +13,17 @@ pnpm-debug.log*
 !.vscode/tasks.json
 
 # Rust
-debug/
-target/
+debug
+target
 **/*.rs.bk
 *.pdb
 
 # Tauri
-**/gen
+gen
 
 # Node
-**/node_modules
-dist/
+node_modules
+dist
 
 # Vite
 **/*vite*timestamp*
@@ -45,6 +45,6 @@ dist/
 workspace.md
 
 # Others
-.temp/
-coverage/
+.temp
+coverage
 .eslintcache

@@ -81,7 +81,6 @@ impl<'a> OutputContext<'a> {
 fn read_asset(path: &Path) -> Result<String> {
   fs::read_to_string(path)
     .with_context(|| format!("failed to read asset: {}", path.display()).bright_red())
-    .map_err(Into::into)
 }
 
 fn write_file(path: &Path, contents: &str) -> Result<()> {
@@ -92,7 +91,6 @@ fn write_file(path: &Path, contents: &str) -> Result<()> {
       let message = format!("generated: {display}");
       println!("{}", message.truecolor(105, 105, 105));
     })
-    .map_err(Into::into)
 }
 
 mod transform {
