@@ -1,0 +1,17 @@
+name: Test PR
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@nightly
+        with:
+          components: clippy
+
+      - run: cargo clippy --all
+      - run: cargo test -p tauri-store
