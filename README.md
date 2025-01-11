@@ -1,4 +1,4 @@
-# tauri-store [![crates.io](https://img.shields.io/crates/v/tauri-store.svg)](https://crates.io/crates/tauri-store) [![Recent downloads](https://img.shields.io/crates/dr/tauri-store)](https://crates.io/crates/tauri-store)
+# tauri-store
 
 Persistent stores for Tauri.
 
