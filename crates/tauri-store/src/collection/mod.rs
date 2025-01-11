@@ -128,6 +128,7 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Gets a value from a store and tries to parse it as an instance of type `T`.
+  ///
   /// If the key does not exist, returns the provided default value.
   pub fn try_get_or<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, default: T) -> T
   where
@@ -137,6 +138,7 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Gets a value from a store and tries to parse it as an instance of type `T`.
+  ///
   /// If the key does not exist, returns the default value of `T`.
   pub fn try_get_or_default<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> T
   where
@@ -146,6 +148,7 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Gets a value from a store and tries to parse it as an instance of type `T`.
+  ///
   /// If the key does not exist, returns the result of the provided closure.
   pub fn try_get_or_else<T, F>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, f: F) -> T
   where
