@@ -1,9 +1,12 @@
 <script lang="ts">
-  import data from './data/0.9.0.json';
   import { Ext } from '$lib/components/link';
   import { Changelog } from '$lib/components/container';
 
   const version = '0.9.0';
+
+  const url = {
+    'tauri-store': 'https://docs.rs/tauri-store/0.4.0/tauri_store/',
+  };
 </script>
 
 <Changelog.Version {version} />
@@ -11,7 +14,7 @@
 <Changelog.BreakingChanges {version}>
   <ul>
     <li>
-      Update <Ext href={data.url['tauri-store']} code>tauri-store</Ext> to <code>0.4.0</code>.
+      Update <Ext href={url['tauri-store']} code>tauri-store</Ext> to <code>0.4.0</code>.
     </li>
   </ul>
 </Changelog.BreakingChanges>

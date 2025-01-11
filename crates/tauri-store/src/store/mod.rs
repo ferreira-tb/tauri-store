@@ -8,11 +8,12 @@ use crate::event::{
   emit, ConfigPayload, EventSource, StatePayload, STORE_CONFIG_CHANGE_EVENT,
   STORE_STATE_CHANGE_EVENT,
 };
+use crate::io_err;
 use crate::manager::ManagerExt;
 use save::{debounce, throttle, to_bytes, SaveHandle};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
-use serde_json::Value as Json;
+use serde_json::{json, Value as Json};
 use std::collections::HashMap;
 use std::fmt;
 use std::fs::{self, File};
@@ -26,7 +27,7 @@ use watch::Watcher;
 
 pub(crate) use resource::StoreResource;
 pub use save::SaveStrategy;
-pub use state::{StoreState, StoreStateExt};
+pub use state::StoreState;
 
 #[cfg(tauri_store_tracing)]
 use tracing::{debug, warn};
@@ -98,67 +99,105 @@ impl<R: Runtime> Store<R> {
 
   /// Tries to parse the store state as an instance of type `T`.
   pub fn try_state<T: DeserializeOwned>(&self) -> Result<T> {
-    self.state.parse()
+    Ok(serde_json::from_value(json!(self.state))?)
   }
 
   /// Gets a value from the store.
   pub fn get(&self, key: impl AsRef<str>) -> Option<&Json> {
-    self.state.get(key.as_ref())
+    self.state.0.get(key.as_ref())
   }
 
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
   pub fn try_get<T: DeserializeOwned>(&self, key: impl AsRef<str>) -> Result<T> {
-    self.state.try_get(key)
+    let key = key.as_ref();
+    let Some(value) = self.state.0.get(key).cloned() else {
+      return io_err!(NotFound, "key not found: {key}");
+    };
+
+    Ok(serde_json::from_value(value)?)
+  }
+
+  /// Gets a value from the store and tries to parse it as an instance of type `T`.
+  /// If the key does not exist, returns the provided default value.
+  pub fn try_get_or<T>(&self, key: impl AsRef<str>, default: T) -> T
+  where
+    T: DeserializeOwned,
+  {
+    self.try_get(key).unwrap_or(default)
+  }
+
+  /// Gets a value from the store and tries to parse it as an instance of type `T`.
+  /// If the key does not exist, returns the default value of `T`.
+  pub fn try_get_or_default<T>(&self, key: impl AsRef<str>) -> T
+  where
+    T: DeserializeOwned + Default,
+  {
+    self.try_get(key).unwrap_or_default()
+  }
+
+  /// Gets a value from the store and tries to parse it as an instance of type `T`.
+  /// If the key does not exist, returns the result of the provided closure.
+  pub fn try_get_or_else<T, F>(&self, key: impl AsRef<str>, f: F) -> T
+  where
+    T: DeserializeOwned,
+    F: FnOnce() -> T,
+  {
+    self.try_get(key).unwrap_or_else(|_| f())
   }
 
   /// Sets a key-value pair in the store.
-  pub fn set(&mut self, key: impl AsRef<str>, value: Json) -> Result<()> {
-    self.state.insert(key.as_ref().to_owned(), value);
+  pub fn set(&mut self, key: impl AsRef<str>, value: impl Into<Json>) -> Result<()> {
+    self
+      .state
+      .0
+      .insert(key.as_ref().to_owned(), value.into());
+
     self.on_state_change(None)
   }
 
   /// Patches the store state, optionally having a window as the source.
-  pub fn patch_with_source<E>(&mut self, state: StoreState, source: E) -> Result<()>
+  pub fn patch_with_source<S, E>(&mut self, state: S, source: E) -> Result<()>
   where
+    S: Into<StoreState>,
     E: Into<EventSource>,
   {
-    self.state.extend(state);
+    self.state.0.extend(state.into().0);
     self.on_state_change(source)
   }
 
   /// Patches the store state.
-  pub fn patch(&mut self, state: StoreState) -> Result<()> {
+  pub fn patch<S: Into<StoreState>>(&mut self, state: S) -> Result<()> {
     self.patch_with_source(state, None)
   }
 
   /// Whether the store has a key.
   pub fn has(&self, key: impl AsRef<str>) -> bool {
-    self.state.contains_key(key.as_ref())
+    self.state.0.contains_key(key.as_ref())
   }
 
   /// Creates an iterator over the store keys.
   pub fn keys(&self) -> impl Iterator<Item = &String> {
-    self.state.keys()
+    self.state.0.keys()
   }
 
   /// Creates an iterator over the store values.
   pub fn values(&self) -> impl Iterator<Item = &Json> {
-    self.state.values()
+    self.state.0.values()
   }
 
   /// Creates an iterator over the store entries.
   pub fn entries(&self) -> impl Iterator<Item = (&String, &Json)> {
-    self.state.iter()
+    self.state.0.iter()
   }
 
   /// Returns the amount of items in the store.
   pub fn len(&self) -> usize {
-    self.state.len()
+    self.state.0.len()
   }
 
   /// Whether the store is empty.
   pub fn is_empty(&self) -> bool {
-    self.state.is_empty()
+    self.state.0.is_empty()
   }
 
   /// Save the store state to the disk.

@@ -17,7 +17,7 @@ pub use event::{
 };
 pub use manager::ManagerExt;
 pub use serde_json::Value as Json;
-pub use store::{SaveStrategy, Store, StoreOptions, StoreState, StoreStateExt};
+pub use store::{SaveStrategy, Store, StoreOptions, StoreState};
 
 #[cfg(feature = "derive")]
 pub use tauri_store_macros::{Collection, CollectionBuilder};

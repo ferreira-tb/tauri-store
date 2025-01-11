@@ -51,7 +51,7 @@ pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Result<
 where
   R: Runtime,
 {
-  app.valtio().store_state(id)
+  app.valtio().state(id)
 }
 
 #[tauri::command]

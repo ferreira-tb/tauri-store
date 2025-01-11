@@ -48,7 +48,7 @@ pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Result<
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().store_state(id)
+  app.PLUGIN_NAME().state(id)
 }
 
 #[tauri::command]

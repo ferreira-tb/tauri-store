@@ -21,11 +21,11 @@
     "update": "pwsh scripts/update.ps1"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^6.1.6",
+    "@tb-dev/eslint-config": "^6.1.7",
     "@types/node": "^22.10.5",
     "@types/react": "^19.0.4",
     "@types/react-dom": "^19.0.2",
-    "eslint": "^9.17.0",
+    "eslint": "^9.18.0",
     "prettier": "^3.4.2",
     "prettier-plugin-css-order": "^2.1.2",
     "prettier-plugin-svelte": "^3.3.2",

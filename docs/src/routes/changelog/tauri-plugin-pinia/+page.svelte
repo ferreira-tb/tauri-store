@@ -15,4 +15,5 @@
 
 <Changelog.Next />
 
+<Pinia.V1x />
 <Pinia.V0x />
