@@ -71,7 +71,7 @@ export const customDirectory = snippetGroup((metadata) => {
     value: `
 ${snakeCase(metadata.name)}::Builder::new()
   .path("/path/to/custom/directory")
-  .build(),
+  .build();
   `,
   };
 });
