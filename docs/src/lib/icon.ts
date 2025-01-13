@@ -1,4 +1,4 @@
-import * as Icon from '$lib/components/icons';
+import * as Icon from '$components/icons';
 
 export function resolvePluginIcon(plugin: TauriPlugin) {
   switch (plugin) {

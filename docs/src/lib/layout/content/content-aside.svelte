@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onDestroy } from 'svelte';
-  import { Link } from '$lib/components/link';
+  import { Link } from '$components/link';
   import type { Headings } from './aside.svelte';
-  import { currentPlugin } from '$lib/stores/plugin';
+  import { currentPlugin } from '$stores/plugin';
 
   interface Props {
     headings: Headings;

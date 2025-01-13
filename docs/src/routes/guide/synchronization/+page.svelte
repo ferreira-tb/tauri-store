@@ -1,11 +1,11 @@
 <script lang="ts">
-  import * as Alert from '$lib/components/alert';
-  import { Ext, Link } from '$lib/components/link';
-  import { currentMetadata } from '$lib/stores/plugin';
-  import { Container } from '$lib/components/container';
-  import { Breadcrumb } from '$lib/components/breadcrumb';
-  import { CodeBlock, CodeGroup } from '$lib/components/code';
-  import { syncDenylist, syncOptions } from '$lib/content/guide/synchronization/snippets';
+  import * as Alert from '$components/alert';
+  import { Ext, Link } from '$components/link';
+  import { currentMetadata } from '$stores/plugin';
+  import { Container } from '$components/container';
+  import { Breadcrumb } from '$components/breadcrumb';
+  import { CodeBlock, CodeGroup } from '$components/code';
+  import { syncDenylist, syncOptions } from '$content/guide/synchronization/snippets';
 
   const url = $derived.by(() => {
     const docs = $currentMetadata.docs;

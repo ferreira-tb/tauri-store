@@ -1,6 +1,6 @@
 <script lang="ts">
   import { cn } from '$lib/utils';
-  import { Ext } from '$lib/components/link';
+  import { Ext } from '$components/link';
   import type { HTMLAttributes } from 'svelte/elements';
 
   type Props = HTMLAttributes<HTMLElement> & {

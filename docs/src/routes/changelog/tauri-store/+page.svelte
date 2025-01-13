@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Breadcrumb } from '$lib/components/breadcrumb';
-  import * as Store from '$lib/content/changelog/tauri-store';
-  import { Changelog, Container } from '$lib/components/container';
+  import { Breadcrumb } from '$components/breadcrumb';
+  import * as Store from '$content/changelog/tauri-store';
+  import { Changelog, Container } from '$components/container';
 </script>
 
 <svelte:head>

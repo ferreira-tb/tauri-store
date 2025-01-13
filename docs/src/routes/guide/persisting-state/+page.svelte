@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { Ext, Link } from '$lib/components/link';
-  import { currentMetadata } from '$lib/stores/plugin';
-  import { Container } from '$lib/components/container';
-  import { Breadcrumb } from '$lib/components/breadcrumb';
-  import { CodeBlock, CodeGroup } from '$lib/components/code';
+  import { Ext, Link } from '$components/link';
+  import { currentMetadata } from '$stores/plugin';
+  import { Container } from '$components/container';
+  import { Breadcrumb } from '$components/breadcrumb';
+  import { CodeBlock, CodeGroup } from '$components/code';
   import {
     autosave,
     customDirectory,
     saveDenylist,
     saveOnChange,
     saveStores,
-  } from '$lib/content/guide/persisting-state/snippets';
+  } from '$content/guide/persisting-state/snippets';
 
   const url = $derived.by(() => {
     const docs = $currentMetadata.docs;

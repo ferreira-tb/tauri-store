@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Breadcrumb } from '$lib/components/breadcrumb';
-  import { Changelog, Container } from '$lib/components/container';
-  import * as Valtio from '$lib/content/changelog/tauri-plugin-valtio';
+  import { Breadcrumb } from '$components/breadcrumb';
+  import { Changelog, Container } from '$components/container';
+  import * as Valtio from '$content/changelog/tauri-plugin-valtio';
 </script>
 
 <svelte:head>

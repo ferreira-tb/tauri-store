@@ -1,7 +1,5 @@
 # tauri-plugin-valtio
 
-> IMPORTANT: This is work in progress and **SHOULD NOT** be used before it reaches version 0.1.0. Expect breaking changes on every release before that. Tracking issue: [ferreira-tb/tauri-store#75](https://github.com/ferreira-tb/tauri-store/issues/75).
-
 Persistent [Valtio](https://valtio.dev/) stores for Tauri and React.
 
 ## Features

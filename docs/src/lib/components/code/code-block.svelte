@@ -2,7 +2,7 @@
   import { cn } from '$lib/utils';
   import { highlight, type Lang } from '$lib/code';
   import type { HTMLAttributes } from 'svelte/elements';
-  import * as Accordion from '$lib/components/ui/accordion';
+  import * as Accordion from '$components/ui/accordion';
 
   type Props = HTMLAttributes<HTMLElement> & {
     accordion?: boolean | string;

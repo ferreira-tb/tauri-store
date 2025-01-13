@@ -1,7 +1,7 @@
 <script lang="ts">
   import { cn } from '$lib/utils';
   import type { Snippet } from 'svelte';
-  import { Title } from '$lib/components/ui/alert';
+  import { Title } from '$components/ui/alert';
 
   interface Props {
     children: Snippet;

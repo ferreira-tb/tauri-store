@@ -7,9 +7,9 @@
     "baseColor": "zinc"
   },
   "aliases": {
-    "components": "$lib/components",
+    "components": "$components",
     "utils": "$lib/utils",
-    "ui": "$lib/components/ui",
+    "ui": "$components/ui",
     "hooks": "$lib/hooks"
   },
   "typescript": true,

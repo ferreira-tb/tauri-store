@@ -1,10 +1,10 @@
 <script lang="ts">
   import '../app.css';
-  import { Layout } from '$lib/layout';
+  import { Layout } from '$layout';
   import { ModeWatcher } from 'mode-watcher';
+  import * as Sidebar from '$layout/sidebar';
   import metadata from '$lib/data/metadata.json';
-  import * as Sidebar from '$lib/layout/sidebar';
-  import { currentPlugin } from '$lib/stores/plugin';
+  import { currentPlugin } from '$stores/plugin';
   import { onMount, type Snippet, tick } from 'svelte';
   import { isHighlighterReady, loadHighlighter } from '$lib/code';
 

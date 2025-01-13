@@ -1,18 +1,18 @@
 <script lang="ts">
-  import { Ext } from '$lib/components/link';
-  import * as Alert from '$lib/components/alert';
-  import { CodeGroup } from '$lib/components/code';
-  import { currentMetadata } from '$lib/stores/plugin';
-  import { Container } from '$lib/components/container';
-  import { Breadcrumb } from '$lib/components/breadcrumb';
-  import { Extra } from '$lib/content/guide/getting-started/extra';
-  import { UsageSteps } from '$lib/content/guide/getting-started/usage-steps';
+  import { Ext } from '$components/link';
+  import * as Alert from '$components/alert';
+  import { CodeGroup } from '$components/code';
+  import { currentMetadata } from '$stores/plugin';
+  import { Container } from '$components/container';
+  import { Breadcrumb } from '$components/breadcrumb';
+  import { Extra } from '$content/guide/getting-started/extra';
+  import { UsageSteps } from '$content/guide/getting-started/usage-steps';
   import {
     capabilities,
     installCrate,
     installPackage,
     pluginRegistration,
-  } from '$lib/content/guide/getting-started/snippets';
+  } from '$content/guide/getting-started/snippets';
 
   const url = $derived.by(() => {
     return {

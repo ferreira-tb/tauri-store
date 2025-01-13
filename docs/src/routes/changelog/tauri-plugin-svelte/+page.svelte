@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Breadcrumb } from '$lib/components/breadcrumb';
-  import { Changelog, Container } from '$lib/components/container';
-  import * as Svelte from '$lib/content/changelog/tauri-plugin-svelte';
+  import { Breadcrumb } from '$components/breadcrumb';
+  import { Changelog, Container } from '$components/container';
+  import * as Svelte from '$content/changelog/tauri-plugin-svelte';
 </script>
 
 <svelte:head>

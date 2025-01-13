@@ -1,4 +1,4 @@
-import { persistent } from '$lib/stores/persistent';
+import { persistent } from '$stores/persistent';
 
 export type Mode = 'learn' | 'reference' | 'changelog';
 
