@@ -5,7 +5,7 @@
 <script lang="ts">
   import Link from './link.svelte';
   import type { Snippet } from 'svelte';
-  import { currentPlugin } from '$lib/stores/plugin';
+  import { currentPlugin } from '$stores/plugin';
   import type { HTMLAnchorAttributes } from 'svelte/elements';
 
   type Props = HTMLAnchorAttributes & {

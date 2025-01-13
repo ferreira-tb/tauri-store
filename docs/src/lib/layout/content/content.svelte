@@ -4,7 +4,7 @@
   import type { Headings } from './aside.svelte';
   import ContentAside from './content-aside.svelte';
   import ContentFooter from './content-footer.svelte';
-  import { Separator } from '$lib/components/ui/separator';
+  import { Separator } from '$components/ui/separator';
 
   interface Props {
     children: Snippet;

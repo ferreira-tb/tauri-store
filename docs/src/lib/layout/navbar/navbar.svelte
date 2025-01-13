@@ -1,14 +1,14 @@
 <script lang="ts">
   import { cn } from '$lib/utils';
+  import { Link } from '$components/link';
   import { NAVBAR_HEIGHT } from './constants';
-  import { Link } from '$lib/components/link';
-  import { useSidebar } from '$lib/layout/sidebar';
+  import { useSidebar } from '$layout/sidebar';
+  import { currentPlugin } from '$stores/plugin';
   import NavbarMobile from './navbar-mobile.svelte';
   import NavbarPlugin from './navbar-plugin.svelte';
   import NavbarSocial from './navbar-social.svelte';
-  import { currentPlugin } from '$lib/stores/plugin';
   import NavbarDesktop from './navbar-desktop.svelte';
-  import type { Headings } from '$lib/layout/content/aside.svelte';
+  import type { Headings } from '$layout/content/aside.svelte';
 
   interface Props {
     headings: Headings;

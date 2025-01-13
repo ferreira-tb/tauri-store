@@ -1,11 +1,11 @@
 <script lang="ts">
   import { tick } from 'svelte';
-  import { Link } from '$lib/components/link';
-  import { useSidebar } from '$lib/layout/sidebar';
-  import * as Sheet from '$lib/components/ui/sheet';
+  import { Link } from '$components/link';
+  import { useSidebar } from '$layout/sidebar';
+  import * as Sheet from '$components/ui/sheet';
   import { Menu, PanelRightOpen } from 'lucide-svelte';
-  import { Separator } from '$lib/components/ui/separator';
-  import type { Headings } from '$lib/layout/content/aside.svelte';
+  import { Separator } from '$components/ui/separator';
+  import type { Headings } from '$layout/content/aside.svelte';
   import { NAVBAR_HEIGHT, NAVBAR_HEIGHT_MOBILE } from './constants';
 
   interface Props {

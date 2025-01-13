@@ -1,11 +1,11 @@
 <script lang="ts">
+  import { Ext } from '$components/link';
   import { pascalCase } from 'change-case';
-  import { Ext } from '$lib/components/link';
-  import { currentMetadata } from '$lib/stores/plugin';
-  import { Container } from '$lib/components/container';
-  import { Breadcrumb } from '$lib/components/breadcrumb';
-  import { CodeBlock, CodeGroup } from '$lib/components/code';
-  import { get, onLoad, tryGet, watchStore } from '$lib/content/guide/accessing-from-rust/snippets';
+  import { currentMetadata } from '$stores/plugin';
+  import { Container } from '$components/container';
+  import { Breadcrumb } from '$components/breadcrumb';
+  import { CodeBlock, CodeGroup } from '$components/code';
+  import { get, onLoad, tryGet, watchStore } from '$content/guide/accessing-from-rust/snippets';
 
   const url = $derived.by(() => {
     const docs = $currentMetadata.docs;

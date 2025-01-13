@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Link } from '$lib/components/link';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { Link } from '$components/link';
+  import * as DropdownMenu from '$components/ui/dropdown-menu';
 
   interface Props {
     external?: boolean;

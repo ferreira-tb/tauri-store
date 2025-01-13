@@ -1,9 +1,9 @@
 <script lang="ts">
   import { plugins } from '$lib/data';
   import { resolvePluginIcon } from '$lib/icon';
-  import { currentPlugin } from '$lib/stores/plugin';
-  import * as Sidebar from '$lib/components/ui/sidebar';
-  import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+  import { currentPlugin } from '$stores/plugin';
+  import * as Sidebar from '$components/ui/sidebar';
+  import * as DropdownMenu from '$components/ui/dropdown-menu';
 </script>
 
 <Sidebar.Footer>

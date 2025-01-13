@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Link } from '$lib/components/link';
-  import { Button } from '$lib/components/ui/button';
-  import { Container } from '$lib/components/container';
+  import { Link } from '$components/link';
+  import { Button } from '$components/ui/button';
+  import { Container } from '$components/container';
 </script>
 
 <svelte:head>

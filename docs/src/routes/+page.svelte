@@ -1,10 +1,10 @@
 <script lang="ts">
   import { findMetadata } from '$lib/data';
+  import * as Alert from '$components/alert';
   import { resolvePluginIcon } from '$lib/icon';
-  import * as Alert from '$lib/components/alert';
   import metadata from '$lib/data/metadata.json';
-  import { Container } from '$lib/components/container';
-  import { Ext, PluginLink } from '$lib/components/link';
+  import { Container } from '$components/container';
+  import { Ext, PluginLink } from '$components/link';
 
   const url = {
     cargoFeatures: 'https://doc.rust-lang.org/cargo/reference/features.html',

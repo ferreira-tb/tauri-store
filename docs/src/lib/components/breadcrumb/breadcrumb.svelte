@@ -1,5 +1,5 @@
 <script lang="ts">
-  import * as Breadcrumb from '$lib/components/ui/breadcrumb';
+  import * as Breadcrumb from '$components/ui/breadcrumb';
 
   interface Props {
     current: string;

@@ -1,7 +1,7 @@
 <script lang="ts">
   import NavbarMenu from './navbar-menu.svelte';
   import NavbarSocial from './navbar-social.svelte';
-  import { Separator } from '$lib/components/ui/separator';
+  import { Separator } from '$components/ui/separator';
   import { changelogs, javascriptDocs, rustDocs } from '$lib/data';
 </script>
 

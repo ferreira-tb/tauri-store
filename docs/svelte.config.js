@@ -15,6 +15,12 @@ const config = {
     paths: {
       base: '/tauri-store',
     },
+    alias: {
+      $components: './src/lib/components',
+      $content: './src/content',
+      $layout: './src/lib/layout',
+      $stores: './src/lib/stores',
+    },
   },
 };
 

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { plugins } from '$lib/data';
   import { resolvePluginIcon } from '$lib/icon';
-  import { Button } from '$lib/components/ui/button';
-  import * as Dialog from '$lib/components/ui/dialog';
-  import { currentPlugin, DEFAULT_PLUGIN } from '$lib/stores/plugin';
+  import { Button } from '$components/ui/button';
+  import * as Dialog from '$components/ui/dialog';
+  import { currentPlugin, DEFAULT_PLUGIN } from '$stores/plugin';
 
   let isOpen = $state(false);
 

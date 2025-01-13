@@ -2,7 +2,7 @@
   import * as Tabs from '../ui/tabs';
   import type { Code } from '$lib/code';
   import CodeBlock from './code-block.svelte';
-  import * as Accordion from '$lib/components/ui/accordion';
+  import * as Accordion from '$components/ui/accordion';
 
   interface Props {
     accordion?: boolean | string;
