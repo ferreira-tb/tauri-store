@@ -21,10 +21,8 @@ import {
 } from '@tauri-store/shared';
 
 /**
- * A [writable store](https://svelte.dev/docs/svelte/stores#svelte-store-writable)
- * that can sync its state with the Rust backend and persist it to disk.
- * It adheres to the [Svelte store contract](https://svelte.dev/docs/svelte/stores#Store-contract),
- * so it's interchangeable with conventional Svelte stores.
+ * A [writable store] that can sync its state with the Rust backend and persist it to disk.
+ * It adheres to the [Svelte store contract], so it's interchangeable with conventional Svelte stores.
  *
  * @example
  * ```ts
@@ -48,6 +46,9 @@ import {
  * // Save the store to disk.
  * await store.save();
  * ```
+ *
+ * [writable store]: https://svelte.dev/docs/svelte/stores#svelte-store-writable
+ * [Svelte store contract]: https://svelte.dev/docs/svelte/stores#Store-contract
  */
 export class Store<S extends State> extends BaseStore<S> implements StoreContract<S> {
   public readonly id: string;
@@ -177,8 +178,8 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
  * import { store, Store } from 'tauri-plugin-svelte';
  *
  * // These are equivalent.
- * const store = new Store('counter', { count: 0 });
- * const store = store('counter', { count: 0 });
+ * const foo = new Store('foo', { count: 0 });
+ * const bar = store('bar', { count: 0 });
  * ```
  */
 export function store<S extends State>(
