@@ -58,6 +58,7 @@ where
       id: ID.fetch_add(1, SeqCst),
     }
   }
+
   pub fn call(&self, app: &AppHandle<R>) {
     if self.sender.send() || self.waiting.load(Relaxed) {
       return;

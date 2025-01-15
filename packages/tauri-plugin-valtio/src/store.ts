@@ -93,6 +93,21 @@ export class Store<S extends State> extends BaseStore<S> {
   }
 }
 
+/**
+ * Create a new store with the given `id` and initial `state`.
+ *
+ * @example
+ * ```ts
+ * import { store } from 'tauri-plugin-valtio';
+ *
+ * export const foo = store('foo', { count: 0 });
+ *
+ * // "state" is the actual valtio proxy.
+ * export const increment = () => {
+ *  foo.state.count++;
+ * };
+ * ```
+ */
 export function store<S extends State>(
   id: string,
   state: S,

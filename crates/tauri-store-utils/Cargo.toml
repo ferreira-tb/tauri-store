@@ -7,6 +7,7 @@ homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
+readme = "./README.md"
 keywords = ["tauri", "plugin", "store"]
 
 [package.edition]

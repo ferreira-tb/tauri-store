@@ -7,8 +7,7 @@ import type { TauriStoreContract } from '@tauri-store/shared';
 /**
  * Creates the Pinia plugin.
  *
- * This is also exported as
- * [`TauriPluginPinia`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/functions/TauriPluginPinia.html).
+ * This is also exported as [`TauriPluginPinia`].
  *
  * @example
  * ```ts
@@ -24,6 +23,8 @@ import type { TauriStoreContract } from '@tauri-store/shared';
  * app.use(pinia)
  * app.mount('#app');
  * ```
+ *
+ * [`TauriPluginPinia`]: https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/functions/TauriPluginPinia.html
  */
 export function createPlugin(pluginOptions: TauriPluginPiniaOptions = {}) {
   return function (ctx: PiniaPluginContext) {
@@ -43,7 +44,8 @@ export function createPlugin(pluginOptions: TauriPluginPiniaOptions = {}) {
 }
 
 /**
- * This is an alias for
- * [`createPlugin`](https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/functions/createPlugin.html).
+ * This is an alias for [`createPlugin`].
+ *
+ * [`createPlugin`]: https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/functions/createPlugin.html
  */
 export const TauriPluginPinia = createPlugin;

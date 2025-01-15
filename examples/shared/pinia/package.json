@@ -4,7 +4,7 @@
   "packageManager": "pnpm@10.0.0",
   "private": true,
   "dependencies": {
-    "@tauri-apps/api": "^2.1.1",
+    "@tauri-apps/api": "^2.2.0",
     "@tauri-apps/plugin-process": "^2.2.0",
     "@tauri-apps/plugin-shell": "^2.2.0",
     "@tb-dev/utils": "^4.1.3",
