@@ -13,6 +13,10 @@
 
 <Container title="Changelog" level={1} />
 
-<Changelog.Next />
+<Changelog.Next>
+  <ul>
+    <li>Add <code>Store::save_on_exit</code> and <code>StoreOptions::save_on_exit</code>.</li>
+  </ul>
+</Changelog.Next>
 
 <Store.V0x />

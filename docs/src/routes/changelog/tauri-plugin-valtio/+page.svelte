@@ -13,6 +13,10 @@
 
 <Container title="Changelog" level={1} />
 
-<Changelog.Next />
+<Changelog.Next>
+  <ul>
+    <li>Add <code>TauriPluginValtioStoreOptions.saveOnExit</code>.</li>
+  </ul>
+</Changelog.Next>
 
 <Valtio.V0x />

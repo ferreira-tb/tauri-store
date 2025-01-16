@@ -1,13 +1,13 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { open } from '@tauri-apps/plugin-shell';
+import { counterOptions, counter as value } from 'example-shared-js/src/index.js';
 
 function store() {
-  const counter = ref(0);
-  const counter2 = ref(0);
-  const counter3 = ref(0);
-
-  const nested = ref({ foo: { bar: { baz: 0 } } });
+  const counter = ref(value.counter);
+  const counter2 = ref(value.counter2);
+  const counter3 = ref(value.counter3);
+  const nested = ref(value.nested);
 
   function increment() {
     counter.value++;
@@ -23,13 +23,7 @@ function store() {
 }
 
 export const useStore = defineStore('counter-store', store, {
-  tauri: {
-    filterKeys: ['counter', 'counter2', 'nested'],
-    filterKeysStrategy: 'pick',
-    saveOnChange: true,
-    saveStrategy: 'debounce',
-    saveInterval: 1000,
-  },
+  tauri: counterOptions,
 });
 
 export async function openStore() {

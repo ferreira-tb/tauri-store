@@ -9,6 +9,7 @@ import {
   DEFAULT_FILTER_KEYS_STRATEGY,
   DEFAULT_ON_ERROR,
   DEFAULT_SAVE_ON_CHANGE,
+  DEFAULT_SAVE_ON_EXIT,
   mergeStoreOptions,
   type State,
   throttle,
@@ -37,6 +38,7 @@ export class Store extends BaseStore {
       onError: options.onError ?? DEFAULT_ON_ERROR,
       saveInterval: saveStrategy.interval,
       saveOnChange: options.saveOnChange ?? DEFAULT_SAVE_ON_CHANGE,
+      saveOnExit: options.saveOnExit ?? DEFAULT_SAVE_ON_EXIT,
       saveStrategy: saveStrategy.strategy,
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
@@ -89,8 +91,9 @@ export class Store extends BaseStore {
     try {
       await commands.setStoreOptions(this.id, {
         saveInterval: this.options.saveInterval,
-        saveStrategy: this.options.saveStrategy,
         saveOnChange: this.options.saveOnChange,
+        saveOnExit: this.options.saveOnExit,
+        saveStrategy: this.options.saveStrategy,
       });
     } catch (err) {
       this.onError?.(err);

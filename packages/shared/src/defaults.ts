@@ -10,6 +10,8 @@ export const DEFAULT_SAVE_INTERVAL: Required<StoreOptions>['saveInterval'] = 0;
 
 export const DEFAULT_SAVE_ON_CHANGE: Required<StoreOptions>['saveOnChange'] = false;
 
+export const DEFAULT_SAVE_ON_EXIT: Required<StoreOptions>['saveOnExit'] = true;
+
 export const DEFAULT_SAVE_STRATEGY: Required<StoreOptions>['saveStrategy'] = 'immediate';
 
 export const DEFAULT_SYNC_INTERVAL: Required<StoreOptions>['syncInterval'] = 0;

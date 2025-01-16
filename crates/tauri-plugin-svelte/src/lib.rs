@@ -74,7 +74,7 @@ fn setup<R: Runtime>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()> {
 
 fn on_event<R: Runtime>(app: &AppHandle<R>, event: &RunEvent) {
   if let RunEvent::Exit = event {
-    let _ = app.svelte().save_all_now();
+    let _ = app.svelte().0.on_exit();
   }
 }
 

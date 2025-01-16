@@ -4,6 +4,18 @@ import type { LooseTimeStrategyKind, TimeStrategyRawTuple } from '../time-strate
 /** Options that can also be updated from Rust. */
 export interface StoreBackendOptions {
   /**
+   * Saves the store automatically on a graceful exit.
+   * @default true
+   */
+  saveOnExit?: boolean;
+
+  /**
+   * Saves the store whenever there is a state change.
+   * @default false
+   */
+  saveOnChange?: boolean;
+
+  /**
    * Interval in milliseconds to use when saving the store.
    * This option is only valid when {@link StoreBackendOptions.saveStrategy} is set to `debounce` or `throttle`.
    *
@@ -20,17 +32,12 @@ export interface StoreBackendOptions {
    * @default 'immediate'
    */
   saveStrategy?: LooseTimeStrategyKind;
-
-  /**
-   * Save the store whenever there is a state change.
-   * @default false
-   */
-  saveOnChange?: boolean;
 }
 
 /** @internal */
 export interface StoreBackendRawOptions {
   readonly saveOnChange?: Option<boolean>;
+  readonly saveOnExit?: Option<boolean>;
   readonly saveStrategy?: Option<TimeStrategyRawTuple>;
 }
 
