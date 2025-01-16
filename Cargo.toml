@@ -1,4 +1,5 @@
 [workspace]
+resolver = "2"
 members = [
   "crates/*",
   "examples/pinia/src-tauri",
@@ -7,7 +8,6 @@ members = [
   "examples/svelte/src-tauri",
   "examples/valtio/src-tauri",
 ]
-resolver = "2"
 
 [workspace.package]
 version = "1.0.0"
