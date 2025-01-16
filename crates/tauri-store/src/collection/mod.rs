@@ -17,6 +17,9 @@ use tauri::{AppHandle, Resource, ResourceId, Runtime};
 
 pub use builder::StoreCollectionBuilder;
 
+#[cfg(tauri_store_tracing)]
+use tracing::error;
+
 pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
 
 /// Closure to be called when a store is loaded.
@@ -277,11 +280,30 @@ impl<R: Runtime> StoreCollection<R> {
 
     Ok(())
   }
-}
 
-impl<R: Runtime> Drop for StoreCollection<R> {
-  fn drop(&mut self) {
+  /// Runs any necessary tasks before the application exits.
+  pub fn on_exit(&self) -> Result<()> {
     self.clear_autosave();
+
+    for rid in self.rids() {
+      match StoreResource::take(&self.app, rid) {
+        Ok(resource) => {
+          resource.locked(|store| {
+            if store.save_on_exit {
+              let _ = store.save_now();
+            }
+          });
+        }
+
+        #[cfg_attr(not(tauri_store_tracing), allow(unused_variables))]
+        Err(err) => {
+          #[cfg(tauri_store_tracing)]
+          error!("failed to take store resource: {err}");
+        }
+      }
+    }
+
+    Ok(())
   }
 }
 

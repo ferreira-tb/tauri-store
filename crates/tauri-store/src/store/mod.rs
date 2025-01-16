@@ -1,3 +1,4 @@
+mod options;
 mod resource;
 mod save;
 mod state;
@@ -10,9 +11,9 @@ use crate::event::{
 };
 use crate::io_err;
 use crate::manager::ManagerExt;
+use options::set_options;
 use save::{debounce, throttle, to_bytes, SaveHandle};
 use serde::de::DeserializeOwned;
-use serde::{Deserialize, Serialize};
 use serde_json::{json, Value as Json};
 use std::collections::HashMap;
 use std::fmt;
@@ -25,6 +26,7 @@ use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, ResourceId, Runtime};
 use watch::Watcher;
 
+pub use options::StoreOptions;
 pub(crate) use resource::StoreResource;
 pub use save::SaveStrategy;
 pub use state::StoreState;
@@ -39,6 +41,7 @@ pub struct Store<R: Runtime> {
   pub(crate) id: String,
   pub(crate) state: StoreState,
   pub(crate) watchers: HashMap<u32, Watcher<R>>,
+  pub(crate) save_on_exit: bool,
   save_on_change: bool,
   save_strategy: Option<SaveStrategy>,
   debounce_save_handle: OnceLock<SaveHandle<R>>,
@@ -69,6 +72,7 @@ impl<R: Runtime> Store<R> {
       state,
       watchers: HashMap::new(),
       save_on_change: false,
+      save_on_exit: true,
       save_strategy: None,
       debounce_save_handle: OnceLock::new(),
       throttle_save_handle: OnceLock::new(),
@@ -250,6 +254,12 @@ impl<R: Runtime> Store<R> {
     Ok(())
   }
 
+  /// Whether to save the store on exit.
+  /// This is enabled by default.
+  pub fn save_on_exit(&mut self, enabled: bool) {
+    self.save_on_exit = enabled;
+  }
+
   /// Whether to save the store on state change.
   pub fn save_on_change(&mut self, enabled: bool) {
     self.save_on_change = enabled;
@@ -297,22 +307,11 @@ impl<R: Runtime> Store<R> {
   }
 
   /// Sets the store options, optionally having a window as the source.
-  #[expect(
-    clippy::needless_pass_by_value,
-    reason = "We are just anticipating the need for it."
-  )]
   pub fn set_options_with_source<E>(&mut self, options: StoreOptions, source: E) -> Result<()>
   where
     E: Into<EventSource>,
   {
-    if let Some(strategy) = options.save_strategy {
-      self.set_save_strategy(strategy);
-    }
-
-    if let Some(enabled) = options.save_on_change {
-      self.save_on_change = enabled;
-    }
-
+    set_options(self, options);
     self.on_config_change(source)
   }
 
@@ -403,26 +402,11 @@ impl<R: Runtime> fmt::Debug for Store<R> {
     f.debug_struct("Store")
       .field("id", &self.id)
       .field("state", &self.state)
+      .field("watchers", &self.watchers.len())
+      .field("save_on_exit", &self.save_on_exit)
       .field("save_on_change", &self.save_on_change)
       .field("save_strategy", &self.save_strategy)
       .finish_non_exhaustive()
-  }
-}
-
-#[non_exhaustive]
-#[derive(Clone, Debug, Default, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct StoreOptions {
-  pub save_strategy: Option<SaveStrategy>,
-  pub save_on_change: Option<bool>,
-}
-
-impl<R: Runtime> From<&Store<R>> for StoreOptions {
-  fn from(store: &Store<R>) -> Self {
-    Self {
-      save_strategy: store.save_strategy,
-      save_on_change: Some(store.save_on_change),
-    }
   }
 }
 

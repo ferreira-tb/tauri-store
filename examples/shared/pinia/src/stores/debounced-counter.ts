@@ -1,11 +1,12 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { open } from '@tauri-apps/plugin-shell';
+import { debouncedCounterOptions, debouncedCounter as value } from 'example-shared-js/src/index.js';
 
 function debouncedStore() {
-  const debouncedCounter = ref(0);
-  const debouncedCounter2 = ref(0);
-  const debouncedCounter3 = ref(0);
+  const debouncedCounter = ref(value.debouncedCounter);
+  const debouncedCounter2 = ref(value.debouncedCounter2);
+  const debouncedCounter3 = ref(value.debouncedCounter3);
 
   function increment() {
     debouncedCounter.value++;
@@ -20,13 +21,7 @@ function debouncedStore() {
 }
 
 export const useDebouncedStore = defineStore('debounced-counter-store', debouncedStore, {
-  tauri: {
-    filterKeys: ['debouncedCounter3'],
-    filterKeysStrategy: 'omit',
-    saveOnChange: true,
-    syncStrategy: 'debounce',
-    syncInterval: 1000,
-  },
+  tauri: debouncedCounterOptions,
 });
 
 export async function openDebouncedStore() {

@@ -13,6 +13,10 @@
 
 <Container title="Changelog" level={1} />
 
-<Changelog.Next />
+<Changelog.Next>
+  <ul>
+    <li>Add <code>TauriPluginSvelteStoreOptions.saveOnExit</code>.</li>
+  </ul>
+</Changelog.Next>
 
 <Svelte.V0x />

@@ -1,5 +1,7 @@
 import { invoke } from '@tauri-apps/api/core';
 
+export * from './stores';
+
 export function onError(err: unknown) {
   console.error(err);
   const message = err instanceof Error ? err.message : String(err);

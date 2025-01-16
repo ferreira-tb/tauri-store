@@ -1,15 +1,20 @@
 use std::env::current_dir;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::{Arc, LazyLock};
 use tauri::test::{mock_app, MockRuntime};
 use tauri::Manager;
 use tauri_store::{Store, StoreCollection, StoreCollectionBuilder};
 use tokio::fs;
-use tokio::sync::{OwnedSemaphorePermit, Semaphore};
+use tokio::sync::{OwnedSemaphorePermit as Permit, Semaphore};
+
+pub mod prelude {
+  pub use super::{assert_exists, with_store, StoreExt, STORE_ID};
+}
 
 pub const STORE_ID: &str = "store";
-pub static PATH: LazyLock<PathBuf> = LazyLock::new(path);
-pub static CONTEXT: LazyLock<Context> = LazyLock::new(Context::new);
+
+static PATH: LazyLock<PathBuf> = LazyLock::new(path);
+static CONTEXT: LazyLock<Context> = LazyLock::new(Context::new);
 
 pub struct Context {
   collection: Arc<StoreCollection<MockRuntime>>,
@@ -29,7 +34,7 @@ impl Context {
     }
   }
 
-  pub async fn acquire_permit(&self) -> OwnedSemaphorePermit {
+  async fn acquire_permit(&self) -> Permit {
     let permit = Arc::clone(&self.semaphore)
       .acquire_owned()
       .await
@@ -44,13 +49,33 @@ impl Context {
 
     permit
   }
+}
 
-  pub fn with_store<F, T>(&self, f: F) -> T
-  where
-    F: FnOnce(&mut Store<MockRuntime>) -> T,
-  {
-    self.collection.with_store(STORE_ID, f).unwrap()
+pub async fn with_store<F, T>(f: F) -> (T, Permit)
+where
+  F: FnOnce(&mut Store<MockRuntime>) -> T,
+{
+  let permit = CONTEXT.acquire_permit().await;
+  let value = CONTEXT
+    .collection
+    .with_store(STORE_ID, f)
+    .unwrap();
+
+  (value, permit)
+}
+
+pub trait StoreExt {
+  fn assert_exists(&self, yes: bool);
+}
+
+impl StoreExt for Store<MockRuntime> {
+  fn assert_exists(&self, yes: bool) {
+    assert_exists(&self.path(), yes);
   }
+}
+
+pub fn assert_exists(path: &Path, yes: bool) {
+  assert!(path.try_exists().is_ok_and(|it| it == yes));
 }
 
 fn path() -> PathBuf {

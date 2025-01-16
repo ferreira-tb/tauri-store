@@ -13,7 +13,11 @@
 
 <Container title="Changelog" level={1} />
 
-<Changelog.Next />
+<Changelog.Next>
+  <ul>
+    <li>Add <code>TauriPluginPiniaStoreOptions.saveOnExit</code>.</li>
+  </ul>
+</Changelog.Next>
 
 <Pinia.V1x />
 <Pinia.V0x />
