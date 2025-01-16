@@ -36,6 +36,7 @@ use tracing::{debug, warn};
 
 type ResourceTuple<R> = (ResourceId, Arc<StoreResource<R>>);
 
+/// A key-value store that can persist its state to disk.
 pub struct Store<R: Runtime> {
   app: AppHandle<R>,
   pub(crate) id: String,

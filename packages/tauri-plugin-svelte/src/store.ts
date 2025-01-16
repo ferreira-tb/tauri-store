@@ -25,6 +25,9 @@ import {
  * A [writable store] that can sync its state with the Rust backend and persist it to disk.
  * It adheres to the [Svelte store contract], so it's interchangeable with conventional Svelte stores.
  *
+ * [writable store]: https://svelte.dev/docs/svelte/stores#svelte-store-writable
+ * [Svelte store contract]: https://svelte.dev/docs/svelte/stores#Store-contract
+ *
  * @example
  * ```ts
  * import { Store } from 'tauri-plugin-svelte';
@@ -47,9 +50,6 @@ import {
  * // Save the store to disk.
  * await store.save();
  * ```
- *
- * [writable store]: https://svelte.dev/docs/svelte/stores#svelte-store-writable
- * [Svelte store contract]: https://svelte.dev/docs/svelte/stores#Store-contract
  */
 export class Store<S extends State> extends BaseStore<S> implements StoreContract<S> {
   public readonly id: string;

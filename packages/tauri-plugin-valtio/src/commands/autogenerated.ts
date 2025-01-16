@@ -24,7 +24,6 @@ export const clearAutosave = commands.clearAutosave('valtio');
  * import { getDefaultSaveStrategy } from 'tauri-plugin-valtio';
  *
  * const { strategy, interval } = await getDefaultSaveStrategy();
- * console.log(strategy, interval);
  * ```
  */
 export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('valtio');
@@ -37,7 +36,6 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('valtio');
  * import { getValtioPath } from 'tauri-plugin-valtio';
  *
  * const path = await getValtioPath();
- * console.log(path);
  * ```
  */
 export const getValtioPath = commands.getStoreCollectionPath('valtio');
@@ -50,7 +48,6 @@ export const getValtioPath = commands.getStoreCollectionPath('valtio');
  * import { getSaveStrategy } from 'tauri-plugin-valtio';
  *
  * const { strategy, interval } = await getSaveStrategy('my-store');
- * console.log(strategy, interval);
  * ```
  **/
 export const getSaveStrategy = commands.getSaveStrategy('valtio');
@@ -63,9 +60,6 @@ export const getSaveStrategy = commands.getSaveStrategy('valtio');
  * import { getStoreIds } from 'tauri-plugin-valtio';
  *
  * const ids = await getStoreIds();
- * for (const id of ids) {
- *   console.log(id);
- * }
  * ```
  */
 export const getStoreIds = commands.getStoreIds('valtio');
@@ -78,7 +72,6 @@ export const getStoreIds = commands.getStoreIds('valtio');
  * import { getStorePath } from 'tauri-plugin-valtio';
  *
  * const path = await getStorePath('my-store');
- * console.log(path);
  * ```
  **/
 export const getStorePath = commands.getStorePath('valtio');
@@ -91,7 +84,6 @@ export const getStorePath = commands.getStorePath('valtio');
  * import { getStoreState } from 'tauri-plugin-valtio';
  *
  * const state = await getStoreState('counter-store');
- * console.log(state.counter);
  * ```
  */
 export const getStoreState = commands.getStoreState('valtio');

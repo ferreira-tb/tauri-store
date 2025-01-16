@@ -3,6 +3,7 @@ use super::Store;
 use serde::{Deserialize, Serialize};
 use tauri::Runtime;
 
+/// Options to configure the store behavior.
 #[non_exhaustive]
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]

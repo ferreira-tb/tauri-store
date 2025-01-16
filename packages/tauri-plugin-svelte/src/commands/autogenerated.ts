@@ -24,7 +24,6 @@ export const clearAutosave = commands.clearAutosave('svelte');
  * import { getDefaultSaveStrategy } from 'tauri-plugin-svelte';
  *
  * const { strategy, interval } = await getDefaultSaveStrategy();
- * console.log(strategy, interval);
  * ```
  */
 export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('svelte');
@@ -37,7 +36,6 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('svelte');
  * import { getSveltePath } from 'tauri-plugin-svelte';
  *
  * const path = await getSveltePath();
- * console.log(path);
  * ```
  */
 export const getSveltePath = commands.getStoreCollectionPath('svelte');
@@ -50,7 +48,6 @@ export const getSveltePath = commands.getStoreCollectionPath('svelte');
  * import { getSaveStrategy } from 'tauri-plugin-svelte';
  *
  * const { strategy, interval } = await getSaveStrategy('my-store');
- * console.log(strategy, interval);
  * ```
  **/
 export const getSaveStrategy = commands.getSaveStrategy('svelte');
@@ -63,9 +60,6 @@ export const getSaveStrategy = commands.getSaveStrategy('svelte');
  * import { getStoreIds } from 'tauri-plugin-svelte';
  *
  * const ids = await getStoreIds();
- * for (const id of ids) {
- *   console.log(id);
- * }
  * ```
  */
 export const getStoreIds = commands.getStoreIds('svelte');
@@ -78,7 +72,6 @@ export const getStoreIds = commands.getStoreIds('svelte');
  * import { getStorePath } from 'tauri-plugin-svelte';
  *
  * const path = await getStorePath('my-store');
- * console.log(path);
  * ```
  **/
 export const getStorePath = commands.getStorePath('svelte');
@@ -91,7 +84,6 @@ export const getStorePath = commands.getStorePath('svelte');
  * import { getStoreState } from 'tauri-plugin-svelte';
  *
  * const state = await getStoreState('counter-store');
- * console.log(state.counter);
  * ```
  */
 export const getStoreState = commands.getStoreState('svelte');
