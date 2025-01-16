@@ -28,5 +28,5 @@ jobs:
       - name: Test
         shell: pwsh
         run: |
-          cargo clippy --all
-          cargo test -p tauri-store
+          cargo clippy --workspace
+          cargo test -p tauri-store --tests

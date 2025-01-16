@@ -10,7 +10,7 @@
 <Changelog.Version {version} />
 
 <Changelog.BreakingChanges {version}>
-  <p>The breaking changes affect only Rust users.</p>
+  <p>This change only affects Rust users.</p>
 
   <ul>
     <li>
