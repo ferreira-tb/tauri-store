@@ -22,7 +22,6 @@ export const clearAutosave = commands.clearAutosave('PLUGIN_NAME');
  * import { getDefaultSaveStrategy } from 'KEBAB_PLUGIN_FULL_NAME';
  *
  * const { strategy, interval } = await getDefaultSaveStrategy();
- * console.log(strategy, interval);
  * ```
  */
 export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('PLUGIN_NAME');
@@ -35,7 +34,6 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('PLUGIN_NA
  * import { getPASCAL_PLUGIN_NAMEPath } from 'KEBAB_PLUGIN_FULL_NAME';
  *
  * const path = await getPASCAL_PLUGIN_NAMEPath();
- * console.log(path);
  * ```
  */
 export const getPASCAL_PLUGIN_NAMEPath = commands.getStoreCollectionPath('PLUGIN_NAME');
@@ -48,7 +46,6 @@ export const getPASCAL_PLUGIN_NAMEPath = commands.getStoreCollectionPath('PLUGIN
  * import { getSaveStrategy } from 'KEBAB_PLUGIN_FULL_NAME';
  *
  * const { strategy, interval } = await getSaveStrategy('my-store');
- * console.log(strategy, interval);
  * ```
  **/
 export const getSaveStrategy = commands.getSaveStrategy('PLUGIN_NAME');
@@ -61,9 +58,6 @@ export const getSaveStrategy = commands.getSaveStrategy('PLUGIN_NAME');
  * import { getStoreIds } from 'KEBAB_PLUGIN_FULL_NAME';
  *
  * const ids = await getStoreIds();
- * for (const id of ids) {
- *   console.log(id);
- * }
  * ```
  */
 export const getStoreIds = commands.getStoreIds('PLUGIN_NAME');
@@ -76,7 +70,6 @@ export const getStoreIds = commands.getStoreIds('PLUGIN_NAME');
  * import { getStorePath } from 'KEBAB_PLUGIN_FULL_NAME';
  *
  * const path = await getStorePath('my-store');
- * console.log(path);
  * ```
  **/
 export const getStorePath = commands.getStorePath('PLUGIN_NAME');
@@ -89,7 +82,6 @@ export const getStorePath = commands.getStorePath('PLUGIN_NAME');
  * import { getStoreState } from 'KEBAB_PLUGIN_FULL_NAME';
  *
  * const state = await getStoreState('counter-store');
- * console.log(state.counter);
  * ```
  */
 export const getStoreState = commands.getStoreState('PLUGIN_NAME');

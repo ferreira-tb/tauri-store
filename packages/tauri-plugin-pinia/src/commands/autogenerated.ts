@@ -24,7 +24,6 @@ export const clearAutosave = commands.clearAutosave('pinia');
  * import { getDefaultSaveStrategy } from 'tauri-plugin-pinia';
  *
  * const { strategy, interval } = await getDefaultSaveStrategy();
- * console.log(strategy, interval);
  * ```
  */
 export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('pinia');
@@ -37,7 +36,6 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('pinia');
  * import { getPiniaPath } from 'tauri-plugin-pinia';
  *
  * const path = await getPiniaPath();
- * console.log(path);
  * ```
  */
 export const getPiniaPath = commands.getStoreCollectionPath('pinia');
@@ -50,7 +48,6 @@ export const getPiniaPath = commands.getStoreCollectionPath('pinia');
  * import { getSaveStrategy } from 'tauri-plugin-pinia';
  *
  * const { strategy, interval } = await getSaveStrategy('my-store');
- * console.log(strategy, interval);
  * ```
  **/
 export const getSaveStrategy = commands.getSaveStrategy('pinia');
@@ -63,9 +60,6 @@ export const getSaveStrategy = commands.getSaveStrategy('pinia');
  * import { getStoreIds } from 'tauri-plugin-pinia';
  *
  * const ids = await getStoreIds();
- * for (const id of ids) {
- *   console.log(id);
- * }
  * ```
  */
 export const getStoreIds = commands.getStoreIds('pinia');
@@ -78,7 +72,6 @@ export const getStoreIds = commands.getStoreIds('pinia');
  * import { getStorePath } from 'tauri-plugin-pinia';
  *
  * const path = await getStorePath('my-store');
- * console.log(path);
  * ```
  **/
 export const getStorePath = commands.getStorePath('pinia');
@@ -91,7 +84,6 @@ export const getStorePath = commands.getStorePath('pinia');
  * import { getStoreState } from 'tauri-plugin-pinia';
  *
  * const state = await getStoreState('counter-store');
- * console.log(state.counter);
  * ```
  */
 export const getStoreState = commands.getStoreState('pinia');
