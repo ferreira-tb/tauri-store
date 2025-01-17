@@ -1,9 +1,19 @@
 import type { TauriPluginPiniaStoreOptions } from './types';
 import type { TauriStoreContract } from '@tauri-store/shared';
 
-export type * from './types';
-
 export { createPlugin, TauriPluginPinia } from './plugin';
+
+export type {
+  MaybePromise,
+  Option,
+  State,
+  StoreBackendOptions,
+  StoreFrontendOptions,
+  StoreOptions,
+  TauriPluginPiniaOptions,
+  TauriPluginPiniaStoreOptions,
+  TauriStoreContract,
+} from './types';
 
 export {
   clearAutosave,

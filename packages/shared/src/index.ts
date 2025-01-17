@@ -25,6 +25,7 @@ export type {
   Fn,
   MaybePromise,
   Nil,
+  OnErrorFn,
   Option,
   State,
   StateChangePayload,

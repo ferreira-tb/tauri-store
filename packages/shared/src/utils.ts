@@ -1,10 +1,11 @@
+import type { Option } from './types';
 import { debounce as kitDebounce, throttle as kitThrottle } from 'es-toolkit';
 
-export function debounce<T extends (...args: any) => any>(f: T, wait?: number): T {
+export function debounce<T extends (...args: any) => any>(f: T, wait?: Option<number>): T {
   return kitDebounce(f, wait ?? 0) as unknown as T;
 }
 
-export function throttle<T extends (...args: any) => any>(f: T, wait?: number): T {
+export function throttle<T extends (...args: any) => any>(f: T, wait?: Option<number>): T {
   return kitThrottle(f, wait ?? 0) as unknown as T;
 }
 

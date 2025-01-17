@@ -1,6 +1,16 @@
-export type * from './types';
-
 export { Store, store } from './store';
+
+export type {
+  MaybePromise,
+  Option,
+  State,
+  StoreBackendOptions,
+  StoreContract,
+  StoreFrontendOptions,
+  StoreOptions,
+  TauriPluginSvelteStoreOptions,
+  TauriStoreContract,
+} from './types';
 
 export {
   clearAutosave,

@@ -9,6 +9,7 @@ import {
   DEFAULT_ON_ERROR,
   DEFAULT_SAVE_ON_CHANGE,
   DEFAULT_SAVE_ON_EXIT,
+  type Fn,
   type State,
   throttle,
   TimeStrategy,
@@ -41,7 +42,7 @@ export class Store<S extends State> extends BaseStore<S> {
     } satisfies Required<TauriPluginValtioStoreOptions>;
   }
 
-  protected async load() {
+  protected async load(): Promise<void> {
     const state = await commands.load<S>(this.id);
     this.patchSelf(state);
 
@@ -49,11 +50,11 @@ export class Store<S extends State> extends BaseStore<S> {
     this.unwatch = this.watch();
   }
 
-  protected async unload() {
+  protected async unload(): Promise<void> {
     await commands.unload(this.id);
   }
 
-  protected watch() {
+  protected watch(): Fn {
     const patchBackend = () => {
       const state = snapshot(this.state);
       this.patchBackend(state as S);
@@ -70,19 +71,19 @@ export class Store<S extends State> extends BaseStore<S> {
     return subscribe(this.state, patchBackend);
   }
 
-  protected patchSelf(state: S) {
+  protected patchSelf(state: S): void {
     const _state = this.applyKeyFilters(state);
     Object.assign(this.state, _state);
   }
 
-  protected patchBackend(state: S) {
+  protected patchBackend(state: S): void {
     if (this.enabled) {
       const _state = this.applyKeyFilters(state);
       commands.patch(this.id, _state).catch((err) => this.onError?.(err));
     }
   }
 
-  protected async setOptions() {
+  protected async setOptions(): Promise<void> {
     try {
       await commands.setStoreOptions(this.id, {
         saveInterval: this.options.saveInterval,

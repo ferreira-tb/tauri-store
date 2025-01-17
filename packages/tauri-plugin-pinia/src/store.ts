@@ -10,6 +10,7 @@ import {
   DEFAULT_ON_ERROR,
   DEFAULT_SAVE_ON_CHANGE,
   DEFAULT_SAVE_ON_EXIT,
+  type Fn,
   mergeStoreOptions,
   type State,
   throttle,
@@ -18,7 +19,7 @@ import {
 
 export class Store extends BaseStore {
   protected readonly options: TauriPluginPiniaStoreOptions;
-  protected override readonly flush = () => nextTick();
+  protected override readonly flush = (): Promise<void> => nextTick();
 
   constructor(
     private readonly ctx: PiniaPluginContext,
@@ -45,7 +46,7 @@ export class Store extends BaseStore {
     } satisfies Required<TauriPluginPiniaStoreOptions>;
   }
 
-  protected async load() {
+  protected async load(): Promise<void> {
     const state = await commands.load(this.id);
     this.patchSelf(state);
 
@@ -53,11 +54,11 @@ export class Store extends BaseStore {
     this.unwatch = this.watch();
   }
 
-  protected async unload() {
+  protected async unload(): Promise<void> {
     await commands.unload(this.id);
   }
 
-  protected watch() {
+  protected watch(): Fn {
     const patchBackend = this.patchBackend.bind(this);
     const options: WatchOptions = {
       deep: this.options.deep,
@@ -75,19 +76,19 @@ export class Store extends BaseStore {
     return watch(this.ctx.store.$state, patchBackend, options);
   }
 
-  protected patchSelf(state: State) {
+  protected patchSelf(state: State): void {
     const _state = this.applyKeyFilters(state);
     this.ctx.store.$patch(_state as typeof this.ctx.store.$state);
   }
 
-  protected patchBackend(state: State) {
+  protected patchBackend(state: State): void {
     if (this.enabled) {
       const _state = this.applyKeyFilters(state);
       commands.patch(this.id, _state).catch((err) => this.onError?.(err));
     }
   }
 
-  protected async setOptions() {
+  protected async setOptions(): Promise<void> {
     try {
       await commands.setStoreOptions(this.id, {
         saveInterval: this.options.saveInterval,
@@ -100,7 +101,7 @@ export class Store extends BaseStore {
     }
   }
 
-  get id() {
+  get id(): string {
     return this.ctx.store.$id;
   }
 }
