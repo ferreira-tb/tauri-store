@@ -1,11 +1,13 @@
 mod autosave;
 mod builder;
+mod path;
 
 use crate::error::Result;
 use crate::event::{emit, STORE_UNLOAD_EVENT};
 use crate::store::{SaveStrategy, Store, StoreResource, StoreState};
 use autosave::Autosave;
 use dashmap::DashMap;
+use path::set_path;
 use serde::de::DeserializeOwned;
 use serde_json::Value as Json;
 use std::collections::HashSet;
@@ -29,7 +31,7 @@ pub type OnLoadFn<R> = dyn Fn(&Store<R>) -> Result<()> + Send + Sync;
 /// This is the core component for store plugins.
 pub struct StoreCollection<R: Runtime> {
   pub(crate) app: AppHandle<R>,
-  pub(crate) path: PathBuf,
+  pub(crate) path: Mutex<PathBuf>,
   pub(crate) stores: DashMap<String, ResourceId>,
   pub(crate) on_load: Option<Box<OnLoadFn<R>>>,
   pub(crate) autosave: Mutex<Autosave>,
@@ -83,8 +85,14 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Directory where the stores are saved.
-  pub fn path(&self) -> &Path {
-    &self.path
+  pub fn path(&self) -> PathBuf {
+    self.path.lock().unwrap().clone()
+  }
+
+  /// Sets the directory where the stores are saved.
+  /// This will move all *currently active* stores to the new directory.
+  pub fn set_path(&self, path: impl AsRef<Path>) -> Result<()> {
+    set_path(self, path)
   }
 
   /// Calls a closure with a mutable reference to the store with the given id.
@@ -153,10 +161,14 @@ impl<R: Runtime> StoreCollection<R> {
   /// Gets a value from a store and tries to parse it as an instance of type `T`.
   ///
   /// If the key does not exist, returns the result of the provided closure.
-  pub fn try_get_or_else<T, F>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, f: F) -> T
+  pub fn try_get_or_else<T>(
+    &self,
+    store_id: impl AsRef<str>,
+    key: impl AsRef<str>,
+    f: impl FnOnce() -> T,
+  ) -> T
   where
     T: DeserializeOwned,
-    F: FnOnce() -> T,
   {
     self
       .try_get(store_id, key)
@@ -312,7 +324,6 @@ impl<R: Runtime> Resource for StoreCollection<R> {}
 impl<R: Runtime> fmt::Debug for StoreCollection<R> {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     f.debug_struct("StoreCollection")
-      .field("path", &self.path)
       .field("pretty", &self.pretty)
       .field("default_save_strategy", &self.default_save_strategy)
       .field("on_load", &self.on_load.is_some())

@@ -20,5 +20,5 @@ fn main() {
 
 #[cfg(windows)]
 fn is_workspace() -> bool {
-  var("__TAURI_STORE_WORKSPACE__").is_ok_and(|v| v == "true")
+  var("TAURI_STORE_WORKSPACE").is_ok_and(|it| it == "true")
 }

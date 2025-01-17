@@ -154,6 +154,10 @@
     @apply mb-6;
   }
 
+  main :where(em, i) {
+    @apply italic;
+  }
+
   main strong {
     @apply font-semibold;
   }

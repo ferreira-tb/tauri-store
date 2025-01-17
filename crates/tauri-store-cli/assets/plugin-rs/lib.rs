@@ -54,6 +54,7 @@ impl<R: Runtime> Builder<R> {
         command::save_some_now,
         command::set_autosave,
         command::set_save_strategy,
+        command::set_PLUGIN_NAME_path,
         command::set_store_options,
         command::unload
       ])

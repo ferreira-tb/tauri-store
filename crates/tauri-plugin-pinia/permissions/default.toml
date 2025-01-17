@@ -18,6 +18,7 @@ permissions = [
   "allow-save-some",
   "allow-save-some-now",
   "allow-set-autosave",
+  "allow-set-pinia-path",
   "allow-set-save-strategy",
   "allow-set-store-options",
   "allow-unload",

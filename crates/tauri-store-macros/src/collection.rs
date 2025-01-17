@@ -9,7 +9,7 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
     mod __impl_collection {
       use super::#name;
       use serde::de::DeserializeOwned;
-      use std::path::Path;
+      use std::path::{Path, PathBuf};
       use std::sync::Arc;
       use std::time::Duration;
       use tauri::{AppHandle, Runtime};
@@ -22,8 +22,14 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
         }
 
         /// Directory where the stores are saved.
-        pub fn path(&self) -> &Path {
-          &self.0.path()
+        pub fn path(&self) -> PathBuf {
+          self.0.path()
+        }
+
+        /// Sets the directory where the stores are saved.
+        /// This will move all *currently active* stores to the new directory.
+        pub fn set_path(&self, path: impl AsRef<Path>) -> Result<()> {
+          self.0.set_path(path)
         }
 
         /// Calls a closure with a mutable reference to the store with the given id.

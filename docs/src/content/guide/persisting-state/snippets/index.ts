@@ -2,6 +2,7 @@ import { snakeCase } from 'change-case';
 import { snippetGroup } from '$stores/snippet';
 
 export * from './save-on-change';
+export * from './custom-directory';
 
 export const saveStores = snippetGroup((metadata) => {
   const title = snakeCase(metadata.title!);
@@ -58,19 +59,6 @@ use std::time::Duration;
 // Save every five minutes.
 ${snakeCase(metadata.name)}::Builder::new()
   .autosave(Duration::from_secs(300))
-  .build();
-  `,
-  };
-});
-
-export const customDirectory = snippetGroup((metadata) => {
-  return {
-    id: 'custom-directory',
-    label: 'src-tauri/src/main.rs',
-    lang: 'rust',
-    value: `
-${snakeCase(metadata.name)}::Builder::new()
-  .path("/path/to/custom/directory")
   .build();
   `,
   };

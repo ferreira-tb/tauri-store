@@ -16,6 +16,7 @@ import {
   DEFAULT_ON_ERROR,
   DEFAULT_SAVE_ON_CHANGE,
   DEFAULT_SAVE_ON_EXIT,
+  type Fn,
   type State,
   throttle,
   TimeStrategy,
@@ -79,11 +80,11 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     } satisfies Required<TauriPluginSvelteStoreOptions>;
   }
 
-  public set(value: S) {
+  public set(value: S): void {
     this.store.set(value);
   }
 
-  public update(updater: Updater<S>) {
+  public update(updater: Updater<S>): void {
     this.store.update(updater);
   }
 
@@ -91,7 +92,7 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     return this.store.subscribe(run, invalidate);
   }
 
-  protected async load() {
+  protected async load(): Promise<void> {
     const state = await commands.load<S>(this.id);
     this.patchSelf(state);
 
@@ -99,11 +100,11 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     this.unwatch = this.watch();
   }
 
-  protected async unload() {
+  protected async unload(): Promise<void> {
     await commands.unload(this.id);
   }
 
-  protected watch() {
+  protected watch(): Fn {
     // A Svelte subscriber is called immediately upon subscription.
     // If we try to sync on the first call, we'll end up with an infinite loop.
     let isFirstCall = true;
@@ -127,19 +128,19 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     return this.subscribe(patchBackend);
   }
 
-  protected patchSelf(state: S) {
+  protected patchSelf(state: S): void {
     const _state = this.applyKeyFilters(state);
     this.update((value) => Object.assign(value, _state));
   }
 
-  protected patchBackend(state: S) {
+  protected patchBackend(state: S): void {
     if (this.enabled) {
       const _state = this.applyKeyFilters(state);
       commands.patch(this.id, _state).catch((err) => this.onError?.(err));
     }
   }
 
-  protected async setOptions() {
+  protected async setOptions(): Promise<void> {
     try {
       await commands.setStoreOptions(this.id, {
         saveInterval: this.options.saveInterval,
@@ -152,23 +153,23 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     }
   }
 
-  public async getPath() {
+  public async getPath(): Promise<string> {
     return commands.getStorePath(this.id);
   }
 
-  public async save() {
+  public async save(): Promise<void> {
     return commands.save(this.id);
   }
 
-  public async saveAll() {
+  public async saveAll(): Promise<void> {
     return commands.saveAll();
   }
 
-  public async saveAllNow() {
+  public async saveAllNow(): Promise<void> {
     return commands.saveAllNow();
   }
 
-  public async saveNow() {
+  public async saveNow(): Promise<void> {
     return commands.saveNow(this.id);
   }
 }

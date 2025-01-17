@@ -1,6 +1,8 @@
 import type { MaybePromise, Option } from './utils';
 import type { LooseTimeStrategyKind, TimeStrategyRawTuple } from '../time-strategy';
 
+export type OnErrorFn = (error: unknown) => MaybePromise<void>;
+
 /** Options that can also be updated from Rust. */
 export interface StoreBackendOptions {
   /**
@@ -70,7 +72,7 @@ export interface StoreFrontendOptions {
    * Custom error handler.
    * @default console.error
    */
-  readonly onError?: (error: unknown) => MaybePromise<void>;
+  readonly onError?: OnErrorFn;
 
   /**
    * Interval in milliseconds to use when syncing the store with the backend.

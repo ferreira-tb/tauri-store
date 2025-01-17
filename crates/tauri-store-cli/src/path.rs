@@ -33,6 +33,10 @@ pub fn assets_examples_dir() -> PathBuf {
   assets_dir().join("examples")
 }
 
+pub fn assets_permissions_dir() -> PathBuf {
+  assets_dir().join("permissions")
+}
+
 pub fn assets_plugin_rs_dir() -> PathBuf {
   assets_dir().join("plugin-rs")
 }
@@ -41,8 +45,12 @@ pub fn assets_plugin_ts_dir() -> PathBuf {
   assets_dir().join("plugin-ts")
 }
 
+pub fn crate_dir(target: Target) -> PathBuf {
+  crates_dir().join(target.as_ref())
+}
+
 pub fn crate_src_dir(target: Target) -> PathBuf {
-  crates_dir().join(target.as_ref()).join("src")
+  crate_dir(target).join("src")
 }
 
 pub fn crate_commands_dir(target: Target) -> PathBuf {
@@ -59,4 +67,8 @@ pub fn package_src_dir(target: Target) -> PathBuf {
 
 pub fn package_commands_dir(target: Target) -> PathBuf {
   package_src_dir(target).join("commands")
+}
+
+pub fn permissions_dir(target: Target) -> PathBuf {
+  crate_dir(target).join("permissions")
 }

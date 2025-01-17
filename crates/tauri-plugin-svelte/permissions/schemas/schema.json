@@ -475,6 +475,16 @@
           "const": "deny-set-store-options"
         },
         {
+          "description": "Enables the set_svelte_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-svelte-path"
+        },
+        {
+          "description": "Denies the set_svelte_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-svelte-path"
+        },
+        {
           "description": "Enables the unload command without any pre-configured scope.",
           "type": "string",
           "const": "allow-unload"
@@ -485,7 +495,7 @@
           "const": "deny-unload"
         },
         {
-          "description": "Default permissions for the Pinia plugin",
+          "description": "Default permissions for the Svelte plugin",
           "type": "string",
           "const": "default"
         }

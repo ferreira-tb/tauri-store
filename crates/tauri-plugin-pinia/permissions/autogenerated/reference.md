@@ -18,6 +18,7 @@ Default permissions for the Pinia plugin
 - `allow-save-some`
 - `allow-save-some-now`
 - `allow-set-autosave`
+- `allow-set-pinia-path`
 - `allow-set-save-strategy`
 - `allow-set-store-options`
 - `allow-unload`
@@ -443,6 +444,32 @@ Enables the set_autosave command without any pre-configured scope.
 <td>
 
 Denies the set_autosave command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-set-pinia-path`
+
+</td>
+<td>
+
+Enables the set_pinia_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-set-pinia-path`
+
+</td>
+<td>
+
+Denies the set_pinia_path command without any pre-configured scope.
 
 </td>
 </tr>

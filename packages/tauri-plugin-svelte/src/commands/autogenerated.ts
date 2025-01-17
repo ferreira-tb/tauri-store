@@ -159,6 +159,19 @@ export const saveNow = commands.saveNow('svelte');
 export const setAutosave = commands.setAutosave('svelte');
 
 /**
+ * Sets the directory where the stores are saved.
+ * This will move all *currently active* stores to the new directory.
+ *
+ * @example
+ * ```ts
+ * import { setSveltePath } from 'tauri-plugin-svelte';
+ *
+ * await setSveltePath('/path/to/new/directory');
+ * ```
+ */
+export const setSveltePath = commands.setStoreCollectionPath('svelte');
+
+/**
  * Sets the save strategy for a store.
  * Calling this will abort any pending save operation.
  *

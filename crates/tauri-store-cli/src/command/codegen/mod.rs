@@ -1,6 +1,7 @@
-mod example;
-mod krate;
-mod package;
+mod crates;
+mod examples;
+mod packages;
+mod permissions;
 
 use crate::target::Target;
 use anyhow::{Context, Result};
@@ -23,9 +24,10 @@ pub struct Codegen;
 impl Codegen {
   #[expect(clippy::unused_self)]
   pub fn run(&self) -> Result<()> {
-    krate::generate()?;
-    package::generate()?;
-    example::generate()?;
+    crates::generate()?;
+    packages::generate()?;
+    examples::generate()?;
+    permissions::generate()?;
 
     Ok(())
   }

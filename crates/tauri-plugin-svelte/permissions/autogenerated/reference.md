@@ -1,14 +1,14 @@
 ## Default Permission
 
-Default permissions for the Pinia plugin
+Default permissions for the Svelte plugin
 
 - `allow-clear-autosave`
 - `allow-get-default-save-strategy`
+- `allow-get-svelte-path`
 - `allow-get-save-strategy`
 - `allow-get-store-ids`
 - `allow-get-store-path`
 - `allow-get-store-state`
-- `allow-get-svelte-path`
 - `allow-load`
 - `allow-patch`
 - `allow-save`
@@ -18,6 +18,7 @@ Default permissions for the Pinia plugin
 - `allow-save-some`
 - `allow-save-some-now`
 - `allow-set-autosave`
+- `allow-set-svelte-path`
 - `allow-set-save-strategy`
 - `allow-set-store-options`
 - `allow-unload`
@@ -495,6 +496,32 @@ Enables the set_store_options command without any pre-configured scope.
 <td>
 
 Denies the set_store_options command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`svelte:allow-set-svelte-path`
+
+</td>
+<td>
+
+Enables the set_svelte_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`svelte:deny-set-svelte-path`
+
+</td>
+<td>
+
+Denies the set_svelte_path command without any pre-configured scope.
 
 </td>
 </tr>

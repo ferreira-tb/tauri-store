@@ -38,7 +38,7 @@ export class TimeStrategy {
    *
    * @internal
    */
-  public static parse(tuple: TimeStrategyRawTuple) {
+  public static parse(tuple: TimeStrategyRawTuple): TimeStrategy {
     return new TimeStrategy(tuple[0], parseBigInt(tuple[1]));
   }
 }

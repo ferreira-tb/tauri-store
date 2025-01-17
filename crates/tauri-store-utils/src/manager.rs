@@ -1,9 +1,9 @@
 use std::future::Future;
 use tauri::async_runtime::{self, RuntimeHandle, TokioHandle};
-use tauri::{AppHandle, Manager, Runtime, WebviewWindow, Window};
+use tauri::{AppHandle, Manager, Runtime};
 use tokio::task::AbortHandle;
 
-pub trait ManagerExt<R: Runtime>: Manager<R> {
+pub(crate) trait ManagerExt<R: Runtime>: Manager<R> {
   fn tokio_handle(&self) -> TokioHandle {
     let RuntimeHandle::Tokio(handle) = async_runtime::handle();
     handle
@@ -22,5 +22,3 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
 }
 
 impl<R: Runtime> ManagerExt<R> for AppHandle<R> {}
-impl<R: Runtime> ManagerExt<R> for WebviewWindow<R> {}
-impl<R: Runtime> ManagerExt<R> for Window<R> {}

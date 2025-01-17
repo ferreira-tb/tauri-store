@@ -1,9 +1,10 @@
 import { flushPromises } from './utils';
 import { listen, StoreEvent } from './event';
-import { TimeStrategy } from './time-strategy';
 import { DEFAULT_FILTER_KEYS_STRATEGY } from './defaults';
+import { type LooseTimeStrategyKind, TimeStrategy } from './time-strategy';
 import type {
   ConfigChangePayload,
+  OnErrorFn,
   Option,
   State,
   StateChangePayload,
@@ -31,7 +32,7 @@ export abstract class BaseStore<S extends State = State> {
   protected readonly flush = flushPromises;
 
   /** Starts the store synchronization. */
-  public async start() {
+  public async start(): Promise<void> {
     if (this.enabled) return;
     try {
       this.enabled = true;
@@ -53,7 +54,7 @@ export abstract class BaseStore<S extends State = State> {
   }
 
   /** Stops the store synchronization. */
-  public async stop() {
+  public async stop(): Promise<void> {
     if (!this.enabled) return;
     try {
       this.unlistenOptions?.();
@@ -102,7 +103,7 @@ export abstract class BaseStore<S extends State = State> {
 
   private unlistenOptions: Option<() => void>;
 
-  protected async processChangeQueue() {
+  protected async processChangeQueue(): Promise<void> {
     while (this.changeQueue.length > 0) {
       await this.flush();
       const payload = this.changeQueue.pop();
@@ -133,7 +134,7 @@ export abstract class BaseStore<S extends State = State> {
     }
   }
 
-  protected applyKeyFilters(state: S) {
+  protected applyKeyFilters(state: S): Partial<S> {
     if (!this.options.filterKeys) {
       return state;
     }
@@ -154,21 +155,21 @@ export abstract class BaseStore<S extends State = State> {
   /**
    * {@link StoreOptions.syncStrategy}
    */
-  protected get syncStrategy() {
+  protected get syncStrategy(): LooseTimeStrategyKind {
     return this.options.syncStrategy;
   }
 
   /**
    * {@link StoreOptions.saveStrategy}
    */
-  protected get syncInterval() {
+  protected get syncInterval(): Option<number> {
     return this.options.syncInterval;
   }
 
   /**
    * {@link StoreOptions.onError}
    */
-  protected get onError() {
+  protected get onError(): Option<OnErrorFn> {
     return this.options.onError;
   }
 }

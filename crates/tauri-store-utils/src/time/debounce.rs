@@ -1,5 +1,5 @@
 use crate::manager::ManagerExt;
-use crate::sync::AtomicOption;
+use crate::sync::MutexOption;
 use crate::task::{OptionalAbortHandle, RemoteCallable};
 use std::future::Future;
 use std::ops::Deref;
@@ -161,18 +161,19 @@ where
 }
 
 #[derive(Default)]
-pub(super) struct OptionalSender(AtomicOption<UnboundedSender<Message>>);
+pub(super) struct OptionalSender(MutexOption<UnboundedSender<Message>>);
 
 impl OptionalSender {
   pub(super) fn send(&self) -> bool {
     self
+      .0
       .map(|it| it.send(Message::Call).is_ok())
       .unwrap_or(false)
   }
 }
 
 impl Deref for OptionalSender {
-  type Target = AtomicOption<UnboundedSender<Message>>;
+  type Target = MutexOption<UnboundedSender<Message>>;
 
   fn deref(&self) -> &Self::Target {
     &self.0

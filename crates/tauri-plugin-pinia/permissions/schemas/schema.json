@@ -455,6 +455,16 @@
           "const": "deny-set-autosave"
         },
         {
+          "description": "Enables the set_pinia_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-pinia-path"
+        },
+        {
+          "description": "Denies the set_pinia_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-pinia-path"
+        },
+        {
           "description": "Enables the set_save_strategy command without any pre-configured scope.",
           "type": "string",
           "const": "allow-set-save-strategy"

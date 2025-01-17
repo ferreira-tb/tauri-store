@@ -4,11 +4,15 @@
 use crate::manager::ManagerExt;
 use std::path::PathBuf;
 use std::time::Duration;
+use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
 use tauri_store::{with_store, Result, SaveStrategy, StoreOptions, StoreState};
 
 #[tauri::command]
-pub(crate) async fn clear_autosave<R: Runtime>(app: AppHandle<R>) {
+pub(crate) async fn clear_autosave<R>(app: AppHandle<R>)
+where
+  R: Runtime,
+{
   app.pinia().clear_autosave();
 }
 
@@ -21,12 +25,18 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn get_pinia_path<R: Runtime>(app: AppHandle<R>) -> PathBuf {
-  app.pinia().path().to_path_buf()
+pub(crate) async fn get_pinia_path<R>(app: AppHandle<R>) -> PathBuf
+where
+  R: Runtime,
+{
+  app.pinia().path()
 }
 
 #[tauri::command]
-pub(crate) async fn get_store_ids<R: Runtime>(app: AppHandle<R>) -> Vec<String> {
+pub(crate) async fn get_store_ids<R>(app: AppHandle<R>) -> Vec<String>
+where
+  R: Runtime,
+{
   app.pinia().ids()
 }
 
@@ -55,7 +65,10 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn load<R: Runtime>(app: AppHandle<R>, id: String) -> Result<StoreState> {
+pub(crate) async fn load<R>(app: AppHandle<R>, id: String) -> Result<StoreState>
+where
+  R: Runtime,
+{
   with_store(&app, id, |store| store.state().clone())
 }
 
@@ -70,40 +83,69 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn save<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
+pub(crate) async fn save<R>(app: AppHandle<R>, id: String) -> Result<()>
+where
+  R: Runtime,
+{
   app.pinia().save(id)
 }
 
 #[tauri::command]
-pub(crate) async fn save_all<R: Runtime>(app: AppHandle<R>) -> Result<()> {
+pub(crate) async fn save_all<R>(app: AppHandle<R>) -> Result<()>
+where
+  R: Runtime,
+{
   app.pinia().save_all()
 }
 
 #[tauri::command]
-pub(crate) async fn save_all_now<R: Runtime>(app: AppHandle<R>) -> Result<()> {
+pub(crate) async fn save_all_now<R>(app: AppHandle<R>) -> Result<()>
+where
+  R: Runtime,
+{
   app.pinia().save_all_now()
 }
 
 #[tauri::command]
-pub(crate) async fn save_now<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
+pub(crate) async fn save_now<R>(app: AppHandle<R>, id: String) -> Result<()>
+where
+  R: Runtime,
+{
   app.pinia().save_now(id)
 }
 
 #[tauri::command]
-pub(crate) async fn save_some<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -> Result<()> {
+pub(crate) async fn save_some<R>(app: AppHandle<R>, ids: Vec<String>) -> Result<()>
+where
+  R: Runtime,
+{
   app.pinia().save_some(&ids)
 }
 
 #[tauri::command]
-pub(crate) async fn save_some_now<R: Runtime>(app: AppHandle<R>, ids: Vec<String>) -> Result<()> {
+pub(crate) async fn save_some_now<R>(app: AppHandle<R>, ids: Vec<String>) -> Result<()>
+where
+  R: Runtime,
+{
   app.pinia().save_some_now(&ids)
 }
 
 #[tauri::command]
-pub(crate) async fn set_autosave<R: Runtime>(app: AppHandle<R>, interval: u64) {
+pub(crate) async fn set_autosave<R>(app: AppHandle<R>, interval: u64)
+where
+  R: Runtime,
+{
   app
     .pinia()
     .set_autosave(Duration::from_millis(interval));
+}
+
+#[tauri::command]
+pub(crate) async fn set_pinia_path<R>(app: AppHandle<R>, path: PathBuf) -> Result<()>
+where
+  R: Runtime,
+{
+  spawn_blocking(move || app.pinia().set_path(path)).await?
 }
 
 #[tauri::command]
@@ -135,6 +177,9 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn unload<R: Runtime>(app: AppHandle<R>, id: String) -> Result<()> {
+pub(crate) async fn unload<R>(app: AppHandle<R>, id: String) -> Result<()>
+where
+  R: Runtime,
+{
   app.pinia().unload_store(&id)
 }

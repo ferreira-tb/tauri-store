@@ -7,7 +7,7 @@ use std::time::Instant;
 
 pub(super) fn generate() -> Result<()> {
   let start = Instant::now();
-  println!("{}", "generating example code".cyan());
+  println!("{}", "generating examples".cyan());
 
   let assets = assets_examples_dir();
   generate_shared_commands(&assets)?;

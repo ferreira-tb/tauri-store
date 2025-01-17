@@ -1,19 +1,19 @@
+#![allow(dead_code)]
+
+use anyhow::Result;
 use std::env::current_dir;
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, LazyLock};
+use std::sync::{Arc, LazyLock, OnceLock};
 use tauri::test::{mock_app, MockRuntime};
 use tauri::Manager;
 use tauri_store::{Store, StoreCollection, StoreCollectionBuilder};
 use tokio::fs;
 use tokio::sync::{OwnedSemaphorePermit as Permit, Semaphore};
 
-pub mod prelude {
-  pub use super::{assert_exists, with_store, StoreExt, STORE_ID};
-}
-
 pub const STORE_ID: &str = "store";
 
-static PATH: LazyLock<PathBuf> = LazyLock::new(path);
+static TEMP_DIR: OnceLock<PathBuf> = OnceLock::new();
+static PATH: LazyLock<PathBuf> = LazyLock::new(default_path);
 static CONTEXT: LazyLock<Context> = LazyLock::new(Context::new);
 
 pub struct Context {
@@ -34,28 +34,36 @@ impl Context {
     }
   }
 
-  async fn acquire_permit(&self) -> Permit {
+  async fn acquire_permit(&self) -> Result<Permit> {
     let permit = Arc::clone(&self.semaphore)
       .acquire_owned()
-      .await
-      .unwrap();
+      .await?;
 
-    self.collection.unload_store(STORE_ID).unwrap();
+    self.collection.unload_store(STORE_ID)?;
 
-    let path = self.collection.path();
-    if let Ok(true) = fs::try_exists(path).await {
-      fs::remove_dir_all(path).await.unwrap();
+    let temp_dir = temp_dir();
+    if fs::try_exists(temp_dir).await? {
+      fs::remove_dir_all(temp_dir).await?;
     }
 
-    permit
+    Ok(permit)
   }
+}
+
+pub async fn with_collection<F, T>(f: F) -> (T, Permit)
+where
+  F: FnOnce(&StoreCollection<MockRuntime>) -> T,
+{
+  let permit = CONTEXT.acquire_permit().await.unwrap();
+  let value = f(&CONTEXT.collection);
+  (value, permit)
 }
 
 pub async fn with_store<F, T>(f: F) -> (T, Permit)
 where
   F: FnOnce(&mut Store<MockRuntime>) -> T,
 {
-  let permit = CONTEXT.acquire_permit().await;
+  let permit = CONTEXT.acquire_permit().await.unwrap();
   let value = CONTEXT
     .collection
     .with_store(STORE_ID, f)
@@ -78,6 +86,10 @@ pub fn assert_exists(path: &Path, yes: bool) {
   assert!(path.try_exists().is_ok_and(|it| it == yes));
 }
 
-fn path() -> PathBuf {
-  current_dir().unwrap().join(".temp")
+pub fn temp_dir() -> &'static Path {
+  TEMP_DIR.get_or_init(|| current_dir().unwrap().join(".temp"))
+}
+
+fn default_path() -> PathBuf {
+  temp_dir().join(env!("CARGO_PKG_NAME"))
 }
