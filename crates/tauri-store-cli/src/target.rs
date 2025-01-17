@@ -30,7 +30,7 @@ impl Target {
       .map_err(Into::into)
   }
 
-  pub fn is_plugin(&self) -> bool {
+  pub fn is_plugin(self) -> bool {
     self.as_ref().starts_with(PLUGIN_PREFIX)
   }
 
