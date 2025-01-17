@@ -26,4 +26,6 @@ export {
   saveNow,
   setAutosave,
   setSaveStrategy,
+  setStoreOptions,
+  setValtioPath,
 } from './commands';

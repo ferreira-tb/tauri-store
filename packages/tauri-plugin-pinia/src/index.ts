@@ -28,7 +28,9 @@ export {
   saveAllNow,
   saveNow,
   setAutosave,
+  setPiniaPath,
   setSaveStrategy,
+  setStoreOptions,
 } from './commands';
 
 declare module 'pinia' {
