@@ -21,6 +21,8 @@ impl<R: Runtime> StoreResource<R> {
     (rid, resource)
   }
 
+  // Using the StoreResource directly avoids the StoreCollection trying
+  // to load the store if it isn't in the resources table already.
   pub(crate) fn get(app: &AppHandle<R>, rid: ResourceId) -> Result<Arc<Self>> {
     app
       .resources_table()
@@ -34,11 +36,7 @@ impl<R: Runtime> StoreResource<R> {
       .take::<Self>(rid)
       .map_err(Into::into)
   }
-}
 
-// Using StoreResource directly avoids the StoreCollection trying
-// to load the store if it isn't in the resources table already.
-impl<R: Runtime> StoreResource<R> {
   pub(crate) fn locked<F, T>(&self, f: F) -> T
   where
     F: FnOnce(&mut Store<R>) -> T,

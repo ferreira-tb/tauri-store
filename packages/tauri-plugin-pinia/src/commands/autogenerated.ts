@@ -159,6 +159,19 @@ export const saveNow = commands.saveNow('pinia');
 export const setAutosave = commands.setAutosave('pinia');
 
 /**
+ * Sets the directory where the stores are saved.
+ * This will move all *currently active* stores to the new directory.
+ *
+ * @example
+ * ```ts
+ * import { setPiniaPath } from 'tauri-plugin-pinia';
+ *
+ * await setPiniaPath('/path/to/new/directory');
+ * ```
+ */
+export const setPiniaPath = commands.setStoreCollectionPath('pinia');
+
+/**
  * Sets the save strategy for a store.
  * Calling this will abort any pending save operation.
  *

@@ -159,6 +159,19 @@ export const saveNow = commands.saveNow('valtio');
 export const setAutosave = commands.setAutosave('valtio');
 
 /**
+ * Sets the directory where the stores are saved.
+ * This will move all *currently active* stores to the new directory.
+ *
+ * @example
+ * ```ts
+ * import { setValtioPath } from 'tauri-plugin-valtio';
+ *
+ * await setValtioPath('/path/to/new/directory');
+ * ```
+ */
+export const setValtioPath = commands.setStoreCollectionPath('valtio');
+
+/**
  * Sets the save strategy for a store.
  * Calling this will abort any pending save operation.
  *

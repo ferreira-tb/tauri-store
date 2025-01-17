@@ -89,7 +89,7 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
 
     let collection = Arc::new(StoreCollection::<R> {
       app: app.clone(),
-      path,
+      path: Mutex::new(path),
       stores: DashMap::new(),
       default_save_strategy: self.default_save_strategy,
       autosave: Mutex::new(autosave),

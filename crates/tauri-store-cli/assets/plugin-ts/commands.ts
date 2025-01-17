@@ -157,6 +157,19 @@ export const saveNow = commands.saveNow('PLUGIN_NAME');
 export const setAutosave = commands.setAutosave('PLUGIN_NAME');
 
 /**
+ * Sets the directory where the stores are saved.
+ * This will move all *currently active* stores to the new directory.
+ *
+ * @example
+ * ```ts
+ * import { setPASCAL_PLUGIN_NAMEPath } from 'KEBAB_PLUGIN_FULL_NAME';
+ *
+ * await setPASCAL_PLUGIN_NAMEPath('/path/to/new/directory');
+ * ```
+ */
+export const setPASCAL_PLUGIN_NAMEPath = commands.setStoreCollectionPath('PLUGIN_NAME');
+
+/**
  * Sets the save strategy for a store.
  * Calling this will abort any pending save operation.
  *

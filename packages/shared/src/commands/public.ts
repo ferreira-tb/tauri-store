@@ -104,6 +104,12 @@ export function setSaveStrategy(plugin: string) {
   return set;
 }
 
+export function setStoreCollectionPath(plugin: string) {
+  return function (path: string): Promise<void> {
+    return invoke(`plugin:${plugin}|set_${plugin}_path`, { path });
+  };
+}
+
 export function setStoreOptions(plugin: string) {
   return function (storeId: string, options: StoreBackendOptions): Promise<void> {
     let saveStrategy: TimeStrategyRawTuple | undefined;

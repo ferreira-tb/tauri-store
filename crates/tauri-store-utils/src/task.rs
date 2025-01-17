@@ -1,4 +1,4 @@
-use crate::sync::AtomicOption;
+use crate::sync::MutexOption;
 use std::ops::Deref;
 use tokio::task::AbortHandle;
 
@@ -12,18 +12,18 @@ pub trait RemoteCallable<T> {
 }
 
 #[derive(Default)]
-pub(crate) struct OptionalAbortHandle(AtomicOption<AbortHandle>);
+pub(crate) struct OptionalAbortHandle(MutexOption<AbortHandle>);
 
 impl OptionalAbortHandle {
   pub(crate) fn abort(&self) {
-    if let Some(handle) = self.take() {
+    if let Some(handle) = self.0.take() {
       handle.abort();
     }
   }
 }
 
 impl Deref for OptionalAbortHandle {
-  type Target = AtomicOption<AbortHandle>;
+  type Target = MutexOption<AbortHandle>;
 
   fn deref(&self) -> &Self::Target {
     &self.0

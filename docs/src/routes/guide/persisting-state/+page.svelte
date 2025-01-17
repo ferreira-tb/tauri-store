@@ -1,15 +1,16 @@
 <script lang="ts">
   import { Ext, Link } from '$components/link';
-  import { currentMetadata } from '$stores/plugin';
   import { Container } from '$components/container';
   import { Breadcrumb } from '$components/breadcrumb';
   import { CodeBlock, CodeGroup } from '$components/code';
+  import { currentMetadata, currentPlugin } from '$stores/plugin';
   import {
     autosave,
     customDirectory,
     saveDenylist,
     saveOnChange,
     saveStores,
+    setCollectionPath,
   } from '$content/guide/persisting-state/snippets';
 
   const url = $derived.by(() => {
@@ -67,11 +68,19 @@
 
 <Container title="Custom directory">
   <p>
-    By default, the stores are saved in the {@render ext('appDataDir', "app's data directory")}. You
-    can change this by setting the {@render ext('path')} option during the plugin's initialization.
+    By default, the stores are saved in a directory called <code>{$currentPlugin}</code> within your
+    app's {@render ext('appDataDir', 'data directory')}. You can change this by setting the
+    {@render ext('path')} option during the plugin's initialization.
   </p>
 
   <CodeGroup code={$customDirectory} />
+
+  <p>
+    The path can also be modified at runtime. In this case, all
+    <em>currently active</em> stores will be moved to the new directory.
+  </p>
+
+  <CodeGroup code={$setCollectionPath} />
 </Container>
 
 <Container title="Denylist">

@@ -1,11 +1,11 @@
 use std::sync::Mutex;
 
 /// Naive `Mutex<Option<T>>` wrapper.
-pub struct AtomicOption<T> {
+pub struct MutexOption<T> {
   inner: Mutex<Option<T>>,
 }
 
-impl<T> AtomicOption<T> {
+impl<T> MutexOption<T> {
   pub fn new(value: T) -> Self {
     Self { inner: Mutex::new(Some(value)) }
   }
@@ -23,7 +23,7 @@ impl<T> AtomicOption<T> {
   }
 }
 
-impl<T> Default for AtomicOption<T> {
+impl<T> Default for MutexOption<T> {
   fn default() -> Self {
     Self { inner: Mutex::new(None) }
   }

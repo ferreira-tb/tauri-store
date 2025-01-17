@@ -20,7 +20,7 @@ use std::fmt;
 use std::fs::{self, File};
 use std::io::ErrorKind::NotFound;
 use std::io::Write;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::{Arc, OnceLock};
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, ResourceId, Runtime};
@@ -145,10 +145,9 @@ impl<R: Runtime> Store<R> {
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
   ///
   /// If the key does not exist, returns the result of the provided closure.
-  pub fn try_get_or_else<T, F>(&self, key: impl AsRef<str>, f: F) -> T
+  pub fn try_get_or_else<T>(&self, key: impl AsRef<str>, f: impl FnOnce() -> T) -> T
   where
     T: DeserializeOwned,
-    F: FnOnce() -> T,
   {
     self.try_get(key).unwrap_or_else(|_| f())
   }
@@ -411,9 +410,11 @@ impl<R: Runtime> fmt::Debug for Store<R> {
   }
 }
 
-fn store_path<R: Runtime>(app: &AppHandle<R>, id: &str) -> PathBuf {
-  app
-    .store_collection()
-    .path()
-    .join(format!("{id}.json"))
+fn store_path<R: Runtime>(app: &AppHandle<R>, store_id: &str) -> PathBuf {
+  append_filename(&app.store_collection().path(), store_id)
+}
+
+/// Appends the store filename to the given directory path.
+pub(super) fn append_filename(path: &Path, store_id: &str) -> PathBuf {
+  path.join(format!("{store_id}.json"))
 }

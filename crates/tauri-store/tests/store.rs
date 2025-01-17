@@ -5,16 +5,12 @@ mod shared;
 use itertools::Itertools;
 use serde::Deserialize;
 use serde_json::Value;
-use shared::prelude::*;
 use std::sync::Arc;
 use tauri_store::SaveStrategy;
 use tokio::sync::Notify;
 use tokio::time::{sleep, timeout, Duration};
 
-#[derive(Deserialize)]
-struct Foo {
-  key: u8,
-}
+use shared::{assert_exists, with_store, StoreExt, STORE_ID};
 
 #[tokio::test]
 async fn id() {
@@ -23,6 +19,11 @@ async fn id() {
 
 #[tokio::test]
 async fn try_state() {
+  #[derive(Deserialize)]
+  struct Foo {
+    key: u8,
+  }
+
   with_store(|store| {
     let state = store.try_state::<Foo>();
     assert!(state.is_err());
@@ -90,11 +91,11 @@ async fn try_get_or_default() {
 async fn try_get_or_else() {
   let else_fn = || 20;
   with_store(|store| {
-    let value = store.try_get_or_else::<u8, _>("key", else_fn);
+    let value = store.try_get_or_else::<u8>("key", else_fn);
     assert_eq!(value, 20);
 
     store.set("key", 42).unwrap();
-    let value = store.try_get_or_else::<u8, _>("key", else_fn);
+    let value = store.try_get_or_else::<u8>("key", else_fn);
     assert_eq!(value, 42);
   })
   .await;
