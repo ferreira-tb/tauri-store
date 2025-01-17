@@ -30,10 +30,6 @@ impl Target {
       .map_err(Into::into)
   }
 
-  pub fn is_plugin(self) -> bool {
-    self.as_ref().starts_with(PLUGIN_PREFIX)
-  }
-
   pub fn plugin_name(&self) -> Option<&str> {
     self.as_ref().strip_prefix(PLUGIN_PREFIX)
   }
