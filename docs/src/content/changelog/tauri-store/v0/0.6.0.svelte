@@ -1,13 +1,30 @@
 <script lang="ts">
-  import data from './data/0.6.0.json';
   import { Ext } from '$components/link';
   import { Changelog } from '$components/container';
 
   const version = '0.6.0';
+
+  // prettier-ignore
+  const url = {
+    "ManagerExt::with_store": "https://docs.rs/tauri-store/0.6.0/tauri_store/trait.ManagerExt.html#method.with_store",
+    "Store::patch": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.Store.html#method.patch",
+    "Store::patch_with_source": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.Store.html#method.patch_with_source",
+    "Store::set": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.Store.html#method.set",
+    "Store::try_get_or": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.Store.html#method.try_get_or",
+    "Store::try_get_or_default": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.Store.html#method.try_get_or_default",
+    "Store::try_get_or_else": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.Store.html#method.try_get_or_else",
+    "StoreCollection::patch": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.StoreCollection.html#method.patch",
+    "StoreCollection::set": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.StoreCollection.html#method.set",
+    "StoreCollection::state": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.StoreCollection.html#method.state",
+    "StoreCollection::try_state": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.StoreCollection.html#method.try_state",
+    "StoreCollection::try_get_or": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.StoreCollection.html#method.try_get_or",
+    "StoreCollection::try_get_or_default": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.StoreCollection.html#method.try_get_or_default",
+    "StoreCollection::try_get_or_else": "https://docs.rs/tauri-store/0.6.0/tauri_store/struct.StoreCollection.html#method.try_get_or_else"
+  }
 </script>
 
-{#snippet ext(key: keyof typeof data.url)}
-  <Ext href={data.url[key]} code>{key}</Ext>
+{#snippet ext(key: keyof typeof url)}
+  <Ext href={url[key]} code>{key}</Ext>
 {/snippet}
 
 <Changelog.Version {version} />
