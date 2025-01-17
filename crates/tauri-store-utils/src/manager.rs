@@ -3,7 +3,7 @@ use tauri::async_runtime::{self, RuntimeHandle, TokioHandle};
 use tauri::{AppHandle, Manager, Runtime};
 use tokio::task::AbortHandle;
 
-pub trait ManagerExt<R: Runtime>: Manager<R> {
+pub(crate) trait ManagerExt<R: Runtime>: Manager<R> {
   fn tokio_handle(&self) -> TokioHandle {
     let RuntimeHandle::Tokio(handle) = async_runtime::handle();
     handle
