@@ -1,14 +1,14 @@
 ## Default Permission
 
-Default permissions for the valtio plugin
+Default permissions for the Valtio plugin
 
 - `allow-clear-autosave`
 - `allow-get-default-save-strategy`
+- `allow-get-valtio-path`
 - `allow-get-save-strategy`
 - `allow-get-store-ids`
 - `allow-get-store-path`
 - `allow-get-store-state`
-- `allow-get-valtio-path`
 - `allow-load`
 - `allow-patch`
 - `allow-save`
@@ -18,6 +18,7 @@ Default permissions for the valtio plugin
 - `allow-save-some`
 - `allow-save-some-now`
 - `allow-set-autosave`
+- `allow-set-valtio-path`
 - `allow-set-save-strategy`
 - `allow-set-store-options`
 - `allow-unload`
@@ -495,6 +496,32 @@ Enables the set_store_options command without any pre-configured scope.
 <td>
 
 Denies the set_store_options command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`valtio:allow-set-valtio-path`
+
+</td>
+<td>
+
+Enables the set_valtio_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`valtio:deny-set-valtio-path`
+
+</td>
+<td>
+
+Denies the set_valtio_path command without any pre-configured scope.
 
 </td>
 </tr>
