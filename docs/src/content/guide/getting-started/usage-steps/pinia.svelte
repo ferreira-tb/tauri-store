@@ -31,7 +31,7 @@ app.mount('#app');
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
-export const useCounterStore = defineStore('counter', () => {
+export const useStore = defineStore('counter', () => {
   const counter = ref(0);
   return { counter };
 });
@@ -39,10 +39,10 @@ export const useCounterStore = defineStore('counter', () => {
   };
 
   const startStore = `
-import { useCounterStore } from '@/stores/counter';
+import { useStore } from '@/stores/counter';
 
-const counterStore = useCounterStore();
-await counterStore.$tauri.start();
+const store = useStore();
+await store.$tauri.start();
 `;
 </script>
 

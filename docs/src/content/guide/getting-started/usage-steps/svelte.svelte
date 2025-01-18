@@ -10,25 +10,25 @@
     value: `
 import { Store } from 'tauri-plugin-svelte';
 
-export const counterStore = new Store('counter', { counter: 0 });
+export const store = new Store('counter', { counter: 0 });
     `,
   };
 
   const startStore = `
-import { counterStore } from '$stores/counter';
+import { store } from '$lib/stores/counter';
 
-await counterStore.start();
+await store.start();
   `;
 
   // See: https://github.com/sveltejs/svelte/issues/6745
   const useStore = `
 <script>
-  import { counterStore } from '$stores/counter';
+  import { store } from '$lib/stores/counter';
 <\/script>
 
 <div>
-  <p>Counter: {$counterStore.counter}</p>
-  <button type="button" onclick={() => $counterStore.counter++}>
+  <p>Counter: {$store.counter}</p>
+  <button type="button" onclick={() => $store.counter++}>
     <span>Increment</span>
   </button>
 </div>

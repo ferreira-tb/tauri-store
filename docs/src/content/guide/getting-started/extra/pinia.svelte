@@ -4,6 +4,11 @@
   import { CodeGroup } from '$components/code';
   import { Container } from '$components/container';
 
+  const url = {
+    nuxt: 'https://nuxt.com/',
+    nuxtPlugin: 'https://nuxt.com/docs/guide/directory-structure/plugins',
+  };
+
   const nuxtPlugin: Code = {
     id: 'nuxt-plugin',
     label: 'plugins/pinia.ts',
@@ -17,11 +22,6 @@ export default defineNuxtPlugin(({ $pinia }) => {
   ($pinia as Pinia).use(TauriPluginPinia());
 });
     `,
-  };
-
-  const url = {
-    nuxt: 'https://nuxt.com/',
-    nuxtPlugin: 'https://nuxt.com/docs/guide/directory-structure/plugins',
   };
 </script>
 
