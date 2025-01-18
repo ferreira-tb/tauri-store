@@ -1,27 +1,40 @@
 <# 
   .SYNOPSIS
-  Release script for the tauri-store repository.
+  Publish the crates and packages to the registry.
 
   .PARAMETER Target
   Targets to publish. If not specified, all targets will be published.
+
+  .PARAMETER DryRun
+  Perform a dry run to see what would be published.
+
+  .PARAMETER Fast
+  Skip codegen and linting.
 #>
 
 param(
   [string[]]$Target = @(),
-  [switch]$AllowDirty,
   [switch]$DryRun,
-  [switch]$NoVerify,
+  [switch]$Fast,
   [switch]$OnlyCrate,
-  [switch]$OnlyPackage
+  [switch]$OnlyPackage,
+  [switch]$SkipCodegen,
+  [switch]$SkipLint
 )
 
 $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
-pnpm run codegen
-pnpm run format
-pnpm run clippy
-pnpm run eslint
+if (-not $SkipCodegen -and -not $Fast) {
+  pnpm run codegen
+  pnpm run format
+}
+
+if (-not $SkipLint -and -not $Fast) {
+  pnpm run clippy
+  pnpm run eslint
+}
+
 pnpm run build
 
 function Publish-Crate {
@@ -33,16 +46,8 @@ function Publish-Crate {
 
   if ($Target.Count -eq 0 -or $Target -contains $Name) {
     $command = "cargo publish -p $Name"
-    if ($AllowDirty) {
-      $command += ' --allow-dirty'
-    }
-
     if ($DryRun) {
       $command += ' --dry-run'
-    }
-  
-    if ($NoVerify) {
-      $command += ' --no-verify'
     }
     
     Invoke-Expression $command
