@@ -23,4 +23,4 @@ Check the [documentation](https://tb.dev.br/tauri-store/) for more information o
 
 ## Supported Tauri Version
 
-This plugin requires Tauri `2.0` or later.
+The plugins require Tauri `2.0` or later.
