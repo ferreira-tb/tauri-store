@@ -8,6 +8,7 @@ import {
   debouncedStore,
   incrementCounter,
   incrementDebouncedCounter,
+  incrementNestedCounter,
   incrementThrottledCounter,
   openDebouncedStore,
   openStore,
@@ -55,10 +56,16 @@ function Counter() {
 
   return (
     <section id="counter">
-      <p>Counter: {storeState.counter}</p>
+      <p>
+        Counter: {storeState.counter}
+        Nested: {storeState.nested.foo.bar.baz}
+      </p>
       <div className="action">
         <button type="button" onClick={incrementCounter}>
           Increment
+        </button>
+        <button type="button" onClick={incrementNestedCounter}>
+          Increment Nested
         </button>
         <button type="button" onClick={store.start}>
           Start

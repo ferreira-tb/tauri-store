@@ -49,9 +49,10 @@ onMounted(() => {
       <button type="button" @click="clearAutosave">Clear Autosave</button>
     </div>
     <section id="counter">
-      <p>Counter: {{ store.counter }}</p>
+      <p>Counter: {{ store.counter }} Nested: {{ store.nested.foo.bar.baz }}</p>
       <div class="action">
         <button type="button" @click="store.increment">Increment</button>
+        <button type="button" @click="store.incrementNested">Increment Nested</button>
         <button type="button" @click="start">Start</button>
         <button type="button" @click="stop">Stop</button>
         <button type="button" @click="save(store.$id)">Save</button>

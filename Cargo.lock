@@ -947,6 +947,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "example-svelte-runes"
+version = "1.0.0"
+dependencies = [
+ "anyhow",
+ "example-shared",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-process",
+ "tauri-plugin-shell",
+ "tauri-plugin-svelte",
+ "tauri-plugin-window-state",
+]
+
+[[package]]
 name = "example-valtio"
 version = "1.0.0"
 dependencies = [
@@ -3721,7 +3737,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-pinia"
-version = "1.1.0"
+version = "1.1.1"
 dependencies = [
  "serde",
  "tauri",
@@ -3763,7 +3779,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-svelte"
-version = "1.0.0"
+version = "1.1.0"
 dependencies = [
  "serde",
  "tauri",
@@ -3774,7 +3790,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-valtio"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "serde",
  "tauri",

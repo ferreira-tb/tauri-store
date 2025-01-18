@@ -1,5 +1,5 @@
 # Pinia Example
 
 ```sh
-pnpm example pinia
+pnpm run example pinia
 ```

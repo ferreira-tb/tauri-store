@@ -12,3 +12,7 @@ export async function openStore() {
 export const incrementCounter = () => {
   store.state.counter += 1;
 };
+
+export const incrementNestedCounter = () => {
+  store.state.nested.foo.bar.baz += 1;
+};

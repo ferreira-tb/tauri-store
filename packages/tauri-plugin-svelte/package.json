@@ -1,6 +1,6 @@
 {
   "name": "tauri-plugin-svelte",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Persistent Svelte stores for Tauri",
   "type": "module",
   "private": false,
@@ -37,10 +37,14 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./runes": {
+      "types": "./dist/runes/index.d.ts",
+      "import": "./dist/runes/index.js"
+    },
     "./*": "./*"
   },
   "scripts": {
-    "build": "vite build",
+    "build": "svelte-kit sync && svelte-package",
     "type-check": "tsc --noEmit",
     "typedoc": "typedoc --plugin typedoc-plugin-mdn-links"
   },
@@ -48,5 +52,10 @@
     "@tauri-apps/api": "^2.0.3",
     "@tauri-store/shared": "workspace:*",
     "svelte": "^5.15.0"
+  },
+  "devDependencies": {
+    "@sveltejs/kit": "^2.16.0",
+    "@sveltejs/package": "^2.3.7",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3"
   }
 }

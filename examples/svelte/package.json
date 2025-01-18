@@ -4,8 +4,8 @@
   "packageManager": "pnpm@10.0.0",
   "private": true,
   "scripts": {
-    "vite:dev": "vite dev",
-    "vite:build": "vite build"
+    "vite:dev": "svelte-kit sync && vite dev",
+    "vite:build": "svelte-kit sync && vite build"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.8",

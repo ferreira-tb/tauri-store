@@ -1,5 +1,5 @@
 {
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "./src/**/*.vue"],
   "compilerOptions": {
     "baseUrl": ".",
     "target": "esnext",

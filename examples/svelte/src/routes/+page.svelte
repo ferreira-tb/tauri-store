@@ -7,7 +7,7 @@
     saveAll,
     saveAllNow,
     setAutosave,
-  } from 'tauri-plugin-svelte/src/index.js';
+  } from 'tauri-plugin-svelte/src/lib/index.js';
   import {
     debouncedStore,
     openDebouncedStore,
@@ -43,9 +43,13 @@
   </div>
 
   <section id="counter">
-    <p>Counter: {$store.counter}</p>
+    <p>
+      Counter: {$store.counter}
+      Nested: {$store.nested.foo.bar.baz}
+    </p>
     <div class="action">
       <button type="button" onclick={() => $store.counter++}>Increment</button>
+      <button type="button" onclick={() => $store.nested.foo.bar.baz++}>Increment Nested</button>
       <button type="button" onclick={() => store.start()}>Start</button>
       <button type="button" onclick={() => store.stop()}>Stop</button>
       <button type="button" onclick={() => store.save()}>Save</button>
