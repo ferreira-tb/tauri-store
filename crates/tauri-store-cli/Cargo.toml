@@ -8,6 +8,10 @@ edition = "2021"
 [package.version]
 workspace = true
 
+[[bin]]
+name = "tauri-store"
+path = "src/main.rs"
+
 [lints]
 workspace = true
 

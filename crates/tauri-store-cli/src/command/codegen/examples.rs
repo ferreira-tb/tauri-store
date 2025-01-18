@@ -1,8 +1,8 @@
 use super::{Generator, OutputContext};
-use crate::path::{assets_examples_dir, examples_shared_rust_impl_dir};
+use crate::path::{assets_dir, examples_shared_rust_dir};
 use anyhow::Result;
 use colored::Colorize;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::time::Instant;
 
 pub(super) fn generate() -> Result<()> {
@@ -28,4 +28,12 @@ fn generate_shared_commands(assets: &Path) -> Result<()> {
   Generator::builder(&input, &output)
     .build()
     .generate()
+}
+
+fn assets_examples_dir() -> PathBuf {
+  assets_dir().join("examples")
+}
+
+fn examples_shared_rust_impl_dir() -> PathBuf {
+  examples_shared_rust_dir().join("src/impl")
 }

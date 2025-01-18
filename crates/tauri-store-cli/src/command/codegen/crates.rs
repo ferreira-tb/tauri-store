@@ -1,8 +1,9 @@
 use super::{Generator, OutputContext};
-use crate::path::{assets_plugin_rs_dir, crate_commands_dir, crate_src_dir};
+use crate::path::{assets_dir, crate_src_dir};
+use crate::target::Target;
 use anyhow::Result;
 use colored::Colorize;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::time::Instant;
 
 pub(super) fn generate() -> Result<()> {
@@ -67,4 +68,12 @@ fn generate_lib(assets: &Path) -> Result<()> {
   Generator::builder(&input, &output)
     .build()
     .generate()
+}
+
+fn assets_plugin_rs_dir() -> PathBuf {
+  assets_dir().join("plugin-rs")
+}
+
+fn crate_commands_dir(target: Target) -> PathBuf {
+  crate_src_dir(target).join("command")
 }

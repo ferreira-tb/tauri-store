@@ -17,6 +17,7 @@
     "eslint:fix": "eslint . --config eslint.config.js --fix",
     "example": "pwsh scripts/start-example.ps1",
     "format": "prettier . --write && cargo fmt --all",
+    "install:cli": "cargo install --path ./crates/tauri-store-cli --force",
     "test:crate": "cargo +nightly test -p tauri-store --tests -- --test-threads=1",
     "type-check": "pnpm run -r type-check",
     "update": "pwsh scripts/update.ps1"
