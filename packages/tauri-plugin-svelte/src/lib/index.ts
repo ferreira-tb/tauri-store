@@ -1,5 +1,7 @@
 export { Store, store } from './store';
 
+export { RuneStore, runeStore } from './runes';
+
 export type {
   MaybePromise,
   Option,
@@ -8,6 +10,7 @@ export type {
   StoreContract,
   StoreFrontendOptions,
   StoreOptions,
+  TauriPluginSvelteRuneStoreOptions,
   TauriPluginSvelteStoreOptions,
   TauriStoreContract,
 } from './types';

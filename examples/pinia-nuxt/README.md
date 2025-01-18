@@ -1,5 +1,5 @@
 # Nuxt Example
 
 ```sh
-pnpm example pinia-nuxt
+pnpm run example pinia-nuxt
 ```

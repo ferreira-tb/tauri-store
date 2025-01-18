@@ -9,6 +9,7 @@ export default defineConfig({
     'examples/shared/pinia/tsconfig.json',
     'examples/shared/react/tsconfig.json',
     'examples/svelte/tsconfig.json',
+    'examples/svelte-runes/tsconfig.json',
     'examples/valtio/tsconfig.json',
     'packages/shared/tsconfig.json',
     'packages/tauri-plugin-pinia/tsconfig.json',
@@ -17,6 +18,7 @@ export default defineConfig({
   ],
   features: {
     react: true,
+    reactCompiler: true,
     reactHooks: false,
     svelte: true,
     vue: true,

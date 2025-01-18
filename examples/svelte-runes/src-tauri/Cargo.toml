@@ -1,0 +1,46 @@
+[package]
+name = "example-svelte-runes"
+publish = false
+
+[package.version]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow = "1"
+serde_json = "1"
+tauri-plugin-process = "2"
+tauri-plugin-shell = "2"
+tauri-plugin-window-state = "2"
+
+[dependencies.serde]
+version = "1"
+features = ["derive"]
+
+[dependencies.example-shared]
+path = "../../shared/rust"
+default-features = false
+
+[dependencies.tauri]
+version = "2"
+features = ["devtools", "protocol-asset"]
+
+[dependencies.tauri-plugin-svelte]
+path = "../../../crates/tauri-plugin-svelte"
+default-features = false
+
+[build-dependencies.tauri-build]
+version = "2"
+features = []
+
+[features]
+svelte-runes = ["example-shared/svelte"]
+file-sync-all = ["example-shared/file-sync-all"]

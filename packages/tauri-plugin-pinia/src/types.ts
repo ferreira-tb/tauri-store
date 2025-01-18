@@ -11,6 +11,9 @@ export type {
   TauriStoreContract,
 } from '@tauri-store/shared';
 
+/**
+ * Options for the Pinia plugin.
+ */
 export interface TauriPluginPiniaOptions extends StoreFrontendOptions {
   /**
    * @see https://vuejs.org/api/reactivity-core.html#watch
@@ -25,4 +28,7 @@ export interface TauriPluginPiniaOptions extends StoreFrontendOptions {
   readonly flush?: WatchOptions['flush'];
 }
 
+/**
+ * Options for the Pinia store.
+ */
 export type TauriPluginPiniaStoreOptions = StoreOptions & TauriPluginPiniaOptions;

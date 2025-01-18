@@ -1,5 +1,5 @@
 # Valtio Example
 
 ```sh
-pnpm example valtio
+pnpm run example valtio
 ```

@@ -134,23 +134,11 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
   }
 
   protected patchBackend(state: S): void {
-    if (this.enabled) {
-      const _state = this.applyKeyFilters(state);
-      commands.patch(this.id, _state).catch((err) => this.onError?.(err));
-    }
+    this.patchBackendHelper(commands.patch, state);
   }
 
-  protected async setOptions(): Promise<void> {
-    try {
-      await commands.setStoreOptions(this.id, {
-        saveInterval: this.options.saveInterval,
-        saveOnChange: this.options.saveOnChange,
-        saveOnExit: this.options.saveOnExit,
-        saveStrategy: this.options.saveStrategy,
-      });
-    } catch (err) {
-      this.onError?.(err);
-    }
+  protected setOptions(): Promise<void> {
+    return this.setOptionsHelper(commands.setStoreOptions);
   }
 
   public async getPath(): Promise<string> {
@@ -175,15 +163,15 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
 }
 
 /**
- * Create a new store with the given `id` and initial `state`.
+ * Creates a new store with the given `id` and initial `state`.
  *
  * @example
  * ```ts
  * import { store, Store } from 'tauri-plugin-svelte';
  *
  * // These are equivalent.
- * const foo = new Store('foo', { count: 0 });
- * const bar = store('bar', { count: 0 });
+ * const foo = new Store('foo', { value: 0 });
+ * const bar = store('bar', { value: 0 });
  * ```
  */
 export function store<S extends State>(

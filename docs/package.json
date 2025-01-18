@@ -4,11 +4,11 @@
   "packageManager": "pnpm@10.0.0",
   "private": true,
   "scripts": {
-    "build": "vite build",
+    "build": "svelte-kit sync && vite build",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "dev": "vite dev",
-    "preview": "vite preview"
+    "dev": "svelte-kit sync && vite dev",
+    "preview": "svelte-kit sync && vite preview"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.8",

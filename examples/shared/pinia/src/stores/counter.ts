@@ -13,12 +13,17 @@ function store() {
     counter.value++;
   }
 
+  function incrementNested() {
+    nested.value.foo.bar.baz++;
+  }
+
   return {
     counter,
     counter2,
     counter3,
     nested,
     increment,
+    incrementNested,
   };
 }
 

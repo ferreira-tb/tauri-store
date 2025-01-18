@@ -6,5 +6,6 @@ packages:
   - 'examples/shared/pinia'
   - 'examples/shared/react'
   - 'examples/svelte'
+  - 'examples/svelte-runes'
   - 'examples/valtio'
   - 'packages/*'

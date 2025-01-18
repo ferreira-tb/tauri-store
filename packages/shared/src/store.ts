@@ -1,5 +1,6 @@
 import { flushPromises } from './utils';
 import { listen, StoreEvent } from './event';
+import type { patch, setStoreOptions } from './commands';
 import { DEFAULT_FILTER_KEYS_STRATEGY } from './defaults';
 import { type LooseTimeStrategyKind, TimeStrategy } from './time-strategy';
 import type {
@@ -118,9 +119,30 @@ export abstract class BaseStore<S extends State = State> {
   }
 
   protected abstract patchSelf(state: S): void;
+
   protected abstract patchBackend(state: S): void;
 
+  protected patchBackendHelper(fn: ReturnType<typeof patch>, state: S) {
+    if (this.enabled) {
+      const _state = this.applyKeyFilters(state);
+      fn(this.id, _state).catch((err) => this.onError?.(err));
+    }
+  }
+
   protected abstract setOptions(): Promise<void>;
+
+  protected async setOptionsHelper(fn: ReturnType<typeof setStoreOptions>) {
+    try {
+      await fn(this.id, {
+        saveInterval: this.options.saveInterval,
+        saveOnChange: this.options.saveOnChange,
+        saveOnExit: this.options.saveOnExit,
+        saveStrategy: this.options.saveStrategy,
+      });
+    } catch (err) {
+      this.onError?.(err);
+    }
+  }
 
   private patchOptions(config: StoreBackendRawOptions) {
     if (typeof config.saveOnChange === 'boolean') {

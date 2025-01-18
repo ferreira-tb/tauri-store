@@ -1,5 +1,5 @@
 # Svelte Example
 
 ```sh
-pnpm example svelte
+pnpm run example svelte
 ```

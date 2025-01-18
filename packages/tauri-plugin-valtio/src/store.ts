@@ -77,23 +77,11 @@ export class Store<S extends State> extends BaseStore<S> {
   }
 
   protected patchBackend(state: S): void {
-    if (this.enabled) {
-      const _state = this.applyKeyFilters(state);
-      commands.patch(this.id, _state).catch((err) => this.onError?.(err));
-    }
+    this.patchBackendHelper(commands.patch, state);
   }
 
   protected async setOptions(): Promise<void> {
-    try {
-      await commands.setStoreOptions(this.id, {
-        saveInterval: this.options.saveInterval,
-        saveOnChange: this.options.saveOnChange,
-        saveOnExit: this.options.saveOnExit,
-        saveStrategy: this.options.saveStrategy,
-      });
-    } catch (err) {
-      this.onError?.(err);
-    }
+    return this.setOptionsHelper(commands.setStoreOptions);
   }
 }
 
