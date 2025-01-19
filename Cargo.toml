@@ -14,6 +14,7 @@ members = [
 version = "1.0.0"
 edition = "2021"
 rust-version = "1.77.2"
+categories = ["filesystem", "gui", "web-programming"]
 
 [workspace.lints.rust.unexpected_cfgs]
 level = "warn"
