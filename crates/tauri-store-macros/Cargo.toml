@@ -16,6 +16,9 @@ workspace = true
 [package.rust-version]
 workspace = true
 
+[package.categories]
+workspace = true
+
 [lib]
 proc-macro = true
 
