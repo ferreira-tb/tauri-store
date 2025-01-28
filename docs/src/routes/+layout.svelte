@@ -11,7 +11,7 @@
   const { children }: { children: Snippet } = $props();
 
   if (!isHighlighterReady()) {
-    void loadHighlighter();
+    loadHighlighter();
   }
 
   onMount(async () => {

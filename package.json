@@ -18,25 +18,26 @@
     "example": "pwsh scripts/start-example.ps1",
     "format": "prettier . --write && cargo fmt --all",
     "install:cli": "cargo install --path ./crates/tauri-store-cli --force",
+    "svelte:sync": "pnpm run --recursive --if-present sync",
     "test:crate": "cargo +nightly test -p tauri-store --tests -- --test-threads=1",
     "type-check": "pnpm run -r type-check",
     "update": "pwsh scripts/update.ps1"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^6.2.2",
-    "@types/node": "^22.10.7",
-    "@types/react": "^19.0.7",
+    "@tb-dev/eslint-config": "^6.2.5",
+    "@types/node": "^22.12.0",
+    "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
-    "eslint": "^9.18.0",
+    "eslint": "^9.19.0",
     "prettier": "^3.4.2",
     "prettier-plugin-css-order": "^2.1.2",
     "prettier-plugin-svelte": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.10",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "tslib": "^2.8.1",
     "typedoc": "^0.27.6",
-    "typedoc-plugin-mdn-links": "^4.0.8",
+    "typedoc-plugin-mdn-links": "^4.0.10",
     "typescript": "~5.7.3",
-    "vite": "^6.0.7",
+    "vite": "^6.0.11",
     "vite-plugin-dts": "^4.5.0"
   }
 }
