@@ -67,8 +67,8 @@ export function isHighlighterReady() {
   return highlighter.ready;
 }
 
-export async function loadHighlighter() {
-  await highlighter.load();
+export function loadHighlighter() {
+  void highlighter.load();
 }
 
 export async function highlight(code: string, options: HighlighterOptions) {
