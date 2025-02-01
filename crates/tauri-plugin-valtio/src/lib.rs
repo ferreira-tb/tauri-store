@@ -65,7 +65,7 @@ impl<R: Runtime> Builder<R> {
   }
 }
 
-#[expect(clippy::unnecessary_wraps)]
+#[allow(clippy::unnecessary_wraps)]
 fn setup<R: Runtime>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()> {
   let collection = builder.into_collection(app);
   app.manage(Valtio(collection));

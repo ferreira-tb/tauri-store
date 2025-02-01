@@ -23,10 +23,7 @@ impl<R: Runtime> From<&Store<R>> for StoreOptions {
   }
 }
 
-#[expect(
-  clippy::needless_pass_by_value,
-  reason = "We are just anticipating the need for it."
-)]
+#[allow(clippy::needless_pass_by_value)]
 pub(super) fn set_options<R>(store: &mut Store<R>, options: StoreOptions)
 where
   R: Runtime,
