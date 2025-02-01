@@ -37,7 +37,7 @@ impl Autosave {
 
       #[cfg(tauri_store_tracing)]
       debug!("autosave started");
-    };
+    }
   }
 
   pub fn stop(&mut self) {

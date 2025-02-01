@@ -13,6 +13,7 @@
     setCollectionPath,
   } from '$content/guide/persisting-state/snippets';
 
+  // prettier-ignore
   const url = $derived.by(() => {
     const docs = $currentMetadata.docs;
     return {
@@ -25,8 +26,7 @@
       save_denylist: `${docs.rust}/struct.Builder.html#method.save_denylist`,
 
       // Tauri
-      appDataDir:
-        'https://docs.rs/tauri/latest/tauri/path/struct.PathResolver.html#method.app_data_dir',
+      appDataDir: 'https://docs.rs/tauri/latest/tauri/path/struct.PathResolver.html#method.app_data_dir',
     };
   });
 </script>

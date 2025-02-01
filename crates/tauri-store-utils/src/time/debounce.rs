@@ -141,7 +141,7 @@ where
       loop {
         select! {
           message = self.receiver.recv() => {
-            if message.is_none() { break };
+            if message.is_none() { break }
           }
           () = sleep(self.duration) => {
             self.receiver.close();

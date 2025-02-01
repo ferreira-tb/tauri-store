@@ -17,7 +17,7 @@ use strum::VariantArray;
 pub struct Docs;
 
 impl Docs {
-  #[expect(clippy::unused_self)]
+  #[allow(clippy::unused_self)]
   pub fn run(&self) -> Result<()> {
     let start = Instant::now();
     println!("{}", "generating docs metadata".cyan());
