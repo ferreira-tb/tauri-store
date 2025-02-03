@@ -1,5 +1,6 @@
 <script lang="ts">
   import { findMetadata } from '$lib/data';
+  import { DISCORD, ISSUES } from '$lib/url';
   import * as Alert from '$components/alert';
   import { resolvePluginIcon } from '$lib/icon';
   import metadata from '$lib/data/metadata.json';
@@ -8,8 +9,6 @@
 
   const url = {
     cargoFeatures: 'https://doc.rust-lang.org/cargo/reference/features.html',
-    discord: 'https://discord.gg/ARd7McmVNv',
-    discussions: 'https://github.com/ferreira-tb/tauri-store/discussions',
     fileSyncAll: 'https://doc.rust-lang.org/std/fs/struct.File.html#method.sync_all',
     semver: 'https://doc.rust-lang.org/cargo/reference/semver.html',
     tauriStore: findMetadata('tauri-store').docs.rust,
@@ -100,9 +99,9 @@
 
   <Container title="Any questions?" id="any-questions">
     <p>
-      Feel free to start a discussion on the
-      <Ext href={url.discussions}>GitHub repository</Ext>
-      or ask in our <Ext href={url.discord}>Discord server</Ext>.
+      Feel free to open an issue on the
+      <Ext href={ISSUES}>GitHub repository</Ext>
+      or ask in our <Ext href={DISCORD}>Discord server</Ext>.
     </p>
   </Container>
 </div>

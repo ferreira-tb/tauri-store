@@ -5,3 +5,5 @@ pnpm-lock.yaml
 schemas
 .svelte-kit
 .output
+
+**/lib/url.ts

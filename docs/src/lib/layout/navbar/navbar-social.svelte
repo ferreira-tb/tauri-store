@@ -3,6 +3,7 @@
   import type { Snippet } from 'svelte';
   import { Link } from '$components/link';
   import * as Icon from '$components/icons';
+  import { DISCORD, GITHUB } from '$lib/url';
 
   interface Props {
     children?: Snippet;
@@ -11,18 +12,13 @@
   }
 
   const { size = '1.25rem', class: className, children }: Props = $props();
-
-  const url = {
-    discord: 'https://discord.gg/ARd7McmVNv',
-    github: 'https://github.com/ferreira-tb/tauri-store',
-  };
 </script>
 
 <div class={cn('flex items-center justify-end gap-4', className)}>
-  <Link href={url.discord} external>
+  <Link href={DISCORD} external>
     <Icon.Discord {size} />
   </Link>
-  <Link href={url.github} external>
+  <Link href={GITHUB} external>
     <Icon.Github {size} />
   </Link>
 
