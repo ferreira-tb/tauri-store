@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { HOME } from '$lib/url';
   import { Link } from '$components/link';
   import { Button } from '$components/ui/button';
   import { Container } from '$components/container';
@@ -11,7 +12,7 @@
 
 <div>
   <Container title="Page not found" level={1}>
-    <Link href="https://tb.dev.br/tauri-store/">
+    <Link href={HOME}>
       <Button>Take me home</Button>
     </Link>
   </Container>
