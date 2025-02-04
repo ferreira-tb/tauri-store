@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { exit } from '@tauri-apps/plugin-process';
 import { onError } from 'example-shared-js/src/index.js';
 
-export function useKeyDown() {
+export function useAppExit() {
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {

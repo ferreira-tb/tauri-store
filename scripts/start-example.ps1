@@ -12,7 +12,7 @@ $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
 if (-not $Example -or $Example -eq 'random') {
-  $Examples = Get-ChildItem -Path './examples' -Directory -Exclude 'shared' |
+  $Examples = Get-ChildItem -Path './examples' -Directory -Exclude '.shared' |
     Select-Object -ExpandProperty Name
 
   $Example = Get-Random -InputObject $Examples

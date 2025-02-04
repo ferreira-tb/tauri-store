@@ -1,7 +1,7 @@
 {
   "name": "example-pinia",
   "type": "module",
-  "packageManager": "pnpm@10.0.0",
+  "packageManager": "pnpm@10.2.0",
   "private": true,
   "scripts": {
     "vite:dev": "vite dev",
@@ -12,7 +12,7 @@
     "@vueuse/core": "^12.5.0",
     "example-shared-js": "workspace:*",
     "example-shared-pinia": "workspace:*",
-    "pinia": "^2.3.0",
+    "pinia": "^2.3.1",
     "tauri-plugin-pinia": "workspace:*",
     "vue": "^3.5.13",
     "vue-tsc": "^2.2.0"
