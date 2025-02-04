@@ -3,11 +3,11 @@ import { defineConfig } from '@tb-dev/eslint-config';
 export default defineConfig({
   project: [
     'docs/tsconfig.json',
+    'examples/.shared/javascript/tsconfig.json',
+    'examples/.shared/pinia/tsconfig.json',
+    'examples/.shared/react/tsconfig.json',
     'examples/pinia/tsconfig.json',
     'examples/pinia-nuxt/tsconfig.json',
-    'examples/shared/javascript/tsconfig.json',
-    'examples/shared/pinia/tsconfig.json',
-    'examples/shared/react/tsconfig.json',
     'examples/svelte/tsconfig.json',
     'examples/svelte-runes/tsconfig.json',
     'examples/valtio/tsconfig.json',

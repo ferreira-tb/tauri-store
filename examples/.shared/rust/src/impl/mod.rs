@@ -20,13 +20,11 @@ pub(crate) mod prelude {
 }
 
 #[tauri::command]
-#[allow(clippy::needless_pass_by_value)]
 pub(crate) fn on_error(message: String) {
   error!(error = message);
 }
 
 #[tauri::command]
-#[allow(clippy::needless_pass_by_value)]
 pub(crate) fn on_warn(message: String) {
   warn!(warning = message);
 }

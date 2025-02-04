@@ -1,10 +1,10 @@
 packages:
   - 'docs'
+  - 'examples/.shared/javascript'
+  - 'examples/.shared/pinia'
+  - 'examples/.shared/react'
   - 'examples/pinia'
   - 'examples/pinia-nuxt'
-  - 'examples/shared/javascript'
-  - 'examples/shared/pinia'
-  - 'examples/shared/react'
   - 'examples/svelte'
   - 'examples/svelte-runes'
   - 'examples/valtio'

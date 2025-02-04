@@ -3,7 +3,7 @@ use std::path::PathBuf;
 
 const ASSETS_DIR: &str = "crates/tauri-store-cli/assets";
 const CRATES_DIR: &str = "crates";
-const EXAMPLES_SHARED_RUST_DIR: &str = "examples/shared/rust";
+const EXAMPLES_SHARED_RUST_DIR: &str = "examples/.shared/rust";
 const DOCS_CHANGELOG_DIR: &str = "docs/src/content/changelog";
 const DOCS_DATA_DIR: &str = "docs/src/lib/data";
 const PACKAGES_DIR: &str = "packages";

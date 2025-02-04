@@ -2,9 +2,9 @@
 resolver = "2"
 members = [
   "crates/*",
+  "examples/.shared/rust",
   "examples/pinia/src-tauri",
   "examples/pinia-nuxt/src-tauri",
-  "examples/shared/rust",
   "examples/svelte/src-tauri",
   "examples/svelte-runes/src-tauri",
   "examples/valtio/src-tauri",

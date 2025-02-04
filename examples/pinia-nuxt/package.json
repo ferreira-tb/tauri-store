@@ -1,7 +1,7 @@
 {
   "name": "example-pinia-nuxt",
   "type": "module",
-  "packageManager": "pnpm@10.0.0",
+  "packageManager": "pnpm@10.2.0",
   "private": true,
   "scripts": {
     "nuxt:build": "nuxt build",
@@ -17,7 +17,7 @@
     "example-shared-js": "workspace:*",
     "example-shared-pinia": "workspace:*",
     "nuxt": "^3.15.4",
-    "pinia": "^2.3.0",
+    "pinia": "=2.3.0",
     "tauri-plugin-pinia": "workspace:*",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0",

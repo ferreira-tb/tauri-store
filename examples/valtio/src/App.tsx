@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useEffect } from 'react';
 import { useSnapshot } from 'valtio';
-import { useKeyDown } from 'example-shared-react/src/index.js';
+import { useAppExit } from 'example-shared-react/src/index.js';
 import { onError, printCounter } from 'example-shared-js/src/index.js';
 import { clearAutosave, saveAll, saveAllNow, setAutosave } from 'tauri-plugin-valtio/src/index.js';
 import {
@@ -18,7 +18,7 @@ import {
 } from './stores';
 
 export default function App() {
-  useKeyDown();
+  useAppExit();
   useEffect(() => {
     // prettier-ignore
     store.start()
