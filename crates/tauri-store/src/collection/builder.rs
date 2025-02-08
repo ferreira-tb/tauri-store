@@ -12,7 +12,7 @@ use tauri::{AppHandle, Manager, Runtime};
 #[cfg(tauri_store_tracing)]
 use tracing::trace;
 
-/// Builder for the [store collection](crate::collection::StoreCollection).
+/// Builder for the [StoreCollection](crate::collection::StoreCollection).
 pub struct StoreCollectionBuilder<R: Runtime> {
   path: Option<PathBuf>,
   default_save_strategy: SaveStrategy,
@@ -24,22 +24,26 @@ pub struct StoreCollectionBuilder<R: Runtime> {
 }
 
 impl<R: Runtime> StoreCollectionBuilder<R> {
+  /// Creates a new builder instance with default values.
   pub fn new() -> Self {
     Self::default()
   }
 
+  /// Sets the autosave interval for all stores.
   #[must_use]
   pub fn autosave(mut self, duration: Duration) -> Self {
     self.autosave = Some(duration);
     self
   }
 
+  /// Sets the default save strategy to be used by the stores.
   #[must_use]
   pub fn default_save_strategy(mut self, strategy: SaveStrategy) -> Self {
     self.default_save_strategy = strategy;
     self
   }
 
+  /// Registers a closure to be called when a store is loaded.
   #[must_use]
   pub fn on_load<F>(mut self, f: F) -> Self
   where
@@ -49,24 +53,28 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
     self
   }
 
+  /// Directory where the stores will be saved.
   #[must_use]
   pub fn path(mut self, path: impl AsRef<Path>) -> Self {
     self.path = Some(path.as_ref().to_path_buf());
     self
   }
 
+  /// Sets whether the store files should be pretty printed.
   #[must_use]
   pub fn pretty(mut self, yes: bool) -> Self {
     self.pretty = yes;
     self
   }
 
+  /// Sets a list of stores that should not be saved to disk.
   #[must_use]
   pub fn save_denylist(mut self, save_denylist: HashSet<String>) -> Self {
     self.save_denylist = Some(save_denylist);
     self
   }
 
+  /// Sets a list of stores that should not be synchronized across windows.
   #[must_use]
   pub fn sync_denylist(mut self, sync_denylist: HashSet<String>) -> Self {
     self.sync_denylist = Some(sync_denylist);

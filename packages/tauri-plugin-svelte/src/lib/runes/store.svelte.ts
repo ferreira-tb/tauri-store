@@ -35,9 +35,6 @@ const DEFAULT_FLUSH: NonNullable<Flush> = 'post';
  * export function increment() {
  *  store.state.count += 1;
  * }
- *
- * // Save the store to disk.
- * await store.save();
  * ```
  */
 export class RuneStore<S extends State> extends BaseStore<S> implements TauriStoreContract {
