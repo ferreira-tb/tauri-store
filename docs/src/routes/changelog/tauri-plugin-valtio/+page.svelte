@@ -15,4 +15,5 @@
 
 <Changelog.Next></Changelog.Next>
 
+<Valtio.V1x />
 <Valtio.V0x />
