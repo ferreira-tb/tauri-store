@@ -2,10 +2,14 @@
   import { findMetadata } from '$lib/data';
   import { DISCORD, ISSUES } from '$lib/url';
   import * as Alert from '$components/alert';
-  import { resolvePluginIcon } from '$lib/icon';
+  import { useSidebar } from '$layout/sidebar';
   import metadata from '$lib/data/metadata.json';
   import { Container } from '$components/container';
   import { Ext, PluginLink } from '$components/link';
+  import * as Table from '$lib/components/base/table';
+  import { resolveIcon, worksWith } from '$lib/plugin';
+
+  const sidebar = useSidebar();
 
   const url = {
     cargoFeatures: 'https://doc.rust-lang.org/cargo/reference/features.html',
@@ -40,31 +44,68 @@
       store plugins. Currently, the following plugins are available:
     </p>
 
-    <ul class="mx-0 mt-4 list-none">
-      {#each metadata as plugin (plugin.name)}
-        {#if plugin.isPlugin}
-          {@const Icon = resolvePluginIcon(plugin.name as TauriPlugin)}
-          <li class="flex items-center gap-2">
-            <PluginLink
-              plugin={plugin.name as TauriPlugin}
-              class="flex items-center justify-start gap-1"
-            >
-              <Icon size="1.25em" />
-              <span>{plugin.name}</span>
-            </PluginLink>
-            <Ext href={`https://www.npmjs.com/package/${plugin.name}`}>
-              <img
-                src={`https://img.shields.io/npm/v/${plugin.name}`}
-                alt={plugin.name}
-                fetchpriority="low"
-                decoding="async"
-                loading="lazy"
-              />
-            </Ext>
-          </li>
-        {/if}
-      {/each}
-    </ul>
+    <Table.Root class="mt-4">
+      <Table.Header>
+        <Table.Row>
+          <Table.Cell>Plugin</Table.Cell>
+          <Table.Cell>Version</Table.Cell>
+
+          {#if !sidebar.isMobile}
+            <Table.Cell>Downloads</Table.Cell>
+          {/if}
+
+          <Table.Cell>Works with</Table.Cell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {#each metadata as plugin (plugin.name)}
+          {#if plugin.isPlugin}
+            {@const Icon = resolveIcon(plugin.name as TauriPlugin)}
+            <Table.Row>
+              <Table.Cell>
+                <PluginLink
+                  plugin={plugin.name as TauriPlugin}
+                  class="flex items-center justify-start gap-1"
+                >
+                  <Icon size="1.25em" />
+                  <span>{plugin.name}</span>
+                </PluginLink>
+              </Table.Cell>
+
+              <Table.Cell>
+                <Ext href={`https://www.npmjs.com/package/${plugin.name}`}>
+                  <img
+                    src={`https://img.shields.io/npm/v/${plugin.name}`}
+                    alt={plugin.name}
+                    fetchpriority="low"
+                    decoding="async"
+                    loading="lazy"
+                  />
+                </Ext>
+              </Table.Cell>
+
+              {#if !sidebar.isMobile}
+                <Table.Cell>
+                  <Ext href={`https://crates.io/crates/${plugin.name}`}>
+                    <img
+                      src={`https://img.shields.io/crates/d/${plugin.name}`}
+                      alt={plugin.name}
+                      fetchpriority="low"
+                      decoding="async"
+                      loading="lazy"
+                    />
+                  </Ext>
+                </Table.Cell>
+              {/if}
+
+              <Table.Cell>
+                {worksWith(plugin.name as TauriPlugin).join(', ')}
+              </Table.Cell>
+            </Table.Row>
+          {/if}
+        {/each}
+      </Table.Body>
+    </Table.Root>
   </Container>
 
   <Container title="Cargo features">

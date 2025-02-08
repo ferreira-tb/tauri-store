@@ -3,8 +3,8 @@
   import Footer from './sidebar-footer.svelte';
   import Header from './sidebar-header.svelte';
   import MenuItem from './sidebar-menu-item.svelte';
-  import * as Sidebar from '$components/ui/sidebar';
-  import { useSidebar } from '$components/ui/sidebar';
+  import * as Sidebar from '$components/base/sidebar';
+  import { useSidebar } from '$components/base/sidebar';
   import { changelogs, javascriptDocs, rustDocs } from '$lib/data';
 
   const sidebar = useSidebar();

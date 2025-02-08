@@ -1,7 +1,7 @@
 <script lang="ts">
   import { HOME } from '$lib/url';
   import { Link } from '$components/link';
-  import { Button } from '$components/ui/button';
+  import { Button } from '$components/base/button';
   import { Container } from '$components/container';
 </script>
 

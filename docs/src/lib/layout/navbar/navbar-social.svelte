@@ -2,7 +2,7 @@
   import { cn } from '$lib/utils';
   import type { Snippet } from 'svelte';
   import { Link } from '$components/link';
-  import * as Icon from '$components/icons';
+  import * as Icon from '$components/icon';
   import { DISCORD, GITHUB } from '$lib/url';
 
   interface Props {

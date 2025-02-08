@@ -1,8 +1,8 @@
 <script lang="ts">
   import { cn } from '$lib/utils';
+  import * as Accordion from '../base/accordion';
   import { highlight, type Lang } from '$lib/code';
   import type { HTMLAttributes } from 'svelte/elements';
-  import * as Accordion from '$components/ui/accordion';
 
   type Props = HTMLAttributes<HTMLElement> & {
     accordion?: boolean | string;

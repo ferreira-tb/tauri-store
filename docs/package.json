@@ -15,7 +15,7 @@
     "@tb-dev/utils": "^4.1.3",
     "@types/semver": "^7.5.8",
     "autoprefixer": "^10.4.20",
-    "bits-ui": "^1.0.0-next.89",
+    "bits-ui": "1.0.0-next.90",
     "change-case": "^5.4.4",
     "clsx": "^2.1.1",
     "lucide-svelte": "^0.475.0",

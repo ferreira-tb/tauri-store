@@ -13,7 +13,7 @@
     "dev": "cargo tauri dev",
     "docs:crate": "cargo doc -p tauri-plugin-* --open --no-deps",
     "docs:package": "pnpm run -F docs dev --host",
-    "eslint": "eslint . --config eslint.config.js --cache",
+    "eslint": "eslint . --config eslint.config.js",
     "eslint:fix": "eslint . --config eslint.config.js --fix",
     "example": "pwsh scripts/start-example.ps1",
     "format": "prettier . --write && cargo fmt --all",

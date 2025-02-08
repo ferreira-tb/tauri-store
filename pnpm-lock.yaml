@@ -75,8 +75,8 @@ importers:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.5.1)
       bits-ui:
-        specifier: ^1.0.0-next.89
-        version: 1.0.0-next.89(svelte@5.19.9)
+        specifier: 1.0.0-next.90
+        version: 1.0.0-next.90(svelte@5.19.9)
       change-case:
         specifier: ^5.4.4
         version: 5.4.4
@@ -1925,8 +1925,8 @@ packages:
   birpc@0.2.19:
     resolution: {integrity: sha512-5WeXXAvTmitV1RqJFppT5QtUiz2p1mRSYU000Jkft5ZUCLJIk4uQriYNO50HknxKwM6jd8utNc66K1qGIwwWBQ==}
 
-  bits-ui@1.0.0-next.89:
-    resolution: {integrity: sha512-WbCVLKDlDyIFwhAtjR6KLhlaqpSKWZ1u15W/IiYE8p3szO0xrPx3i6ND0o5gk7q0QOTj3jjHQsKpNx54AR0LPg==}
+  bits-ui@1.0.0-next.90:
+    resolution: {integrity: sha512-BT+SzWzYuHwL8Q7L7/TsOiZElvsWUq10W3SDQwt3k6ofkaIVsrvaaqn6iKS5uHPZs7ztzJgqp+KdtsG2+xbWJw==}
     engines: {node: '>=18', pnpm: '>=8.7.0'}
     peerDependencies:
       svelte: ^5.11.0
@@ -7288,7 +7288,7 @@ snapshots:
 
   birpc@0.2.19: {}
 
-  bits-ui@1.0.0-next.89(svelte@5.19.9):
+  bits-ui@1.0.0-next.90(svelte@5.19.9):
     dependencies:
       '@floating-ui/core': 1.6.8
       '@floating-ui/dom': 1.6.12

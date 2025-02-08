@@ -1,10 +1,10 @@
 <script lang="ts">
-  import * as Sheet from '$components/ui/sheet/index.js';
   import { cn } from '$lib/utils.js';
   import type { WithElementRef } from 'bits-ui';
+  import { useSidebar } from './context.svelte.js';
   import type { HTMLAttributes } from 'svelte/elements';
   import { SIDEBAR_WIDTH_MOBILE } from './constants.js';
-  import { useSidebar } from './context.svelte.js';
+  import * as Sheet from '$components/base/sheet/index.js';
 
   let {
     ref = $bindable(null),
@@ -15,9 +15,9 @@
     children,
     ...restProps
   }: WithElementRef<HTMLAttributes<HTMLDivElement>> & {
+    collapsible?: 'offcanvas' | 'icon' | 'none';
     side?: 'left' | 'right';
     variant?: 'sidebar' | 'floating' | 'inset';
-    collapsible?: 'offcanvas' | 'icon' | 'none';
   } = $props();
 
   const sidebar = useSidebar();

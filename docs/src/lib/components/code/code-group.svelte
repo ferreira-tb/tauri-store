@@ -1,8 +1,8 @@
 <script lang="ts">
-  import * as Tabs from '../ui/tabs';
+  import * as Tabs from '../base/tabs';
   import type { Code } from '$lib/code';
   import CodeBlock from './code-block.svelte';
-  import * as Accordion from '$components/ui/accordion';
+  import * as Accordion from '../base/accordion';
 
   interface Props {
     accordion?: boolean | string;

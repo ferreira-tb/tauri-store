@@ -2,9 +2,9 @@
   import { tick } from 'svelte';
   import { Link } from '$components/link';
   import { useSidebar } from '$layout/sidebar';
-  import * as Sheet from '$components/ui/sheet';
+  import * as Sheet from '$components/base/sheet';
   import { Menu, PanelRightOpen } from 'lucide-svelte';
-  import { Separator } from '$components/ui/separator';
+  import { Separator } from '$components/base/separator';
   import type { Headings } from '$layout/content/aside.svelte';
   import { NAVBAR_HEIGHT, NAVBAR_HEIGHT_MOBILE } from './constants';
 
