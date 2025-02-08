@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { type Subscriber, writable } from 'svelte/store';
 
 class Persistent<T extends string = string> {
@@ -24,10 +25,12 @@ class Persistent<T extends string = string> {
   }
 
   private load() {
-    let value = localStorage.getItem(this.key) as T | null;
-    if (value?.length === 0) value = null;
-    if (!value && this.defaultValue) value = this.defaultValue;
-    this.value.set(value);
+    if (browser) {
+      let value = localStorage.getItem(this.key) as T | null;
+      if (value?.length === 0) value = null;
+      if (!value && this.defaultValue) value = this.defaultValue;
+      this.value.set(value);
+    }
   }
 }
 
