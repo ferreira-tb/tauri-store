@@ -12,7 +12,7 @@ use tauri::{AppHandle, Manager, Runtime};
 #[cfg(tauri_store_tracing)]
 use tracing::trace;
 
-/// Builder for the [StoreCollection](crate::collection::StoreCollection).
+/// Builder for the [`StoreCollection`](crate::collection::StoreCollection).
 pub struct StoreCollectionBuilder<R: Runtime> {
   path: Option<PathBuf>,
   default_save_strategy: SaveStrategy,
