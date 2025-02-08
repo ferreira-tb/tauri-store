@@ -26,8 +26,11 @@ import {
  * A [writable store] that can sync its state with the Rust backend and persist it to disk.
  * It adheres to the [Svelte store contract], so it's interchangeable with conventional Svelte stores.
  *
+ * If you prefer runes, use the [`RuneStore`] class instead.
+ *
  * [writable store]: https://svelte.dev/docs/svelte/stores#svelte-store-writable
  * [Svelte store contract]: https://svelte.dev/docs/svelte/stores#Store-contract
+ * [`RuneStore`]: https://tb.dev.br/tauri-store/reference/tauri-plugin-svelte/classes/RuneStore.html
  *
  * @example
  * ```ts
