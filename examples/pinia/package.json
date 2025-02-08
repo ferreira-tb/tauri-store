@@ -1,7 +1,7 @@
 {
   "name": "example-pinia",
   "type": "module",
-  "packageManager": "pnpm@10.2.0",
+  "packageManager": "pnpm@10.2.1",
   "private": true,
   "scripts": {
     "vite:dev": "vite dev",

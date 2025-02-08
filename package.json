@@ -2,7 +2,7 @@
   "name": "monorepo",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.2.0",
+  "packageManager": "pnpm@10.2.1",
   "scripts": {
     "build": "pnpm run build:shared && pnpm run build:package",
     "build:docs": "pwsh scripts/build-docs.ps1",
@@ -28,7 +28,7 @@
     "@types/node": "^22.13.1",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
-    "eslint": "^9.19.0",
+    "eslint": "^9.20.0",
     "prettier": "^3.4.2",
     "prettier-plugin-css-order": "^2.1.2",
     "prettier-plugin-svelte": "^3.3.3",
@@ -37,7 +37,7 @@
     "typedoc": "^0.27.6",
     "typedoc-plugin-mdn-links": "^4.0.11",
     "typescript": "~5.7.3",
-    "vite": "^6.0.11",
+    "vite": "^6.1.0",
     "vite-plugin-dts": "^4.5.0"
   }
 }
