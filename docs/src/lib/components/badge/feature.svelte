@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Badge } from '../ui/badge';
+  import { Badge } from '../base/badge';
 
   interface Props {
     name: string;

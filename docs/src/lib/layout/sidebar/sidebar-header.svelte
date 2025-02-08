@@ -1,10 +1,10 @@
 <script lang="ts">
   import { resolveIcon } from './header';
   import { ChevronsUpDown } from 'lucide-svelte';
-  import * as Sidebar from '$components/ui/sidebar';
-  import { useSidebar } from '$components/ui/sidebar';
+  import * as Sidebar from '$components/base/sidebar';
+  import { useSidebar } from '$components/base/sidebar';
   import { DEFAULT_MODE, type Mode, mode } from './mode';
-  import * as DropdownMenu from '$components/ui/dropdown-menu';
+  import * as DropdownMenu from '$components/base/dropdown-menu';
 
   const sidebar = useSidebar();
 

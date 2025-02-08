@@ -1,15 +1,15 @@
 <script lang="ts">
-  import * as Tooltip from '$components/ui/tooltip/index.js';
   import { cn } from '$lib/utils.js';
   import type { WithElementRef } from 'bits-ui';
+  import { setSidebar } from './context.svelte.js';
   import type { HTMLAttributes } from 'svelte/elements';
+  import * as Tooltip from '$components/base/tooltip/index.js';
   import {
     SIDEBAR_COOKIE_MAX_AGE,
     SIDEBAR_COOKIE_NAME,
     SIDEBAR_WIDTH,
     SIDEBAR_WIDTH_ICON,
   } from './constants.js';
-  import { setSidebar } from './context.svelte.js';
 
   let {
     ref = $bindable(null),
@@ -21,9 +21,9 @@
     children,
     ...restProps
   }: WithElementRef<HTMLAttributes<HTMLDivElement>> & {
-    open?: boolean;
-    onOpenChange?: (open: boolean) => void;
     controlledOpen?: boolean;
+    onOpenChange?: (open: boolean) => void;
+    open?: boolean;
   } = $props();
 
   const sidebar = setSidebar({

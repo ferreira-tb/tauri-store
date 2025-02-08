@@ -1,7 +1,7 @@
 <script lang="ts">
   import { cn } from '$lib/utils';
+  import { Root } from '../base/alert';
   import type { Snippet } from 'svelte';
-  import { Root } from '$components/ui/alert';
   import type { HTMLAttributes } from 'svelte/elements';
 
   type Props = HTMLAttributes<HTMLElement> & {

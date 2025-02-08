@@ -1,9 +1,9 @@
 <script lang="ts">
   import { plugins } from '$lib/data';
-  import { resolvePluginIcon } from '$lib/icon';
+  import { resolveIcon } from '$lib/plugin';
   import { currentPlugin } from '$stores/plugin';
-  import * as Sidebar from '$components/ui/sidebar';
-  import * as DropdownMenu from '$components/ui/dropdown-menu';
+  import * as Sidebar from '$components/base/sidebar';
+  import * as DropdownMenu from '$components/base/dropdown-menu';
 </script>
 
 <Sidebar.Footer>
@@ -18,7 +18,7 @@
               {...props}
             >
               {#if $currentPlugin}
-                {@const PluginIcon = resolvePluginIcon($currentPlugin)}
+                {@const PluginIcon = resolveIcon($currentPlugin)}
                 {#key $currentPlugin}
                   <div class="flex size-8 items-center">
                     <PluginIcon size="2rem" />
@@ -35,7 +35,7 @@
 
         <DropdownMenu.Content side="top" class="w-[--bits-dropdown-menu-anchor-width]">
           {#each plugins as plugin (plugin.name)}
-            {@const PluginIcon = resolvePluginIcon(plugin.name as TauriPlugin)}
+            {@const PluginIcon = resolveIcon(plugin.name as TauriPlugin)}
             <DropdownMenu.Item>
               <button
                 type="button"

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Link } from '$components/link';
-  import * as Sidebar from '$components/ui/sidebar';
-  import { useSidebar } from '$components/ui/sidebar';
+  import * as Sidebar from '$components/base/sidebar';
+  import { useSidebar } from '$components/base/sidebar';
 
   interface Props {
     external?: boolean;
