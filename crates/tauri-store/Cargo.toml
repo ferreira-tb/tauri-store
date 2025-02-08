@@ -8,7 +8,7 @@ repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
-keywords = ["tauri", "plugin", "store"]
+keywords = ["plugin", "store", "tauri"]
 
 [package.edition]
 workspace = true
@@ -66,5 +66,7 @@ version = "2"
 features = ["test"]
 
 [features]
+default = ["plugin"]
+plugin = []
 derive = ["dep:tauri-store-macros"]
 file-sync-all = []

@@ -17,10 +17,12 @@ class Persistent<T extends string = string> {
 
   public set(value: T) {
     this.value.set(value);
-    if (value.length === 0) {
-      localStorage.removeItem(this.key);
-    } else {
-      localStorage.setItem(this.key, value);
+    if (browser) {
+      if (value.length === 0) {
+        localStorage.removeItem(this.key);
+      } else {
+        localStorage.setItem(this.key, value);
+      }
     }
   }
 

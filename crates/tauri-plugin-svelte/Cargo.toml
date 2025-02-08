@@ -8,7 +8,7 @@ repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
-keywords = ["tauri", "plugin", "store", "svelte"]
+keywords = ["plugin", "store", "svelte", "tauri"]
 links = "tauri-plugin-svelte"
 
 [package.edition]
@@ -36,6 +36,7 @@ tauri = "2"
 [dependencies.tauri-store]
 version = "0.7"
 path = "../tauri-store"
+default-features = false
 features = ["derive"]
 
 [target."cfg(tauri_store_tracing)".dependencies]
