@@ -1,7 +1,7 @@
 [
   {
     "name": "tauri-plugin-pinia",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "title": "Pinia",
     "isPlugin": true,
     "docs": {
@@ -12,7 +12,7 @@
   },
   {
     "name": "tauri-plugin-svelte",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "title": "Svelte",
     "isPlugin": true,
     "docs": {
@@ -23,7 +23,7 @@
   },
   {
     "name": "tauri-plugin-valtio",
-    "version": "0.2.1",
+    "version": "1.0.0",
     "title": "Valtio",
     "isPlugin": true,
     "docs": {
@@ -34,7 +34,7 @@
   },
   {
     "name": "tauri-store",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "title": null,
     "isPlugin": false,
     "docs": {
