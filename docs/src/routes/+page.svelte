@@ -52,9 +52,8 @@
 
           {#if !sidebar.isMobile}
             <Table.Cell>Downloads</Table.Cell>
+            <Table.Cell>Works with</Table.Cell>
           {/if}
-
-          <Table.Cell>Works with</Table.Cell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -96,11 +95,11 @@
                     />
                   </Ext>
                 </Table.Cell>
-              {/if}
 
-              <Table.Cell>
-                {worksWith(plugin.name as TauriPlugin).join(', ')}
-              </Table.Cell>
+                <Table.Cell>
+                  {worksWith(plugin.name as TauriPlugin).join(', ')}
+                </Table.Cell>
+              {/if}
             </Table.Row>
           {/if}
         {/each}
