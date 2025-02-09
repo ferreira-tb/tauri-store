@@ -19,7 +19,7 @@
     "format": "prettier . --write && cargo fmt --all",
     "install:cli": "cargo install --path ./crates/tauri-store-cli --force",
     "svelte:sync": "pnpm run --recursive --if-present sync",
-    "test:crate": "cargo +nightly test -p tauri-store --tests -- --test-threads=1",
+    "test:crate": "pwsh scripts/test.ps1",
     "type-check": "pnpm run -r type-check",
     "update": "pwsh scripts/update.ps1"
   },
