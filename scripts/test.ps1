@@ -12,6 +12,7 @@ if ($Ubuntu) {
 
 pnpm install
 pnpm run build:shared
+pnpm run svelte:sync
 pnpm run type-check
 
 cargo clippy --workspace
