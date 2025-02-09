@@ -4,6 +4,7 @@
   "packageManager": "pnpm@10.2.1",
   "private": true,
   "scripts": {
+    "type-check": "vue-tsc --noEmit",
     "vite:dev": "vite dev",
     "vite:build": "vite build"
   },

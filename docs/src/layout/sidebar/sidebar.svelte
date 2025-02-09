@@ -26,6 +26,7 @@
             {@render guide('persisting-state', 'Persisting state')}
             {@render guide('synchronization', 'Synchronization')}
             {@render guide('accessing-from-rust', 'Accessing from Rust')}
+            {@render guide('lifecycle-hooks', 'Lifecycle hooks')}
           </Sidebar.Menu>
         </Sidebar.GroupContent>
       </Sidebar.Group>

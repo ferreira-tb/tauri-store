@@ -13,11 +13,13 @@ import {
   debounce,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
+  DEFAULT_HOOKS,
   DEFAULT_ON_ERROR,
   DEFAULT_SAVE_ON_CHANGE,
   DEFAULT_SAVE_ON_EXIT,
   type Fn,
   type State,
+  type StoreHooks,
   throttle,
   TimeStrategy,
 } from '@tauri-store/shared';
@@ -58,10 +60,10 @@ import {
 export class Store<S extends State> extends BaseStore<S> implements StoreContract<S> {
   public readonly id: string;
   private readonly store: Writable<S>;
-  protected options: TauriPluginSvelteStoreOptions;
+  protected options: TauriPluginSvelteStoreOptions<S>;
   protected override readonly flush = tick;
 
-  constructor(id: string, state: S, options: TauriPluginSvelteStoreOptions = {}) {
+  constructor(id: string, state: S, options: TauriPluginSvelteStoreOptions<S> = {}) {
     super();
 
     this.id = id;
@@ -73,14 +75,15 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     this.options = {
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
-      onError: options.onError ?? DEFAULT_ON_ERROR,
+      hooks: options.hooks ?? (DEFAULT_HOOKS as StoreHooks<S>),
+      onError: options.onError ?? options.hooks?.error ?? DEFAULT_ON_ERROR,
       saveInterval: saveStrategy.interval,
       saveOnChange: options.saveOnChange ?? DEFAULT_SAVE_ON_CHANGE,
       saveOnExit: options.saveOnExit ?? DEFAULT_SAVE_ON_EXIT,
       saveStrategy: saveStrategy.strategy,
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
-    } satisfies Required<TauriPluginSvelteStoreOptions>;
+    } satisfies Required<TauriPluginSvelteStoreOptions<S>>;
   }
 
   public set(value: S): void {
@@ -132,8 +135,14 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
   }
 
   protected patchSelf(state: S): void {
-    const _state = this.applyKeyFilters(state);
-    this.update((value) => Object.assign(value, _state));
+    let _state = this.options.hooks?.beforeFrontendSync
+      ? this.options.hooks.beforeFrontendSync(state)
+      : state;
+
+    if (_state) {
+      _state = this.applyKeyFilters(_state);
+      this.update((value) => Object.assign(value, _state));
+    }
   }
 
   protected patchBackend(state: S): void {
@@ -180,7 +189,7 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
 export function store<S extends State>(
   id: string,
   state: S,
-  options?: TauriPluginSvelteStoreOptions
+  options?: TauriPluginSvelteStoreOptions<S>
 ): Store<S> {
   return new Store(id, state, options);
 }

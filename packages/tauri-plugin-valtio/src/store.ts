@@ -6,11 +6,13 @@ import {
   debounce,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
+  DEFAULT_HOOKS,
   DEFAULT_ON_ERROR,
   DEFAULT_SAVE_ON_CHANGE,
   DEFAULT_SAVE_ON_EXIT,
   type Fn,
   type State,
+  type StoreHooks,
   throttle,
   TimeStrategy,
 } from '@tauri-store/shared';
@@ -18,9 +20,9 @@ import {
 export class Store<S extends State> extends BaseStore<S> {
   public readonly id: string;
   public readonly state: S;
-  protected options: TauriPluginValtioStoreOptions;
+  protected options: TauriPluginValtioStoreOptions<S>;
 
-  constructor(id: string, state: S, options: TauriPluginValtioStoreOptions = {}) {
+  constructor(id: string, state: S, options: TauriPluginValtioStoreOptions<S> = {}) {
     super();
 
     this.id = id;
@@ -32,14 +34,15 @@ export class Store<S extends State> extends BaseStore<S> {
     this.options = {
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
-      onError: options.onError ?? DEFAULT_ON_ERROR,
+      hooks: options.hooks ?? (DEFAULT_HOOKS as StoreHooks<S>),
+      onError: options.onError ?? options.hooks?.error ?? DEFAULT_ON_ERROR,
       saveInterval: saveStrategy.interval,
       saveOnChange: options.saveOnChange ?? DEFAULT_SAVE_ON_CHANGE,
       saveOnExit: options.saveOnExit ?? DEFAULT_SAVE_ON_EXIT,
       saveStrategy: saveStrategy.strategy,
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
-    } satisfies Required<TauriPluginValtioStoreOptions>;
+    } satisfies Required<TauriPluginValtioStoreOptions<S>>;
   }
 
   protected async load(): Promise<void> {
@@ -72,8 +75,14 @@ export class Store<S extends State> extends BaseStore<S> {
   }
 
   protected patchSelf(state: S): void {
-    const _state = this.applyKeyFilters(state);
-    Object.assign(this.state, _state);
+    let _state = this.options.hooks?.beforeFrontendSync
+      ? this.options.hooks.beforeFrontendSync(state)
+      : state;
+
+    if (_state) {
+      _state = this.applyKeyFilters(_state);
+      Object.assign(this.state, _state);
+    }
   }
 
   protected patchBackend(state: S): void {
@@ -103,7 +112,7 @@ export class Store<S extends State> extends BaseStore<S> {
 export function store<S extends State>(
   id: string,
   state: S,
-  options: TauriPluginValtioStoreOptions = {}
+  options: TauriPluginValtioStoreOptions<S> = {}
 ): StoreBuilderReturn<S> {
   const _store = new Store(id, state, options);
   return {

@@ -1,21 +1,19 @@
 import type { MaybePromise, Option } from './utils';
 import type { LooseTimeStrategyKind, TimeStrategyRawTuple } from '../time-strategy';
 
-export type OnErrorFn = (error: unknown) => MaybePromise<void>;
-
 /** Options that can also be updated from Rust. */
 export interface StoreBackendOptions {
-  /**
-   * Saves the store automatically on a graceful exit.
-   * @default true
-   */
-  saveOnExit?: boolean;
-
   /**
    * Saves the store whenever there is a state change.
    * @default false
    */
   saveOnChange?: boolean;
+
+  /**
+   * Saves the store automatically on a graceful exit.
+   * @default true
+   */
+  saveOnExit?: boolean;
 
   /**
    * Interval in milliseconds to use when saving the store.
@@ -44,7 +42,7 @@ export interface StoreBackendRawOptions {
 }
 
 /** Options that can only be set from JavaScript. */
-export interface StoreFrontendOptions {
+export interface StoreFrontendOptions<S extends State = State> {
   /**
    * Keys the plugin should save or ignore.
    *
@@ -69,10 +67,17 @@ export interface StoreFrontendOptions {
   readonly filterKeysStrategy?: StoreKeyFilterStrategy;
 
   /**
+   * Hooks to run custom logic at specific points in the store lifecycle.
+   */
+  readonly hooks?: StoreHooks<S>;
+
+  /**
    * Custom error handler.
    * @default console.error
+   *
+   * @deprecated Use {@link StoreHooks.error} instead.
    */
-  readonly onError?: OnErrorFn;
+  readonly onError?: StoreHooks<S>['error'];
 
   /**
    * Interval in milliseconds to use when syncing the store with the backend.
@@ -100,8 +105,32 @@ export interface StoreFrontendOptions {
   readonly syncStrategy?: LooseTimeStrategyKind;
 }
 
+export interface StoreHooks<S extends State = State> {
+  /**
+   * Hook that runs **before** the store sends its state to Rust.
+   * Can be used to modify the state before the sync.
+   *
+   * Returning a nullish value will abort the operation.
+   */
+  readonly beforeBackendSync?: (state: S) => Option<Partial<S>>;
+
+  /**
+   * Hook that runs **before** the store attempts to update itself with data coming from Rust.
+   * Can be used to modify the state before the changes are applied.
+   *
+   * Returning a nullish value will abort the operation.
+   */
+  readonly beforeFrontendSync?: (state: S) => Option<Partial<S>>;
+
+  /**
+   * Custom error handler.
+   * @default console.error
+   */
+  readonly error?: (error: unknown) => MaybePromise<void>;
+}
+
 /** Options to configure how the store should behave. */
-export type StoreOptions = StoreBackendOptions & StoreFrontendOptions;
+export type StoreOptions<S extends State = State> = StoreBackendOptions & StoreFrontendOptions<S>;
 
 /** A contract that a store must adhere to in order to be considered a valid implementation. */
 export interface TauriStoreContract {

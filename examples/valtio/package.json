@@ -4,6 +4,7 @@
   "packageManager": "pnpm@10.2.1",
   "private": true,
   "scripts": {
+    "type-check": "tsc --noEmit",
     "vite:build": "vite build",
     "vite:dev": "vite dev"
   },

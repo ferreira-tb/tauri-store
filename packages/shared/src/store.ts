@@ -5,11 +5,11 @@ import { DEFAULT_FILTER_KEYS_STRATEGY } from './defaults';
 import { type LooseTimeStrategyKind, TimeStrategy } from './time-strategy';
 import type {
   ConfigChangePayload,
-  OnErrorFn,
   Option,
   State,
   StateChangePayload,
   StoreBackendRawOptions,
+  StoreHooks,
   StoreKeyFilter,
   StoreKeyFilterStrategy,
   StoreOptions,
@@ -23,7 +23,7 @@ import type {
  */
 export abstract class BaseStore<S extends State = State> {
   public abstract readonly id: string;
-  protected abstract readonly options: StoreOptions;
+  protected abstract readonly options: StoreOptions<S>;
 
   /** Whether the synchronization is enabled. */
   protected enabled = false;
@@ -94,7 +94,7 @@ export abstract class BaseStore<S extends State = State> {
   /** Stops listening for state changes coming from the backend. */
   protected unlisten: Option<() => void>;
 
-  private async listenOptions() {
+  private async listenOptions(): Promise<() => void> {
     return listen<ConfigChangePayload>(StoreEvent.ConfigChange, ({ payload }) => {
       if (this.enabled && payload.id === this.id) {
         this.patchOptions(payload.config);
@@ -122,16 +122,22 @@ export abstract class BaseStore<S extends State = State> {
 
   protected abstract patchBackend(state: S): void;
 
-  protected patchBackendHelper(fn: ReturnType<typeof patch>, state: S) {
+  protected patchBackendHelper(fn: ReturnType<typeof patch>, state: S): void {
     if (this.enabled) {
-      const _state = this.applyKeyFilters(state);
-      fn(this.id, _state).catch((err) => this.onError?.(err));
+      let _state = this.options.hooks?.beforeBackendSync
+        ? this.options.hooks.beforeBackendSync(state)
+        : state;
+
+      if (_state) {
+        _state = this.applyKeyFilters(_state);
+        fn(this.id, _state).catch((err) => this.onError?.(err));
+      }
     }
   }
 
   protected abstract setOptions(): Promise<void>;
 
-  protected async setOptionsHelper(fn: ReturnType<typeof setStoreOptions>) {
+  protected async setOptionsHelper(fn: ReturnType<typeof setStoreOptions>): Promise<void> {
     try {
       await fn(this.id, {
         saveInterval: this.options.saveInterval,
@@ -144,7 +150,7 @@ export abstract class BaseStore<S extends State = State> {
     }
   }
 
-  private patchOptions(config: StoreBackendRawOptions) {
+  private patchOptions(config: StoreBackendRawOptions): void {
     if (typeof config.saveOnChange === 'boolean') {
       this.options.saveOnChange = config.saveOnChange;
     }
@@ -156,7 +162,7 @@ export abstract class BaseStore<S extends State = State> {
     }
   }
 
-  protected applyKeyFilters(state: S): Partial<S> {
+  protected applyKeyFilters(state: Partial<S>): Partial<S> {
     if (!this.options.filterKeys) {
       return state;
     }
@@ -189,10 +195,10 @@ export abstract class BaseStore<S extends State = State> {
   }
 
   /**
-   * {@link StoreOptions.onError}
+   * {@link StoreHooks.error}
    */
-  protected get onError(): Option<OnErrorFn> {
-    return this.options.onError;
+  protected get onError(): Option<StoreHooks<S>['error']> {
+    return this.options.onError ?? this.options.hooks?.error;
   }
 }
 

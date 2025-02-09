@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "sync": "svelte-kit sync",
+    "type-check": "tsc --noEmit",
     "vite:dev": "svelte-kit sync && vite dev",
     "vite:build": "svelte-kit sync && vite build"
   },

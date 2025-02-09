@@ -9,6 +9,7 @@ export type {
   StoreBackendOptions,
   StoreContract,
   StoreFrontendOptions,
+  StoreHooks,
   StoreOptions,
   TauriPluginSvelteRuneStoreOptions,
   TauriPluginSvelteStoreOptions,

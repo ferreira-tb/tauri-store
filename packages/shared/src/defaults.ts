@@ -4,6 +4,10 @@ export const DEFAULT_FILTER_KEYS: Required<StoreOptions>['filterKeys'] = null;
 
 export const DEFAULT_FILTER_KEYS_STRATEGY: Required<StoreOptions>['filterKeysStrategy'] = 'omit';
 
+export const DEFAULT_HOOKS: Required<StoreOptions>['hooks'] = {
+  error: console.error.bind(console),
+};
+
 export const DEFAULT_ON_ERROR: Required<StoreOptions>['onError'] = console.error.bind(console);
 
 export const DEFAULT_SAVE_INTERVAL: Required<StoreOptions>['saveInterval'] = 0;

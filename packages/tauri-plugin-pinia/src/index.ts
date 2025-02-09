@@ -9,6 +9,7 @@ export type {
   State,
   StoreBackendOptions,
   StoreFrontendOptions,
+  StoreHooks,
   StoreOptions,
   TauriPluginPiniaOptions,
   TauriPluginPiniaStoreOptions,
