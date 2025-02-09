@@ -106,7 +106,7 @@
   }
 
   main h3 {
-    @apply mt-4 text-xl font-semibold tracking-tight;
+    @apply mt-8 text-xl font-semibold tracking-tight;
   }
 
   main h4 {
