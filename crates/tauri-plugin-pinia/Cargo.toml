@@ -1,14 +1,14 @@
 [package]
 name = "tauri-plugin-pinia"
 description = "Persistent Pinia stores for Tauri"
-version = "1.1.2"
+version = "1.2.0"
 documentation = "https://docs.rs/tauri-plugin-pinia"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
-keywords = ["tauri", "plugin", "store", "pinia", "vue"]
+keywords = ["pinia", "plugin", "store", "tauri", "vue"]
 links = "tauri-plugin-pinia"
 
 [package.edition]
@@ -36,6 +36,7 @@ tauri = "2"
 [dependencies.tauri-store]
 version = "0.7"
 path = "../tauri-store"
+default-features = false
 features = ["derive"]
 
 [target."cfg(tauri_store_tracing)".dependencies]

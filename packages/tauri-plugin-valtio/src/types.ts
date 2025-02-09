@@ -6,6 +6,7 @@ export type {
   State,
   StoreBackendOptions,
   StoreFrontendOptions,
+  StoreHooks,
   StoreOptions,
   TauriStoreContract,
 } from '@tauri-store/shared';
@@ -13,7 +14,7 @@ export type {
 /**
  * Options for the Valtio store.
  */
-export type TauriPluginValtioStoreOptions = StoreOptions;
+export type TauriPluginValtioStoreOptions<S extends State> = StoreOptions<S>;
 
 export interface StoreBuilderReturn<S extends State> extends TauriStoreContract {
   state: S;

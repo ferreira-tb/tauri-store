@@ -7,6 +7,7 @@ export type {
   State,
   StoreBackendOptions,
   StoreFrontendOptions,
+  StoreHooks,
   StoreOptions,
   TauriStoreContract,
 } from '@tauri-store/shared';

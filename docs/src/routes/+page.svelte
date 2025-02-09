@@ -4,9 +4,9 @@
   import * as Alert from '$components/alert';
   import { useSidebar } from '$layout/sidebar';
   import metadata from '$lib/data/metadata.json';
+  import * as Table from '$components/base/table';
   import { Container } from '$components/container';
   import { Ext, PluginLink } from '$components/link';
-  import * as Table from '$lib/components/base/table';
   import { resolveIcon, worksWith } from '$lib/plugin';
 
   const sidebar = useSidebar();

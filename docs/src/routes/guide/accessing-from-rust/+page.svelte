@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Ext } from '$components/link';
   import { pascalCase } from 'change-case';
+  import { CodeBlock } from '$components/code';
   import { currentMetadata } from '$stores/plugin';
   import { Container } from '$components/container';
   import { Breadcrumb } from '$components/breadcrumb';
-  import { CodeBlock, CodeGroup } from '$components/code';
-  import { get, onLoad, tryGet, watchStore } from '$content/guide/accessing-from-rust/snippets';
+  import { get, tryGet, watchStore } from '$content/guide/accessing-from-rust/snippets';
 
   const url = $derived.by(() => {
     const docs = $currentMetadata.docs;
@@ -15,7 +15,6 @@
       // Rust
       ManagerExt: `${docs.rust}/trait.ManagerExt.html`,
       Store: `${docs.rust}/struct.Store.html`,
-      on_load: `${docs.rust}/struct.Builder.html#method.on_load`,
       try_get: `${docs.rust}/struct.${pascalTitle}.html#method.try_get`,
       watch: `${docs.rust}/struct.${pascalTitle}.html#method.watch`,
 
@@ -76,16 +75,4 @@
   </p>
 
   <CodeBlock lang="rust" code={$watchStore} />
-</Container>
-
-<Container title="Lifecycle hooks" />
-
-<Container title="on_load" level={3}>
-  {#snippet titleSnippet({ title })}
-    <Ext href={url.on_load}>{title}</Ext>
-  {/snippet}
-
-  <p>Registers a closure to be called when a store is loaded.</p>
-
-  <CodeGroup code={$onLoad} />
 </Container>

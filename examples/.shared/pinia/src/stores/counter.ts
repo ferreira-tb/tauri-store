@@ -8,6 +8,8 @@ function store() {
   const counter2 = ref(value.counter2);
   const counter3 = ref(value.counter3);
   const nested = ref(value.nested);
+  const nested2 = ref(value.nested2);
+  const nested3 = ref(value.nested3);
 
   function increment() {
     counter.value++;
@@ -22,6 +24,8 @@ function store() {
     counter2,
     counter3,
     nested,
+    nested2,
+    nested3,
     increment,
     incrementNested,
   };

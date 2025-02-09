@@ -15,9 +15,9 @@ const config = {
       base: '/tauri-store',
     },
     alias: {
-      $components: './src/lib/components',
+      $components: './src/components',
       $content: './src/content',
-      $layout: './src/lib/layout',
+      $layout: './src/layout',
       $stores: './src/lib/stores',
     },
   },

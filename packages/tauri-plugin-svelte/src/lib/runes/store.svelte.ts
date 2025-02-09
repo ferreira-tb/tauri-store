@@ -6,17 +6,19 @@ import {
   debounce,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
+  DEFAULT_HOOKS,
   DEFAULT_ON_ERROR,
   DEFAULT_SAVE_ON_CHANGE,
   DEFAULT_SAVE_ON_EXIT,
   type Fn,
   type State,
+  type StoreHooks,
   type TauriStoreContract,
   throttle,
   TimeStrategy,
 } from '@tauri-store/shared';
 
-type Flush = TauriPluginSvelteRuneStoreOptions['flush'];
+type Flush = TauriPluginSvelteRuneStoreOptions<State>['flush'];
 
 const DEFAULT_FLUSH: NonNullable<Flush> = 'post';
 
@@ -40,10 +42,10 @@ const DEFAULT_FLUSH: NonNullable<Flush> = 'post';
 export class RuneStore<S extends State> extends BaseStore<S> implements TauriStoreContract {
   public readonly id: string;
   public readonly state: S = $state()!;
-  protected options: TauriPluginSvelteRuneStoreOptions;
+  protected options: TauriPluginSvelteRuneStoreOptions<S>;
   protected override readonly flush = tick;
 
-  constructor(id: string, state: S, options: TauriPluginSvelteRuneStoreOptions = {}) {
+  constructor(id: string, state: S, options: TauriPluginSvelteRuneStoreOptions<S> = {}) {
     super();
 
     this.id = id;
@@ -56,14 +58,15 @@ export class RuneStore<S extends State> extends BaseStore<S> implements TauriSto
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
       flush: options.flush ?? DEFAULT_FLUSH,
-      onError: options.onError ?? DEFAULT_ON_ERROR,
+      hooks: options.hooks ?? (DEFAULT_HOOKS as StoreHooks<S>),
+      onError: options.onError ?? options.hooks?.error ?? DEFAULT_ON_ERROR,
       saveInterval: saveStrategy.interval,
       saveOnChange: options.saveOnChange ?? DEFAULT_SAVE_ON_CHANGE,
       saveOnExit: options.saveOnExit ?? DEFAULT_SAVE_ON_EXIT,
       saveStrategy: saveStrategy.strategy,
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
-    } satisfies Required<TauriPluginSvelteRuneStoreOptions>;
+    } satisfies Required<TauriPluginSvelteRuneStoreOptions<S>>;
   }
 
   protected readonly load = async (): Promise<void> => {
@@ -106,8 +109,14 @@ export class RuneStore<S extends State> extends BaseStore<S> implements TauriSto
   };
 
   protected readonly patchSelf = (state: S): void => {
-    const _state = this.applyKeyFilters(state);
-    Object.assign(this.state, _state);
+    let _state = this.options.hooks?.beforeFrontendSync
+      ? this.options.hooks.beforeFrontendSync(state)
+      : state;
+
+    if (_state) {
+      _state = this.applyKeyFilters(_state);
+      Object.assign(this.state, _state);
+    }
   };
 
   protected readonly patchBackend = (state: S): void => {
@@ -167,7 +176,7 @@ function createEffectRoot(fn: Fn, flush: Flush = DEFAULT_FLUSH): Fn {
 export function runeStore<S extends State>(
   id: string,
   state: S,
-  options: TauriPluginSvelteRuneStoreOptions = {}
+  options: TauriPluginSvelteRuneStoreOptions<S> = {}
 ): RuneStore<S> {
   return new RuneStore(id, state, options);
 }

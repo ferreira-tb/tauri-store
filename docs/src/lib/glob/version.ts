@@ -12,7 +12,7 @@ export function sortVersions(versions: Record<string, unknown>): ComponentTuple[
 function parse(name: string) {
   const version = versionFileRegex.exec(name)?.[1];
   if (!version) {
-    throw new TypeError(`Invalid version file name: ${name}`);
+    throw new TypeError(`invalid version file name: ${name}`);
   }
 
   return version;

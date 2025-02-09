@@ -1,5 +1,5 @@
 import { snakeCase } from 'change-case';
-import { snippet, snippetGroup } from '$stores/snippet';
+import { snippet } from '$stores/snippet';
 
 export const get = snippet((metadata) => {
   return `
@@ -53,20 +53,4 @@ fn watch_store(app: AppHandle) {
   }
 }
   `;
-});
-
-export const onLoad = snippetGroup((metadata) => {
-  return {
-    id: 'on-load',
-    label: 'src-tauri/src/main.rs',
-    lang: 'rust',
-    value: `
-${snakeCase(metadata.name)}::Builder::new()
-  .on_load(|store| {
-    println!("store loaded: {}", store.id());
-    Ok(())
-  })
-  .build();
-      `,
-  };
 });

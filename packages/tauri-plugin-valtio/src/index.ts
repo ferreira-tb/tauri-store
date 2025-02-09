@@ -7,6 +7,7 @@ export type {
   StoreBackendOptions,
   StoreBuilderReturn,
   StoreFrontendOptions,
+  StoreHooks,
   StoreOptions,
   TauriPluginValtioStoreOptions,
   TauriStoreContract,

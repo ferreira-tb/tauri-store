@@ -7,6 +7,7 @@ import {
   debounce,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
+  DEFAULT_HOOKS,
   DEFAULT_ON_ERROR,
   DEFAULT_SAVE_ON_CHANGE,
   DEFAULT_SAVE_ON_EXIT,
@@ -36,7 +37,8 @@ export class Store extends BaseStore {
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
       flush: options.flush ?? 'pre',
-      onError: options.onError ?? DEFAULT_ON_ERROR,
+      hooks: options.hooks ?? DEFAULT_HOOKS,
+      onError: options.onError ?? options.hooks?.error ?? DEFAULT_ON_ERROR,
       saveInterval: saveStrategy.interval,
       saveOnChange: options.saveOnChange ?? DEFAULT_SAVE_ON_CHANGE,
       saveOnExit: options.saveOnExit ?? DEFAULT_SAVE_ON_EXIT,
@@ -77,8 +79,14 @@ export class Store extends BaseStore {
   }
 
   protected patchSelf(state: State): void {
-    const _state = this.applyKeyFilters(state);
-    this.ctx.store.$patch(_state as typeof this.ctx.store.$state);
+    let _state = this.options.hooks?.beforeFrontendSync
+      ? this.options.hooks.beforeFrontendSync(state)
+      : state;
+
+    if (_state) {
+      _state = this.applyKeyFilters(_state);
+      this.ctx.store.$patch(_state as typeof this.ctx.store.$state);
+    }
   }
 
   protected patchBackend(state: State): void {
