@@ -18,6 +18,7 @@
       // JavaScript
       beforeBackendSync: `${docs.javascript}/interfaces/StoreHooks.html#beforebackendsync`,
       beforeFrontendSync: `${docs.javascript}/interfaces/StoreHooks.html#beforefrontendsync`,
+      hooks: `${docs.javascript}/interfaces/StoreFrontendOptions.html#hooks`,
       error: `${docs.javascript}/interfaces/StoreHooks.html#error`,
 
       // Rust
@@ -33,12 +34,14 @@
 
 <Breadcrumb current="Lifecycle hooks" parents={['Guide']} />
 
+{#snippet ext(key: keyof typeof url, label?: string, code = true)}
+  <Ext href={url[key]} {code}>{label ?? key}</Ext>
+{/snippet}
+
 <Container title="Lifecycle hooks" level={1}></Container>
 
 <Container title="JavaScript">
-  <p>
-    JavaScript hooks can be registered using the <code>hooks</code> property of the store options.
-  </p>
+  <p>JavaScript hooks can be registered using the {@render ext('hooks')} option.</p>
 
   <CodeBlock lang="typescript" code={$jsHooks} />
 </Container>
