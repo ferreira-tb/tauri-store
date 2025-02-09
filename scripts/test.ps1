@@ -12,7 +12,7 @@ if ($Ubuntu) {
 
 pnpm install
 pnpm run build:shared
-
 pnpm run type-check
+
 cargo clippy --workspace
 cargo test -p tauri-store --tests -- --test-threads=1
