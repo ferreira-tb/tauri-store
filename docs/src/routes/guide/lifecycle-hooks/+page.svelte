@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Ext } from '$components/link';
-  import { currentMetadata } from '$stores/plugin';
   import { Container } from '$components/container';
   import { Breadcrumb } from '$components/breadcrumb';
   import { CodeBlock, CodeGroup } from '$components/code';
+  import { currentMetadata, currentPlugin } from '$stores/plugin';
   import {
     jsHooks,
     onBeforeBackendSync,
@@ -25,6 +25,12 @@
       on_load: `${docs.rust}/struct.Builder.html#method.on_load`,
     };
   });
+
+  const staticUrl = {
+    structuredClone: 'https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone',
+    valtioDeepClone: 'https://valtio.dev/docs/how-tos/how-to-reset-state',
+    valtioSnapshot: 'https://valtio.dev/docs/api/advanced/snapshot',
+  };
 </script>
 
 <svelte:head>
@@ -36,6 +42,10 @@
 
 {#snippet ext(key: keyof typeof url, label?: string, code = true)}
   <Ext href={url[key]} {code}>{label ?? key}</Ext>
+{/snippet}
+
+{#snippet extStatic(key: keyof typeof staticUrl, label?: string, code = true)}
+  <Ext href={staticUrl[key]} {code}>{label ?? key}</Ext>
 {/snippet}
 
 <Container title="Lifecycle hooks" level={1}></Container>
@@ -57,6 +67,15 @@
   </p>
 
   <CodeBlock lang="typescript" code={onBeforeBackendSync} />
+
+  {#if $currentPlugin === 'tauri-plugin-valtio'}
+    <p>
+      <code>state</code> is a <Ext href={staticUrl.valtioSnapshot}>snapshot</Ext>, so it's deeply
+      frozen. If you need to mutate it, you can use
+      {@render extStatic('valtioDeepClone', 'deepClone')} from <code>valtio/utils</code>
+      or {@render extStatic('structuredClone')} to create a new object.
+    </p>
+  {/if}
 </Container>
 
 <Container title="beforeFrontendSync" level={3}>

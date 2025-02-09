@@ -28,6 +28,7 @@ export const counterOptions: StoreOptions<Counter> = {
 
   hooks: {
     beforeBackendSync: (state) => {
+      state = structuredClone(state);
       state.counter2 &&= null;
       if (state.nested2) {
         state.nested2.foo.bar &&= null;
