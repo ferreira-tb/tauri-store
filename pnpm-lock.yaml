@@ -24,17 +24,17 @@ importers:
         specifier: ^9.20.0
         version: 9.20.0(jiti@2.4.2)
       prettier:
-        specifier: ^3.4.2
-        version: 3.4.2
+        specifier: ^3.5.0
+        version: 3.5.0
       prettier-plugin-css-order:
         specifier: ^2.1.2
-        version: 2.1.2(postcss@8.5.1)(prettier@3.4.2)
+        version: 2.1.2(postcss@8.5.1)(prettier@3.5.0)
       prettier-plugin-svelte:
         specifier: ^3.3.3
-        version: 3.3.3(prettier@3.4.2)(svelte@5.19.9)
+        version: 3.3.3(prettier@3.5.0)(svelte@5.19.9)
       prettier-plugin-tailwindcss:
         specifier: ^0.6.11
-        version: 0.6.11(prettier-plugin-css-order@2.1.2(postcss@8.5.1)(prettier@3.4.2))(prettier-plugin-svelte@3.3.3(prettier@3.4.2)(svelte@5.19.9))(prettier@3.4.2)
+        version: 0.6.11(prettier-plugin-css-order@2.1.2(postcss@8.5.1)(prettier@3.5.0))(prettier-plugin-svelte@3.3.3(prettier@3.5.0)(svelte@5.19.9))(prettier@3.5.0)
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -42,8 +42,8 @@ importers:
         specifier: ^0.27.6
         version: 0.27.6(typescript@5.7.3)
       typedoc-plugin-mdn-links:
-        specifier: ^4.0.11
-        version: 4.0.11(typedoc@0.27.6(typescript@5.7.3))
+        specifier: ^4.0.12
+        version: 4.0.12(typedoc@0.27.6(typescript@5.7.3))
       typescript:
         specifier: ~5.7.3
         version: 5.7.3
@@ -4154,8 +4154,8 @@ packages:
       prettier-plugin-svelte:
         optional: true
 
-  prettier@3.4.2:
-    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
+  prettier@3.5.0:
+    resolution: {integrity: sha512-quyMrVt6svPS7CjQ9gKb3GLEX/rl3BCL2oa/QkNcXv4YNVBC9olt3s+H7ukto06q7B1Qz46PbrKLO34PR6vXcA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -4830,8 +4830,8 @@ packages:
     resolution: {integrity: sha512-3KS2b+kL7fsuk/eJZ7EQdnEmQoaho/r6KUef7hxvltNA5DR8NAUM+8wJMbJyZ4G9/7i3v5zPBIMN5aybAh2/Jg==}
     engines: {node: '>= 0.4'}
 
-  typedoc-plugin-mdn-links@4.0.11:
-    resolution: {integrity: sha512-xx9at8P8ABWYG9CLi04Y/uMcy3URIIzA+vy/JGN15Hn/VqDeapRIglwStS1MaQKwCixwZzoUpIoDaGcHdcoFWg==}
+  typedoc-plugin-mdn-links@4.0.12:
+    resolution: {integrity: sha512-pie8DmMoN9P6oUdwi5fWuPSfseqEqPAew5wJ3XOdQql5Pbuv/TQlS4RhBwV2hSy4u8eGqu00TbFjabicL9K1WQ==}
     peerDependencies:
       typedoc: 0.26.x || 0.27.x
 
@@ -9736,28 +9736,28 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-css-order@2.1.2(postcss@8.5.1)(prettier@3.4.2):
+  prettier-plugin-css-order@2.1.2(postcss@8.5.1)(prettier@3.5.0):
     dependencies:
       css-declaration-sorter: 7.2.0(postcss@8.5.1)
       postcss-less: 6.0.0(postcss@8.5.1)
       postcss-scss: 4.0.9(postcss@8.5.1)
-      prettier: 3.4.2
+      prettier: 3.5.0
     transitivePeerDependencies:
       - postcss
 
-  prettier-plugin-svelte@3.3.3(prettier@3.4.2)(svelte@5.19.9):
+  prettier-plugin-svelte@3.3.3(prettier@3.5.0)(svelte@5.19.9):
     dependencies:
-      prettier: 3.4.2
+      prettier: 3.5.0
       svelte: 5.19.9
 
-  prettier-plugin-tailwindcss@0.6.11(prettier-plugin-css-order@2.1.2(postcss@8.5.1)(prettier@3.4.2))(prettier-plugin-svelte@3.3.3(prettier@3.4.2)(svelte@5.19.9))(prettier@3.4.2):
+  prettier-plugin-tailwindcss@0.6.11(prettier-plugin-css-order@2.1.2(postcss@8.5.1)(prettier@3.5.0))(prettier-plugin-svelte@3.3.3(prettier@3.5.0)(svelte@5.19.9))(prettier@3.5.0):
     dependencies:
-      prettier: 3.4.2
+      prettier: 3.5.0
     optionalDependencies:
-      prettier-plugin-css-order: 2.1.2(postcss@8.5.1)(prettier@3.4.2)
-      prettier-plugin-svelte: 3.3.3(prettier@3.4.2)(svelte@5.19.9)
+      prettier-plugin-css-order: 2.1.2(postcss@8.5.1)(prettier@3.5.0)
+      prettier-plugin-svelte: 3.3.3(prettier@3.5.0)(svelte@5.19.9)
 
-  prettier@3.4.2: {}
+  prettier@3.5.0: {}
 
   pretty-bytes@6.1.1: {}
 
@@ -10608,7 +10608,7 @@ snapshots:
       possible-typed-array-names: 1.0.0
       reflect.getprototypeof: 1.0.10
 
-  typedoc-plugin-mdn-links@4.0.11(typedoc@0.27.6(typescript@5.7.3)):
+  typedoc-plugin-mdn-links@4.0.12(typedoc@0.27.6(typescript@5.7.3)):
     dependencies:
       typedoc: 0.27.6(typescript@5.7.3)
 
