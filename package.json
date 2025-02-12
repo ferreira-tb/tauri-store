@@ -7,11 +7,11 @@
     "build": "pnpm run build:shared && pnpm run build:package",
     "build:docs": "pwsh scripts/build-docs.ps1",
     "build:shared": "pnpm run -F @tauri-store/shared build",
-    "build:package": "pnpm run -F \"./packages/tauri-plugin-*\" build",
+    "build:package": "pnpm run -F \"./packages/tauri-*\" build",
     "clippy": "cargo +nightly clippy --workspace",
     "codegen": "cargo run -p tauri-store-cli -- codegen",
     "dev": "cargo tauri dev",
-    "docs:crate": "cargo doc -p tauri-plugin-* --open --no-deps",
+    "docs:crate": "cargo +nightly doc -p tauri-* --open --no-deps --lib",
     "docs:package": "pnpm run -F docs dev --host",
     "eslint": "eslint . --config eslint.config.js",
     "eslint:fix": "eslint . --config eslint.config.js --fix",
@@ -24,7 +24,7 @@
     "update": "pwsh scripts/update.ps1"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^6.2.8",
+    "@tb-dev/eslint-config": "^6.2.9",
     "@types/node": "^22.13.1",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",

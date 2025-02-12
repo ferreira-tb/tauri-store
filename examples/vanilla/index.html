@@ -14,8 +14,8 @@
       import { clearAutosave, setAutosave } from 'tauri-store/src/index.js';
       import { increment, incrementNested, openStore, store } from './src/counter.js';
 
-      window.addEventListener('DOMContentLoaded', () => {
-        store.start();
+      window.addEventListener('DOMContentLoaded', async () => {
+        await store.start();
 
         const onClick = (id, callback) => {
           const el = document.getElementById(id);
@@ -33,12 +33,15 @@
         onClick('print', () => printStore());
         onClick('open', () => openStore());
 
-        store.subscribe((state) => {
+        update(store.state());
+        store.subscribe(update);
+
+        function update(state) {
           const counter = state.counter;
           const nested = state.nested.foo.bar.baz;
           const p = document.getElementById('counter-value');
           p.textContent = `Counter: ${counter} Nested: ${nested}`;
-        });
+        }
       });
 
       window.addEventListener('keydown', (e) => {
