@@ -1,6 +1,7 @@
 export { Store, store } from './store';
 
 export type {
+  CloneFn,
   MaybePromise,
   Option,
   State,
