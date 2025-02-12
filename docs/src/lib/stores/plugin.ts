@@ -1,3 +1,4 @@
+import { snakeCase } from 'change-case';
 import { findMetadata } from '$lib/data';
 import metadata from '$lib/data/metadata.json';
 import { persistent } from '$stores/persistent';
@@ -24,8 +25,14 @@ class CurrentPlugin {
 
 export const currentPlugin = new CurrentPlugin();
 
-export const currentMetadata = derived(currentPlugin, derive, findMetadata(DEFAULT_PLUGIN));
+export const currentMetadata = derived(currentPlugin, deriveMetadata, findMetadata(DEFAULT_PLUGIN));
 
-function derive(current: TauriPlugin | null) {
+function deriveMetadata(current: TauriPlugin | null) {
   return findMetadata(current ?? DEFAULT_PLUGIN);
+}
+
+export function getCollectionName(plugin: Metadata, transform = snakeCase) {
+  return (plugin.name as TauriPlugin) === 'tauri-store'
+    ? transform('store_collection')
+    : transform(plugin.title);
 }

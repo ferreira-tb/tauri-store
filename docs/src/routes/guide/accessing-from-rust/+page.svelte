@@ -2,21 +2,20 @@
   import { Ext } from '$components/link';
   import { pascalCase } from 'change-case';
   import { CodeBlock } from '$components/code';
-  import { currentMetadata } from '$stores/plugin';
   import { Container } from '$components/container';
   import { Breadcrumb } from '$components/breadcrumb';
+  import { currentMetadata, getCollectionName } from '$stores/plugin';
   import { get, tryGet, watchStore } from '$content/guide/accessing-from-rust/snippets';
 
   const url = $derived.by(() => {
     const docs = $currentMetadata.docs;
-    const title = $currentMetadata.title;
-    const pascalTitle = pascalCase(title);
+    const collection = getCollectionName($currentMetadata, pascalCase);
     return {
       // Rust
       ManagerExt: `${docs.rust}/trait.ManagerExt.html`,
       Store: `${docs.rust}/struct.Store.html`,
-      try_get: `${docs.rust}/struct.${pascalTitle}.html#method.try_get`,
-      watch: `${docs.rust}/struct.${pascalTitle}.html#method.watch`,
+      try_get: `${docs.rust}/struct.${collection}.html#method.try_get`,
+      watch: `${docs.rust}/struct.${collection}.html#method.watch`,
 
       // Tauri
       AppHandle: 'https://docs.rs/tauri/latest/tauri/struct.AppHandle.html',
