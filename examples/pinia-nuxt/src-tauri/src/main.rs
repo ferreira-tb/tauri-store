@@ -3,11 +3,6 @@
   windows_subsystem = "windows"
 )]
 
-use anyhow::Result;
-use example_shared::{build, setup_tracing};
-
-fn main() -> Result<()> {
-  setup_tracing("example_pinia_nuxt")?;
-  build().run(tauri::generate_context!())?;
-  Ok(())
+fn main() {
+  example_pinia_nuxt_lib::run();
 }

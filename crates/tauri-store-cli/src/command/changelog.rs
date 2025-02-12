@@ -1,7 +1,7 @@
+use super::codegen::util::transform::remove_nocheck;
 use crate::fs::{read_file, write_file};
 use crate::path::{assets_dir, docs_changelog_dir};
-use crate::target::Target;
-use crate::transform::remove_nocheck;
+use crate::plugin::Plugin;
 use anyhow::Result;
 use clap::Args;
 use semver::Version;
@@ -9,8 +9,8 @@ use std::path::PathBuf;
 
 #[derive(Debug, Args)]
 pub struct Changelog {
-  #[arg(short = 't', long)]
-  target: String,
+  #[arg(short = 'p', long)]
+  plugin: String,
   #[arg(short = 'v', long)]
   version: Version,
 }
@@ -23,8 +23,8 @@ impl Changelog {
 
     contents = contents.replace("VERSION", &self.version.to_string());
 
-    let target = Target::try_from(self.target.as_str())?;
-    let output = changelog_dir(target)
+    let plugin = Plugin::try_from(self.plugin.as_str())?;
+    let output = changelog_dir(plugin)
       .join(format!("v{}", self.version.major))
       .join(format!("{}.svelte", self.version));
 
@@ -36,6 +36,6 @@ fn assets_changelog_dir() -> PathBuf {
   assets_dir().join("changelog")
 }
 
-fn changelog_dir(target: Target) -> PathBuf {
-  docs_changelog_dir().join(target.as_ref())
+fn changelog_dir(plugin: Plugin) -> PathBuf {
+  docs_changelog_dir().join(plugin.as_ref())
 }

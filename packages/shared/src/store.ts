@@ -13,7 +13,6 @@ import type {
   StoreKeyFilter,
   StoreKeyFilterStrategy,
   StoreOptions,
-  Writeable,
 } from './types';
 
 /**
@@ -200,23 +199,6 @@ export abstract class BaseStore<S extends State = State> {
   protected get onError(): Option<StoreHooks<S>['error']> {
     return this.options.onError ?? this.options.hooks?.error;
   }
-}
-
-/**
- * @internal
- */
-export function mergeStoreOptions<T extends StoreOptions, U extends StoreOptions>(
-  target: T = {} as T,
-  source: U = {} as U
-): T & U {
-  type Key = keyof StoreOptions;
-  for (const [key, value] of Object.entries(source)) {
-    if (typeof target[key as Key] === 'undefined') {
-      (target as Writeable<StoreOptions>)[key as Key] = value;
-    }
-  }
-
-  return target as T & U;
 }
 
 function shouldFilterKey(

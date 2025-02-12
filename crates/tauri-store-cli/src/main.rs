@@ -2,8 +2,7 @@ mod command;
 mod fs;
 mod manifest;
 mod path;
-mod target;
-mod transform;
+mod plugin;
 
 use anyhow::Result;
 use clap::Parser;

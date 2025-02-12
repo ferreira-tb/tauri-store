@@ -6,7 +6,7 @@ use std::path::{Path, PathBuf};
 use std::sync::{Arc, LazyLock, OnceLock};
 use tauri::test::{mock_app, MockRuntime};
 use tauri::Manager;
-use tauri_store::{Store, StoreCollection, StoreCollectionBuilder};
+use tauri_store::{Store, StoreCollection};
 use tokio::fs;
 use tokio::sync::{OwnedSemaphorePermit as Permit, Semaphore};
 
@@ -24,7 +24,7 @@ pub struct Context {
 impl Context {
   fn new() -> Self {
     let app = mock_app();
-    let collection = StoreCollectionBuilder::new()
+    let collection = StoreCollection::builder()
       .path(&*PATH)
       .build(app.app_handle());
 

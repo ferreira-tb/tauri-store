@@ -5,11 +5,11 @@
   import * as Icon from '$components/icon';
   import { DISCORD, GITHUB } from '$lib/url';
 
-  interface Props {
+  type Props = {
     children?: Snippet;
     class?: string;
     size?: string;
-  }
+  };
 
   const { size = '1.25rem', class: className, children }: Props = $props();
 </script>

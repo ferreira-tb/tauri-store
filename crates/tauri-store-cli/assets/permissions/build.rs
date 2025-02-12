@@ -1,7 +1,7 @@
 const COMMANDS: &[&str] = &[
   "clear_autosave",
   "get_default_save_strategy",
-  "get_PLUGIN_NAME_path",
+  "get___STORE_COLLECTION___path",
   "get_save_strategy",
   "get_store_ids",
   "get_store_path",
@@ -15,7 +15,7 @@ const COMMANDS: &[&str] = &[
   "save_some",
   "save_some_now",
   "set_autosave",
-  "set_PLUGIN_NAME_path",
+  "set___STORE_COLLECTION___path",
   "set_save_strategy",
   "set_store_options",
   "unload",

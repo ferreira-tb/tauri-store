@@ -4,10 +4,10 @@
   import CodeBlock from './code-block.svelte';
   import * as Accordion from '../base/accordion';
 
-  interface Props {
+  type Props = {
     accordion?: boolean | string;
     code: Code | Code[];
-  }
+  };
 
   const { code, accordion }: Props = $props();
 

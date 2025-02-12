@@ -1,14 +1,14 @@
 import { snakeCase } from 'change-case';
 import { snippet } from '$stores/snippet';
 
-export const get = snippet((metadata) => {
+export const get = snippet((metadata, ctx) => {
   return `
 use ${snakeCase(metadata.name)}::ManagerExt;
 
 #[tauri::command]
 fn get_counter(app: AppHandle) -> i32 {
   let value = app
-    .${snakeCase(metadata.title!)}()
+    .${ctx.collection}()
     .get("store", "counter")
     .unwrap();
 
@@ -17,30 +17,29 @@ fn get_counter(app: AppHandle) -> i32 {
   `;
 });
 
-export const tryGet = snippet((metadata) => {
+export const tryGet = snippet((metadata, ctx) => {
   return `
 use ${snakeCase(metadata.name)}::ManagerExt;
 
 #[tauri::command]
 fn try_get_counter(app: AppHandle) -> i32 {
   app
-    .${snakeCase(metadata.title!)}()
+    .${ctx.collection}()
     .try_get::<i32>("store", "counter")
     .unwrap()
 }
   `;
 });
 
-export const watchStore = snippet((metadata) => {
-  const title = snakeCase(metadata.title!);
+export const watchStore = snippet((metadata, ctx) => {
   return `
 use ${snakeCase(metadata.name)}::ManagerExt;
 
 #[tauri::command]
 fn watch_store(app: AppHandle) {
-  let id = app.${title}().watch("store", |app| {
+  let id = app.${ctx.collection}().watch("store", |app| {
     app
-      .${title}()
+      .${ctx.collection}()
       .try_get::<i32>("store", "counter")
       .inspect(|counter| println!("counter: {counter}"))?;
     
@@ -49,7 +48,7 @@ fn watch_store(app: AppHandle) {
 
   // It returns an id that can be used to remove the watcher.
   if let Ok(id) = id {
-    app.${title}().unwatch("store", id).unwrap();
+    app.${ctx.collection}().unwatch("store", id).unwrap();
   }
 }
   `;

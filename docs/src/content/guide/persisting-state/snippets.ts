@@ -1,8 +1,7 @@
 import { pascalCase, snakeCase } from 'change-case';
 import { snippet, snippetGroup } from '$stores/snippet';
 
-export const saveStores = snippetGroup((metadata) => {
-  const title = snakeCase(metadata.title!);
+export const saveStores = snippetGroup((metadata, ctx) => {
   return [
     {
       id: 'save-stores-ts',
@@ -33,13 +32,13 @@ use ${snakeCase(metadata.name)}::ManagerExt;
 // See: https://docs.rs/tauri/latest/tauri/trait.Manager.html
 
 // Save a single store.
-manager.${title}().save("my-store");
+manager.${ctx.collection}().save("my-store");
 
 // Save some stores.
-manager.${title}().save_some(&["my-store", "my-store-2"]);
+manager.${ctx.collection}().save_some(&["my-store", "my-store-2"]);
 
 // Save all stores.
-manager.${title}().save_all();
+manager.${ctx.collection}().save_all();
       `,
     },
   ];
@@ -53,12 +52,11 @@ export const saveOnChange = snippet((metadata) => {
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
-function store() {
-  const counter = ref(0);
-  return { counter };
+function counterStore() {
+  return { counter: ref(0) };
 }
 
-export const useStore = defineStore('store', store, {
+export const useCounterStore = defineStore('counter', counterStore, {
   tauri: {
     saveOnChange: true,
 
@@ -71,28 +69,14 @@ export const useStore = defineStore('store', store, {
       `;
     }
 
-    case 'tauri-plugin-svelte': {
+    case 'tauri-plugin-svelte':
+    case 'tauri-plugin-valtio':
+    case 'tauri-store': {
       return `
-import { Store } from 'tauri-plugin-svelte';
+import { store } from '${name}';
 
 const value = { counter: 0 };
-const store = new Store('store', value, {
-  saveOnChange: true,
-
-  // You can also debounce or throttle when saving.
-  // This is optional. The default behavior is to save immediately.
-  saveStrategy: 'debounce',
-  saveInterval: 1000,
-});
-      `;
-    }
-
-    case 'tauri-plugin-valtio': {
-      return `
-import { store } from 'tauri-plugin-valtio';
-
-const value = { counter: 0 };
-const store = store('store', value, {
+const counterStore = store('counter', value, {
   saveOnChange: true,
 
   // You can also debounce or throttle when saving.
@@ -105,7 +89,7 @@ const store = store('store', value, {
   }
 });
 
-export const autosave = snippetGroup((metadata) => {
+export const autosave = snippetGroup((metadata, ctx) => {
   return {
     id: 'autosave',
     label: 'src-tauri/src/main.rs',
@@ -116,12 +100,12 @@ use std::time::Duration;
 // Save every five minutes.
 ${snakeCase(metadata.name)}::Builder::new()
   .autosave(Duration::from_secs(300))
-  .build();
+  .${ctx.isTauriStore ? 'build_plugin' : 'build'}();
   `,
   };
 });
 
-export const customDirectory = snippetGroup((metadata) => {
+export const customDirectory = snippetGroup((metadata, ctx) => {
   return {
     id: 'custom-directory',
     label: 'src-tauri/src/main.rs',
@@ -129,23 +113,22 @@ export const customDirectory = snippetGroup((metadata) => {
     value: `
 ${snakeCase(metadata.name)}::Builder::new()
   .path("/path/to/custom/directory")
-  .build();
-  `,
+  .${ctx.isTauriStore ? 'build_plugin' : 'build'}();
+    `,
   };
 });
 
-export const setCollectionPath = snippetGroup((metadata) => {
-  const title = snakeCase(metadata.title!);
-  const pascalTitle = pascalCase(metadata.title ?? '');
+export const setCollectionPath = snippetGroup((metadata, ctx) => {
+  const collection = pascalCase(ctx.collection);
   return [
     {
       id: 'set-collection-path-ts',
       label: 'JavaScript',
       lang: 'typescript',
       value: `
-import { set${pascalTitle}Path } from '${metadata.name}';
+import { set${collection}Path } from '${metadata.name}';
 
-await set${pascalTitle}Path('/path/to/new/directory');
+await set${collection}Path('/path/to/new/directory');
       `,
     },
     {
@@ -155,13 +138,13 @@ await set${pascalTitle}Path('/path/to/new/directory');
       value: `
 use ${snakeCase(metadata.name)}::ManagerExt;
 
-manager.${title}().set_path("/path/to/new/directory");
+manager.${ctx.collection}().set_path("/path/to/new/directory");
 `,
     },
   ];
 });
 
-export const saveDenylist = snippetGroup((metadata) => {
+export const saveDenylist = snippetGroup((metadata, ctx) => {
   return {
     id: 'save-denylist',
     label: 'src-tauri/src/main.rs',
@@ -169,7 +152,7 @@ export const saveDenylist = snippetGroup((metadata) => {
     value: `
 ${snakeCase(metadata.name)}::Builder::new()
   .save_denylist(&["store-1", "store-2"])
-  .build();
+  .${ctx.isTauriStore ? 'build_plugin' : 'build'}();
   `,
   };
 });

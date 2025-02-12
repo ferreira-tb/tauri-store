@@ -3,14 +3,14 @@ use std::path::PathBuf;
 use std::time::Duration;
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
-use tauri_store::{with_store, Result, SaveStrategy, StoreOptions, StoreState};
+use __IMPORT_SOURCE__::{with_store, Result, SaveStrategy, StoreOptions, StoreState};
 
 #[tauri::command]
 pub(crate) async fn clear_autosave<R>(app: AppHandle<R>)
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().clear_autosave();
+  app.__STORE_COLLECTION__().clear_autosave();
 }
 
 #[tauri::command]
@@ -18,15 +18,15 @@ pub(crate) async fn get_default_save_strategy<R>(app: AppHandle<R>) -> SaveStrat
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().default_save_strategy()
+  app.__STORE_COLLECTION__().default_save_strategy()
 }
 
 #[tauri::command]
-pub(crate) async fn get_PLUGIN_NAME_path<R>(app: AppHandle<R>) -> PathBuf
+pub(crate) async fn get___STORE_COLLECTION___path<R>(app: AppHandle<R>) -> PathBuf
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().path()
+  app.__STORE_COLLECTION__().path()
 }
 
 #[tauri::command]
@@ -34,7 +34,7 @@ pub(crate) async fn get_store_ids<R>(app: AppHandle<R>) -> Vec<String>
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().ids()
+  app.__STORE_COLLECTION__().ids()
 }
 
 #[tauri::command]
@@ -58,7 +58,7 @@ pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Result<
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().state(id)
+  app.__STORE_COLLECTION__().state(id)
 }
 
 #[tauri::command]
@@ -84,7 +84,7 @@ pub(crate) async fn save<R>(app: AppHandle<R>, id: String) -> Result<()>
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().save(id)
+  app.__STORE_COLLECTION__().save(id)
 }
 
 #[tauri::command]
@@ -92,7 +92,7 @@ pub(crate) async fn save_all<R>(app: AppHandle<R>) -> Result<()>
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().save_all()
+  app.__STORE_COLLECTION__().save_all()
 }
 
 #[tauri::command]
@@ -100,7 +100,7 @@ pub(crate) async fn save_all_now<R>(app: AppHandle<R>) -> Result<()>
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().save_all_now()
+  app.__STORE_COLLECTION__().save_all_now()
 }
 
 #[tauri::command]
@@ -108,7 +108,7 @@ pub(crate) async fn save_now<R>(app: AppHandle<R>, id: String) -> Result<()>
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().save_now(id)
+  app.__STORE_COLLECTION__().save_now(id)
 }
 
 #[tauri::command]
@@ -116,7 +116,7 @@ pub(crate) async fn save_some<R>(app: AppHandle<R>, ids: Vec<String>) -> Result<
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().save_some(&ids)
+  app.__STORE_COLLECTION__().save_some(&ids)
 }
 
 #[tauri::command]
@@ -124,7 +124,7 @@ pub(crate) async fn save_some_now<R>(app: AppHandle<R>, ids: Vec<String>) -> Res
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().save_some_now(&ids)
+  app.__STORE_COLLECTION__().save_some_now(&ids)
 }
 
 #[tauri::command]
@@ -133,16 +133,16 @@ where
   R: Runtime,
 {
   app
-    .PLUGIN_NAME()
+    .__STORE_COLLECTION__()
     .set_autosave(Duration::from_millis(interval));
 }
 
 #[tauri::command]
-pub(crate) async fn set_PLUGIN_NAME_path<R>(app: AppHandle<R>, path: PathBuf) -> Result<()>
+pub(crate) async fn set___STORE_COLLECTION___path<R>(app: AppHandle<R>, path: PathBuf) -> Result<()>
 where
   R: Runtime,
 {
-  spawn_blocking(move || app.PLUGIN_NAME().set_path(path)).await?
+  spawn_blocking(move || app.__STORE_COLLECTION__().set_path(path)).await?
 }
 
 #[tauri::command]
@@ -178,5 +178,5 @@ pub(crate) async fn unload<R>(app: AppHandle<R>, id: String) -> Result<()>
 where
   R: Runtime,
 {
-  app.PLUGIN_NAME().unload_store(&id)
+  app.__STORE_COLLECTION__().unload_store(&id)
 }

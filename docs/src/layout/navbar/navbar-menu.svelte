@@ -2,16 +2,16 @@
   import { Link } from '$components/link';
   import * as DropdownMenu from '$components/base/dropdown-menu';
 
-  interface Props {
+  type Props = {
     external?: boolean;
     items: MenuItem[];
     label: string;
-  }
+  };
 
-  interface MenuItem {
+  type MenuItem = {
     label: string;
     url: string;
-  }
+  };
 
   const { items, label, external }: Props = $props();
 </script>

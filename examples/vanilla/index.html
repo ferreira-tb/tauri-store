@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../assets/style.css" />
+    <title>tauri-store</title>
+  </head>
+
+  <body>
+    <script type="module">
+      import { exit } from '@tauri-apps/plugin-process';
+      import { onError, printStore } from './src/commands.js';
+      import { clearAutosave, setAutosave } from 'tauri-store/src/index.js';
+      import { increment, incrementNested, openStore, store } from './src/counter.js';
+
+      window.addEventListener('DOMContentLoaded', async () => {
+        await store.start();
+
+        const onClick = (id, callback) => {
+          const el = document.getElementById(id);
+          el.addEventListener('click', callback);
+        };
+
+        onClick('set-autosave', () => setAutosave(5000));
+        onClick('clear-autosave', () => clearAutosave());
+        onClick('increment', () => increment());
+        onClick('increment-nested', () => incrementNested());
+        onClick('start', () => store.start());
+        onClick('stop', () => store.stop());
+        onClick('save', () => store.save());
+        onClick('save-now', () => store.saveNow());
+        onClick('print', () => printStore());
+        onClick('open', () => openStore());
+
+        update(store.state());
+        store.subscribe(update);
+
+        function update(state) {
+          const counter = state.counter;
+          const nested = state.nested.foo.bar.baz;
+          const p = document.getElementById('counter-value');
+          p.textContent = `Counter: ${counter} Nested: ${nested}`;
+        }
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          exit(0).catch(onError);
+        }
+      });
+    </script>
+
+    <main>
+      <div class="action">
+        <button id="set-autosave" type="button">Set Autosave</button>
+        <button id="clear-autosave" type="button">Clear Autosave</button>
+      </div>
+
+      <section id="counter">
+        <p id="counter-value">Counter: 0 Nested: 0</p>
+        <div className="action">
+          <button id="increment" type="button">Increment</button>
+          <button id="increment-nested" type="button">Increment Nested</button>
+          <button id="start" type="button">Start</button>
+          <button id="stop" type="button">Stop</button>
+          <button id="save" type="button">Save</button>
+          <button id="save-now" type="button">Save Now</button>
+          <button id="print" type="button">Print</button>
+          <button id="open" type="button">Open</button>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

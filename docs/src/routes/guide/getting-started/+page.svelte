@@ -17,7 +17,7 @@
   const url = $derived.by(() => {
     return {
       capabilities: 'https://v2.tauri.app/security/capabilities/',
-      javascriptDocs: $currentMetadata.docs.javascript!,
+      javascriptDocs: $currentMetadata.docs.javascript,
       rustDocs: $currentMetadata.docs.rust,
     };
   });

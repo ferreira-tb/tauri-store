@@ -2,6 +2,6 @@ use std::sync::Arc;
 use tauri::Runtime;
 use tauri_store::{Collection, StoreCollection};
 
-/// The PASCAL_PLUGIN_NAME plugin.
+/// The __PASCAL_PLUGIN_NAME__ plugin.
 #[derive(Collection)]
-pub struct PASCAL_PLUGIN_NAME<R: Runtime>(pub(crate) Arc<StoreCollection<R>>);
+pub struct __PASCAL_PLUGIN_NAME__<R: Runtime>(pub(crate) Arc<StoreCollection<R>>);

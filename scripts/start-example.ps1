@@ -12,15 +12,17 @@ $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
 if (-not $Example -or $Example -eq 'random') {
-  $Examples = Get-ChildItem -Path './examples' -Directory -Exclude '.shared' |
+  $Examples = Get-ChildItem -Path './examples' -Directory -Exclude 'assets' |
     Select-Object -ExpandProperty Name
 
   $Example = Get-Random -InputObject $Examples
 }
 
+Write-Host "starting example: $($Example.ToUpper())"
+
 pnpm run build:shared
 
-$ArgumentList = "tauri dev -f $Example"
+$ArgumentList = 'tauri dev'
 foreach ($Feature in $Features) {
   $ArgumentList += " -f $Feature"
 }

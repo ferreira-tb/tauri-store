@@ -10,11 +10,11 @@
   import NavbarDesktop from './navbar-desktop.svelte';
   import type { Headings } from '$layout/content/aside.svelte';
 
-  interface Props {
+  type Props = {
     headings: Headings;
     height: string;
     left: string;
-  }
+  };
 
   const { headings, height, left }: Props = $props();
 

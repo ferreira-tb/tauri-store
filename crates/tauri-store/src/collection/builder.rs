@@ -1,16 +1,14 @@
-use super::autosave::Autosave;
 use super::{OnLoadFn, StoreCollection, RESOURCE_ID};
 use crate::error::Result;
 use crate::store::{SaveStrategy, Store};
-use dashmap::DashMap;
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 use std::time::Duration;
-use tauri::{AppHandle, Manager, Runtime};
+use tauri::{Manager, Runtime};
 
-#[cfg(tauri_store_tracing)]
-use tracing::trace;
+#[cfg(feature = "plugin")]
+use tauri::plugin::TauriPlugin;
 
 /// Builder for the [`StoreCollection`](crate::collection::StoreCollection).
 pub struct StoreCollectionBuilder<R: Runtime> {
@@ -81,8 +79,54 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
     self
   }
 
-  pub fn build(mut self, app: &AppHandle<R>) -> Arc<StoreCollection<R>> {
-    let path = self.path.take().unwrap_or_else(|| {
+  /// Builds the [`StoreCollection`](crate::collection::StoreCollection).
+  ///
+  /// # Panics
+  ///
+  /// Panics if a store collection is already initialized.
+  pub fn build<M>(self, app: &M) -> Arc<StoreCollection<R>>
+  where
+    M: Manager<R>,
+  {
+    private::build(self, app)
+  }
+
+  /// Initializes the plugin with a [`StoreCollection`](crate::collection::StoreCollection).
+  ///
+  /// # Panics
+  ///
+  /// Panics if a store collection is already initialized.
+  #[cfg(feature = "plugin")]
+  #[cfg_attr(docsrs, doc(cfg(feature = "plugin")))]
+  pub fn build_plugin(self) -> TauriPlugin<R> {
+    crate::plugin::create(self)
+  }
+}
+
+mod private {
+  use super::RESOURCE_ID;
+  use crate::collection::autosave::Autosave;
+  use crate::collection::{StoreCollection, StoreCollectionBuilder};
+  use dashmap::DashMap;
+  use std::sync::{Arc, Mutex};
+  use tauri::{Manager, Runtime};
+
+  #[cfg(tauri_store_tracing)]
+  use tracing::trace;
+
+  type Builder<R> = StoreCollectionBuilder<R>;
+
+  pub(super) fn build<R, M>(mut builder: Builder<R>, app: &M) -> Arc<StoreCollection<R>>
+  where
+    R: Runtime,
+    M: Manager<R>,
+  {
+    assert!(
+      RESOURCE_ID.get().is_none(),
+      "store collection is already initialized"
+    );
+
+    let path = builder.path.take().unwrap_or_else(|| {
       app
         .path()
         .app_data_dir()
@@ -90,21 +134,22 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
         .join(env!("CARGO_PKG_NAME"))
     });
 
-    self.save_denylist = self.save_denylist.filter(|it| !it.is_empty());
-    self.sync_denylist = self.sync_denylist.filter(|it| !it.is_empty());
+    builder.save_denylist = builder.save_denylist.filter(|it| !it.is_empty());
+    builder.sync_denylist = builder.sync_denylist.filter(|it| !it.is_empty());
 
-    let autosave = Autosave::new(self.autosave);
+    let autosave = Autosave::new(builder.autosave);
 
+    let app = app.app_handle();
     let collection = Arc::new(StoreCollection::<R> {
       app: app.clone(),
       path: Mutex::new(path),
       stores: DashMap::new(),
-      default_save_strategy: self.default_save_strategy,
+      default_save_strategy: builder.default_save_strategy,
       autosave: Mutex::new(autosave),
-      on_load: self.on_load,
-      pretty: self.pretty,
-      save_denylist: self.save_denylist,
-      sync_denylist: self.sync_denylist,
+      on_load: builder.on_load,
+      pretty: builder.pretty,
+      save_denylist: builder.save_denylist,
+      sync_denylist: builder.sync_denylist,
     });
 
     #[cfg(tauri_store_tracing)]

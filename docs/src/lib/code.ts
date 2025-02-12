@@ -14,16 +14,16 @@ export type Lang =
   | 'typescript'
   | 'vue';
 
-export interface Code {
+export type Code = {
   id?: string;
   label: string;
   lang: Lang;
   value: string | null;
-}
+};
 
-interface HighlighterOptions {
+type HighlighterOptions = {
   lang: Lang;
-}
+};
 
 class Highlighter {
   private core: HighlighterCore | null = null;

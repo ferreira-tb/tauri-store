@@ -4,9 +4,9 @@
   import type { Headings } from './aside.svelte';
   import { currentPlugin } from '$stores/plugin';
 
-  interface Props {
+  type Props = {
     headings: Headings;
-  }
+  };
 
   const { headings }: Props = $props();
 

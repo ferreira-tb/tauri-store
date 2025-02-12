@@ -20,7 +20,7 @@
     const plugin = search.get('plugin');
     if (plugin) {
       const data = metadata.find((item) => item.name === plugin);
-      if (data?.isPlugin) currentPlugin.set(data.name);
+      if (data) currentPlugin.set(data.name);
     }
   });
 </script>

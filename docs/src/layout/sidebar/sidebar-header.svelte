@@ -8,10 +8,10 @@
 
   const sidebar = useSidebar();
 
-  interface MenuItem {
+  type MenuItem = {
     label: string;
     mode: Mode;
-  }
+  };
 
   const items: MenuItem[] = [
     { mode: 'learn', label: 'Learn' },

@@ -1,7 +1,7 @@
 import { snakeCase } from 'change-case';
 import { snippet, snippetGroup } from '$stores/snippet';
 
-export const syncDenylist = snippetGroup((metadata) => {
+export const syncDenylist = snippetGroup((metadata, ctx) => {
   return {
     id: 'sync-denylist',
     label: 'src-tauri/src/main.rs',
@@ -9,25 +9,24 @@ export const syncDenylist = snippetGroup((metadata) => {
     value: `
 ${snakeCase(metadata.name)}::Builder::new()
   .sync_denylist(&["store-1", "store-2"])
-  .build();
+  .${ctx.isTauriStore ? 'build_plugin' : 'build'}()
   `,
   };
 });
 
 export const syncOptions = snippet((metadata) => {
   const name = metadata.name as TauriPlugin;
-
   switch (name) {
     case 'tauri-plugin-pinia': {
       return `
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
-function store() {
-  const counter = ref(0);
-  return { counter };
+function counterStore() {
+  return { counter: ref(0) };
 }
 
-export const useStore = defineStore('store', store, {
+export const useCounterStore = defineStore('counter', counterStore, {
   tauri: {
     syncStrategy: 'debounce',
     syncInterval: 1000,
@@ -35,24 +34,15 @@ export const useStore = defineStore('store', store, {
 });
       `;
     }
-    case 'tauri-plugin-svelte': {
+
+    case 'tauri-plugin-svelte':
+    case 'tauri-plugin-valtio':
+    case 'tauri-store': {
       return `
-import { Store } from 'tauri-plugin-svelte';
+import { store } from '${name}';
 
 const value = { counter: 0 };
-const store = new Store('store', value, {
-  syncStrategy: 'debounce',
-  syncInterval: 1000,
-});
-      `;
-    }
-
-    case 'tauri-plugin-valtio': {
-      return `
-import { store } from 'tauri-plugin-valtio';
-
-const value = { counter: 0 };
-const store = store('store', value, {
+const counterStore = store('counter', value, {
   syncStrategy: 'debounce',
   syncInterval: 1000,
 });

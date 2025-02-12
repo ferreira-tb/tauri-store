@@ -62,8 +62,8 @@
   {/snippet}
 
   <p>
-    Registers a hook to be called before a store sends its state to Rust. This is useful for
-    transforming the state before it is sent to the backend.
+    Registers a hook to be called before a store sends its state to Rust. This can be used to modify
+    the state before it is sent to the backend.
   </p>
 
   <CodeBlock lang="typescript" code={onBeforeBackendSync} />

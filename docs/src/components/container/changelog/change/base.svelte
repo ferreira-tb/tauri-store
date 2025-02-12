@@ -22,9 +22,9 @@
   import { kebabCase } from 'change-case';
   import Container from '../../container.svelte';
 
-  interface Props extends BaseProps {
+  type Props = BaseProps & {
     kind: ChangeKind;
-  }
+  };
 
   const { kind, version, children, ...restProps }: Props = $props();
 

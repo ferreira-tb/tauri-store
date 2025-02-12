@@ -1,10 +1,10 @@
-export * as commands from './commands';
+export { BaseStore } from './store';
 
-export { debounce, throttle } from './utils';
+export * as commands from './commands';
 
 export { listen, StoreEvent } from './event';
 
-export { BaseStore, mergeStoreOptions } from './store';
+export { debounce, merge, throttle } from './utils';
 
 export { type LooseTimeStrategyKind, TimeStrategy, type TimeStrategyKind } from './time-strategy';
 

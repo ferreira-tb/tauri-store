@@ -29,13 +29,13 @@ import { useSnapshot } from 'valtio';
 import { counterStore } from '@/stores/counter';
 
 export default function MyComponent() {
-  // The \`state\` property is the actual valtio proxy.
-  const snap = useSnapshot(fooStore.state);
+  // \`state\` is the actual valtio proxy.
+  const snap = useSnapshot(counterStore.state);
 
   return (
     <div>
       <p>Counter: {snap.counter}</p>
-      <button type="button" onClick={fooStore.increment}>
+      <button type="button" onClick={counterStore.increment}>
         <span>Increment</span>
       </button>
     </div>

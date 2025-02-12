@@ -9,7 +9,7 @@ export const installCrate = snippetGroup((metadata) => {
     value: `
 [dependencies]
 ${metadata.name} = "${metadata.version}"
-      `,
+    `,
   };
 });
 
@@ -39,7 +39,7 @@ export const installPackage = snippetGroup((metadata) => {
 });
 
 export const capabilities = snippetGroup((metadata) => {
-  const title = kebabCase(metadata.title!);
+  const title = kebabCase(metadata.title);
   return {
     id: 'capabilities',
     label: `src-tauri/capabilities/${title}.json`,
@@ -64,6 +64,6 @@ tauri::Builder::default()
   .plugin(${snakeCase(metadata.name)}::init())
   .run(tauri::generate_context!())
   .expect("error while running tauri application");
-      `,
+    `,
   };
 });

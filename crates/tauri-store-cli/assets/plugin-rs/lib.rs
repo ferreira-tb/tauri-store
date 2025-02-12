@@ -3,7 +3,7 @@
 #![doc = include_str!("../README.md")]
 #![doc(html_favicon_url = "https://tb.dev.br/tauri-store/favicon.ico")]
 
-mod PLUGIN_NAME;
+mod __SNAKE_PLUGIN_NAME__;
 mod command;
 mod manager;
 
@@ -16,9 +16,9 @@ use tauri_store::CollectionBuilder;
 
 pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
-pub use PLUGIN_NAME::PASCAL_PLUGIN_NAME;
+pub use __SNAKE_PLUGIN_NAME__::__PASCAL_PLUGIN_NAME__;
 
-/// Builder for the PASCAL_PLUGIN_NAME plugin.
+/// Builder for the __PASCAL_PLUGIN_NAME__ plugin.
 #[derive(CollectionBuilder)]
 pub struct Builder<R: Runtime> {
   path: Option<PathBuf>,
@@ -31,15 +31,15 @@ pub struct Builder<R: Runtime> {
 }
 
 impl<R: Runtime> Builder<R> {
-  /// Builds the PASCAL_PLUGIN_NAME plugin.
+  /// Builds the __PASCAL_PLUGIN_NAME__ plugin.
   pub fn build(self) -> TauriPlugin<R> {
-    tauri::plugin::Builder::new("PLUGIN_NAME")
+    tauri::plugin::Builder::new("__REGISTERED_PLUGIN_NAME__")
       .setup(|app, _| setup(app, self))
       .on_event(on_event)
       .invoke_handler(tauri::generate_handler![
         command::clear_autosave,
         command::get_default_save_strategy,
-        command::get_PLUGIN_NAME_path,
+        command::get___STORE_COLLECTION___path,
         command::get_save_strategy,
         command::get_store_ids,
         command::get_store_path,
@@ -54,7 +54,7 @@ impl<R: Runtime> Builder<R> {
         command::save_some_now,
         command::set_autosave,
         command::set_save_strategy,
-        command::set_PLUGIN_NAME_path,
+        command::set___STORE_COLLECTION___path,
         command::set_store_options,
         command::unload
       ])
@@ -65,14 +65,14 @@ impl<R: Runtime> Builder<R> {
 #[allow(clippy::unnecessary_wraps)]
 fn setup<R: Runtime>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()> {
   let collection = builder.into_collection(app);
-  app.manage(PASCAL_PLUGIN_NAME(collection));
+  app.manage(__PASCAL_PLUGIN_NAME__(collection));
 
   Ok(())
 }
 
 fn on_event<R: Runtime>(app: &AppHandle<R>, event: &RunEvent) {
   if let RunEvent::Exit = event {
-    let _ = app.PLUGIN_NAME().0.on_exit();
+    let _ = app.__SNAKE_PLUGIN_NAME__().0.on_exit();
   }
 }
 

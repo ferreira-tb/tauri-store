@@ -495,7 +495,7 @@
           "const": "deny-unload"
         },
         {
-          "description": "Default permissions for the Svelte plugin",
+          "description": "Default permissions for tauri-plugin-svelte.",
           "type": "string",
           "const": "default"
         }

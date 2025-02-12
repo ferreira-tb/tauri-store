@@ -8,9 +8,9 @@
   import type { Headings } from '$layout/content/aside.svelte';
   import { NAVBAR_HEIGHT, NAVBAR_HEIGHT_MOBILE } from './constants';
 
-  interface Props {
+  type Props = {
     headings: Headings;
-  }
+  };
 
   const { headings }: Props = $props();
 

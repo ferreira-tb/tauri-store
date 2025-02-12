@@ -1,7 +1,6 @@
 <script lang="ts">
   import { findMetadata } from '$lib/data';
   import { DISCORD, ISSUES } from '$lib/url';
-  import * as Alert from '$components/alert';
   import { useSidebar } from '$layout/sidebar';
   import metadata from '$lib/data/metadata.json';
   import * as Table from '$components/base/table';
@@ -58,23 +57,35 @@
       </Table.Header>
       <Table.Body>
         {#each metadata as plugin (plugin.name)}
-          {#if plugin.isPlugin}
-            {@const Icon = resolveIcon(plugin.name as TauriPlugin)}
-            <Table.Row>
-              <Table.Cell>
-                <PluginLink
-                  plugin={plugin.name as TauriPlugin}
-                  class="flex items-center justify-start gap-1"
-                >
-                  <Icon size="1.25em" />
-                  <span>{plugin.name}</span>
-                </PluginLink>
-              </Table.Cell>
+          {@const Icon = resolveIcon(plugin.name as TauriPlugin)}
+          <Table.Row>
+            <Table.Cell>
+              <PluginLink
+                plugin={plugin.name as TauriPlugin}
+                class="flex items-center justify-start gap-1"
+              >
+                <Icon size="1.25em" />
+                <span>{plugin.name}</span>
+              </PluginLink>
+            </Table.Cell>
 
+            <Table.Cell>
+              <Ext href={`https://www.npmjs.com/package/${plugin.name}`}>
+                <img
+                  src={`https://img.shields.io/npm/v/${plugin.name}`}
+                  alt={plugin.name}
+                  fetchpriority="low"
+                  decoding="async"
+                  loading="lazy"
+                />
+              </Ext>
+            </Table.Cell>
+
+            {#if !sidebar.isMobile}
               <Table.Cell>
-                <Ext href={`https://www.npmjs.com/package/${plugin.name}`}>
+                <Ext href={`https://crates.io/crates/${plugin.name}`}>
                   <img
-                    src={`https://img.shields.io/npm/v/${plugin.name}`}
+                    src={`https://img.shields.io/crates/d/${plugin.name}`}
                     alt={plugin.name}
                     fetchpriority="low"
                     decoding="async"
@@ -83,25 +94,11 @@
                 </Ext>
               </Table.Cell>
 
-              {#if !sidebar.isMobile}
-                <Table.Cell>
-                  <Ext href={`https://crates.io/crates/${plugin.name}`}>
-                    <img
-                      src={`https://img.shields.io/crates/d/${plugin.name}`}
-                      alt={plugin.name}
-                      fetchpriority="low"
-                      decoding="async"
-                      loading="lazy"
-                    />
-                  </Ext>
-                </Table.Cell>
-
-                <Table.Cell>
-                  {worksWith(plugin.name as TauriPlugin).join(', ')}
-                </Table.Cell>
-              {/if}
-            </Table.Row>
-          {/if}
+              <Table.Cell>
+                {worksWith(plugin.name as TauriPlugin).join(', ')}
+              </Table.Cell>
+            {/if}
+          </Table.Row>
         {/each}
       </Table.Body>
     </Table.Root>
@@ -125,16 +122,10 @@
   <Container title="Versioning">
     <p>
       This crate follows
-      <Ext href={url.semver}>Cargo guidelines for SemVer compatibility</Ext>.
+      <Ext href={url.semver}>Cargo guidelines for SemVer compatibility</Ext>. However, features
+      prefixed with <code>unstable</code> are experimental and may introduce breaking changes between
+      minor versions or even be completely removed.
     </p>
-
-    <Alert.Root>
-      <Alert.Title>Experimental features</Alert.Title>
-      <Alert.Description>
-        Features prefixed with <code>unstable</code> are experimental and may introduce breaking changes
-        between patch versions or even be completely removed.
-      </Alert.Description>
-    </Alert.Root>
   </Container>
 
   <Container title="Any questions?" id="any-questions">

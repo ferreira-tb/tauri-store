@@ -3,10 +3,10 @@
   import type { Snippet } from 'svelte';
   import { Title } from '../base/alert';
 
-  interface Props {
+  type Props = {
     children: Snippet;
     class?: string;
-  }
+  };
 
   const { class: className, children }: Props = $props();
 </script>

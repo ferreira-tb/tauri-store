@@ -1,10 +1,10 @@
 ## Default Permission
 
-Default permissions for the Valtio plugin
+Default permissions for tauri-plugin-valtio.
 
 - `allow-clear-autosave`
-- `allow-get-default-save-strategy`
 - `allow-get-valtio-path`
+- `allow-get-default-save-strategy`
 - `allow-get-save-strategy`
 - `allow-get-store-ids`
 - `allow-get-store-path`
@@ -17,8 +17,8 @@ Default permissions for the Valtio plugin
 - `allow-save-now`
 - `allow-save-some`
 - `allow-save-some-now`
-- `allow-set-autosave`
 - `allow-set-valtio-path`
+- `allow-set-autosave`
 - `allow-set-save-strategy`
 - `allow-set-store-options`
 - `allow-unload`
