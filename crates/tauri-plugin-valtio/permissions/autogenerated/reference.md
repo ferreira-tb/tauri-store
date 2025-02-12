@@ -1,6 +1,6 @@
 ## Default Permission
 
-Default permissions for the tauri-plugin-valtio plugin.
+Default permissions for tauri-plugin-valtio.
 
 - `allow-clear-autosave`
 - `allow-get-valtio-path`

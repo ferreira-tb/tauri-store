@@ -1,6 +1,6 @@
 "$schema" = "schemas/schema.json"
 [default]
-description = "Default permissions for the tauri-plugin-valtio plugin."
+description = "Default permissions for tauri-plugin-valtio."
 permissions = [
   "allow-clear-autosave",
   "allow-get-valtio-path",

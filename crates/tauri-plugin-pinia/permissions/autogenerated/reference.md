@@ -1,6 +1,6 @@
 ## Default Permission
 
-Default permissions for the tauri-plugin-pinia plugin.
+Default permissions for tauri-plugin-pinia.
 
 - `allow-clear-autosave`
 - `allow-get-pinia-path`

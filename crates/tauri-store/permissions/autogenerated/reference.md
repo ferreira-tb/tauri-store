@@ -1,6 +1,6 @@
 ## Default Permission
 
-Default permissions for the tauri-store plugin.
+Default permissions for tauri-store.
 
 - `allow-clear-autosave`
 - `allow-get-store-collection-path`

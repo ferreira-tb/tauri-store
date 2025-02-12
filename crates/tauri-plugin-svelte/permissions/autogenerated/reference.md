@@ -1,6 +1,6 @@
 ## Default Permission
 
-Default permissions for the tauri-plugin-svelte plugin.
+Default permissions for tauri-plugin-svelte.
 
 - `allow-clear-autosave`
 - `allow-get-svelte-path`

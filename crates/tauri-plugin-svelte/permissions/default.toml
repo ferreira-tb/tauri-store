@@ -1,6 +1,6 @@
 "$schema" = "schemas/schema.json"
 [default]
-description = "Default permissions for the tauri-plugin-svelte plugin."
+description = "Default permissions for tauri-plugin-svelte."
 permissions = [
   "allow-clear-autosave",
   "allow-get-svelte-path",

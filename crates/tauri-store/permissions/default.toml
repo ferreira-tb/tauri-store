@@ -1,6 +1,6 @@
 "$schema" = "schemas/schema.json"
 [default]
-description = "Default permissions for the tauri-store plugin."
+description = "Default permissions for tauri-store."
 permissions = [
   "allow-clear-autosave",
   "allow-get-store-collection-path",

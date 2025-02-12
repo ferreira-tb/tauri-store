@@ -1,6 +1,6 @@
 "$schema" = "schemas/schema.json"
 [default]
-description = "Default permissions for the tauri-plugin-pinia plugin."
+description = "Default permissions for tauri-plugin-pinia."
 permissions = [
   "allow-clear-autosave",
   "allow-get-pinia-path",

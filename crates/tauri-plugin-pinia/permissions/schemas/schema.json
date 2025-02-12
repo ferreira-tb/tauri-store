@@ -495,7 +495,7 @@
           "const": "deny-unload"
         },
         {
-          "description": "Default permissions for the tauri-plugin-pinia plugin.",
+          "description": "Default permissions for tauri-plugin-pinia.",
           "type": "string",
           "const": "default"
         }

@@ -495,7 +495,7 @@
           "const": "deny-unload"
         },
         {
-          "description": "Default permissions for the tauri-store plugin.",
+          "description": "Default permissions for tauri-store.",
           "type": "string",
           "const": "default"
         }

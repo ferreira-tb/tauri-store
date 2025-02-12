@@ -1,6 +1,6 @@
 "$schema" = "schemas/schema.json"
 [default]
-description = "Default permissions for the __PLUGIN_NAME__ plugin."
+description = "Default permissions for __PLUGIN_NAME__."
 permissions = [
   "allow-clear-autosave",
   "allow-get-__STORE_COLLECTION__-path",
