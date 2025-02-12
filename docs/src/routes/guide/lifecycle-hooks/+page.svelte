@@ -16,10 +16,7 @@
     const docs = $currentMetadata.docs;
     return {
       // JavaScript
-      beforeBackendSync: `${docs.javascript}/interfaces/StoreHooks.html#beforebackendsync`,
-      beforeFrontendSync: `${docs.javascript}/interfaces/StoreHooks.html#beforefrontendsync`,
-      hooks: `${docs.javascript}/interfaces/StoreFrontendOptions.html#hooks`,
-      error: `${docs.javascript}/interfaces/StoreHooks.html#error`,
+      StoreHooks: `${docs.javascript}/types/StoreHooks.html`,
 
       // Rust
       on_load: `${docs.rust}/struct.Builder.html#method.on_load`,
@@ -51,16 +48,12 @@
 <Container title="Lifecycle hooks" level={1}></Container>
 
 <Container title="JavaScript">
-  <p>JavaScript hooks can be registered using the {@render ext('hooks')} option.</p>
+  <p>JavaScript hooks can be registered using the {@render ext('StoreHooks', 'hooks')} option.</p>
 
   <CodeBlock lang="typescript" code={$jsHooks} />
 </Container>
 
 <Container title="beforeBackendSync" level={3}>
-  {#snippet titleSnippet({ title })}
-    <Ext href={url.beforeBackendSync}>{title}</Ext>
-  {/snippet}
-
   <p>
     Registers a hook to be called before a store sends its state to Rust. This can be used to modify
     the state before it is sent to the backend.
@@ -79,10 +72,6 @@
 </Container>
 
 <Container title="beforeFrontendSync" level={3}>
-  {#snippet titleSnippet({ title })}
-    <Ext href={url.beforeFrontendSync}>{title}</Ext>
-  {/snippet}
-
   <p>
     Registers a hook to be called before a store attempts to update itself with data from Rust. This
     can be used to modify the state before the changes are applied.
@@ -92,10 +81,6 @@
 </Container>
 
 <Container title="error" level={3}>
-  {#snippet titleSnippet({ title })}
-    <Ext href={url.error}>{title}</Ext>
-  {/snippet}
-
   <p>Registers a hook to be called when an error is thrown by a store.</p>
 
   <CodeBlock lang="typescript" code={onError} />

@@ -18,7 +18,7 @@
     const docs = $currentMetadata.docs;
     return {
       // JavaScript
-      saveOnChange: `${docs.javascript}/interfaces/StoreBackendOptions.html#saveonchange`,
+      StoreBackendOptions: `${docs.javascript}/types/StoreBackendOptions.html`,
 
       // Rust
       autosave: `${docs.rust}/struct.Builder.html#method.autosave`,
@@ -54,7 +54,7 @@
 <Container title="Save on change">
   <p>
     If there's a need to save a store whenever its state changes, you can enable the
-    {@render ext('saveOnChange')} option when defining the store.
+    {@render ext('StoreBackendOptions', 'saveOnChange')} option when defining the store.
   </p>
 
   <CodeBlock lang="typescript" code={$saveOnChange} />
