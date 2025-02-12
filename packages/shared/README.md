@@ -2,6 +2,8 @@
 
 Common utilities for [Tauri Store](https://tb.dev.br/tauri-store/) plugins.
 
+This won't be of any use to you unless you're developing a plugin yourself.
+
 Reference: https://tb.dev.br/tauri-store/reference/shared/index.html
 
 ## Documentation
