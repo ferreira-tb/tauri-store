@@ -1,12 +1,12 @@
 import { page } from '$app/state';
 import { onMount, untrack } from 'svelte';
 
-interface Heading {
+type Heading = {
   element: Element;
   level: number;
   link: string;
   title: string;
-}
+};
 
 class Headings {
   public value: Heading[] = $state.raw([]);

@@ -16,6 +16,6 @@ export type {
  */
 export type TauriPluginValtioStoreOptions<S extends State> = StoreOptions<S>;
 
-export interface StoreBuilderReturn<S extends State> extends TauriStoreContract {
+export type StoreBuilderReturn<S extends State> = TauriStoreContract & {
   state: S;
-}
+};

@@ -1,10 +1,10 @@
 <script lang="ts">
   import * as Breadcrumb from '../base/breadcrumb';
 
-  interface Props {
+  type Props = {
     current: string;
     parents: string[];
-  }
+  };
 
   const { current, parents }: Props = $props();
 </script>

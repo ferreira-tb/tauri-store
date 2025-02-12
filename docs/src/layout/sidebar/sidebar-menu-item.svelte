@@ -3,11 +3,11 @@
   import * as Sidebar from '$components/base/sidebar';
   import { useSidebar } from '$components/base/sidebar';
 
-  interface Props {
+  type Props = {
     external?: boolean;
     href: string;
     label: string;
-  }
+  };
 
   const { href, label, external }: Props = $props();
 

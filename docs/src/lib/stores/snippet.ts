@@ -5,10 +5,10 @@ import { currentMetadata, type Metadata } from '$stores/plugin';
 
 type SnippetFn = (metadata: Metadata, ctx: Context) => string;
 
-interface Context {
+type Context = {
   collection: string;
   isTauriStore: boolean;
-}
+};
 
 export function snippet(fn: SnippetFn) {
   return derived(currentMetadata, derive(fn), null);

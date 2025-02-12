@@ -6,11 +6,11 @@
   import ContentFooter from './content-footer.svelte';
   import { Separator } from '$components/base/separator';
 
-  interface Props {
+  type Props = {
     children: Snippet;
     headings: Headings;
     navbarHeight: string;
-  }
+  };
 
   const { navbarHeight, children, headings }: Props = $props();
 </script>

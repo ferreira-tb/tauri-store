@@ -29,7 +29,7 @@ export default defineConfig({
       'svelte/no-inline-styles': 'off',
     },
     typescript: {
-      '@typescript-eslint/consistent-type-definitions': 'off',
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/naming-convention': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-explicit-any': 'off',

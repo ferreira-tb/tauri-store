@@ -16,7 +16,7 @@ export type CloneFn = <T>(value: T) => T;
 /**
  * Options for `tauri-store`.
  */
-export interface TauriStoreOptions<S extends State> extends StoreOptions<S> {
+export type TauriStoreOptions<S extends State> = StoreOptions<S> & {
   /**
    * Whether to clone values whenever they are read or written.
    * By default, the state is cloned using [`structuredClone`].
@@ -27,4 +27,4 @@ export interface TauriStoreOptions<S extends State> extends StoreOptions<S> {
    * [`structuredClone`]: https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone
    */
   clone?: CloneFn | boolean;
-}
+};

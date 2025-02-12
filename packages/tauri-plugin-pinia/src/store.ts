@@ -12,7 +12,7 @@ import {
   DEFAULT_SAVE_ON_CHANGE,
   DEFAULT_SAVE_ON_EXIT,
   type Fn,
-  mergeStoreOptions,
+  merge,
   type State,
   throttle,
   TimeStrategy,
@@ -28,7 +28,7 @@ export class Store extends BaseStore {
   ) {
     super();
 
-    const options = mergeStoreOptions(ctx.options.tauri, pluginOptions);
+    const options = merge<TauriPluginPiniaStoreOptions>(ctx.options.tauri, pluginOptions);
     const saveStrategy = new TimeStrategy(options.saveStrategy, options.saveInterval);
     const syncStrategy = new TimeStrategy(options.syncStrategy, options.syncInterval);
 
@@ -37,7 +37,7 @@ export class Store extends BaseStore {
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
       flush: options.flush ?? 'pre',
-      hooks: options.hooks ?? DEFAULT_HOOKS,
+      hooks: merge(options.hooks, DEFAULT_HOOKS),
       onError: options.onError ?? options.hooks?.error ?? DEFAULT_ON_ERROR,
       saveInterval: saveStrategy.interval,
       saveOnChange: options.saveOnChange ?? DEFAULT_SAVE_ON_CHANGE,

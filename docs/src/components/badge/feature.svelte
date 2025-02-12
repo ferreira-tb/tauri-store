@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Badge } from '../base/badge';
 
-  interface Props {
+  type Props = {
     name: string;
-  }
+  };
 
   const { name }: Props = $props();
 </script>

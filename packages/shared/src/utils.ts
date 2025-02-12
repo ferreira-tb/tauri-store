@@ -10,6 +10,24 @@ export function throttle<T extends (...args: any) => any>(f: T, wait?: Option<nu
 }
 
 /**
+ * Merge properties from `source` into `target` if they don't already exist.
+ *
+ * This is a shallow merge.
+ */
+export function merge<T extends Record<string, unknown>>(
+  target: T = {} as T,
+  source: T = {} as T
+): T {
+  for (const [key, value] of Object.entries(source)) {
+    if (typeof target[key] === 'undefined') {
+      Reflect.set(target, key, value);
+    }
+  }
+
+  return target;
+}
+
+/**
  * @internal
  */
 export function flatten<T>(array: (T | T[])[]): T[] {

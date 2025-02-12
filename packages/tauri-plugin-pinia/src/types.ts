@@ -15,7 +15,7 @@ export type {
 /**
  * Options for the Pinia plugin.
  */
-export interface TauriPluginPiniaOptions extends StoreFrontendOptions {
+export type TauriPluginPiniaOptions = StoreFrontendOptions & {
   /**
    * @see https://vuejs.org/api/reactivity-core.html#watch
    * @default true
@@ -27,7 +27,7 @@ export interface TauriPluginPiniaOptions extends StoreFrontendOptions {
    * @default 'pre'
    */
   readonly flush?: WatchOptions['flush'];
-}
+};
 
 /**
  * Options for the Pinia store.

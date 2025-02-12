@@ -18,6 +18,7 @@ import {
   DEFAULT_SAVE_ON_CHANGE,
   DEFAULT_SAVE_ON_EXIT,
   type Fn,
+  merge,
   type State,
   type StoreHooks,
   throttle,
@@ -75,7 +76,7 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     this.options = {
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
-      hooks: options.hooks ?? (DEFAULT_HOOKS as StoreHooks<S>),
+      hooks: merge(options.hooks, DEFAULT_HOOKS as StoreHooks<S>),
       onError: options.onError ?? options.hooks?.error ?? DEFAULT_ON_ERROR,
       saveInterval: saveStrategy.interval,
       saveOnChange: options.saveOnChange ?? DEFAULT_SAVE_ON_CHANGE,

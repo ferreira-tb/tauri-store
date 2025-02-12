@@ -2,10 +2,10 @@ import metadata from './metadata.json';
 
 export const plugins = metadata;
 
-interface MetadataUrl {
+type MetadataUrl = {
   label: string;
   url: string;
-}
+};
 
 export const javascriptDocs: MetadataUrl[] = plugins.map((it) => {
   return { label: it.name, url: it.docs.javascript };

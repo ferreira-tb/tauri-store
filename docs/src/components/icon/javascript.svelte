@@ -1,9 +1,9 @@
 <script lang="ts">
-  interface Props {
+  type Props = {
     height?: string;
     size?: string;
     width?: string;
-  }
+  };
 
   const { size = '1em', width, height, ...restProps }: Props = $props();
 </script>

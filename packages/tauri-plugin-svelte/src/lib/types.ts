@@ -27,10 +27,10 @@ export type StoreContract<S extends State> = TauriStoreContract & Writable<S>;
 /**
  * Options for the Svelte rune store.
  */
-export interface TauriPluginSvelteRuneStoreOptions<S extends State> extends StoreOptions<S> {
+export type TauriPluginSvelteRuneStoreOptions<S extends State> = StoreOptions<S> & {
   /**
    * @see https://svelte.dev/docs/svelte/$effect#$effect.pre
    * @default 'post'
    */
   flush?: 'post' | 'pre';
-}
+};
