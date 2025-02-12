@@ -6,7 +6,6 @@ use tauri::{AppHandle, RunEvent, Runtime};
 pub use crate::collection::StoreCollectionBuilder as Builder;
 
 /// Initializes the store plugin.
-#[cfg_attr(docsrs, doc(cfg(feature = "plugin")))]
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
   create(Builder::default())
 }
