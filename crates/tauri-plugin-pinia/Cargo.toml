@@ -34,7 +34,7 @@ serde = "1.0"
 tauri = "2"
 
 [dependencies.tauri-store]
-version = "0.7"
+version = "0.8"
 path = "../tauri-store"
 default-features = false
 features = ["derive"]

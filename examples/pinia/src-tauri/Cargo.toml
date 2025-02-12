@@ -11,6 +11,10 @@ workspace = true
 [package.rust-version]
 workspace = true
 
+[lib]
+name = "example_pinia_lib"
+crate-type = ["cdylib", "rlib", "staticlib"]
+
 [lints]
 workspace = true
 
@@ -20,14 +24,11 @@ serde_json = "1"
 tauri-plugin-process = "2"
 tauri-plugin-shell = "2"
 tauri-plugin-window-state = "2"
+tracing = "0.1"
 
 [dependencies.serde]
 version = "1"
 features = ["derive"]
-
-[dependencies.example-shared]
-path = "../../.shared/rust"
-default-features = false
 
 [dependencies.tauri]
 version = "2"
@@ -37,11 +38,10 @@ features = ["devtools", "protocol-asset"]
 path = "../../../crates/tauri-plugin-pinia"
 default-features = false
 
+[dependencies.tracing-subscriber]
+version = "0.3"
+features = ["chrono", "env-filter", "fmt", "parking_lot", "registry"]
+
 [build-dependencies.tauri-build]
 version = "2"
 features = []
-
-[features]
-default = ["pinia"]
-pinia = ["example-shared/pinia"]
-file-sync-all = ["example-shared/file-sync-all"]

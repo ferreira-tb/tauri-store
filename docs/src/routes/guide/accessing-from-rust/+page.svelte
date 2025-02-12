@@ -9,7 +9,7 @@
 
   const url = $derived.by(() => {
     const docs = $currentMetadata.docs;
-    const title = $currentMetadata.title ?? '';
+    const title = $currentMetadata.title;
     const pascalTitle = pascalCase(title);
     return {
       // Rust

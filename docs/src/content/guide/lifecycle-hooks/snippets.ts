@@ -6,13 +6,14 @@ export const jsHooks = snippet((metadata) => {
   switch (name) {
     case 'tauri-plugin-pinia': {
       return `
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
-function store() {
+function counterStore() {
   return { counter: ref(0) };
 }
 
-export const useStore = defineStore('store', store, {
+export const useCounterStore = defineStore('counter', counterStore, {
   tauri: {
     hooks: {
       error: (err) => console.error(err),
@@ -27,12 +28,13 @@ export const useStore = defineStore('store', store, {
     }
 
     case 'tauri-plugin-svelte':
-    case 'tauri-plugin-valtio': {
+    case 'tauri-plugin-valtio':
+    case 'tauri-store': {
       return `
 import { store } from '${name}';
 
 const value = { counter: 0 };
-const store = store('store', value, {
+const counterStore = store('counter', value, {
   hooks: {
     error: (err) => console.error(err),
     beforeBackendSync: (state) => {
@@ -72,7 +74,7 @@ const hooks: StoreHooks = {
 };
 `;
 
-export const onLoad = snippetGroup((metadata) => {
+export const onLoad = snippetGroup((metadata, ctx) => {
   return {
     id: 'on-load',
     label: 'src-tauri/src/main.rs',
@@ -83,7 +85,7 @@ ${snakeCase(metadata.name)}::Builder::new()
     println!("store loaded: {}", store.id());
     Ok(())
   })
-  .build();
-      `,
+  .${ctx.isTauriStore ? 'build_plugin' : 'build'}()
+    `,
   };
 });

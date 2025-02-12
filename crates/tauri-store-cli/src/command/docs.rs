@@ -1,5 +1,5 @@
 use crate::path::docs_data_dir;
-use crate::target::Target;
+use crate::plugin::Plugin;
 use anyhow::Result;
 use bon::Builder;
 use clap::Args;
@@ -32,14 +32,14 @@ impl Docs {
 }
 
 fn generate_metadata() -> Result<()> {
-  let mut targets = Vec::with_capacity(Target::VARIANTS.len());
-  for target in Target::VARIANTS {
-    let manifest = target.manifest()?;
-    let plugin_name = target.plugin_name();
+  let mut plugins = Vec::with_capacity(Plugin::VARIANTS.len());
+  for plugin in Plugin::VARIANTS {
+    let manifest = plugin.manifest()?;
+    let plugin_name = plugin.name();
 
     let name = manifest.name();
     let docs_url = DocsUrl::builder()
-      .maybe_javascript(plugin_name.map(|_| docs_js(name)))
+      .javascript(docs_js(plugin_name))
       .rust(docs_rs(name))
       .changelog(changelog(name))
       .build();
@@ -47,18 +47,17 @@ fn generate_metadata() -> Result<()> {
     let metadata = Metadata::builder()
       .name(name)
       .version(manifest.version().clone())
-      .maybe_title(plugin_name.map(|it| it.to_case(Case::Title)))
-      .is_plugin(plugin_name.is_some())
+      .title(plugin_name.to_case(Case::Title))
       .docs(docs_url)
       .build();
 
-    targets.push(metadata);
+    plugins.push(metadata);
   }
 
-  targets.sort_unstable();
+  plugins.sort_unstable();
 
   let path = docs_data_dir().join("metadata.json");
-  fs::write(path, to_vec_pretty(&targets)?)?;
+  fs::write(path, to_vec_pretty(&plugins)?)?;
 
   Ok(())
 }
@@ -70,7 +69,6 @@ struct Metadata {
   name: String,
   version: Version,
   title: Option<String>,
-  is_plugin: bool,
   docs: DocsUrl,
 }
 

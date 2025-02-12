@@ -20,7 +20,7 @@ if (-not $Example -or $Example -eq 'random') {
 
 pnpm run build:shared
 
-$ArgumentList = "tauri dev -f $Example"
+$ArgumentList = 'tauri dev'
 foreach ($Feature in $Features) {
   $ArgumentList += " -f $Feature"
 }

@@ -11,6 +11,9 @@ export function resolveIcon(plugin: TauriPlugin) {
     case 'tauri-plugin-valtio': {
       return Icon.React;
     }
+    case 'tauri-store': {
+      return Icon.Javascript;
+    }
   }
 }
 
@@ -24,6 +27,9 @@ export function worksWith(plugin: TauriPlugin) {
     }
     case 'tauri-plugin-valtio': {
       return ['React'];
+    }
+    case 'tauri-store': {
+      return ['Everything'];
     }
   }
 }

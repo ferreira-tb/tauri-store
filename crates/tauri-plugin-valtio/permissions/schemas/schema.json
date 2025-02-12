@@ -495,7 +495,7 @@
           "const": "deny-unload"
         },
         {
-          "description": "Default permissions for the Valtio plugin",
+          "description": "Default permissions for the tauri-plugin-valtio plugin.",
           "type": "string",
           "const": "default"
         }

@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 
-export default defineConfig(async () => ({
+export default defineConfig({
   clearScreen: false,
   plugins: [react()],
   resolve: {
@@ -22,4 +22,4 @@ export default defineConfig(async () => ({
     minify: false,
     target: 'esnext',
   },
-}));
+});

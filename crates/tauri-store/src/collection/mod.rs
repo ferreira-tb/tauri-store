@@ -279,6 +279,7 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Removes the store from the collection.
+  #[doc(hidden)]
   pub fn unload_store(&self, id: &str) -> Result<()> {
     if let Some((_, rid)) = self.stores.remove(id) {
       // The store needs to be saved immediately here.
@@ -294,6 +295,7 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Runs any necessary tasks before the application exits.
+  #[doc(hidden)]
   pub fn on_exit(&self) -> Result<()> {
     self.clear_autosave();
 
@@ -306,7 +308,6 @@ impl<R: Runtime> StoreCollection<R> {
             }
           });
         }
-
         #[cfg_attr(not(tauri_store_tracing), allow(unused_variables))]
         Err(err) => {
           #[cfg(tauri_store_tracing)]

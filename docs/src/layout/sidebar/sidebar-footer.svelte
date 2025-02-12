@@ -20,7 +20,7 @@
               {#if $currentPlugin}
                 {@const PluginIcon = resolveIcon($currentPlugin)}
                 {#key $currentPlugin}
-                  <div class="flex size-8 items-center">
+                  <div class="mr-1 flex size-8 items-center">
                     <PluginIcon size="2rem" />
                   </div>
                   <div class="flex flex-col items-start gap-1">

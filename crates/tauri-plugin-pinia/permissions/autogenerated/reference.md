@@ -1,10 +1,10 @@
 ## Default Permission
 
-Default permissions for the Pinia plugin
+Default permissions for the tauri-plugin-pinia plugin.
 
 - `allow-clear-autosave`
-- `allow-get-default-save-strategy`
 - `allow-get-pinia-path`
+- `allow-get-default-save-strategy`
 - `allow-get-save-strategy`
 - `allow-get-store-ids`
 - `allow-get-store-path`
@@ -17,8 +17,8 @@ Default permissions for the Pinia plugin
 - `allow-save-now`
 - `allow-save-some`
 - `allow-save-some-now`
-- `allow-set-autosave`
 - `allow-set-pinia-path`
+- `allow-set-autosave`
 - `allow-set-save-strategy`
 - `allow-set-store-options`
 - `allow-unload`

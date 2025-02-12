@@ -1,10 +1,10 @@
 "$schema" = "schemas/schema.json"
 [default]
-description = "Default permissions for the PASCAL_PLUGIN_NAME plugin"
+description = "Default permissions for the __PLUGIN_NAME__ plugin."
 permissions = [
   "allow-clear-autosave",
+  "allow-get-__STORE_COLLECTION__-path",
   "allow-get-default-save-strategy",
-  "allow-get-PLUGIN_NAME-path",
   "allow-get-save-strategy",
   "allow-get-store-ids",
   "allow-get-store-path",
@@ -17,8 +17,8 @@ permissions = [
   "allow-save-now",
   "allow-save-some",
   "allow-save-some-now",
+  "allow-set-__STORE_COLLECTION__-path",
   "allow-set-autosave",
-  "allow-set-PLUGIN_NAME-path",
   "allow-set-save-strategy",
   "allow-set-store-options",
   "allow-unload",

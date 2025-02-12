@@ -1,11 +1,9 @@
 packages:
   - 'docs'
-  - 'examples/.shared/javascript'
-  - 'examples/.shared/pinia'
-  - 'examples/.shared/react'
   - 'examples/pinia'
   - 'examples/pinia-nuxt'
   - 'examples/svelte'
   - 'examples/svelte-runes'
   - 'examples/valtio'
+  - 'examples/vanilla'
   - 'packages/*'

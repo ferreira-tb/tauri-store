@@ -1,8 +1,8 @@
-import '../../.shared/assets/style.css';
+import '../../assets/style.css';
 import App from './App.vue';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { onError } from 'example-shared-js/src/index.js';
+import { onError } from './commands';
 import { TauriPluginPinia } from 'tauri-plugin-pinia/src/index.js';
 
 const app = createApp(App);

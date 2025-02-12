@@ -1,12 +1,12 @@
-use crate::PLUGIN_NAME::PASCAL_PLUGIN_NAME;
+use crate::__SNAKE_PLUGIN_NAME__::__PASCAL_PLUGIN_NAME__;
 use tauri::{AppHandle, Manager, Runtime, State, WebviewWindow, Window};
 use tauri_store::{Result, Store};
 
-/// Extension for the [`Manager`] trait providing access to the PASCAL_PLUGIN_NAME plugin.
+/// Extension for the [`Manager`] trait providing access to the __PASCAL_PLUGIN_NAME__ plugin.
 ///
 /// [`Manager`]: https://docs.rs/tauri/latest/tauri/trait.Manager.html
 pub trait ManagerExt<R: Runtime>: Manager<R> {
-  /// Returns a handle to the PASCAL_PLUGIN_NAME plugin.
+  /// Returns a handle to the __PASCAL_PLUGIN_NAME__ plugin.
   ///
   /// # Panics
   ///
@@ -16,8 +16,8 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   ///
   /// [store collection]: https://tb.dev.br/tauri-store/rust-docs/tauri_store/struct.StoreCollection.html
   /// [resources table]: https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html
-  fn PLUGIN_NAME(&self) -> State<PASCAL_PLUGIN_NAME<R>> {
-    self.state::<PASCAL_PLUGIN_NAME<R>>()
+  fn __SNAKE_PLUGIN_NAME__(&self) -> State<__PASCAL_PLUGIN_NAME__<R>> {
+    self.state::<__PASCAL_PLUGIN_NAME__<R>>()
   }
 
   /// Calls a closure with a mutable reference to the store with the given id.
@@ -25,7 +25,7 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   where
     F: FnOnce(&mut Store<R>) -> T,
   {
-    self.PLUGIN_NAME().with_store(id, f)
+    self.__SNAKE_PLUGIN_NAME__().with_store(id, f)
   }
 }
 

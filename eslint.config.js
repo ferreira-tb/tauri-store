@@ -3,9 +3,6 @@ import { defineConfig } from '@tb-dev/eslint-config';
 export default defineConfig({
   project: [
     'docs/tsconfig.json',
-    'examples/.shared/javascript/tsconfig.json',
-    'examples/.shared/pinia/tsconfig.json',
-    'examples/.shared/react/tsconfig.json',
     'examples/pinia/tsconfig.json',
     'examples/pinia-nuxt/tsconfig.json',
     'examples/svelte/tsconfig.json',
@@ -15,6 +12,7 @@ export default defineConfig({
     'packages/tauri-plugin-pinia/tsconfig.json',
     'packages/tauri-plugin-svelte/tsconfig.json',
     'packages/tauri-plugin-valtio/tsconfig.json',
+    'packages/tauri-store/tsconfig.json',
   ],
   features: {
     react: true,
@@ -23,12 +21,7 @@ export default defineConfig({
     svelte: true,
     vue: true,
   },
-  ignores: [
-    '**/.nuxt/**',
-    '**/.svelte-kit',
-    '**/components/base/**',
-    '**/tauri-store-cli/assets/**',
-  ],
+  ignores: ['**/.nuxt', '**/.svelte-kit', '**/components/base', '**/tauri-store-cli/assets'],
   overrides: {
     svelte: {
       'svelte/block-lang': 'off',

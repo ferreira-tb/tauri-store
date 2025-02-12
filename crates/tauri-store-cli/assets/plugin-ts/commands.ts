@@ -6,12 +6,12 @@ import { commands } from '@tauri-store/shared';
  *
  * @example
  * ```ts
- * import { clearAutosave } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { clearAutosave } from '__PLUGIN_FULL_NAME__';
  *
  * await clearAutosave();
  * ```
  */
-export const clearAutosave = commands.clearAutosave('PLUGIN_NAME');
+export const clearAutosave = commands.clearAutosave('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Gets the default save strategy for the stores.
@@ -19,79 +19,81 @@ export const clearAutosave = commands.clearAutosave('PLUGIN_NAME');
  *
  * @example
  * ```ts
- * import { getDefaultSaveStrategy } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { getDefaultSaveStrategy } from '__PLUGIN_FULL_NAME__';
  *
  * const { strategy, interval } = await getDefaultSaveStrategy();
  * ```
  */
-export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('PLUGIN_NAME');
+export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Directory where the stores are saved.
  *
  * @example
  * ```ts
- * import { getPASCAL_PLUGIN_NAMEPath } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { get__STORE_COLLECTION__Path } from '__PLUGIN_FULL_NAME__';
  *
- * const path = await getPASCAL_PLUGIN_NAMEPath();
+ * const path = await get__STORE_COLLECTION__Path();
  * ```
  */
-export const getPASCAL_PLUGIN_NAMEPath = commands.getStoreCollectionPath('PLUGIN_NAME');
+export const get__STORE_COLLECTION__Path = commands.getStoreCollectionPath(
+  '__REGISTERED_PLUGIN_NAME__'
+);
 
 /**
  * Gets the save strategy used by a store.
  *
  * @example
  * ```ts
- * import { getSaveStrategy } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { getSaveStrategy } from '__PLUGIN_FULL_NAME__';
  *
  * const { strategy, interval } = await getSaveStrategy('my-store');
  * ```
  **/
-export const getSaveStrategy = commands.getSaveStrategy('PLUGIN_NAME');
+export const getSaveStrategy = commands.getSaveStrategy('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Lists all the store ids.
  *
  * @example
  * ```ts
- * import { getStoreIds } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { getStoreIds } from '__PLUGIN_FULL_NAME__';
  *
  * const ids = await getStoreIds();
  * ```
  */
-export const getStoreIds = commands.getStoreIds('PLUGIN_NAME');
+export const getStoreIds = commands.getStoreIds('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Path where the store is saved.
  *
  * @example
  * ```ts
- * import { getStorePath } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { getStorePath } from '__PLUGIN_FULL_NAME__';
  *
  * const path = await getStorePath('my-store');
  * ```
  **/
-export const getStorePath = commands.getStorePath('PLUGIN_NAME');
+export const getStorePath = commands.getStorePath('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Gets the state of a store.
  *
  * @example
  * ```ts
- * import { getStoreState } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { getStoreState } from '__PLUGIN_FULL_NAME__';
  *
  * const state = await getStoreState('counter-store');
  * ```
  */
-export const getStoreState = commands.getStoreState('PLUGIN_NAME');
+export const getStoreState = commands.getStoreState('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Saves a store to the disk.
  *
  * @example
  * ```ts
- * import { save } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { save } from '__PLUGIN_FULL_NAME__';
  *
  * // Save a single store.
  * await save('my-store');
@@ -100,38 +102,38 @@ export const getStoreState = commands.getStoreState('PLUGIN_NAME');
  * await save('my-store', 'my-store-2');
  * ```
  **/
-export const save = commands.save('PLUGIN_NAME');
+export const save = commands.save('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Saves all the stores to the disk.
  *
  * @example
  * ```ts
- * import { saveAll } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { saveAll } from '__PLUGIN_FULL_NAME__';
  *
  * await saveAll();
  * ```
  */
-export const saveAll = commands.saveAll('PLUGIN_NAME');
+export const saveAll = commands.saveAll('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Saves all the stores to the disk immediately, ignoring the save strategy.
  *
  * @example
  * ```ts
- * import { saveAllNow } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { saveAllNow } from '__PLUGIN_FULL_NAME__';
  *
  * await saveAllNow();
  * ```
  */
-export const saveAllNow = commands.saveAllNow('PLUGIN_NAME');
+export const saveAllNow = commands.saveAllNow('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Saves a store to the disk immediately, ignoring the save strategy.
  *
  * @example
  * ```ts
- * import { saveNow } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { saveNow } from '__PLUGIN_FULL_NAME__';
  *
  * // Save a single store.
  * await saveNow('my-store');
@@ -140,7 +142,7 @@ export const saveAllNow = commands.saveAllNow('PLUGIN_NAME');
  * await saveNow('my-store', 'my-store-2');
  * ```
  */
-export const saveNow = commands.saveNow('PLUGIN_NAME');
+export const saveNow = commands.saveNow('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Saves the stores periodically.
@@ -148,13 +150,13 @@ export const saveNow = commands.saveNow('PLUGIN_NAME');
  *
  * @example
  * ```ts
- * import { setAutosave } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { setAutosave } from '__PLUGIN_FULL_NAME__';
  *
  * // Save all the stores every 5 minutes.
  * await setAutosave(5 * 60 * 1000);
  * ```
  */
-export const setAutosave = commands.setAutosave('PLUGIN_NAME');
+export const setAutosave = commands.setAutosave('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Sets the directory where the stores are saved.
@@ -162,12 +164,14 @@ export const setAutosave = commands.setAutosave('PLUGIN_NAME');
  *
  * @example
  * ```ts
- * import { setPASCAL_PLUGIN_NAMEPath } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { set__STORE_COLLECTION__Path } from '__PLUGIN_FULL_NAME__';
  *
- * await setPASCAL_PLUGIN_NAMEPath('/path/to/new/directory');
+ * await set__STORE_COLLECTION__Path('/path/to/new/directory');
  * ```
  */
-export const setPASCAL_PLUGIN_NAMEPath = commands.setStoreCollectionPath('PLUGIN_NAME');
+export const set__STORE_COLLECTION__Path = commands.setStoreCollectionPath(
+  '__REGISTERED_PLUGIN_NAME__'
+);
 
 /**
  * Sets the save strategy for a store.
@@ -175,19 +179,19 @@ export const setPASCAL_PLUGIN_NAMEPath = commands.setStoreCollectionPath('PLUGIN
  *
  * @example
  * ```ts
- * import { setSaveStrategy } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { setSaveStrategy } from '__PLUGIN_FULL_NAME__';
  *
  * await setSaveStrategy('my-store', 'debounce', 1000);
  * ```
  */
-export const setSaveStrategy = commands.setSaveStrategy('PLUGIN_NAME');
+export const setSaveStrategy = commands.setSaveStrategy('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Sets the store options.
  *
  * @example
  * ```ts
- * import { setStoreOptions } from 'KEBAB_PLUGIN_FULL_NAME';
+ * import { setStoreOptions } from '__PLUGIN_FULL_NAME__';
  *
  * await setStoreOptions('my-store', {
  *  saveOnChange: true,
@@ -196,17 +200,17 @@ export const setSaveStrategy = commands.setSaveStrategy('PLUGIN_NAME');
  * });
  * ```
  */
-export const setStoreOptions = commands.setStoreOptions('PLUGIN_NAME');
+export const setStoreOptions = commands.setStoreOptions('__REGISTERED_PLUGIN_NAME__');
 
 /////////////////////////
 // INTERNAL COMMANDS
 /////////////////////////
 
 /** @internal */
-export const load = commands.load('PLUGIN_NAME');
+export const load = commands.load('__REGISTERED_PLUGIN_NAME__');
 
 /** @internal */
-export const patch = commands.patch('PLUGIN_NAME');
+export const patch = commands.patch('__REGISTERED_PLUGIN_NAME__');
 
 /** @internal */
-export const unload = commands.unload('PLUGIN_NAME');
+export const unload = commands.unload('__REGISTERED_PLUGIN_NAME__');

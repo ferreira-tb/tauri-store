@@ -1,44 +1,40 @@
 [
   {
     "name": "tauri-plugin-pinia",
-    "version": "1.1.2",
+    "version": "1.2.0",
     "title": "Pinia",
-    "isPlugin": true,
     "docs": {
-      "javascript": "https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia",
+      "javascript": "https://tb.dev.br/tauri-store/reference/pinia",
       "rust": "https://tb.dev.br/tauri-store/rust-docs/tauri_plugin_pinia",
       "changelog": "/tauri-store/changelog/tauri-plugin-pinia"
     }
   },
   {
     "name": "tauri-plugin-svelte",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "title": "Svelte",
-    "isPlugin": true,
     "docs": {
-      "javascript": "https://tb.dev.br/tauri-store/reference/tauri-plugin-svelte",
+      "javascript": "https://tb.dev.br/tauri-store/reference/svelte",
       "rust": "https://tb.dev.br/tauri-store/rust-docs/tauri_plugin_svelte",
       "changelog": "/tauri-store/changelog/tauri-plugin-svelte"
     }
   },
   {
     "name": "tauri-plugin-valtio",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "title": "Valtio",
-    "isPlugin": true,
     "docs": {
-      "javascript": "https://tb.dev.br/tauri-store/reference/tauri-plugin-valtio",
+      "javascript": "https://tb.dev.br/tauri-store/reference/valtio",
       "rust": "https://tb.dev.br/tauri-store/rust-docs/tauri_plugin_valtio",
       "changelog": "/tauri-store/changelog/tauri-plugin-valtio"
     }
   },
   {
     "name": "tauri-store",
-    "version": "0.7.1",
-    "title": null,
-    "isPlugin": false,
+    "version": "0.7.2",
+    "title": "Tauri Store",
     "docs": {
-      "javascript": null,
+      "javascript": "https://tb.dev.br/tauri-store/reference/tauri-store",
       "rust": "https://tb.dev.br/tauri-store/rust-docs/tauri_store",
       "changelog": "/tauri-store/changelog/tauri-store"
     }

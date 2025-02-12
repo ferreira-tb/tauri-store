@@ -163,6 +163,7 @@ impl<R: Runtime> Store<R> {
   }
 
   /// Patches the store state, optionally having a window as the source.
+  #[doc(hidden)]
   pub fn patch_with_source<S, E>(&mut self, state: S, source: E) -> Result<()>
   where
     S: Into<StoreState>,
@@ -307,6 +308,7 @@ impl<R: Runtime> Store<R> {
   }
 
   /// Sets the store options, optionally having a window as the source.
+  #[doc(hidden)]
   pub fn set_options_with_source<E>(&mut self, options: StoreOptions, source: E) -> Result<()>
   where
     E: Into<EventSource>,
