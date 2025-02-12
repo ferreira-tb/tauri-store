@@ -24,7 +24,7 @@ pub fn run() {
         .default_save_strategy(SaveStrategy::throttle_secs(3))
         .autosave(Duration::from_secs(60))
         .pretty(true)
-        .build(),
+        .__BUILD_CALL__(),
     )
     .setup(|app| {
       let handle = app.handle();

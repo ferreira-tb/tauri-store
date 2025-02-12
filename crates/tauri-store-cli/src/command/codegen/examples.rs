@@ -39,12 +39,23 @@ fn generate_lib(assets: &Path) -> Result<()> {
       let valtio = example_lib("valtio");
       OutputDir::from(valtio)
     }
-    Plugin::Store => unreachable!(),
+    Plugin::Store => {
+      let vanilla = example_lib("vanilla");
+      OutputDir::from(vanilla)
+    }
+  };
+
+  let build_call = |plugin| {
+    if let Plugin::Store = plugin {
+      String::from("build_plugin")
+    } else {
+      String::from("build")
+    }
   };
 
   Generator::builder(&input, &output)
-    .skip(&[Plugin::Store])
     .replace(&[
+      ("__BUILD_CALL__", &build_call),
       (IMPORT_SOURCE, &|it| it.as_ref().to_case(Case::Snake)),
       (STORE_COLLECTION, &|it| store_collection(it, Case::Snake)),
     ])
