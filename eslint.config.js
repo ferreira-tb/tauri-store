@@ -12,6 +12,7 @@ export default defineConfig({
     'packages/tauri-plugin-pinia/tsconfig.json',
     'packages/tauri-plugin-svelte/tsconfig.json',
     'packages/tauri-plugin-valtio/tsconfig.json',
+    'packages/tauri-plugin-zustand/tsconfig.json',
     'packages/tauri-store/tsconfig.json',
   ],
   features: {
