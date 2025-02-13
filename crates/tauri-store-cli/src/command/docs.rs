@@ -39,7 +39,7 @@ fn generate_metadata() -> Result<()> {
 
     let name = manifest.name();
     let docs_url = DocsUrl::builder()
-      .javascript(docs_js(plugin_name))
+      .javascript(docs_js(name))
       .rust(docs_rs(name))
       .changelog(changelog(name))
       .build();
