@@ -4,7 +4,7 @@
   "description": "Utilities for Tauri Store",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@10.3.0",
+  "packageManager": "pnpm@10.4.1",
   "homepage": "https://tb.dev.br/tauri-store",
   "license": "MIT",
   "repository": {
