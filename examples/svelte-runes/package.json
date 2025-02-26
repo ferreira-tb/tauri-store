@@ -1,7 +1,7 @@
 {
   "name": "example-svelte-runes",
   "type": "module",
-  "packageManager": "pnpm@10.4.1",
+  "packageManager": "pnpm@10.5.1",
   "private": true,
   "scripts": {
     "sync": "svelte-kit sync",
@@ -11,12 +11,12 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.8",
-    "@sveltejs/kit": "^2.17.2",
+    "@sveltejs/kit": "^2.17.3",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tauri-apps/api": "^2.2.0",
     "@tauri-apps/plugin-process": "^2.2.0",
     "@tauri-apps/plugin-shell": "^2.2.0",
-    "@tb-dev/utils": "^4.1.6",
+    "@tb-dev/utils": "^4.1.7",
     "svelte": "^5.20.2",
     "svelte-check": "^4.1.4",
     "tauri-plugin-svelte": "workspace:*"
