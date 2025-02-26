@@ -1,7 +1,7 @@
 {
   "name": "example-pinia",
   "type": "module",
-  "packageManager": "pnpm@10.4.1",
+  "packageManager": "pnpm@10.5.1",
   "private": true,
   "scripts": {
     "type-check": "vue-tsc --noEmit",
@@ -17,6 +17,6 @@
     "pinia": "^2.3.1",
     "tauri-plugin-pinia": "workspace:*",
     "vue": "^3.5.13",
-    "vue-tsc": "^2.2.2"
+    "vue-tsc": "^2.2.4"
   }
 }
