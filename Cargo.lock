@@ -3673,9 +3673,9 @@ dependencies = [
 
 [[package]]
 name = "tao"
-version = "0.32.7"
+version = "0.32.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7e7f38988a68dfb559899ea307b97577f008d3254f6cfdd219a67e27ce34c95b"
+checksum = "63c8b1020610b9138dd7b1e06cf259ae91aa05c30f3bd0d6b42a03997b92dec1"
 dependencies = [
  "bitflags 2.9.0",
  "core-foundation",
@@ -3860,7 +3860,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-pinia"
-version = "2.0.0"
+version = "2.1.0"
 dependencies = [
  "serde",
  "tauri",
@@ -3902,7 +3902,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-svelte"
-version = "1.2.1"
+version = "2.0.0"
 dependencies = [
  "serde",
  "tauri",
@@ -3913,7 +3913,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-valtio"
-version = "1.1.1"
+version = "2.0.0"
 dependencies = [
  "serde",
  "tauri",
@@ -3985,7 +3985,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "anyhow",
  "dashmap",
@@ -4023,7 +4023,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-macros"
-version = "0.8.1"
+version = "0.9.0"
 dependencies = [
  "proc-macro2",
  "quote",

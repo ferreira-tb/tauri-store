@@ -7,6 +7,11 @@ import { TauriPluginPinia } from 'tauri-plugin-pinia/src/index.js';
 
 const app = createApp(App);
 const pinia = createPinia();
-pinia.use(TauriPluginPinia({ onError }));
+
+pinia.use(
+  TauriPluginPinia({
+    hooks: { error: onError },
+  })
+);
 
 app.use(pinia).mount('#app');

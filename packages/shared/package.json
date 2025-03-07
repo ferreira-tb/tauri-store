@@ -1,6 +1,6 @@
 {
   "name": "@tauri-store/shared",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Utilities for Tauri Store",
   "type": "module",
   "private": false,
@@ -44,9 +44,7 @@
     "typedoc": "typedoc --plugin typedoc-plugin-mdn-links"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.0.3"
-  },
-  "devDependencies": {
+    "@tauri-apps/api": "^2.0.3",
     "es-toolkit": "^1.32.0"
   }
 }

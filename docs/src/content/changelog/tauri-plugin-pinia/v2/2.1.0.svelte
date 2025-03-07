@@ -1,0 +1,33 @@
+<script lang="ts">
+  import { Ext, Link } from '$components/link';
+  import { Changelog } from '$components/container';
+
+  const version = '2.1.0';
+
+  // prettier-ignore
+  const url = {
+    hooks: 'https://tb.dev.br/tauri-store/reference/tauri-plugin-pinia/interfaces/StoreHooks.html',
+    tauriStore: 'https://docs.rs/tauri-store/0.9.0/tauri_store/',
+  };
+</script>
+
+<Changelog.Version {version} />
+
+<Changelog.BreakingChanges {version}>
+  <ul>
+    <li>
+      Remove deprecated <code>StoreOptions.onError</code>. Use
+      <Ext href={url.hooks} code>StoreHooks.error</Ext> instead. This should have been done in
+      <code>2.0.0</code>, but I forgot. Sorry!
+    </li>
+  </ul>
+</Changelog.BreakingChanges>
+
+<Changelog.Dependencies {version}>
+  <ul>
+    <li>
+      Update <Ext href={url.tauriStore} code>tauri-store</Ext> to
+      <Link href="/tauri-store/changelog/tauri-store#v0-9-0" code>0.9.0</Link>.
+    </li>
+  </ul>
+</Changelog.Dependencies>

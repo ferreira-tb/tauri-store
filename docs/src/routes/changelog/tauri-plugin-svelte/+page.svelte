@@ -15,5 +15,6 @@
 
 <Changelog.Next></Changelog.Next>
 
+<Svelte.V2x />
 <Svelte.V1x />
 <Svelte.V0x />

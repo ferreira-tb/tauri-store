@@ -197,7 +197,7 @@ export abstract class BaseStore<S extends State = State> {
    * {@link StoreHooks.error}
    */
   protected get onError(): Option<StoreHooks<S>['error']> {
-    return this.options.onError ?? this.options.hooks?.error;
+    return this.options.hooks?.error;
   }
 }
 
