@@ -98,7 +98,7 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
   /// Panics if a store collection is already initialized.
   #[cfg(feature = "plugin")]
   pub fn build_plugin(self) -> TauriPlugin<R> {
-    crate::plugin::create(self)
+    crate::plugin::build(self)
   }
 }
 

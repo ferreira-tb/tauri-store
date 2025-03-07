@@ -4,9 +4,7 @@ description = "Command line tools for tauri-store"
 publish = false
 rust-version = "1.84"
 edition = "2021"
-
-[package.version]
-workspace = true
+version.workspace = true
 
 [[bin]]
 name = "tauri-store"
@@ -17,9 +15,9 @@ workspace = true
 
 [dependencies]
 anyhow = "1.0"
-bon = "3.3"
+bon = "3.4"
 colored = "3.0"
-convert_case = "0.7"
+convert_case = "0.8"
 regex = "1.11"
 remain = "0.2"
 
