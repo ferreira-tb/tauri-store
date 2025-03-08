@@ -25,10 +25,10 @@
   },
   "devDependencies": {
     "@tb-dev/eslint-config": "^6.5.0",
-    "@types/node": "^22.13.9",
+    "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
-    "eslint": "^9.21.0",
+    "eslint": "^9.22.0",
     "prettier": "^3.5.3",
     "prettier-plugin-css-order": "^2.1.2",
     "prettier-plugin-svelte": "^3.3.3",

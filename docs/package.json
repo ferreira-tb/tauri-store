@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.8",
-    "@sveltejs/kit": "^2.18.0",
+    "@sveltejs/kit": "^2.19.0",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tb-dev/utils": "^5.1.0",
     "@types/semver": "^7.5.8",
@@ -23,7 +23,7 @@
     "postcss": "^8.5.3",
     "semver": "^7.7.1",
     "shiki": "^3.1.0",
-    "svelte": "^5.22.5",
+    "svelte": "^5.22.6",
     "svelte-check": "^4.1.5",
     "tailwind-merge": "^2.6.0",
     "tailwind-variants": "^0.3.1",
