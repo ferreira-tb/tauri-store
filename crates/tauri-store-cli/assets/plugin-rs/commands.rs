@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use std::time::Duration;
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
-use __IMPORT_SOURCE__::{with_store, Result, SaveStrategy, StoreOptions, StoreState};
+use __IMPORT_SOURCE__::{with_store, Result, SaveStrategy, StoreId, StoreOptions, StoreState};
 
 #[tauri::command]
 pub(crate) async fn clear_autosave<R>(app: AppHandle<R>)
@@ -30,7 +30,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn get_store_ids<R>(app: AppHandle<R>) -> Vec<String>
+pub(crate) async fn get_store_ids<R>(app: AppHandle<R>) -> Vec<StoreId>
 where
   R: Runtime,
 {
@@ -38,7 +38,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn get_store_path<R>(app: AppHandle<R>, id: String) -> Result<PathBuf>
+pub(crate) async fn get_store_path<R>(app: AppHandle<R>, id: StoreId) -> Result<PathBuf>
 where
   R: Runtime,
 {
@@ -46,7 +46,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn get_save_strategy<R>(app: AppHandle<R>, id: String) -> Result<SaveStrategy>
+pub(crate) async fn get_save_strategy<R>(app: AppHandle<R>, id: StoreId) -> Result<SaveStrategy>
 where
   R: Runtime,
 {
@@ -54,7 +54,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: String) -> Result<StoreState>
+pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: StoreId) -> Result<StoreState>
 where
   R: Runtime,
 {
@@ -62,7 +62,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn load<R>(app: AppHandle<R>, id: String) -> Result<StoreState>
+pub(crate) async fn load<R>(app: AppHandle<R>, id: StoreId) -> Result<StoreState>
 where
   R: Runtime,
 {
@@ -70,7 +70,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn patch<R>(window: WebviewWindow<R>, id: String, state: StoreState) -> Result<()>
+pub(crate) async fn patch<R>(window: WebviewWindow<R>, id: StoreId, state: StoreState) -> Result<()>
 where
   R: Runtime,
 {
@@ -80,7 +80,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn save<R>(app: AppHandle<R>, id: String) -> Result<()>
+pub(crate) async fn save<R>(app: AppHandle<R>, id: StoreId) -> Result<()>
 where
   R: Runtime,
 {
@@ -104,7 +104,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn save_now<R>(app: AppHandle<R>, id: String) -> Result<()>
+pub(crate) async fn save_now<R>(app: AppHandle<R>, id: StoreId) -> Result<()>
 where
   R: Runtime,
 {
@@ -112,7 +112,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn save_some<R>(app: AppHandle<R>, ids: Vec<String>) -> Result<()>
+pub(crate) async fn save_some<R>(app: AppHandle<R>, ids: Vec<StoreId>) -> Result<()>
 where
   R: Runtime,
 {
@@ -120,7 +120,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn save_some_now<R>(app: AppHandle<R>, ids: Vec<String>) -> Result<()>
+pub(crate) async fn save_some_now<R>(app: AppHandle<R>, ids: Vec<StoreId>) -> Result<()>
 where
   R: Runtime,
 {
@@ -148,7 +148,7 @@ where
 #[tauri::command]
 pub(crate) async fn set_save_strategy<R>(
   app: AppHandle<R>,
-  id: String,
+  id: StoreId,
   strategy: SaveStrategy,
 ) -> Result<()>
 where
@@ -160,7 +160,7 @@ where
 #[tauri::command]
 pub(crate) async fn set_store_options<R>(
   window: WebviewWindow<R>,
-  id: String,
+  id: StoreId,
   options: StoreOptions,
 ) -> Result<()>
 where
@@ -174,7 +174,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn unload<R>(app: AppHandle<R>, id: String) -> Result<()>
+pub(crate) async fn unload<R>(app: AppHandle<R>, id: StoreId) -> Result<()>
 where
   R: Runtime,
 {

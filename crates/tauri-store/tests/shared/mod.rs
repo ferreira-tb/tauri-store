@@ -6,11 +6,11 @@ use std::path::{Path, PathBuf};
 use std::sync::{Arc, LazyLock, OnceLock};
 use tauri::test::{mock_app, MockRuntime};
 use tauri::Manager;
-use tauri_store::{Store, StoreCollection};
+use tauri_store::{Store, StoreCollection, StoreId};
 use tokio::fs;
 use tokio::sync::{OwnedSemaphorePermit as Permit, Semaphore};
 
-pub const STORE_ID: &str = "store";
+pub static STORE_ID: LazyLock<StoreId> = LazyLock::new(|| StoreId::from("store"));
 
 static TEMP_DIR: OnceLock<PathBuf> = OnceLock::new();
 static PATH: LazyLock<PathBuf> = LazyLock::new(default_path);
@@ -39,7 +39,7 @@ impl Context {
       .acquire_owned()
       .await?;
 
-    self.collection.unload_store(STORE_ID)?;
+    self.collection.unload_store(&STORE_ID)?;
 
     let temp_dir = temp_dir();
     if fs::try_exists(temp_dir).await? {
@@ -66,7 +66,7 @@ where
   let permit = CONTEXT.acquire_permit().await.unwrap();
   let value = CONTEXT
     .collection
-    .with_store(STORE_ID, f)
+    .with_store(&*STORE_ID, f)
     .unwrap();
 
   (value, permit)

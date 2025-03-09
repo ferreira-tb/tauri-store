@@ -18,7 +18,7 @@ pub use collection::{OnLoadFn, StoreCollection};
 pub use error::{BoxResult, Error, Result};
 pub use manager::ManagerExt;
 pub use serde_json::Value as Json;
-pub use store::{SaveStrategy, Store, StoreOptions, StoreState};
+pub use store::{SaveStrategy, Store, StoreId, StoreOptions, StoreState, WatcherId};
 
 pub use event::{
   EventSource, STORE_CONFIG_CHANGE_EVENT, STORE_STATE_CHANGE_EVENT, STORE_UNLOAD_EVENT,

@@ -4,7 +4,7 @@ mod path;
 
 use crate::error::Result;
 use crate::event::{emit, STORE_UNLOAD_EVENT};
-use crate::store::{SaveStrategy, Store, StoreResource, StoreState};
+use crate::store::{SaveStrategy, Store, StoreId, StoreResource, StoreState, WatcherId};
 use autosave::Autosave;
 use dashmap::DashMap;
 use path::set_path;
@@ -19,9 +19,6 @@ use tauri::{AppHandle, Resource, ResourceId, Runtime};
 
 pub use builder::StoreCollectionBuilder;
 
-#[cfg(tauri_store_tracing)]
-use tracing::error;
-
 pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
 
 /// Closure to be called when a store is loaded.
@@ -32,12 +29,12 @@ pub type OnLoadFn<R> = dyn Fn(&Store<R>) -> Result<()> + Send + Sync;
 pub struct StoreCollection<R: Runtime> {
   pub(crate) app: AppHandle<R>,
   pub(crate) path: Mutex<PathBuf>,
-  pub(crate) stores: DashMap<String, ResourceId>,
+  pub(crate) stores: DashMap<StoreId, ResourceId>,
   pub(crate) on_load: Option<Box<OnLoadFn<R>>>,
   pub(crate) autosave: Mutex<Autosave>,
   pub(crate) default_save_strategy: SaveStrategy,
-  pub(crate) save_denylist: Option<HashSet<String>>,
-  pub(crate) sync_denylist: Option<HashSet<String>>,
+  pub(crate) save_denylist: Option<HashSet<StoreId>>,
+  pub(crate) sync_denylist: Option<HashSet<StoreId>>,
   pub(crate) pretty: bool,
 }
 
@@ -48,16 +45,16 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   pub(crate) fn get_resource(&self, id: impl AsRef<str>) -> Result<Arc<StoreResource<R>>> {
-    let id = id.as_ref();
-    let rid = match self.rid(id) {
+    let id = StoreId::from(id.as_ref());
+    let rid = match self.rid(&id) {
       Some(rid) => rid,
       None => {
-        let (rid, resource) = Store::load(&self.app, id)?;
+        let (rid, resource) = Store::load(&self.app, &id)?;
         if let Some(on_load) = &self.on_load {
           resource.locked(|store| on_load(store))?;
         }
 
-        self.stores.insert(id.to_owned(), rid);
+        self.stores.insert(id, rid);
         rid
       }
     };
@@ -66,7 +63,7 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Gets the resource id for a store.
-  fn rid(&self, store_id: &str) -> Option<ResourceId> {
+  fn rid(&self, store_id: &StoreId) -> Option<ResourceId> {
     self.stores.get(store_id).map(|it| *it.value())
   }
 
@@ -76,7 +73,7 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Lists all the store ids.
-  pub fn ids(&self) -> Vec<String> {
+  pub fn ids(&self) -> Vec<StoreId> {
     self
       .stores
       .iter()
@@ -262,7 +259,7 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Watches a store for changes.
-  pub fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<u32>
+  pub fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<WatcherId>
   where
     F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
   {
@@ -272,7 +269,11 @@ impl<R: Runtime> StoreCollection<R> {
   }
 
   /// Removes a watcher from a store.
-  pub fn unwatch(&self, store_id: impl AsRef<str>, watcher_id: u32) -> Result<bool> {
+  pub fn unwatch(
+    &self,
+    store_id: impl AsRef<str>,
+    watcher_id: impl Into<WatcherId>,
+  ) -> Result<bool> {
     self
       .get_resource(store_id)?
       .locked(|store| Ok(store.unwatch(watcher_id)))
@@ -280,7 +281,7 @@ impl<R: Runtime> StoreCollection<R> {
 
   /// Removes the store from the collection.
   #[doc(hidden)]
-  pub fn unload_store(&self, id: &str) -> Result<()> {
+  pub fn unload_store(&self, id: &StoreId) -> Result<()> {
     if let Some((_, rid)) = self.stores.remove(id) {
       // The store needs to be saved immediately here.
       // Otherwise, the plugin might try to load it again if `StoreCollection::get_resource` is called.
@@ -300,19 +301,12 @@ impl<R: Runtime> StoreCollection<R> {
     self.clear_autosave();
 
     for rid in self.rids() {
-      match StoreResource::take(&self.app, rid) {
-        Ok(resource) => {
-          resource.locked(|store| {
-            if store.save_on_exit {
-              let _ = store.save_now();
-            }
-          });
-        }
-        #[cfg_attr(not(tauri_store_tracing), allow(unused_variables))]
-        Err(err) => {
-          #[cfg(tauri_store_tracing)]
-          error!("failed to take store resource: {err}");
-        }
+      if let Ok(resource) = StoreResource::take(&self.app, rid) {
+        resource.locked(|store| {
+          if store.save_on_exit {
+            let _ = store.save_now();
+          }
+        });
       }
     }
 
@@ -325,9 +319,9 @@ impl<R: Runtime> Resource for StoreCollection<R> {}
 impl<R: Runtime> fmt::Debug for StoreCollection<R> {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     f.debug_struct("StoreCollection")
-      .field("pretty", &self.pretty)
       .field("default_save_strategy", &self.default_save_strategy)
       .field("on_load", &self.on_load.is_some())
+      .field("pretty", &self.pretty)
       .field(
         "save_denylist",
         &self

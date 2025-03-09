@@ -1,6 +1,6 @@
 use super::{OnLoadFn, StoreCollection, RESOURCE_ID};
 use crate::error::Result;
-use crate::store::{SaveStrategy, Store};
+use crate::store::{SaveStrategy, Store, StoreId};
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;
@@ -17,8 +17,8 @@ pub struct StoreCollectionBuilder<R: Runtime> {
   autosave: Option<Duration>,
   on_load: Option<Box<OnLoadFn<R>>>,
   pretty: bool,
-  save_denylist: Option<HashSet<String>>,
-  sync_denylist: Option<HashSet<String>>,
+  save_denylist: Option<HashSet<StoreId>>,
+  sync_denylist: Option<HashSet<StoreId>>,
 }
 
 impl<R: Runtime> StoreCollectionBuilder<R> {
@@ -67,14 +67,14 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
 
   /// Sets a list of stores that should not be saved to disk.
   #[must_use]
-  pub fn save_denylist(mut self, save_denylist: HashSet<String>) -> Self {
+  pub fn save_denylist(mut self, save_denylist: HashSet<StoreId>) -> Self {
     self.save_denylist = Some(save_denylist);
     self
   }
 
   /// Sets a list of stores that should not be synchronized across windows.
   #[must_use]
-  pub fn sync_denylist(mut self, sync_denylist: HashSet<String>) -> Self {
+  pub fn sync_denylist(mut self, sync_denylist: HashSet<StoreId>) -> Self {
     self.sync_denylist = Some(sync_denylist);
     self
   }

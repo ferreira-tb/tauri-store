@@ -29,8 +29,8 @@ pub struct Builder<R: Runtime> {
   autosave: Option<Duration>,
   on_load: Option<Box<OnLoadFn<R>>>,
   pretty: bool,
-  save_denylist: HashSet<String>,
-  sync_denylist: HashSet<String>,
+  save_denylist: HashSet<StoreId>,
+  sync_denylist: HashSet<StoreId>,
 }
 
 impl<R: Runtime> Builder<R> {

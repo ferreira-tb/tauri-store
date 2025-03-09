@@ -14,6 +14,7 @@ use crate::manager::ManagerExt;
 use options::set_options;
 use save::{debounce, throttle, to_bytes, SaveHandle};
 use serde::de::DeserializeOwned;
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value as Json};
 use std::collections::HashMap;
 use std::fmt;
@@ -30,6 +31,7 @@ pub use options::StoreOptions;
 pub(crate) use resource::StoreResource;
 pub use save::SaveStrategy;
 pub use state::StoreState;
+pub use watch::WatcherId;
 
 #[cfg(tauri_store_tracing)]
 use tracing::{debug, warn};
@@ -39,9 +41,9 @@ type ResourceTuple<R> = (ResourceId, Arc<StoreResource<R>>);
 /// A key-value store that can persist its state to disk.
 pub struct Store<R: Runtime> {
   app: AppHandle<R>,
-  pub(crate) id: String,
+  pub(crate) id: StoreId,
   pub(crate) state: StoreState,
-  pub(crate) watchers: HashMap<u32, Watcher<R>>,
+  pub(crate) watchers: HashMap<WatcherId, Watcher<R>>,
   pub(crate) save_on_exit: bool,
   save_on_change: bool,
   save_strategy: Option<SaveStrategy>,
@@ -51,8 +53,8 @@ pub struct Store<R: Runtime> {
 
 impl<R: Runtime> Store<R> {
   pub(crate) fn load(app: &AppHandle<R>, id: impl AsRef<str>) -> Result<ResourceTuple<R>> {
-    let id = id.as_ref();
-    let path = store_path(app, id);
+    let id = StoreId::from(id.as_ref());
+    let path = store_path(app, &id);
     let state = match fs::read(path) {
       Ok(bytes) => serde_json::from_slice(&bytes)?,
       Err(e) if e.kind() == NotFound => {
@@ -69,7 +71,7 @@ impl<R: Runtime> Store<R> {
 
     let store = Self {
       app: app.clone(),
-      id: id.to_owned(),
+      id,
       state,
       watchers: HashMap::new(),
       save_on_change: false,
@@ -83,8 +85,8 @@ impl<R: Runtime> Store<R> {
   }
 
   /// The id of the store.
-  pub fn id(&self) -> &str {
-    &self.id
+  pub fn id(&self) -> StoreId {
+    self.id.clone()
   }
 
   /// Path to the store file.
@@ -215,13 +217,13 @@ impl<R: Runtime> Store<R> {
       SaveStrategy::Debounce(duration) => {
         self
           .debounce_save_handle
-          .get_or_init(|| debounce(duration, Arc::from(self.id.as_str())))
+          .get_or_init(|| debounce(duration, self.id.clone()))
           .call(&self.app);
       }
       SaveStrategy::Throttle(duration) => {
         self
           .throttle_save_handle
-          .get_or_init(|| throttle(duration, Arc::from(self.id.as_str())))
+          .get_or_init(|| throttle(duration, self.id.clone()))
           .call(&self.app);
       }
     }
@@ -292,7 +294,7 @@ impl<R: Runtime> Store<R> {
   }
 
   /// Watches the store for changes.
-  pub fn watch<F>(&mut self, f: F) -> u32
+  pub fn watch<F>(&mut self, f: F) -> WatcherId
   where
     F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
   {
@@ -303,8 +305,8 @@ impl<R: Runtime> Store<R> {
   }
 
   /// Removes a listener from this store.
-  pub fn unwatch(&mut self, id: u32) -> bool {
-    self.watchers.remove(&id).is_some()
+  pub fn unwatch(&mut self, id: impl Into<WatcherId>) -> bool {
+    self.watchers.remove(&id.into()).is_some()
   }
 
   /// Sets the store options, optionally having a window as the source.
@@ -412,11 +414,44 @@ impl<R: Runtime> fmt::Debug for Store<R> {
   }
 }
 
-fn store_path<R: Runtime>(app: &AppHandle<R>, store_id: &str) -> PathBuf {
-  append_filename(&app.store_collection().path(), store_id)
+#[derive(Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct StoreId(Arc<str>);
+
+impl AsRef<str> for StoreId {
+  fn as_ref(&self) -> &str {
+    &self.0
+  }
+}
+
+impl Clone for StoreId {
+  fn clone(&self) -> Self {
+    Self(Arc::clone(&self.0))
+  }
+}
+
+impl fmt::Display for StoreId {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(f, "{}", self.0)
+  }
+}
+
+impl From<&str> for StoreId {
+  fn from(id: &str) -> Self {
+    Self(Arc::from(id))
+  }
+}
+
+impl From<String> for StoreId {
+  fn from(id: String) -> Self {
+    Self(Arc::from(id))
+  }
+}
+
+fn store_path<R: Runtime>(app: &AppHandle<R>, id: &StoreId) -> PathBuf {
+  append_filename(&app.store_collection().path(), id)
 }
 
 /// Appends the store filename to the given directory path.
-pub(super) fn append_filename(path: &Path, store_id: &str) -> PathBuf {
-  path.join(format!("{store_id}.json"))
+pub(super) fn append_filename(path: &Path, id: &StoreId) -> PathBuf {
+  path.join(format!("{id}.json"))
 }

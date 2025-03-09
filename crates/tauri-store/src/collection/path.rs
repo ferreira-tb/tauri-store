@@ -55,9 +55,8 @@ where
 {
   // Calling `Store::path` would be a deadlock!
   // We need to manually append the filename to the path.
-  let id = store.id();
-  let current = append(from, id);
-  let new = append(to, id);
+  let current = append(from, &store.id);
+  let new = append(to, &store.id);
 
   if new.try_exists()? {
     let path = new.display();

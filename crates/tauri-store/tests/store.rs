@@ -14,7 +14,7 @@ use shared::{assert_exists, with_store, StoreExt, STORE_ID};
 
 #[tokio::test]
 async fn id() {
-  with_store(|store| assert_eq!(store.id(), STORE_ID)).await;
+  with_store(|store| assert_eq!(store.id(), *STORE_ID)).await;
 }
 
 #[tokio::test]
