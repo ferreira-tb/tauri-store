@@ -45,6 +45,6 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
-    "es-toolkit": "^1.32.0"
+    "es-toolkit": "^1.33.0"
   }
 }

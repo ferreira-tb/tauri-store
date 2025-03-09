@@ -303,6 +303,7 @@ impl<R: Runtime> StoreCollection<R> {
     for rid in self.rids() {
       if let Ok(resource) = StoreResource::take(&self.app, rid) {
         resource.locked(|store| {
+          store.abort_pending_save();
           if store.save_on_exit {
             let _ = store.save_now();
           }
