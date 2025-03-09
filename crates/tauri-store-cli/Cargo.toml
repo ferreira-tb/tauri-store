@@ -2,8 +2,8 @@
 name = "tauri-store-cli"
 description = "Command line tools for tauri-store"
 publish = false
-rust-version = "1.84"
-edition = "2021"
+rust-version = "1.85"
+edition = "2024"
 version.workspace = true
 
 [[bin]]
