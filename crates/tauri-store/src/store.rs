@@ -243,10 +243,13 @@ impl<R: Runtime> Store<R> {
       return Ok(());
     }
 
-    fs::create_dir_all(collection.path())?;
+    let path = self.path();
+    if let Some(parent) = path.parent() {
+      fs::create_dir_all(parent)?;
+    }
 
     let bytes = to_bytes(&self.state, collection.pretty)?;
-    let mut file = File::create(self.path())?;
+    let mut file = File::create(path)?;
     file.write_all(&bytes)?;
 
     #[cfg(feature = "file-sync-all")]
@@ -379,13 +382,7 @@ impl<R: Runtime> Store<R> {
       return;
     }
 
-    let watchers = self
-      .watchers
-      .values()
-      .cloned()
-      .collect::<Vec<_>>();
-
-    for watcher in watchers {
+    for watcher in self.watchers.values().cloned() {
       let app = self.app.clone();
       spawn_blocking(move || watcher.call(app));
     }
