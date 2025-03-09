@@ -12,7 +12,6 @@ export {
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
   DEFAULT_HOOKS,
-  DEFAULT_ON_ERROR,
   DEFAULT_SAVE_INTERVAL,
   DEFAULT_SAVE_ON_CHANGE,
   DEFAULT_SAVE_ON_EXIT,
@@ -37,5 +36,5 @@ export type {
   StoreKeyFilterStrategy,
   StoreOptions,
   TauriStoreContract,
-  Writeable,
+  Writable,
 } from './types';

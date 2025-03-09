@@ -72,14 +72,6 @@ export type StoreFrontendOptions<S extends State = State> = {
   readonly hooks?: StoreHooks<S>;
 
   /**
-   * Custom error handler.
-   * @default console.error
-   *
-   * @deprecated Use {@link StoreHooks.error} instead.
-   */
-  readonly onError?: StoreHooks<S>['error'];
-
-  /**
    * Interval in milliseconds to use when syncing the store with the backend.
    * This option is only valid when {@link StoreFrontendOptions.syncStrategy} is set to `debounce` or `throttle`.
    *

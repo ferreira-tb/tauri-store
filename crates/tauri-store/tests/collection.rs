@@ -8,7 +8,7 @@ use shared::{assert_exists, temp_dir, with_collection, StoreExt, STORE_ID};
 async fn set_path() {
   with_collection(|collection| {
     let store_path = collection
-      .with_store(STORE_ID, |store| {
+      .with_store(&*STORE_ID, |store| {
         store.set("key", 42).unwrap();
         store.save_now().unwrap();
         store.assert_exists(true);
@@ -27,7 +27,7 @@ async fn set_path() {
     assert_exists(&do_not_move, true);
 
     let new_store_path = collection
-      .with_store(STORE_ID, |store| store.path())
+      .with_store(&*STORE_ID, |store| store.path())
       .unwrap();
 
     assert_exists(&new_store_path, true);

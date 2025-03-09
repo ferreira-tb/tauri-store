@@ -8,8 +8,6 @@ export const DEFAULT_HOOKS: Required<StoreOptions>['hooks'] = {
   error: console.error.bind(console),
 };
 
-export const DEFAULT_ON_ERROR: Required<StoreOptions>['onError'] = console.error.bind(console);
-
 export const DEFAULT_SAVE_INTERVAL: Required<StoreOptions>['saveInterval'] = 0;
 
 export const DEFAULT_SAVE_ON_CHANGE: Required<StoreOptions>['saveOnChange'] = false;

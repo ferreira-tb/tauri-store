@@ -11,4 +11,4 @@ export type Nil = null | undefined;
 export type Option<T> = T | Nil;
 
 /** Removes the readonly modifier from all properties of T. */
-export type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+export type Writable<T> = { -readonly [P in keyof T]: T[P] };

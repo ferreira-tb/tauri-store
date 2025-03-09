@@ -1,4 +1,4 @@
 pub use crate::{
-  with_store, BoxResult, Error, Json, OnLoadFn, Result, SaveStrategy, Store, StoreOptions,
-  StoreState,
+  with_store, BoxResult, Error, Json, OnLoadFn, Result, SaveStrategy, Store, StoreCollection,
+  StoreId, StoreOptions, StoreState, WatcherId,
 };

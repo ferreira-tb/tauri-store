@@ -12,7 +12,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
       use std::sync::Arc;
       use std::time::Duration;
       use tauri::{AppHandle, Manager as _, Runtime};
-      use tauri_store::{Result, SaveStrategy, Store, StoreCollection};
+      use tauri_store::prelude::*;
 
       impl<R: Runtime> #name<R> {
         /// Creates a new builder instance with default values.
@@ -64,7 +64,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
         pub fn save_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
           self
             .save_denylist
-            .extend(denylist.iter().map(|s| s.as_ref().to_string()));
+            .extend(denylist.iter().map(|it| StoreId::from(it.as_ref())));
 
           self
         }
@@ -74,7 +74,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
         pub fn sync_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
           self
             .sync_denylist
-            .extend(denylist.iter().map(|s| s.as_ref().to_string()));
+            .extend(denylist.iter().map(|it| StoreId::from(it.as_ref())));
 
           self
         }

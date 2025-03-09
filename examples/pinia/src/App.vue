@@ -10,7 +10,9 @@ import { clearAutosave, save, saveNow, setAutosave } from 'tauri-plugin-pinia/sr
 const store = useStore();
 const { start, stop } = store.$tauri;
 
-onKeyDown('Escape', () => void exit(0).catch(onError));
+onKeyDown('Escape', () => {
+  exit(0).catch(onError);
+});
 
 onMounted(() => {
   start().catch(onError);

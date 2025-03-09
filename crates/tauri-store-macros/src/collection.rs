@@ -13,11 +13,11 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
       use std::sync::Arc;
       use std::time::Duration;
       use tauri::{AppHandle, Runtime};
-      use tauri_store::{Json, Result, SaveStrategy, Store, StoreState};
+      use tauri_store::prelude::*;
 
       impl<R: Runtime> #name<R> {
         /// Lists all the store ids.
-        pub fn ids(&self) -> Vec<String> {
+        pub fn ids(&self) -> Vec<StoreId> {
           self.0.ids()
         }
 
@@ -161,7 +161,7 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
         }
 
         /// Watches a store for changes.
-        pub fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<u32>
+        pub fn watch<F>(&self, store_id: impl AsRef<str>, f: F) -> Result<WatcherId>
         where
           F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
         {
@@ -169,11 +169,11 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
         }
 
         /// Removes a watcher from a store.
-        pub fn unwatch(&self, store_id: impl AsRef<str>, listener_id: u32) -> Result<bool> {
-          self.0.unwatch(store_id, listener_id)
+        pub fn unwatch(&self, store_id: impl AsRef<str>, watcher_id: impl Into<WatcherId>) -> Result<bool> {
+          self.0.unwatch(store_id, watcher_id)
         }
 
-        pub(crate) fn unload_store(&self, id: &str) -> Result<()> {
+        pub(crate) fn unload_store(&self, id: &StoreId) -> Result<()> {
           self.0.unload_store(id)
         }
       }

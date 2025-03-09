@@ -7,10 +7,10 @@ pub use crate::collection::StoreCollectionBuilder as Builder;
 
 /// Initializes the store plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-  create(Builder::default())
+  build(Builder::default())
 }
 
-pub(crate) fn create<R: Runtime>(builder: Builder<R>) -> TauriPlugin<R> {
+pub(crate) fn build<R: Runtime>(builder: Builder<R>) -> TauriPlugin<R> {
   tauri::plugin::Builder::new("tauri-store")
     .on_event(on_event)
     .setup(|app, _| {

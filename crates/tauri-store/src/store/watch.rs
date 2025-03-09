@@ -1,15 +1,17 @@
 use crate::error::Result;
 use std::fmt;
-use std::sync::atomic::{AtomicU32, Ordering};
+use std::ops::Deref;
+use std::sync::atomic::AtomicU32;
+use std::sync::atomic::Ordering::Relaxed;
 use std::sync::Arc;
 use tauri::{AppHandle, Runtime};
 
-static WATCHER_ID: AtomicU32 = AtomicU32::new(0);
+static CURRENT_ID: AtomicU32 = AtomicU32::new(0);
 
 type WatcherFn<R> = dyn Fn(AppHandle<R>) -> Result<()> + Send + Sync;
 
 pub(crate) struct Watcher<R: Runtime> {
-  pub(crate) id: u32,
+  pub(crate) id: WatcherId,
   inner: Arc<WatcherFn<R>>,
 }
 
@@ -19,7 +21,7 @@ impl<R: Runtime> Watcher<R> {
     F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
   {
     Self {
-      id: WATCHER_ID.fetch_add(1, Ordering::Relaxed),
+      id: WatcherId(CURRENT_ID.fetch_add(1, Relaxed)),
       inner: Arc::new(f),
     }
   }
@@ -43,5 +45,22 @@ impl<R: Runtime> fmt::Debug for Watcher<R> {
     f.debug_struct("Listener")
       .field("id", &self.id)
       .finish_non_exhaustive()
+  }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub struct WatcherId(u32);
+
+impl Deref for WatcherId {
+  type Target = u32;
+
+  fn deref(&self) -> &Self::Target {
+    &self.0
+  }
+}
+
+impl From<u32> for WatcherId {
+  fn from(id: u32) -> Self {
+    Self(id)
   }
 }

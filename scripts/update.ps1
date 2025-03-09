@@ -4,10 +4,14 @@
 
   .PARAMETER Include
   Avoid skipping the specified dependencies.
+
+  .PARAMETER IncludeAll
+  Do not skip any dependencies.
 #>
 
 param(
-  [string[]]$Include = @()
+  [string[]]$Include = @(),
+  [switch]$IncludeAll
 )
 
 $ErrorActionPreference = 'Stop'
@@ -23,9 +27,12 @@ $Skip = @(
 )
 
 $Command = 'miho update major -t'
-foreach ($Item in $Skip) {
-  if ($Include -notcontains $Item) {
-    $Command += " -S $Item"
+
+if (-not $IncludeAll) {
+  foreach ($Dependency in $Skip) {
+    if ($Include -notcontains $Dependency) {
+      $Command += " -S $Dependency"
+    }
   }
 }
 

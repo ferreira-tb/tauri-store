@@ -19,19 +19,8 @@
   },
   "conventionalCommits.promptScopes": true,
   "conventionalCommits.scopes": ["pinia", "svelte", "valtio"],
-  "editor.codeActionsOnSave": {
-    "source.fixAll": "explicit"
-  },
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
-  "editor.tabSize": 2,
-  "eslint.codeActionsOnSave.mode": "problems",
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "files.exclude": {
-    ".eslintcache": true
-  },
-  "prettier.requireConfig": true,
   "typescript.tsdk": "node_modules\\typescript\\lib"
 }
