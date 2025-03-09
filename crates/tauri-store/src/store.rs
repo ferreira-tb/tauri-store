@@ -5,10 +5,6 @@ mod state;
 mod watch;
 
 use crate::error::Result;
-use crate::event::{
-  emit, ConfigPayload, EventSource, StatePayload, STORE_CONFIG_CHANGE_EVENT,
-  STORE_STATE_CHANGE_EVENT,
-};
 use crate::io_err;
 use crate::manager::ManagerExt;
 use options::set_options;
@@ -26,6 +22,11 @@ use std::sync::{Arc, OnceLock};
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, ResourceId, Runtime};
 use watch::Watcher;
+
+use crate::event::{
+  emit, ConfigPayload, EventSource, StatePayload, STORE_CONFIG_CHANGE_EVENT,
+  STORE_STATE_CHANGE_EVENT,
+};
 
 pub use options::StoreOptions;
 pub(crate) use resource::StoreResource;
@@ -429,12 +430,6 @@ impl Clone for StoreId {
   }
 }
 
-impl fmt::Display for StoreId {
-  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    write!(f, "{}", self.0)
-  }
-}
-
 impl From<&str> for StoreId {
   fn from(id: &str) -> Self {
     Self(Arc::from(id))
@@ -444,6 +439,18 @@ impl From<&str> for StoreId {
 impl From<String> for StoreId {
   fn from(id: String) -> Self {
     Self(Arc::from(id))
+  }
+}
+
+impl From<&String> for StoreId {
+  fn from(id: &String) -> Self {
+    Self(Arc::from(id.as_str()))
+  }
+}
+
+impl fmt::Display for StoreId {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(f, "{}", self.0)
   }
 }
 
