@@ -14,9 +14,9 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
 use tauri_store::CollectionBuilder;
 
+pub use __SNAKE_PLUGIN_NAME__::__PASCAL_PLUGIN_NAME__;
 pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
-pub use __SNAKE_PLUGIN_NAME__::__PASCAL_PLUGIN_NAME__;
 
 /// Builder for the __PASCAL_PLUGIN_NAME__ plugin.
 #[derive(CollectionBuilder)]
@@ -62,15 +62,20 @@ impl<R: Runtime> Builder<R> {
   }
 }
 
-#[allow(clippy::unnecessary_wraps)]
-fn setup<R: Runtime>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()> {
-  let collection = builder.into_collection(app);
+fn setup<R>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()>
+where
+  R: Runtime,
+{
+  let collection = builder.build_collection(app)?;
   app.manage(__PASCAL_PLUGIN_NAME__(collection));
 
   Ok(())
 }
 
-fn on_event<R: Runtime>(app: &AppHandle<R>, event: &RunEvent) {
+fn on_event<R>(app: &AppHandle<R>, event: &RunEvent)
+where
+  R: Runtime,
+{
   if let RunEvent::Exit = event {
     let _ = app.__SNAKE_PLUGIN_NAME__().0.on_exit();
   }

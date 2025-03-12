@@ -8,19 +8,17 @@ use crate::error::Result;
 use crate::io_err;
 use crate::manager::ManagerExt;
 use options::set_options;
-use save::{debounce, throttle, to_bytes, SaveHandle};
+use save::{debounce, throttle, SaveHandle};
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value as Json};
 use std::collections::HashMap;
 use std::fmt;
-use std::fs::{self, File};
-use std::io::ErrorKind::NotFound;
-use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, OnceLock};
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, ResourceId, Runtime};
+use tauri_store_utils::{read_file, write_file, WriteFileOptions};
 use watch::Watcher;
 
 use crate::event::{
@@ -35,7 +33,12 @@ pub use state::StoreState;
 pub use watch::WatcherId;
 
 #[cfg(tauri_store_tracing)]
-use tracing::{debug, warn};
+use tracing::debug;
+
+#[cfg(debug_assertions)]
+const FILE_EXTENSION: &str = "dev.json";
+#[cfg(not(debug_assertions))]
+const FILE_EXTENSION: &str = "json";
 
 type ResourceTuple<R> = (ResourceId, Arc<StoreResource<R>>);
 
@@ -56,16 +59,7 @@ impl<R: Runtime> Store<R> {
   pub(crate) fn load(app: &AppHandle<R>, id: impl AsRef<str>) -> Result<ResourceTuple<R>> {
     let id = StoreId::from(id.as_ref());
     let path = store_path(app, &id);
-    let state = match fs::read(path) {
-      Ok(bytes) => serde_json::from_slice(&bytes)?,
-      Err(e) if e.kind() == NotFound => {
-        #[cfg(tauri_store_tracing)]
-        warn!("store not found: {id}, using default state");
-
-        StoreState::default()
-      }
-      Err(e) => return Err(e.into()),
-    };
+    let state = read_file(&path)?;
 
     #[cfg(tauri_store_tracing)]
     debug!("store loaded: {id}");
@@ -162,7 +156,7 @@ impl<R: Runtime> Store<R> {
       .0
       .insert(key.as_ref().to_owned(), value.into());
 
-    self.on_state_change(None)
+    self.on_state_change(None::<&str>)
   }
 
   /// Patches the store state, optionally having a window as the source.
@@ -178,7 +172,7 @@ impl<R: Runtime> Store<R> {
 
   /// Patches the store state.
   pub fn patch<S: Into<StoreState>>(&mut self, state: S) -> Result<()> {
-    self.patch_with_source(state, None)
+    self.patch_with_source(state, None::<&str>)
   }
 
   /// Whether the store has a key.
@@ -243,17 +237,12 @@ impl<R: Runtime> Store<R> {
       return Ok(());
     }
 
-    let path = self.path();
-    if let Some(parent) = path.parent() {
-      fs::create_dir_all(parent)?;
-    }
+    let options = WriteFileOptions {
+      pretty: collection.pretty,
+      sync: cfg!(feature = "file-sync-all"),
+    };
 
-    let bytes = to_bytes(&self.state, collection.pretty)?;
-    let mut file = File::create(path)?;
-    file.write_all(&bytes)?;
-
-    #[cfg(feature = "file-sync-all")]
-    file.sync_all()?;
+    write_file(self.path(), &self.state, &options)?;
 
     #[cfg(tauri_store_tracing)]
     debug!("store saved: {}", self.id);
@@ -382,20 +371,23 @@ impl<R: Runtime> Store<R> {
       return;
     }
 
-    for watcher in self.watchers.values().cloned() {
+    for watcher in self.watchers.values() {
       let app = self.app.clone();
+      let watcher = watcher.clone();
       spawn_blocking(move || watcher.call(app));
     }
   }
 
   pub(crate) fn abort_pending_save(&self) {
-    if let Some(debounce_save_handle) = self.debounce_save_handle.get() {
-      debounce_save_handle.abort();
-    }
+    self
+      .debounce_save_handle
+      .get()
+      .map(SaveHandle::abort);
 
-    if let Some(throttle_save_handle) = self.throttle_save_handle.get() {
-      throttle_save_handle.abort();
-    }
+    self
+      .throttle_save_handle
+      .get()
+      .map(SaveHandle::abort);
   }
 }
 
@@ -457,5 +449,5 @@ fn store_path<R: Runtime>(app: &AppHandle<R>, id: &StoreId) -> PathBuf {
 
 /// Appends the store filename to the given directory path.
 pub(super) fn append_filename(path: &Path, id: &StoreId) -> PathBuf {
-  path.join(format!("{id}.json"))
+  path.join(format!("{id}.{FILE_EXTENSION}"))
 }

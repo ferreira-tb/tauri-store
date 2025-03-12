@@ -26,7 +26,8 @@ impl Context {
     let app = mock_app();
     let collection = StoreCollection::builder()
       .path(&*PATH)
-      .build(app.app_handle());
+      .build(app.app_handle())
+      .unwrap();
 
     Self {
       collection,

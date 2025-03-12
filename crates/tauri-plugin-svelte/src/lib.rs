@@ -65,15 +65,20 @@ impl<R: Runtime> Builder<R> {
   }
 }
 
-#[allow(clippy::unnecessary_wraps)]
-fn setup<R: Runtime>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()> {
-  let collection = builder.into_collection(app);
+fn setup<R>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()>
+where
+  R: Runtime,
+{
+  let collection = builder.build_collection(app)?;
   app.manage(Svelte(collection));
 
   Ok(())
 }
 
-fn on_event<R: Runtime>(app: &AppHandle<R>, event: &RunEvent) {
+fn on_event<R>(app: &AppHandle<R>, event: &RunEvent)
+where
+  R: Runtime,
+{
   if let RunEvent::Exit = event {
     let _ = app.svelte().0.on_exit();
   }

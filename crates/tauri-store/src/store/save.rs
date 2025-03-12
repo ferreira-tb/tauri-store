@@ -1,5 +1,4 @@
 use super::StoreId;
-use crate::error::Result;
 use crate::manager::ManagerExt;
 use futures::future::BoxFuture;
 use serde::ser::SerializeTuple;
@@ -170,16 +169,5 @@ impl<'de> Deserialize<'de> for SaveStrategy {
     } else {
       Err(err())
     }
-  }
-}
-
-pub(super) fn to_bytes<T>(value: &T, pretty: bool) -> Result<Vec<u8>>
-where
-  T: ?Sized + Serialize,
-{
-  if pretty {
-    Ok(serde_json::to_vec_pretty(value)?)
-  } else {
-    Ok(serde_json::to_vec(value)?)
   }
 }

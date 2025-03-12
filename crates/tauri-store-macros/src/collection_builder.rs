@@ -79,7 +79,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
           self
         }
 
-        pub(super) fn into_collection(mut self, app: &AppHandle<R>) -> Arc<StoreCollection<R>> {
+        pub(super) fn build_collection(mut self, app: &AppHandle<R>) -> Result<Arc<StoreCollection<R>>> {
           let path = self.path.take().unwrap_or_else(|| {
             app
               .path()

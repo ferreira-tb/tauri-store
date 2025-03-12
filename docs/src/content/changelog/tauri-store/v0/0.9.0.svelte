@@ -16,6 +16,7 @@
 
 <Changelog.BreakingChanges {version}>
   <ul>
+    <li>Use different files for the stores when in development mode.</li>
     <li>
       Introduce <Ext href={url.storeId} code>StoreId</Ext> struct.
     </li>

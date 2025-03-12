@@ -38,13 +38,17 @@ serde_json = "1.0"
 tauri = "2"
 thiserror = "2.0"
 
+[dependencies.semver]
+version = "1.0"
+features = ["serde"]
+
 [dependencies.tauri-store-macros]
 version = "0.9"
 optional = true
 path = "../tauri-store-macros"
 
 [dependencies.tauri-store-utils]
-version = "0.2"
+version = "0.3"
 path = "../tauri-store-utils"
 
 [dependencies.tokio]

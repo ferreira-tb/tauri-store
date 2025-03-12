@@ -1,5 +1,6 @@
 use super::{OnLoadFn, StoreCollection, RESOURCE_ID};
 use crate::error::Result;
+
 use crate::store::{SaveStrategy, Store, StoreId};
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
@@ -84,7 +85,7 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
   /// # Panics
   ///
   /// Panics if a store collection is already initialized.
-  pub fn build<M>(self, app: &M) -> Arc<StoreCollection<R>>
+  pub fn build<M>(self, app: &M) -> Result<Arc<StoreCollection<R>>>
   where
     M: Manager<R>,
   {
@@ -106,6 +107,8 @@ mod private {
   use super::RESOURCE_ID;
   use crate::collection::autosave::Autosave;
   use crate::collection::{StoreCollection, StoreCollectionBuilder};
+  use crate::error::Result;
+  use crate::meta;
   use dashmap::DashMap;
   use std::sync::{Arc, Mutex};
   use tauri::{Manager, Runtime};
@@ -115,7 +118,7 @@ mod private {
 
   type Builder<R> = StoreCollectionBuilder<R>;
 
-  pub(super) fn build<R, M>(mut builder: Builder<R>, app: &M) -> Arc<StoreCollection<R>>
+  pub(super) fn build<R, M>(mut builder: Builder<R>, app: &M) -> Result<Arc<StoreCollection<R>>>
   where
     R: Runtime,
     M: Manager<R>,
@@ -143,12 +146,12 @@ mod private {
       app: app.clone(),
       path: Mutex::new(path),
       stores: DashMap::new(),
-      default_save_strategy: builder.default_save_strategy,
-      autosave: Mutex::new(autosave),
       on_load: builder.on_load,
-      pretty: builder.pretty,
+      autosave: Mutex::new(autosave),
+      default_save_strategy: builder.default_save_strategy,
       save_denylist: builder.save_denylist,
       sync_denylist: builder.sync_denylist,
+      pretty: builder.pretty,
     });
 
     #[cfg(tauri_store_tracing)]
@@ -160,9 +163,10 @@ mod private {
 
     let _ = RESOURCE_ID.set(rid);
 
+    meta::load(&collection)?;
     collection.autosave.lock().unwrap().start(app);
 
-    collection
+    Ok(collection)
   }
 }
 

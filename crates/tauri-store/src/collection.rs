@@ -4,6 +4,7 @@ mod path;
 
 use crate::error::Result;
 use crate::event::{emit, STORE_UNLOAD_EVENT};
+use crate::meta;
 use crate::store::{SaveStrategy, Store, StoreId, StoreResource, StoreState, WatcherId};
 use autosave::Autosave;
 use dashmap::DashMap;
@@ -48,18 +49,20 @@ impl<R: Runtime> StoreCollection<R> {
     let id = StoreId::from(id.as_ref());
     let rid = match self.rid(&id) {
       Some(rid) => rid,
-      None => {
-        let (rid, resource) = Store::load(&self.app, &id)?;
-        if let Some(on_load) = &self.on_load {
-          resource.locked(|store| on_load(store))?;
-        }
-
-        self.stores.insert(id, rid);
-        rid
-      }
+      None => self.load_store(id)?,
     };
 
     StoreResource::get(&self.app, rid)
+  }
+
+  fn load_store(&self, id: StoreId) -> Result<ResourceId> {
+    let (rid, resource) = Store::load(&self.app, &id)?;
+    if let Some(on_load) = &self.on_load {
+      resource.locked(|store| on_load(store))?;
+    }
+
+    self.stores.insert(id, rid);
+    Ok(rid)
   }
 
   /// Gets the resource id for a store.
@@ -311,7 +314,7 @@ impl<R: Runtime> StoreCollection<R> {
       }
     }
 
-    Ok(())
+    meta::save(self)
   }
 }
 
@@ -321,24 +324,7 @@ impl<R: Runtime> fmt::Debug for StoreCollection<R> {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     f.debug_struct("StoreCollection")
       .field("default_save_strategy", &self.default_save_strategy)
-      .field("on_load", &self.on_load.is_some())
       .field("pretty", &self.pretty)
-      .field(
-        "save_denylist",
-        &self
-          .save_denylist
-          .as_ref()
-          .map(HashSet::len)
-          .unwrap_or(0),
-      )
-      .field(
-        "sync_denylist",
-        &self
-          .sync_denylist
-          .as_ref()
-          .map(HashSet::len)
-          .unwrap_or(0),
-      )
       .finish_non_exhaustive()
   }
 }

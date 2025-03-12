@@ -1,4 +1,5 @@
 use crate::command;
+use crate::error::BoxResult;
 use crate::manager::ManagerExt;
 use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, RunEvent, Runtime};
@@ -13,10 +14,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
 pub(crate) fn build<R: Runtime>(builder: Builder<R>) -> TauriPlugin<R> {
   tauri::plugin::Builder::new("tauri-store")
     .on_event(on_event)
-    .setup(|app, _| {
-      let _ = builder.build(app);
-      Ok(())
-    })
+    .setup(|app, _| setup(app, builder))
     .invoke_handler(tauri::generate_handler![
       command::clear_autosave,
       command::get_default_save_strategy,
@@ -42,7 +40,18 @@ pub(crate) fn build<R: Runtime>(builder: Builder<R>) -> TauriPlugin<R> {
     .build()
 }
 
-fn on_event<R: Runtime>(app: &AppHandle<R>, event: &RunEvent) {
+fn setup<R>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()>
+where
+  R: Runtime,
+{
+  builder.build(app)?;
+  Ok(())
+}
+
+fn on_event<R>(app: &AppHandle<R>, event: &RunEvent)
+where
+  R: Runtime,
+{
   if let RunEvent::Exit = event {
     let _ = app.store_collection().on_exit();
   }

@@ -99,6 +99,18 @@ impl From<String> for EventSource {
   }
 }
 
+impl From<&String> for EventSource {
+  fn from(source: &String) -> Self {
+    Self(Some(source.to_owned()))
+  }
+}
+
+impl From<Option<String>> for EventSource {
+  fn from(source: Option<String>) -> Self {
+    Self(source)
+  }
+}
+
 impl From<&WebviewWindow> for EventSource {
   fn from(window: &WebviewWindow) -> Self {
     Self(Some(window.label().to_owned()))
