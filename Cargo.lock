@@ -3860,7 +3860,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-pinia"
-version = "3.0.0"
+version = "3.0.0-beta.1"
 dependencies = [
  "serde",
  "tauri",
@@ -3902,7 +3902,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-svelte"
-version = "2.0.0"
+version = "2.0.0-beta.1"
 dependencies = [
  "serde",
  "tauri",
@@ -3913,7 +3913,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-valtio"
-version = "2.0.0"
+version = "2.0.0-beta.1"
 dependencies = [
  "serde",
  "tauri",
@@ -3985,7 +3985,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store"
-version = "0.9.0"
+version = "0.9.0-beta.1"
 dependencies = [
  "anyhow",
  "dashmap",
@@ -4024,7 +4024,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-macros"
-version = "0.9.0"
+version = "0.9.0-beta.1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -4033,7 +4033,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-utils"
-version = "0.3.0"
+version = "0.3.0-beta.1"
 dependencies = [
  "futures",
  "serde",
@@ -4318,7 +4318,7 @@ dependencies = [
  "serde",
  "serde_spanned",
  "toml_datetime",
- "winnow 0.7.3",
+ "winnow 0.7.4",
 ]
 
 [[package]]
@@ -5304,9 +5304,9 @@ dependencies = [
 
 [[package]]
 name = "winnow"
-version = "0.7.3"
+version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0e7f4ea97f6f78012141bcdb6a216b2609f0979ada50b20ca5b52dde2eac2bb1"
+checksum = "0e97b544156e9bebe1a0ffbc03484fc1ffe3100cbce3ffb17eac35f7cdd7ab36"
 dependencies = [
  "memchr",
 ]
