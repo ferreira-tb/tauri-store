@@ -454,6 +454,6 @@ fn store_path<R: Runtime>(app: &AppHandle<R>, id: &StoreId) -> PathBuf {
 }
 
 /// Appends the store filename to the given directory path.
-pub(super) fn append_filename(path: &Path, id: &StoreId) -> PathBuf {
+pub(crate) fn append_filename(path: &Path, id: &StoreId) -> PathBuf {
   path.join(format!("{id}.{FILE_EXTENSION}"))
 }
