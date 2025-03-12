@@ -1,7 +1,7 @@
 use super::StoreCollection;
 use crate::error::Result;
 use crate::io_err;
-use crate::store::{append_filename as append, Store, StoreResource};
+use crate::store::{append_filename, Store, StoreResource};
 use itertools::Itertools;
 use std::path::Path;
 use std::{fs, mem};
@@ -55,8 +55,8 @@ where
 {
   // Calling `Store::path` would be a deadlock!
   // We need to manually append the filename to the path.
-  let current = append(from, &store.id);
-  let new = append(to, &store.id);
+  let current = append_filename(from, &store.id);
+  let new = append_filename(to, &store.id);
 
   if new.try_exists()? {
     let path = new.display();
