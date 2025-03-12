@@ -11,7 +11,7 @@ pub fn read_file<T>(path: impl AsRef<Path>) -> Result<T>
 where
   T: DeserializeOwned + Default,
 {
-  match fs::read(&path) {
+  match fs::read(path) {
     Ok(bytes) => Ok(from_slice(&bytes)?),
     Err(err) if err.kind() == NotFound => Ok(T::default()),
     Err(err) => Err(err),

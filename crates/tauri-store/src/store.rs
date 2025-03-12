@@ -407,6 +407,12 @@ impl<R: Runtime> fmt::Debug for Store<R> {
 #[derive(Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct StoreId(Arc<str>);
 
+impl StoreId {
+  pub fn new(id: &str) -> Self {
+    Self::from(id)
+  }
+}
+
 impl AsRef<str> for StoreId {
   fn as_ref(&self) -> &str {
     &self.0
