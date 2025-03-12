@@ -33,12 +33,12 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('pinia');
  *
  * @example
  * ```ts
- * import { getPiniaPath } from 'tauri-plugin-pinia';
+ * import { getStoreCollectionPath } from 'tauri-plugin-pinia';
  *
- * const path = await getPiniaPath();
+ * const path = await getStoreCollectionPath();
  * ```
  */
-export const getPiniaPath = commands.getStoreCollectionPath('pinia');
+export const getStoreCollectionPath = commands.getStoreCollectionPath('pinia');
 
 /**
  * Gets the save strategy used by a store.
@@ -164,12 +164,12 @@ export const setAutosave = commands.setAutosave('pinia');
  *
  * @example
  * ```ts
- * import { setPiniaPath } from 'tauri-plugin-pinia';
+ * import { setStoreCollectionPath } from 'tauri-plugin-pinia';
  *
- * await setPiniaPath('/path/to/new/directory');
+ * await setStoreCollectionPath('/path/to/new/directory');
  * ```
  */
-export const setPiniaPath = commands.setStoreCollectionPath('pinia');
+export const setStoreCollectionPath = commands.setStoreCollectionPath('pinia');
 
 /**
  * Sets the save strategy for a store.

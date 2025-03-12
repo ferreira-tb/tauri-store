@@ -33,12 +33,12 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('svelte');
  *
  * @example
  * ```ts
- * import { getSveltePath } from 'tauri-plugin-svelte';
+ * import { getStoreCollectionPath } from 'tauri-plugin-svelte';
  *
- * const path = await getSveltePath();
+ * const path = await getStoreCollectionPath();
  * ```
  */
-export const getSveltePath = commands.getStoreCollectionPath('svelte');
+export const getStoreCollectionPath = commands.getStoreCollectionPath('svelte');
 
 /**
  * Gets the save strategy used by a store.
@@ -164,12 +164,12 @@ export const setAutosave = commands.setAutosave('svelte');
  *
  * @example
  * ```ts
- * import { setSveltePath } from 'tauri-plugin-svelte';
+ * import { setStoreCollectionPath } from 'tauri-plugin-svelte';
  *
- * await setSveltePath('/path/to/new/directory');
+ * await setStoreCollectionPath('/path/to/new/directory');
  * ```
  */
-export const setSveltePath = commands.setStoreCollectionPath('svelte');
+export const setStoreCollectionPath = commands.setStoreCollectionPath('svelte');
 
 /**
  * Sets the save strategy for a store.

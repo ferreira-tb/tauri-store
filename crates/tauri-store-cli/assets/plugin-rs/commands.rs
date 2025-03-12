@@ -22,7 +22,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn get___STORE_COLLECTION___path<R>(app: AppHandle<R>) -> PathBuf
+pub(crate) async fn get_store_collection_path<R>(app: AppHandle<R>) -> PathBuf
 where
   R: Runtime,
 {
@@ -138,7 +138,7 @@ where
 }
 
 #[tauri::command]
-pub(crate) async fn set___STORE_COLLECTION___path<R>(app: AppHandle<R>, path: PathBuf) -> Result<()>
+pub(crate) async fn set_store_collection_path<R>(app: AppHandle<R>, path: PathBuf) -> Result<()>
 where
   R: Runtime,
 {

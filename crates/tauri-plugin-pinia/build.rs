@@ -4,7 +4,7 @@
 const COMMANDS: &[&str] = &[
   "clear_autosave",
   "get_default_save_strategy",
-  "get_pinia_path",
+  "get_store_collection_path",
   "get_save_strategy",
   "get_store_ids",
   "get_store_path",
@@ -18,7 +18,7 @@ const COMMANDS: &[&str] = &[
   "save_some",
   "save_some_now",
   "set_autosave",
-  "set_pinia_path",
+  "set_store_collection_path",
   "set_save_strategy",
   "set_store_options",
   "unload",

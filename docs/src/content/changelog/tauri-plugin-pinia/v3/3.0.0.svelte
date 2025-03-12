@@ -16,6 +16,13 @@
 <Changelog.BreakingChanges {version}>
   <ul>
     <li>
+      Rename <code>getPiniaPath</code> to <code>getStoreCollectionPath</code>.
+    </li>
+    <li>
+      Rename <code>setPiniaPath</code> to <code>setStoreCollectionPath</code>.
+    </li>
+
+    <li>
       Remove deprecated <code>StoreOptions.onError</code>. Use
       <Ext href={url.hooks} code>StoreHooks.error</Ext> instead.
     </li>

@@ -3,9 +3,9 @@
 description = "Default permissions for tauri-plugin-svelte."
 permissions = [
   "allow-clear-autosave",
-  "allow-get-svelte-path",
   "allow-get-default-save-strategy",
   "allow-get-save-strategy",
+  "allow-get-store-collection-path",
   "allow-get-store-ids",
   "allow-get-store-path",
   "allow-get-store-state",
@@ -17,9 +17,9 @@ permissions = [
   "allow-save-now",
   "allow-save-some",
   "allow-save-some-now",
-  "allow-set-svelte-path",
   "allow-set-autosave",
   "allow-set-save-strategy",
+  "allow-set-store-collection-path",
   "allow-set-store-options",
   "allow-unload",
 ]

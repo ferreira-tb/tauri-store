@@ -33,12 +33,12 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('valtio');
  *
  * @example
  * ```ts
- * import { getValtioPath } from 'tauri-plugin-valtio';
+ * import { getStoreCollectionPath } from 'tauri-plugin-valtio';
  *
- * const path = await getValtioPath();
+ * const path = await getStoreCollectionPath();
  * ```
  */
-export const getValtioPath = commands.getStoreCollectionPath('valtio');
+export const getStoreCollectionPath = commands.getStoreCollectionPath('valtio');
 
 /**
  * Gets the save strategy used by a store.
@@ -164,12 +164,12 @@ export const setAutosave = commands.setAutosave('valtio');
  *
  * @example
  * ```ts
- * import { setValtioPath } from 'tauri-plugin-valtio';
+ * import { setStoreCollectionPath } from 'tauri-plugin-valtio';
  *
- * await setValtioPath('/path/to/new/directory');
+ * await setStoreCollectionPath('/path/to/new/directory');
  * ```
  */
-export const setValtioPath = commands.setStoreCollectionPath('valtio');
+export const setStoreCollectionPath = commands.setStoreCollectionPath('valtio');
 
 /**
  * Sets the save strategy for a store.

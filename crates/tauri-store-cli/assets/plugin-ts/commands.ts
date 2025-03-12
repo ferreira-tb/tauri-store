@@ -31,14 +31,12 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('__REGISTE
  *
  * @example
  * ```ts
- * import { get__STORE_COLLECTION__Path } from '__PLUGIN_FULL_NAME__';
+ * import { getStoreCollectionPath } from '__PLUGIN_FULL_NAME__';
  *
- * const path = await get__STORE_COLLECTION__Path();
+ * const path = await getStoreCollectionPath();
  * ```
  */
-export const get__STORE_COLLECTION__Path = commands.getStoreCollectionPath(
-  '__REGISTERED_PLUGIN_NAME__'
-);
+export const getStoreCollectionPath = commands.getStoreCollectionPath('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Gets the save strategy used by a store.
@@ -164,14 +162,12 @@ export const setAutosave = commands.setAutosave('__REGISTERED_PLUGIN_NAME__');
  *
  * @example
  * ```ts
- * import { set__STORE_COLLECTION__Path } from '__PLUGIN_FULL_NAME__';
+ * import { setStoreCollectionPath } from '__PLUGIN_FULL_NAME__';
  *
- * await set__STORE_COLLECTION__Path('/path/to/new/directory');
+ * await setStoreCollectionPath('/path/to/new/directory');
  * ```
  */
-export const set__STORE_COLLECTION__Path = commands.setStoreCollectionPath(
-  '__REGISTERED_PLUGIN_NAME__'
-);
+export const setStoreCollectionPath = commands.setStoreCollectionPath('__REGISTERED_PLUGIN_NAME__');
 
 /**
  * Sets the save strategy for a store.

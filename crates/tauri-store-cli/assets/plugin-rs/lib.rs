@@ -39,7 +39,7 @@ impl<R: Runtime> Builder<R> {
       .invoke_handler(tauri::generate_handler![
         command::clear_autosave,
         command::get_default_save_strategy,
-        command::get___STORE_COLLECTION___path,
+        command::get_store_collection_path,
         command::get_save_strategy,
         command::get_store_ids,
         command::get_store_path,
@@ -54,7 +54,7 @@ impl<R: Runtime> Builder<R> {
         command::save_some_now,
         command::set_autosave,
         command::set_save_strategy,
-        command::set___STORE_COLLECTION___path,
+        command::set_store_collection_path,
         command::set_store_options,
         command::unload
       ])

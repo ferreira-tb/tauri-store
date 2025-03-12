@@ -3,9 +3,9 @@
 Default permissions for tauri-plugin-pinia.
 
 - `allow-clear-autosave`
-- `allow-get-pinia-path`
 - `allow-get-default-save-strategy`
 - `allow-get-save-strategy`
+- `allow-get-store-collection-path`
 - `allow-get-store-ids`
 - `allow-get-store-path`
 - `allow-get-store-state`
@@ -17,9 +17,9 @@ Default permissions for tauri-plugin-pinia.
 - `allow-save-now`
 - `allow-save-some`
 - `allow-save-some-now`
-- `allow-set-pinia-path`
 - `allow-set-autosave`
 - `allow-set-save-strategy`
+- `allow-set-store-collection-path`
 - `allow-set-store-options`
 - `allow-unload`
 
@@ -132,6 +132,32 @@ Enables the get_save_strategy command without any pre-configured scope.
 <td>
 
 Denies the get_save_strategy command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-get-store-collection-path`
+
+</td>
+<td>
+
+Enables the get_store_collection_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-get-store-collection-path`
+
+</td>
+<td>
+
+Denies the get_store_collection_path command without any pre-configured scope.
 
 </td>
 </tr>
@@ -496,6 +522,32 @@ Enables the set_save_strategy command without any pre-configured scope.
 <td>
 
 Denies the set_save_strategy command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-set-store-collection-path`
+
+</td>
+<td>
+
+Enables the set_store_collection_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-set-store-collection-path`
+
+</td>
+<td>
+
+Denies the set_store_collection_path command without any pre-configured scope.
 
 </td>
 </tr>

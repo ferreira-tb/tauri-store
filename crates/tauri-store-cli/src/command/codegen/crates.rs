@@ -89,7 +89,6 @@ fn generate_lib(assets: &Path) -> Result<()> {
     .replace(&[
       (PASCAL_PLUGIN_NAME, &|it| it.pascal_name()),
       (SNAKE_PLUGIN_NAME, &|it| it.snake_name()),
-      (STORE_COLLECTION, &|it| store_collection(it, Case::Snake)),
       ("__REGISTERED_PLUGIN_NAME__", &|it| it.snake_name()),
     ])
     .generate()

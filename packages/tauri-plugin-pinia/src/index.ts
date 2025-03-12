@@ -20,8 +20,8 @@ export type {
 export {
   clearAutosave,
   getDefaultSaveStrategy,
-  getPiniaPath,
   getSaveStrategy,
+  getStoreCollectionPath,
   getStoreIds,
   getStorePath,
   getStoreState,
@@ -30,8 +30,8 @@ export {
   saveAllNow,
   saveNow,
   setAutosave,
-  setPiniaPath,
   setSaveStrategy,
+  setStoreCollectionPath,
   setStoreOptions,
 } from './commands';
 

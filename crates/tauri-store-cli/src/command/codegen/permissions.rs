@@ -1,11 +1,9 @@
-use super::util::consts::{PLUGIN_NAME, STORE_COLLECTION};
-use super::util::replace::store_collection;
+use super::util::consts::PLUGIN_NAME;
 use super::{Codegen, Context, Generator};
 use crate::path::{assets_dir, crate_dir};
 use crate::plugin::Plugin;
 use anyhow::Result;
 use colored::Colorize;
-use convert_case::Case;
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::time::Instant;
@@ -51,7 +49,7 @@ fn generate_build_rs(assets: &Path) -> Result<()> {
 
   Generator::builder(&input, &output)
     .skip(&[Plugin::Store])
-    .replace(&[(STORE_COLLECTION, &|it| store_collection(it, Case::Snake))])
+    .replace(&[])
     .generate()
 }
 
@@ -64,10 +62,7 @@ fn generate_default(assets: &Path) -> Result<()> {
 
   Generator::builder(&input, &output)
     .transform(&[])
-    .replace(&[
-      (PLUGIN_NAME, &|it| it.as_ref().to_owned()),
-      (STORE_COLLECTION, &|it| store_collection(it, Case::Kebab)),
-    ])
+    .replace(&[(PLUGIN_NAME, &|it| it.as_ref().to_owned())])
     .generate()
 }
 
