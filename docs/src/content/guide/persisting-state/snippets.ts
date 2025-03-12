@@ -1,4 +1,4 @@
-import { pascalCase, snakeCase } from 'change-case';
+import { snakeCase } from 'change-case';
 import { snippet, snippetGroup } from '$stores/snippet';
 
 export const saveStores = snippetGroup((metadata, ctx) => {
@@ -119,16 +119,15 @@ ${snakeCase(metadata.name)}::Builder::new()
 });
 
 export const setCollectionPath = snippetGroup((metadata, ctx) => {
-  const collection = pascalCase(ctx.collection);
   return [
     {
       id: 'set-collection-path-ts',
       label: 'JavaScript',
       lang: 'typescript',
       value: `
-import { set${collection}Path } from '${metadata.name}';
+import { setStoreCollectionPath } from '${metadata.name}';
 
-await set${collection}Path('/path/to/new/directory');
+await setStoreCollectionPath('/path/to/new/directory');
       `,
     },
     {
