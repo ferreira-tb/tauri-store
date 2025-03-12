@@ -3,9 +3,9 @@
 Default permissions for tauri-plugin-valtio.
 
 - `allow-clear-autosave`
-- `allow-get-valtio-path`
 - `allow-get-default-save-strategy`
 - `allow-get-save-strategy`
+- `allow-get-store-collection-path`
 - `allow-get-store-ids`
 - `allow-get-store-path`
 - `allow-get-store-state`
@@ -17,9 +17,9 @@ Default permissions for tauri-plugin-valtio.
 - `allow-save-now`
 - `allow-save-some`
 - `allow-save-some-now`
-- `allow-set-valtio-path`
 - `allow-set-autosave`
 - `allow-set-save-strategy`
+- `allow-set-store-collection-path`
 - `allow-set-store-options`
 - `allow-unload`
 
@@ -113,6 +113,32 @@ Denies the get_save_strategy command without any pre-configured scope.
 <tr>
 <td>
 
+`valtio:allow-get-store-collection-path`
+
+</td>
+<td>
+
+Enables the get_store_collection_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`valtio:deny-get-store-collection-path`
+
+</td>
+<td>
+
+Denies the get_store_collection_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `valtio:allow-get-store-ids`
 
 </td>
@@ -184,32 +210,6 @@ Enables the get_store_state command without any pre-configured scope.
 <td>
 
 Denies the get_store_state command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`valtio:allow-get-valtio-path`
-
-</td>
-<td>
-
-Enables the get_valtio_path command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`valtio:deny-get-valtio-path`
-
-</td>
-<td>
-
-Denies the get_valtio_path command without any pre-configured scope.
 
 </td>
 </tr>
@@ -477,6 +477,32 @@ Denies the set_save_strategy command without any pre-configured scope.
 <tr>
 <td>
 
+`valtio:allow-set-store-collection-path`
+
+</td>
+<td>
+
+Enables the set_store_collection_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`valtio:deny-set-store-collection-path`
+
+</td>
+<td>
+
+Denies the set_store_collection_path command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `valtio:allow-set-store-options`
 
 </td>
@@ -496,32 +522,6 @@ Enables the set_store_options command without any pre-configured scope.
 <td>
 
 Denies the set_store_options command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`valtio:allow-set-valtio-path`
-
-</td>
-<td>
-
-Enables the set_valtio_path command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`valtio:deny-set-valtio-path`
-
-</td>
-<td>
-
-Denies the set_valtio_path command without any pre-configured scope.
 
 </td>
 </tr>

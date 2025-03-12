@@ -325,6 +325,16 @@
           "const": "deny-get-save-strategy"
         },
         {
+          "description": "Enables the get_store_collection_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-get-store-collection-path"
+        },
+        {
+          "description": "Denies the get_store_collection_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-get-store-collection-path"
+        },
+        {
           "description": "Enables the get_store_ids command without any pre-configured scope.",
           "type": "string",
           "const": "allow-get-store-ids"
@@ -353,16 +363,6 @@
           "description": "Denies the get_store_state command without any pre-configured scope.",
           "type": "string",
           "const": "deny-get-store-state"
-        },
-        {
-          "description": "Enables the get_svelte_path command without any pre-configured scope.",
-          "type": "string",
-          "const": "allow-get-svelte-path"
-        },
-        {
-          "description": "Denies the get_svelte_path command without any pre-configured scope.",
-          "type": "string",
-          "const": "deny-get-svelte-path"
         },
         {
           "description": "Enables the load command without any pre-configured scope.",
@@ -465,6 +465,16 @@
           "const": "deny-set-save-strategy"
         },
         {
+          "description": "Enables the set_store_collection_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-store-collection-path"
+        },
+        {
+          "description": "Denies the set_store_collection_path command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-store-collection-path"
+        },
+        {
           "description": "Enables the set_store_options command without any pre-configured scope.",
           "type": "string",
           "const": "allow-set-store-options"
@@ -473,16 +483,6 @@
           "description": "Denies the set_store_options command without any pre-configured scope.",
           "type": "string",
           "const": "deny-set-store-options"
-        },
-        {
-          "description": "Enables the set_svelte_path command without any pre-configured scope.",
-          "type": "string",
-          "const": "allow-set-svelte-path"
-        },
-        {
-          "description": "Denies the set_svelte_path command without any pre-configured scope.",
-          "type": "string",
-          "const": "deny-set-svelte-path"
         },
         {
           "description": "Enables the unload command without any pre-configured scope.",

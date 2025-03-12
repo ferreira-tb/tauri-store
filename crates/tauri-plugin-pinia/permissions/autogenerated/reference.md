@@ -87,32 +87,6 @@ Denies the get_default_save_strategy command without any pre-configured scope.
 <tr>
 <td>
 
-`pinia:allow-get-pinia-path`
-
-</td>
-<td>
-
-Enables the get_pinia_path command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`pinia:deny-get-pinia-path`
-
-</td>
-<td>
-
-Denies the get_pinia_path command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
 `pinia:allow-get-save-strategy`
 
 </td>
@@ -470,32 +444,6 @@ Enables the set_autosave command without any pre-configured scope.
 <td>
 
 Denies the set_autosave command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`pinia:allow-set-pinia-path`
-
-</td>
-<td>
-
-Enables the set_pinia_path command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`pinia:deny-set-pinia-path`
-
-</td>
-<td>
-
-Denies the set_pinia_path command without any pre-configured scope.
 
 </td>
 </tr>
