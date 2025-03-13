@@ -3860,7 +3860,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-pinia"
-version = "3.0.0-beta.2"
+version = "3.0.0-beta.3"
 dependencies = [
  "serde",
  "tauri",
@@ -3902,7 +3902,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-svelte"
-version = "2.0.0-beta.2"
+version = "2.0.0-beta.3"
 dependencies = [
  "serde",
  "tauri",
@@ -3913,7 +3913,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-valtio"
-version = "2.0.0-beta.2"
+version = "2.0.0-beta.3"
 dependencies = [
  "serde",
  "tauri",
@@ -3985,7 +3985,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store"
-version = "0.9.0-beta.2"
+version = "0.9.0-beta.3"
 dependencies = [
  "anyhow",
  "dashmap",
@@ -4024,7 +4024,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-macros"
-version = "0.9.0-beta.2"
+version = "0.9.0-beta.3"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -4033,8 +4033,9 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-utils"
-version = "0.3.0-beta.1"
+version = "0.3.0-beta.2"
 dependencies = [
+ "bon",
  "futures",
  "serde",
  "serde_json",
@@ -4216,9 +4217,9 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
-version = "1.44.0"
+version = "1.44.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9975ea0f48b5aa3972bf2d888c238182458437cc2a19374b81b25cdf1023fb3a"
+checksum = "f382da615b842244d4b8738c82ed1275e6c5dd90c459a30941cd07080b06c91a"
 dependencies = [
  "backtrace",
  "bytes",
@@ -4253,9 +4254,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-util"
-version = "0.7.13"
+version = "0.7.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d7fcaa8d55a2bdd6b83ace262b016eca0d79ee02818c5c1bcdf0305114081078"
+checksum = "6b9590b93e6fcc1739458317cccd391ad3955e2bde8913edf6f95f9e65a8f034"
 dependencies = [
  "bytes",
  "futures-core",

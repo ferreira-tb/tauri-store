@@ -29,6 +29,7 @@ pub type OnLoadFn<R> = dyn Fn(&Store<R>) -> Result<()> + Send + Sync;
 /// This is the core component for store plugins.
 pub struct StoreCollection<R: Runtime> {
   pub(crate) app: AppHandle<R>,
+  pub(crate) name: Box<str>,
   pub(crate) path: Mutex<PathBuf>,
   pub(crate) stores: DashMap<StoreId, ResourceId>,
   pub(crate) on_load: Option<Box<OnLoadFn<R>>>,
@@ -92,7 +93,9 @@ impl<R: Runtime> StoreCollection<R> {
   /// Sets the directory where the stores are saved.
   /// This will move all *currently active* stores to the new directory.
   pub fn set_path(&self, path: impl AsRef<Path>) -> Result<()> {
-    set_path(self, path)
+    set_path(self, path)?;
+    meta::save(self)?;
+    Ok(())
   }
 
   /// Calls a closure with a mutable reference to the store with the given id.

@@ -1,15 +1,20 @@
 use super::{OnLoadFn, StoreCollection, RESOURCE_ID};
+use crate::collection::autosave::Autosave;
 use crate::error::Result;
-
+use crate::meta;
 use crate::store::{SaveStrategy, Store, StoreId};
+use dashmap::DashMap;
 use std::collections::HashSet;
 use std::path::{Path, PathBuf};
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tauri::{Manager, Runtime};
 
 #[cfg(feature = "plugin")]
 use tauri::plugin::TauriPlugin;
+
+#[cfg(tauri_store_tracing)]
+use tracing::trace;
 
 /// Builder for the [`StoreCollection`](crate::collection::StoreCollection).
 pub struct StoreCollectionBuilder<R: Runtime> {
@@ -80,18 +85,6 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
     self
   }
 
-  /// Builds the [`StoreCollection`](crate::collection::StoreCollection).
-  ///
-  /// # Panics
-  ///
-  /// Panics if a store collection is already initialized.
-  pub fn build<M>(self, app: &M) -> Result<Arc<StoreCollection<R>>>
-  where
-    M: Manager<R>,
-  {
-    private::build(self, app)
-  }
-
   /// Initializes the plugin with a [`StoreCollection`](crate::collection::StoreCollection).
   ///
   /// # Panics
@@ -101,26 +94,15 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
   pub fn build_plugin(self) -> TauriPlugin<R> {
     crate::plugin::build(self)
   }
-}
 
-mod private {
-  use super::RESOURCE_ID;
-  use crate::collection::autosave::Autosave;
-  use crate::collection::{StoreCollection, StoreCollectionBuilder};
-  use crate::error::Result;
-  use crate::meta;
-  use dashmap::DashMap;
-  use std::sync::{Arc, Mutex};
-  use tauri::{Manager, Runtime};
-
-  #[cfg(tauri_store_tracing)]
-  use tracing::trace;
-
-  type Builder<R> = StoreCollectionBuilder<R>;
-
-  pub(super) fn build<R, M>(mut builder: Builder<R>, app: &M) -> Result<Arc<StoreCollection<R>>>
+  /// Builds the [`StoreCollection`](crate::collection::StoreCollection).
+  ///
+  /// # Panics
+  ///
+  /// Panics if a store collection is already initialized.
+  #[doc(hidden)]
+  pub fn build<M>(mut self, app: &M, name: &str) -> Result<Arc<StoreCollection<R>>>
   where
-    R: Runtime,
     M: Manager<R>,
   {
     assert!(
@@ -128,30 +110,31 @@ mod private {
       "store collection is already initialized"
     );
 
-    let path = builder.path.take().unwrap_or_else(|| {
+    let path = self.path.take().unwrap_or_else(|| {
       app
         .path()
         .app_data_dir()
         .expect("failed to resolve app data dir")
-        .join(env!("CARGO_PKG_NAME"))
+        .join(name)
     });
 
-    builder.save_denylist = builder.save_denylist.filter(|it| !it.is_empty());
-    builder.sync_denylist = builder.sync_denylist.filter(|it| !it.is_empty());
+    self.save_denylist = self.save_denylist.filter(|it| !it.is_empty());
+    self.sync_denylist = self.sync_denylist.filter(|it| !it.is_empty());
 
-    let autosave = Autosave::new(builder.autosave);
+    let autosave = Autosave::new(self.autosave);
 
     let app = app.app_handle();
     let collection = Arc::new(StoreCollection::<R> {
       app: app.clone(),
+      name: Box::from(name),
       path: Mutex::new(path),
       stores: DashMap::new(),
-      on_load: builder.on_load,
+      on_load: self.on_load,
       autosave: Mutex::new(autosave),
-      default_save_strategy: builder.default_save_strategy,
-      save_denylist: builder.save_denylist,
-      sync_denylist: builder.sync_denylist,
-      pretty: builder.pretty,
+      default_save_strategy: self.default_save_strategy,
+      save_denylist: self.save_denylist,
+      sync_denylist: self.sync_denylist,
+      pretty: self.pretty,
     });
 
     #[cfg(tauri_store_tracing)]

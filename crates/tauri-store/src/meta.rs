@@ -3,8 +3,8 @@ use crate::error::Result;
 use semver::Version;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
-use tauri::{AppHandle, Manager, Runtime};
-use tauri_store_utils::{read_file, write_file, WriteFileOptions};
+use tauri::{Manager, Runtime};
+use tauri_store_utils::{read_file, write_file};
 
 #[cfg(debug_assertions)]
 const FILENAME: &str = "meta.dev.tauristore";
@@ -30,8 +30,12 @@ pub(crate) fn load<R>(collection: &StoreCollection<R>) -> Result<()>
 where
   R: Runtime,
 {
-  let path = path(&collection.app)?;
-  let meta = read_file::<Meta>(&path)?;
+  let path = path(collection)?;
+  let meta: Meta = read_file(&path)
+    .create(true)
+    .create_pretty(true)
+    .create_sync(cfg!(feature = "file-sync-all"))
+    .call()?;
 
   if let Some(path) = meta.path {
     *collection.path.lock().unwrap() = path;
@@ -49,20 +53,26 @@ where
     version: current_version(),
   };
 
-  write_file(path(&collection.app)?, &meta, &WriteFileOptions::default())?;
+  write_file(path(collection)?, &meta)
+    .sync(cfg!(feature = "file-sync-all"))
+    .pretty(true)
+    .call()?;
 
   Ok(())
 }
 
-fn path<R>(app: &AppHandle<R>) -> Result<PathBuf>
+fn path<R>(collection: &StoreCollection<R>) -> Result<PathBuf>
 where
   R: Runtime,
 {
-  app
+  let path = collection
+    .app
     .path()
-    .app_config_dir()
-    .map(|dir| dir.join(FILENAME))
-    .map_err(Into::into)
+    .app_config_dir()?
+    .join(collection.name.as_ref())
+    .join(FILENAME);
+
+  Ok(path)
 }
 
 fn current_version() -> Version {

@@ -1,6 +1,6 @@
 {
   "name": "tauri-plugin-svelte",
-  "version": "2.0.0-beta.2",
+  "version": "2.0.0-beta.3",
   "description": "Persistent Svelte stores and runes for Tauri",
   "type": "module",
   "private": false,

@@ -18,7 +18,7 @@ use std::path::{Path, PathBuf};
 use std::sync::{Arc, OnceLock};
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, ResourceId, Runtime};
-use tauri_store_utils::{read_file, write_file, WriteFileOptions};
+use tauri_store_utils::{read_file, write_file};
 use watch::Watcher;
 
 use crate::event::{
@@ -59,7 +59,7 @@ impl<R: Runtime> Store<R> {
   pub(crate) fn load(app: &AppHandle<R>, id: impl AsRef<str>) -> Result<ResourceTuple<R>> {
     let id = StoreId::from(id.as_ref());
     let path = store_path(app, &id);
-    let state = read_file(&path)?;
+    let state = read_file(&path).call()?;
 
     #[cfg(tauri_store_tracing)]
     debug!("store loaded: {id}");
@@ -237,12 +237,10 @@ impl<R: Runtime> Store<R> {
       return Ok(());
     }
 
-    let options = WriteFileOptions {
-      pretty: collection.pretty,
-      sync: cfg!(feature = "file-sync-all"),
-    };
-
-    write_file(self.path(), &self.state, &options)?;
+    write_file(self.path(), &self.state)
+      .sync(cfg!(feature = "file-sync-all"))
+      .pretty(collection.pretty)
+      .call()?;
 
     #[cfg(tauri_store_tracing)]
     debug!("store saved: {}", self.id);
@@ -404,6 +402,7 @@ impl<R: Runtime> fmt::Debug for Store<R> {
   }
 }
 
+/// Unique identifier for a store.
 #[derive(Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct StoreId(Arc<str>);
 

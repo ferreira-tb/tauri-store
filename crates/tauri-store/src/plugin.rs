@@ -44,7 +44,7 @@ fn setup<R>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()>
 where
   R: Runtime,
 {
-  builder.build(app)?;
+  builder.build(app, env!("CARGO_PKG_NAME"))?;
   Ok(())
 }
 

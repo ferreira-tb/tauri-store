@@ -26,7 +26,7 @@ impl Context {
     let app = mock_app();
     let collection = StoreCollection::builder()
       .path(&*PATH)
-      .build(app.app_handle())
+      .build(app.app_handle(), env!("CARGO_PKG_NAME"))
       .unwrap();
 
     Self {
