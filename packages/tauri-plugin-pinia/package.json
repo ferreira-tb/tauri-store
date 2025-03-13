@@ -1,6 +1,6 @@
 {
   "name": "tauri-plugin-pinia",
-  "version": "3.0.0-beta.1",
+  "version": "3.0.0-beta.2",
   "description": "Persistent Pinia stores for Tauri",
   "type": "module",
   "private": false,
