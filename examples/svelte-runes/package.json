@@ -1,7 +1,7 @@
 {
   "name": "example-svelte-runes",
   "type": "module",
-  "packageManager": "pnpm@10.6.2",
+  "packageManager": "pnpm@10.6.3",
   "private": true,
   "scripts": {
     "sync": "svelte-kit sync",
