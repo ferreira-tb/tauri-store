@@ -19,7 +19,8 @@ param(
   [switch]$OnlyCrate,
   [switch]$OnlyPackage,
   [switch]$SkipCodegen,
-  [switch]$SkipLint
+  [switch]$SkipLint,
+  [switch]$SkipTest
 )
 
 $ErrorActionPreference = 'Stop'
@@ -33,6 +34,11 @@ if (-not $SkipCodegen -and -not $Fast) {
 if (-not $SkipLint -and -not $Fast) {
   pnpm run clippy
   pnpm run eslint
+  pnpm run type-check
+}
+
+if (-not $SkipTest -and -not $Fast) {
+  pnpm run test:crate
 }
 
 pnpm run build
