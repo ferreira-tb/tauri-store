@@ -1,4 +1,3 @@
-use super::util::consts::{IMPORT_SOURCE, PASCAL_PLUGIN_NAME, SNAKE_PLUGIN_NAME, STORE_COLLECTION};
 use super::util::replace::store_collection;
 use super::{Context, Generator};
 use crate::path::{assets_dir, crate_src_dir};
@@ -34,7 +33,7 @@ fn generate_plugin(assets: &Path) -> Result<()> {
 
   Generator::builder(&input, &output)
     .skip(&[Plugin::Store])
-    .replace(&[(PASCAL_PLUGIN_NAME, &|it| it.pascal_name())])
+    .replace(&[("__PASCAL_PLUGIN_TITLE__", &|it| it.title_as(Case::Pascal))])
     .generate()
 }
 
@@ -48,8 +47,8 @@ fn generate_manager(assets: &Path) -> Result<()> {
   Generator::builder(&input, &output)
     .skip(&[Plugin::Store])
     .replace(&[
-      (PASCAL_PLUGIN_NAME, &|it| it.pascal_name()),
-      (SNAKE_PLUGIN_NAME, &|it| it.snake_name()),
+      ("__PASCAL_PLUGIN_TITLE__", &|it| it.title_as(Case::Pascal)),
+      ("__SNAKE_PLUGIN_TITLE__", &|it| it.title_as(Case::Snake)),
     ])
     .generate()
 }
@@ -71,8 +70,10 @@ fn generate_commands(assets: &Path) -> Result<()> {
 
   Generator::builder(&input, &output)
     .replace(&[
-      (IMPORT_SOURCE, &import_source),
-      (STORE_COLLECTION, &|it| store_collection(it, Case::Snake)),
+      ("__IMPORT_SOURCE__", &import_source),
+      ("__STORE_COLLECTION__", &|it| {
+        store_collection(it, Case::Snake)
+      }),
     ])
     .generate()
 }
@@ -87,9 +88,9 @@ fn generate_lib(assets: &Path) -> Result<()> {
   Generator::builder(&input, &output)
     .skip(&[Plugin::Store])
     .replace(&[
-      (PASCAL_PLUGIN_NAME, &|it| it.pascal_name()),
-      (SNAKE_PLUGIN_NAME, &|it| it.snake_name()),
-      ("__REGISTERED_PLUGIN_NAME__", &|it| it.snake_name()),
+      ("__PASCAL_PLUGIN_TITLE__", &|it| it.title_as(Case::Pascal)),
+      ("__SNAKE_PLUGIN_TITLE__", &|it| it.title_as(Case::Snake)),
+      ("__REGISTERED_PLUGIN_NAME__", &|it| it.title_as(Case::Snake)),
     ])
     .generate()
 }

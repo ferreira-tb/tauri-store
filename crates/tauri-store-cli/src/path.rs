@@ -30,7 +30,7 @@ join_dir!(examples_dir, EXAMPLES_DIR);
 join_dir!(packages_dir, PACKAGES_DIR);
 
 pub fn crate_dir(plugin: Plugin) -> PathBuf {
-  crates_dir().join(plugin.as_ref())
+  crates_dir().join(plugin.dir_name())
 }
 
 pub fn crate_src_dir(plugin: Plugin) -> PathBuf {
@@ -38,5 +38,5 @@ pub fn crate_src_dir(plugin: Plugin) -> PathBuf {
 }
 
 pub fn package_src_dir(plugin: Plugin) -> PathBuf {
-  packages_dir().join(plugin.as_ref()).join("src")
+  packages_dir().join(plugin.dir_name()).join("src")
 }

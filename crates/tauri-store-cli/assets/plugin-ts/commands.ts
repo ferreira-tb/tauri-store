@@ -6,12 +6,12 @@ import { commands } from '@tauri-store/shared';
  *
  * @example
  * ```ts
- * import { clearAutosave } from '__PLUGIN_FULL_NAME__';
+ * import { clearAutosave } from '__PACKAGE_NAME__';
  *
  * await clearAutosave();
  * ```
  */
-export const clearAutosave = commands.clearAutosave('__REGISTERED_PLUGIN_NAME__');
+export const clearAutosave = commands.clearAutosave('__PLUGIN_TITLE__');
 
 /**
  * Gets the default save strategy for the stores.
@@ -19,79 +19,79 @@ export const clearAutosave = commands.clearAutosave('__REGISTERED_PLUGIN_NAME__'
  *
  * @example
  * ```ts
- * import { getDefaultSaveStrategy } from '__PLUGIN_FULL_NAME__';
+ * import { getDefaultSaveStrategy } from '__PACKAGE_NAME__';
  *
  * const { strategy, interval } = await getDefaultSaveStrategy();
  * ```
  */
-export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('__REGISTERED_PLUGIN_NAME__');
+export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('__PLUGIN_TITLE__');
 
 /**
  * Directory where the stores are saved.
  *
  * @example
  * ```ts
- * import { getStoreCollectionPath } from '__PLUGIN_FULL_NAME__';
+ * import { getStoreCollectionPath } from '__PACKAGE_NAME__';
  *
  * const path = await getStoreCollectionPath();
  * ```
  */
-export const getStoreCollectionPath = commands.getStoreCollectionPath('__REGISTERED_PLUGIN_NAME__');
+export const getStoreCollectionPath = commands.getStoreCollectionPath('__PLUGIN_TITLE__');
 
 /**
  * Gets the save strategy used by a store.
  *
  * @example
  * ```ts
- * import { getSaveStrategy } from '__PLUGIN_FULL_NAME__';
+ * import { getSaveStrategy } from '__PACKAGE_NAME__';
  *
  * const { strategy, interval } = await getSaveStrategy('my-store');
  * ```
  **/
-export const getSaveStrategy = commands.getSaveStrategy('__REGISTERED_PLUGIN_NAME__');
+export const getSaveStrategy = commands.getSaveStrategy('__PLUGIN_TITLE__');
 
 /**
  * Lists all the store ids.
  *
  * @example
  * ```ts
- * import { getStoreIds } from '__PLUGIN_FULL_NAME__';
+ * import { getStoreIds } from '__PACKAGE_NAME__';
  *
  * const ids = await getStoreIds();
  * ```
  */
-export const getStoreIds = commands.getStoreIds('__REGISTERED_PLUGIN_NAME__');
+export const getStoreIds = commands.getStoreIds('__PLUGIN_TITLE__');
 
 /**
  * Path where the store is saved.
  *
  * @example
  * ```ts
- * import { getStorePath } from '__PLUGIN_FULL_NAME__';
+ * import { getStorePath } from '__PACKAGE_NAME__';
  *
  * const path = await getStorePath('my-store');
  * ```
  **/
-export const getStorePath = commands.getStorePath('__REGISTERED_PLUGIN_NAME__');
+export const getStorePath = commands.getStorePath('__PLUGIN_TITLE__');
 
 /**
  * Gets the state of a store.
  *
  * @example
  * ```ts
- * import { getStoreState } from '__PLUGIN_FULL_NAME__';
+ * import { getStoreState } from '__PACKAGE_NAME__';
  *
- * const state = await getStoreState('counter-store');
+ * const state = await getStoreState('my-store');
  * ```
  */
-export const getStoreState = commands.getStoreState('__REGISTERED_PLUGIN_NAME__');
+export const getStoreState = commands.getStoreState('__PLUGIN_TITLE__');
 
 /**
  * Saves a store to the disk.
  *
  * @example
  * ```ts
- * import { save } from '__PLUGIN_FULL_NAME__';
+ * import { save } from '__PACKAGE_NAME__';
  *
  * // Save a single store.
  * await save('my-store');
@@ -100,38 +100,38 @@ export const getStoreState = commands.getStoreState('__REGISTERED_PLUGIN_NAME__'
  * await save('my-store', 'my-store-2');
  * ```
  **/
-export const save = commands.save('__REGISTERED_PLUGIN_NAME__');
+export const save = commands.save('__PLUGIN_TITLE__');
 
 /**
  * Saves all the stores to the disk.
  *
  * @example
  * ```ts
- * import { saveAll } from '__PLUGIN_FULL_NAME__';
+ * import { saveAll } from '__PACKAGE_NAME__';
  *
  * await saveAll();
  * ```
  */
-export const saveAll = commands.saveAll('__REGISTERED_PLUGIN_NAME__');
+export const saveAll = commands.saveAll('__PLUGIN_TITLE__');
 
 /**
  * Saves all the stores to the disk immediately, ignoring the save strategy.
  *
  * @example
  * ```ts
- * import { saveAllNow } from '__PLUGIN_FULL_NAME__';
+ * import { saveAllNow } from '__PACKAGE_NAME__';
  *
  * await saveAllNow();
  * ```
  */
-export const saveAllNow = commands.saveAllNow('__REGISTERED_PLUGIN_NAME__');
+export const saveAllNow = commands.saveAllNow('__PLUGIN_TITLE__');
 
 /**
  * Saves a store to the disk immediately, ignoring the save strategy.
  *
  * @example
  * ```ts
- * import { saveNow } from '__PLUGIN_FULL_NAME__';
+ * import { saveNow } from '__PACKAGE_NAME__';
  *
  * // Save a single store.
  * await saveNow('my-store');
@@ -140,7 +140,7 @@ export const saveAllNow = commands.saveAllNow('__REGISTERED_PLUGIN_NAME__');
  * await saveNow('my-store', 'my-store-2');
  * ```
  */
-export const saveNow = commands.saveNow('__REGISTERED_PLUGIN_NAME__');
+export const saveNow = commands.saveNow('__PLUGIN_TITLE__');
 
 /**
  * Saves the stores periodically.
@@ -148,13 +148,13 @@ export const saveNow = commands.saveNow('__REGISTERED_PLUGIN_NAME__');
  *
  * @example
  * ```ts
- * import { setAutosave } from '__PLUGIN_FULL_NAME__';
+ * import { setAutosave } from '__PACKAGE_NAME__';
  *
  * // Save all the stores every 5 minutes.
  * await setAutosave(5 * 60 * 1000);
  * ```
  */
-export const setAutosave = commands.setAutosave('__REGISTERED_PLUGIN_NAME__');
+export const setAutosave = commands.setAutosave('__PLUGIN_TITLE__');
 
 /**
  * Sets the directory where the stores are saved.
@@ -162,12 +162,12 @@ export const setAutosave = commands.setAutosave('__REGISTERED_PLUGIN_NAME__');
  *
  * @example
  * ```ts
- * import { setStoreCollectionPath } from '__PLUGIN_FULL_NAME__';
+ * import { setStoreCollectionPath } from '__PACKAGE_NAME__';
  *
  * await setStoreCollectionPath('/path/to/new/directory');
  * ```
  */
-export const setStoreCollectionPath = commands.setStoreCollectionPath('__REGISTERED_PLUGIN_NAME__');
+export const setStoreCollectionPath = commands.setStoreCollectionPath('__PLUGIN_TITLE__');
 
 /**
  * Sets the save strategy for a store.
@@ -175,19 +175,19 @@ export const setStoreCollectionPath = commands.setStoreCollectionPath('__REGISTE
  *
  * @example
  * ```ts
- * import { setSaveStrategy } from '__PLUGIN_FULL_NAME__';
+ * import { setSaveStrategy } from '__PACKAGE_NAME__';
  *
  * await setSaveStrategy('my-store', 'debounce', 1000);
  * ```
  */
-export const setSaveStrategy = commands.setSaveStrategy('__REGISTERED_PLUGIN_NAME__');
+export const setSaveStrategy = commands.setSaveStrategy('__PLUGIN_TITLE__');
 
 /**
  * Sets the store options.
  *
  * @example
  * ```ts
- * import { setStoreOptions } from '__PLUGIN_FULL_NAME__';
+ * import { setStoreOptions } from '__PACKAGE_NAME__';
  *
  * await setStoreOptions('my-store', {
  *  saveOnChange: true,
@@ -196,17 +196,17 @@ export const setSaveStrategy = commands.setSaveStrategy('__REGISTERED_PLUGIN_NAM
  * });
  * ```
  */
-export const setStoreOptions = commands.setStoreOptions('__REGISTERED_PLUGIN_NAME__');
+export const setStoreOptions = commands.setStoreOptions('__PLUGIN_TITLE__');
 
 /////////////////////////
 // INTERNAL COMMANDS
 /////////////////////////
 
 /** @internal */
-export const load = commands.load('__REGISTERED_PLUGIN_NAME__');
+export const load = commands.load('__PLUGIN_TITLE__');
 
 /** @internal */
-export const patch = commands.patch('__REGISTERED_PLUGIN_NAME__');
+export const patch = commands.patch('__PLUGIN_TITLE__');
 
 /** @internal */
-export const unload = commands.unload('__REGISTERED_PLUGIN_NAME__');
+export const unload = commands.unload('__PLUGIN_TITLE__');

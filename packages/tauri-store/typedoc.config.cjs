@@ -1,7 +1,7 @@
 /** @type {import('typedoc').TypeDocOptions} */
 module.exports = {
   entryPoints: ['src/index.ts'],
-  out: '../../docs/dist/reference/tauri-store',
+  out: '../../docs/dist/js-docs/tauri-store',
   titleLink: 'https://tb.dev.br/tauri-store/guide/getting-started?plugin=tauri-store',
   includeVersion: true,
   excludeInternal: true,

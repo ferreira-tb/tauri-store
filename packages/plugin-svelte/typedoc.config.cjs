@@ -1,7 +1,7 @@
 /** @type {import('typedoc').TypeDocOptions} */
 module.exports = {
   entryPoints: ['src/lib/index.ts'],
-  out: '../../docs/dist/reference/tauri-plugin-svelte',
+  out: '../../docs/dist/js-docs/tauri-plugin-svelte',
   titleLink: 'https://tb.dev.br/tauri-store/guide/getting-started?plugin=tauri-plugin-svelte',
   includeVersion: true,
   excludeInternal: true,

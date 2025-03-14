@@ -2,25 +2,7 @@ use semver::Version;
 use serde::{Deserialize, Serialize};
 
 pub trait Manifest {
-  fn name(&self) -> &str;
-  fn version(&self) -> &Version;
-}
-
-#[derive(Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct Package {
-  name: String,
-  version: Version,
-}
-
-impl Manifest for Package {
-  fn name(&self) -> &str {
-    &self.name
-  }
-
-  fn version(&self) -> &Version {
-    &self.version
-  }
+  fn version(&self) -> Version;
 }
 
 #[derive(Deserialize, Serialize)]
@@ -36,11 +18,19 @@ impl Crate {
 }
 
 impl Manifest for Crate {
-  fn name(&self) -> &str {
-    self.package.name()
-  }
-
-  fn version(&self) -> &Version {
+  fn version(&self) -> Version {
     self.package.version()
+  }
+}
+
+#[derive(Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Package {
+  version: Version,
+}
+
+impl Manifest for Package {
+  fn version(&self) -> Version {
+    self.version.clone()
   }
 }

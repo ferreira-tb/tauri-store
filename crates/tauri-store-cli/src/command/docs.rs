@@ -35,20 +35,18 @@ fn generate_metadata() -> Result<()> {
   let mut plugins = Vec::with_capacity(Plugin::VARIANTS.len());
   for plugin in Plugin::VARIANTS {
     let manifest = plugin.manifest()?;
-    let plugin_name = plugin.name();
-
-    let name = manifest.name();
-    let docs_url = DocsUrl::builder()
-      .javascript(docs_js(name))
-      .rust(docs_rs(name))
-      .changelog(changelog(name))
-      .build();
-
+    let crate_name = plugin.crate_name();
     let metadata = Metadata::builder()
-      .name(name)
-      .version(manifest.version().clone())
-      .title(plugin_name.to_case(Case::Title))
-      .docs(docs_url)
+      .crate_name(&crate_name)
+      .package_name(plugin.package_name())
+      .title(plugin.title())
+      .version(manifest.version())
+      .docs(
+        DocsUrl::builder()
+          .js(docs_js(&crate_name))
+          .rust(docs_rs(&crate_name))
+          .build(),
+      )
       .build();
 
     plugins.push(metadata);
@@ -66,15 +64,16 @@ fn generate_metadata() -> Result<()> {
 #[serde(rename_all = "camelCase")]
 #[builder(on(String, into))]
 struct Metadata {
-  name: String,
+  crate_name: String,
+  package_name: String,
+  title: String,
   version: Version,
-  title: Option<String>,
   docs: DocsUrl,
 }
 
 impl PartialEq for Metadata {
   fn eq(&self, other: &Self) -> bool {
-    self.name == other.name
+    self.crate_name == other.crate_name
   }
 }
 
@@ -87,8 +86,8 @@ impl PartialOrd for Metadata {
 }
 
 impl Ord for Metadata {
-  fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-    self.name.cmp(&other.name)
+  fn cmp(&self, other: &Self) -> Ordering {
+    self.crate_name.cmp(&other.crate_name)
   }
 }
 
@@ -96,20 +95,15 @@ impl Ord for Metadata {
 #[serde(rename_all = "camelCase")]
 #[builder(on(String, into))]
 struct DocsUrl {
-  javascript: Option<String>,
+  js: String,
   rust: String,
-  changelog: String,
 }
 
-fn docs_js(name: &str) -> String {
-  format!("https://tb.dev.br/tauri-store/reference/{name}")
+fn docs_js(crate_name: &str) -> String {
+  format!("https://tb.dev.br/tauri-store/js-docs/{crate_name}")
 }
 
-fn docs_rs(name: &str) -> String {
-  let snake = name.to_case(Case::Snake);
-  format!("https://tb.dev.br/tauri-store/rust-docs/{snake}")
-}
-
-fn changelog(name: &str) -> String {
-  format!("/tauri-store/changelog/{name}")
+fn docs_rs(crate_name: &str) -> String {
+  let name = crate_name.to_case(Case::Snake);
+  format!("https://tb.dev.br/tauri-store/rust-docs/{name}")
 }

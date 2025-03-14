@@ -8,6 +8,7 @@ pub type Result<T> = StdResult<T, Error>;
 /// A [`Result`](std::result::Result) type with a boxed error.
 pub type BoxResult<T> = StdResult<T, Box<dyn StdError>>;
 
+/// Runtime errors for the stores.
 #[non_exhaustive]
 #[derive(thiserror::Error, Debug)]
 pub enum Error {

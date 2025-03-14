@@ -1,4 +1,3 @@
-use super::util::consts::PLUGIN_NAME;
 use super::{Codegen, Context, Generator};
 use crate::path::{assets_dir, crate_dir};
 use crate::plugin::Plugin;
@@ -62,7 +61,7 @@ fn generate_default(assets: &Path) -> Result<()> {
 
   Generator::builder(&input, &output)
     .transform(&[])
-    .replace(&[(PLUGIN_NAME, &|it| it.as_ref().to_owned())])
+    .replace(&[("__CRATE_NAME__", &|it| it.crate_name())])
     .generate()
 }
 

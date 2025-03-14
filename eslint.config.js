@@ -2,7 +2,7 @@ import { defineConfig } from '@tb-dev/eslint-config';
 
 export default defineConfig({
   project: [
-    'docs/tsconfig.json',
+    //'docs/tsconfig.json',
     'examples/pinia/tsconfig.json',
     'examples/pinia-nuxt/tsconfig.json',
     'examples/svelte/tsconfig.json',
