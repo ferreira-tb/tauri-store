@@ -31,8 +31,15 @@ $Title = "$Package v$Version"
 $Tag = $Title -replace '\s', '-'
 $Repo = 'ferreira-tb/tauri-store'
 
-$KebabVersion = $Version -replace '\.', '-'
-$Changelog = "https://tb.dev.br/tauri-store/changelog/$Package#v$KebabVersion"
+$Filename = $null
+switch ($Package) {
+  '@tauri-store/pinia' { $Filename = 'plugin-pinia' }
+  '@tauri-store/svelte' { $Filename = 'plugin-svelte' }
+  '@tauri-store/valtio' { $Filename = 'plugin-valtio' }
+  default { $Filename = $Package }
+}
+
+$Changelog = "https://github.com/$Repo/blob/main/changelogs/$Filename.md"
 $Notes = @"
 Please refer to the [changelog]($Changelog) for details.
 "@
