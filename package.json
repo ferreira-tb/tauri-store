@@ -8,6 +8,7 @@
     "build:docs": "pwsh scripts/build-docs.ps1",
     "build:shared": "pnpm run -F @tauri-store/shared build",
     "build:package": "pnpm run -F \"tauri-store\" -F \"./packages/plugin-*\" build",
+    "cli": "cargo install --path ./crates/tauri-store-cli --force",
     "clippy": "cargo +nightly clippy --workspace",
     "codegen": "cargo run -p tauri-store-cli -- codegen",
     "dev": "cargo tauri dev",
@@ -17,10 +18,9 @@
     "eslint:fix": "eslint . --config eslint.config.js --fix",
     "example": "pwsh scripts/start-example.ps1",
     "format": "prettier . --write && cargo fmt --all",
-    "install:cli": "cargo install --path ./crates/tauri-store-cli --force",
     "sync": "pnpm run --recursive --if-present sync",
     "test:crate": "pwsh scripts/test.ps1",
-    "type-check": "pnpm run -r type-check",
+    "type-check": "pnpm run --recursive --if-present type-check",
     "update": "pwsh scripts/update.ps1"
   },
   "devDependencies": {
