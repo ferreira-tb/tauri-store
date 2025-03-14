@@ -28,17 +28,19 @@ if ($AllowedPackages -notcontains $Package) {
 }
 
 $Title = "$Package v$Version"
-$Tag = $Title -replace '\s', '-'
-$Repo = 'ferreira-tb/tauri-store'
 
-$Filename = $null
-switch ($Package) {
-  '@tauri-store/pinia' { $Filename = 'plugin-pinia' }
-  '@tauri-store/svelte' { $Filename = 'plugin-svelte' }
-  '@tauri-store/valtio' { $Filename = 'plugin-valtio' }
-  default { $Filename = $Package }
+$Tag = $Title -replace '\s', '-'
+if ($Package -ne 'tauri-store') {
+  $Crate = $Package -replace '@tauri-store/', 'tauri-plugin-'
+  $Tag = "$Crate-v$Version"
 }
 
+$Filename = $Package
+if ($Package -ne 'tauri-store') {
+  $Filename = $Package -replace '@tauri-store/', 'plugin-'
+}
+
+$Repo = 'ferreira-tb/tauri-store'
 $Changelog = "https://github.com/$Repo/blob/main/changelogs/$Filename.md"
 $Notes = @"
 Please refer to the [changelog]($Changelog) for details.

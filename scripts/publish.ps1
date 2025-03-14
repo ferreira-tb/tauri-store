@@ -9,7 +9,7 @@
   Perform a dry run to see what would be published.
 
   .PARAMETER Fast
-  Skip codegen and linting.
+  Skip codegen, linting, and tests.
 #>
 
 param(
@@ -50,7 +50,11 @@ function Publish-Crate {
     return
   }
 
-  if ($Target.Count -eq 0 -or $Target -contains $Name) {
+  if ($Name.startsWith('plugin-')) {
+    $Name = "tauri-$Name"
+  }
+
+  if (($Target.Count -eq 0) -or ($Target -contains $Name)) {
     $command = "cargo publish -p $Name"
     if ($DryRun) {
       $command += ' --dry-run'
@@ -80,7 +84,15 @@ function Publish-Package {
     return
   }
 
-  if ($Target.Count -eq 0 -or $Target -contains $Name) {
+  if ($Name.StartsWith('plugin-')) {
+    $Name = $Name.Substring(7)
+  }
+
+  if ($Name -ne 'tauri-store') {
+    $Name = "@tauri-store/$Name"
+  }
+
+  if (($Target.Count -eq 0) -or ($Target -contains $Name)) {
     $command = "pnpm publish -F $Name"
     if ($DryRun) {
       $command += ' --dry-run'
@@ -94,6 +106,5 @@ function Publish-Package {
   }
 }
 
-Publish-Package -Name '@tauri-store/shared'
-Get-ChildItem -Path './packages' -Directory -Exclude 'shared' |
+Get-ChildItem -Path './packages' -Directory |
   ForEach-Object { Publish-Package -Name $_.Name }

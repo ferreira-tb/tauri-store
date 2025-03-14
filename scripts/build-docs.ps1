@@ -7,12 +7,14 @@ pnpm run sync
 cargo run -p tauri-store-cli -- docs
 pnpm run -F docs build
 
-$WithNamespace = @('shared')
-
 function Build-PackageDocs {
   param([string]$Name)
 
-  if ($WithNamespace -contains $Name) {
+  if ($Name.StartsWith('plugin-')) {
+    $Name = $Name.Substring(7)
+  }
+
+  if ($Name -ne 'tauri-store') {
     $Name = "@tauri-store/$Name"
   }
 
@@ -30,6 +32,10 @@ $SkipCrate = @(
 
 function Build-CrateDocs {
   param([string]$Name)
+
+  if ($Name.StartsWith('plugin-')) {
+    $Name = "tauri-$Name"
+  }
 
   if ($SkipCrate -notcontains $Name) {
     Invoke-Expression "cargo +nightly doc -p $Name --no-deps"
