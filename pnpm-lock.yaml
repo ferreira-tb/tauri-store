@@ -128,6 +128,9 @@ importers:
       '@tauri-apps/plugin-shell':
         specifier: ^2.2.0
         version: 2.2.0
+      '@tauri-store/pinia':
+        specifier: workspace:*
+        version: link:../../packages/plugin-pinia
       '@vitejs/plugin-vue':
         specifier: ^5.2.1
         version: 5.2.1(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.7.3))
@@ -137,9 +140,6 @@ importers:
       pinia:
         specifier: ^3.0.1
         version: 3.0.1(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3))
-      tauri-plugin-pinia:
-        specifier: workspace:*
-        version: link:../../packages/tauri-plugin-pinia
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.7.3)
@@ -161,6 +161,9 @@ importers:
       '@tauri-apps/plugin-shell':
         specifier: ^2.2.0
         version: 2.2.0
+      '@tauri-store/pinia':
+        specifier: workspace:*
+        version: link:../../packages/plugin-pinia
       '@vitejs/plugin-vue':
         specifier: ^5.2.1
         version: 5.2.1(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))(vue@3.5.13(typescript@5.7.3))
@@ -173,9 +176,6 @@ importers:
       pinia:
         specifier: ^3.0.1
         version: 3.0.1(typescript@5.7.3)(vue@3.5.13(typescript@5.7.3))
-      tauri-plugin-pinia:
-        specifier: workspace:*
-        version: link:../../packages/tauri-plugin-pinia
       vue:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.7.3)
@@ -206,6 +206,9 @@ importers:
       '@tauri-apps/plugin-shell':
         specifier: ^2.2.0
         version: 2.2.0
+      '@tauri-store/svelte':
+        specifier: workspace:*
+        version: link:../../packages/plugin-svelte
       '@tb-dev/utils':
         specifier: ^5.1.1
         version: 5.1.1
@@ -215,9 +218,6 @@ importers:
       svelte-check:
         specifier: ^4.1.5
         version: 4.1.5(picomatch@4.0.2)(svelte@5.23.0)(typescript@5.7.3)
-      tauri-plugin-svelte:
-        specifier: workspace:*
-        version: link:../../packages/tauri-plugin-svelte
 
   examples/svelte-runes:
     devDependencies:
@@ -239,6 +239,9 @@ importers:
       '@tauri-apps/plugin-shell':
         specifier: ^2.2.0
         version: 2.2.0
+      '@tauri-store/svelte':
+        specifier: workspace:*
+        version: link:../../packages/plugin-svelte
       '@tb-dev/utils':
         specifier: ^5.1.1
         version: 5.1.1
@@ -248,9 +251,6 @@ importers:
       svelte-check:
         specifier: ^4.1.5
         version: 4.1.5(picomatch@4.0.2)(svelte@5.23.0)(typescript@5.7.3)
-      tauri-plugin-svelte:
-        specifier: workspace:*
-        version: link:../../packages/tauri-plugin-svelte
 
   examples/valtio:
     devDependencies:
@@ -263,6 +263,9 @@ importers:
       '@tauri-apps/plugin-shell':
         specifier: ^2.2.0
         version: 2.2.0
+      '@tauri-store/valtio':
+        specifier: workspace:*
+        version: link:../../packages/plugin-valtio
       '@tb-dev/utils':
         specifier: ^5.1.1
         version: 5.1.1
@@ -275,9 +278,6 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
-      tauri-plugin-valtio:
-        specifier: workspace:*
-        version: link:../../packages/tauri-plugin-valtio
       valtio:
         specifier: ^2.1.3
         version: 2.1.3(@types/react@19.0.10)(react@19.0.0)
@@ -300,20 +300,11 @@ importers:
         specifier: workspace:*
         version: link:../../packages/tauri-store
 
-  packages/shared:
+  packages/plugin-pinia:
     dependencies:
       '@tauri-apps/api':
         specifier: ^2.0.3
-        version: 2.2.0
-      es-toolkit:
-        specifier: ^1.33.0
-        version: 1.33.0
-
-  packages/tauri-plugin-pinia:
-    dependencies:
-      '@tauri-apps/api':
-        specifier: ^2.0.3
-        version: 2.2.0
+        version: 2.3.0
       '@tauri-store/shared':
         specifier: workspace:*
         version: link:../shared
@@ -324,42 +315,51 @@ importers:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.7.3)
 
-  packages/tauri-plugin-svelte:
+  packages/plugin-svelte:
     dependencies:
       '@tauri-apps/api':
         specifier: ^2.0.3
-        version: 2.2.0
+        version: 2.3.0
       '@tauri-store/shared':
         specifier: workspace:*
         version: link:../shared
       svelte:
         specifier: ^5.15.0
-        version: 5.22.5
+        version: 5.23.0
     devDependencies:
       '@sveltejs/kit':
         specifier: ^2.19.0
-        version: 2.19.0(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)))(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))
+        version: 2.19.0(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.23.0)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)))(svelte@5.23.0)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))
       '@sveltejs/package':
         specifier: ^2.3.10
-        version: 2.3.10(svelte@5.22.5)(typescript@5.7.3)
+        version: 2.3.10(svelte@5.23.0)(typescript@5.7.3)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^5.0.3
-        version: 5.0.3(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))
+        version: 5.0.3(svelte@5.23.0)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))
       svelte-check:
         specifier: ^4.1.5
-        version: 4.1.5(picomatch@4.0.2)(svelte@5.22.5)(typescript@5.7.3)
+        version: 4.1.5(picomatch@4.0.2)(svelte@5.23.0)(typescript@5.7.3)
 
-  packages/tauri-plugin-valtio:
+  packages/plugin-valtio:
     dependencies:
       '@tauri-apps/api':
         specifier: ^2.0.3
-        version: 2.2.0
+        version: 2.3.0
       '@tauri-store/shared':
         specifier: workspace:*
         version: link:../shared
       valtio:
         specifier: ^2.1.2
         version: 2.1.3(@types/react@19.0.10)(react@19.0.0)
+
+  packages/shared:
+    dependencies:
+      '@tauri-apps/api':
+        specifier: ^2.0.3
+        version: 2.2.0
+      es-toolkit:
+        specifier: ^1.33.0
+        version: 1.33.0
 
   packages/tauri-store:
     dependencies:
@@ -4529,10 +4529,6 @@ packages:
       svelte: ^3.55 || ^4.0.0-next.0 || ^4.0 || ^5.0.0-next.0
       typescript: ^4.9.4 || ^5.0.0
 
-  svelte@5.22.5:
-    resolution: {integrity: sha512-+2BDWVa/rqr34oM+5HFUSmCCPdBBeNqFv2Xc/SSB8kV4iQhWWBNvU9/nd5Dz3PkAGl7Bm/AndS1vY4fe1MgTKA==}
-    engines: {node: '>=18'}
-
   svelte@5.23.0:
     resolution: {integrity: sha512-v0lL3NuKontiCxholEiAXCB+BYbndlKbwlDMK0DS86WgGELMJSpyqCSbJeMEMBDwOglnS7Ar2Rq0wwa/z2L8Vg==}
     engines: {node: '>=18'}
@@ -6225,23 +6221,6 @@ snapshots:
     dependencies:
       '@sveltejs/kit': 2.19.0(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.23.0)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)))(svelte@5.23.0)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))
 
-  '@sveltejs/kit@2.19.0(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)))(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))':
-    dependencies:
-      '@sveltejs/vite-plugin-svelte': 5.0.3(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))
-      '@types/cookie': 0.6.0
-      cookie: 0.6.0
-      devalue: 5.1.1
-      esm-env: 1.2.2
-      import-meta-resolve: 4.1.0
-      kleur: 4.1.5
-      magic-string: 0.30.17
-      mrmime: 2.0.0
-      sade: 1.8.1
-      set-cookie-parser: 2.7.1
-      sirv: 3.0.1
-      svelte: 5.22.5
-      vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)
-
   '@sveltejs/kit@2.19.0(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.23.0)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)))(svelte@5.23.0)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))':
     dependencies:
       '@sveltejs/vite-plugin-svelte': 5.0.3(svelte@5.23.0)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))
@@ -6259,25 +6238,16 @@ snapshots:
       svelte: 5.23.0
       vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)
 
-  '@sveltejs/package@2.3.10(svelte@5.22.5)(typescript@5.7.3)':
+  '@sveltejs/package@2.3.10(svelte@5.23.0)(typescript@5.7.3)':
     dependencies:
       chokidar: 4.0.3
       kleur: 4.1.5
       sade: 1.8.1
       semver: 7.7.1
-      svelte: 5.22.5
-      svelte2tsx: 0.7.34(svelte@5.22.5)(typescript@5.7.3)
+      svelte: 5.23.0
+      svelte2tsx: 0.7.34(svelte@5.23.0)(typescript@5.7.3)
     transitivePeerDependencies:
       - typescript
-
-  '@sveltejs/vite-plugin-svelte-inspector@4.0.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)))(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))':
-    dependencies:
-      '@sveltejs/vite-plugin-svelte': 5.0.3(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))
-      debug: 4.4.0(supports-color@9.4.0)
-      svelte: 5.22.5
-      vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)
-    transitivePeerDependencies:
-      - supports-color
 
   '@sveltejs/vite-plugin-svelte-inspector@4.0.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.23.0)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)))(svelte@5.23.0)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))':
     dependencies:
@@ -6285,19 +6255,6 @@ snapshots:
       debug: 4.4.0(supports-color@9.4.0)
       svelte: 5.23.0
       vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)
-    transitivePeerDependencies:
-      - supports-color
-
-  '@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))':
-    dependencies:
-      '@sveltejs/vite-plugin-svelte-inspector': 4.0.1(@sveltejs/vite-plugin-svelte@5.0.3(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)))(svelte@5.22.5)(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))
-      debug: 4.4.0(supports-color@9.4.0)
-      deepmerge: 4.3.1
-      kleur: 4.1.5
-      magic-string: 0.30.17
-      svelte: 5.22.5
-      vite: 6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0)
-      vitefu: 1.0.5(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))
     transitivePeerDependencies:
       - supports-color
 
@@ -9966,18 +9923,6 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  svelte-check@4.1.5(picomatch@4.0.2)(svelte@5.22.5)(typescript@5.7.3):
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.25
-      chokidar: 4.0.3
-      fdir: 6.4.3(picomatch@4.0.2)
-      picocolors: 1.1.1
-      sade: 1.8.1
-      svelte: 5.22.5
-      typescript: 5.7.3
-    transitivePeerDependencies:
-      - picomatch
-
   svelte-check@4.1.5(picomatch@4.0.2)(svelte@5.23.0)(typescript@5.7.3):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
@@ -10008,29 +9953,12 @@ snapshots:
       style-to-object: 1.0.8
       svelte: 5.23.0
 
-  svelte2tsx@0.7.34(svelte@5.22.5)(typescript@5.7.3):
+  svelte2tsx@0.7.34(svelte@5.23.0)(typescript@5.7.3):
     dependencies:
       dedent-js: 1.0.1
       pascal-case: 3.1.2
-      svelte: 5.22.5
+      svelte: 5.23.0
       typescript: 5.7.3
-
-  svelte@5.22.5:
-    dependencies:
-      '@ampproject/remapping': 2.3.0
-      '@jridgewell/sourcemap-codec': 1.5.0
-      '@sveltejs/acorn-typescript': 1.0.5(acorn@8.14.0)
-      '@types/estree': 1.0.6
-      acorn: 8.14.0
-      aria-query: 5.3.2
-      axobject-query: 4.1.0
-      clsx: 2.1.1
-      esm-env: 1.2.2
-      esrap: 1.4.4
-      is-reference: 3.0.3
-      locate-character: 3.0.0
-      magic-string: 0.30.17
-      zimmerframe: 1.1.2
 
   svelte@5.23.0:
     dependencies:

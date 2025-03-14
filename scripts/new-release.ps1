@@ -18,9 +18,9 @@ $PSNativeCommandUseErrorActionPreference = $true
 
 $AllowedPackages = @(
   'tauri-store',
-  'tauri-plugin-pinia',
-  'tauri-plugin-svelte',
-  'tauri-plugin-valtio'
+  '@tauri-store/pinia',
+  '@tauri-store/svelte',
+  '@tauri-store/valtio'
 )
 
 if ($AllowedPackages -notcontains $Package) {

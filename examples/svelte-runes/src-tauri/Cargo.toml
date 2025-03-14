@@ -35,7 +35,7 @@ version = "2"
 features = ["devtools", "protocol-asset"]
 
 [dependencies.tauri-plugin-svelte]
-path = "../../../crates/tauri-plugin-svelte"
+path = "../../../crates/plugin-svelte"
 default-features = false
 
 [dependencies.tracing-subscriber]

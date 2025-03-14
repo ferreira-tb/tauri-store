@@ -35,7 +35,7 @@ version = "2"
 features = ["devtools", "protocol-asset"]
 
 [dependencies.tauri-plugin-pinia]
-path = "../../../crates/tauri-plugin-pinia"
+path = "../../../crates/plugin-pinia"
 default-features = false
 
 [dependencies.tracing-subscriber]

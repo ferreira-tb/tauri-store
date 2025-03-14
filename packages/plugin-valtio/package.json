@@ -1,5 +1,5 @@
 {
-  "name": "tauri-plugin-valtio",
+  "name": "@tauri-store/valtio",
   "version": "2.0.0-beta.3",
   "description": "Persistent Valtio stores for Tauri",
   "type": "module",

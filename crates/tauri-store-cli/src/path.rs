@@ -3,7 +3,6 @@ use std::path::PathBuf;
 
 const ASSETS_DIR: &str = "crates/tauri-store-cli/assets";
 const CRATES_DIR: &str = "crates";
-const DOCS_CHANGELOG_DIR: &str = "docs/src/content/changelog";
 const DOCS_DATA_DIR: &str = "docs/src/lib/data";
 const EXAMPLES_DIR: &str = "examples";
 const PACKAGES_DIR: &str = "packages";
@@ -26,7 +25,6 @@ macro_rules! join_dir {
 
 join_dir!(assets_dir, ASSETS_DIR);
 join_dir!(crates_dir, CRATES_DIR);
-join_dir!(docs_changelog_dir, DOCS_CHANGELOG_DIR);
 join_dir!(docs_data_dir, DOCS_DATA_DIR);
 join_dir!(examples_dir, EXAMPLES_DIR);
 join_dir!(packages_dir, PACKAGES_DIR);

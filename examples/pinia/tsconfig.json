@@ -28,6 +28,6 @@
     "exactOptionalPropertyTypes": false,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["tauri-plugin-pinia", "vite/client"]
+    "types": ["@tauri-store/pinia", "vite/client"]
   }
 }
