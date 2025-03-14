@@ -8,7 +8,7 @@ import { commands } from '@tauri-store/shared';
  *
  * @example
  * ```ts
- * import { clearAutosave } from 'tauri-plugin-valtio';
+ * import { clearAutosave } from '@tauri-store/valtio';
  *
  * await clearAutosave();
  * ```
@@ -21,7 +21,7 @@ export const clearAutosave = commands.clearAutosave('valtio');
  *
  * @example
  * ```ts
- * import { getDefaultSaveStrategy } from 'tauri-plugin-valtio';
+ * import { getDefaultSaveStrategy } from '@tauri-store/valtio';
  *
  * const { strategy, interval } = await getDefaultSaveStrategy();
  * ```
@@ -33,7 +33,7 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('valtio');
  *
  * @example
  * ```ts
- * import { getStoreCollectionPath } from 'tauri-plugin-valtio';
+ * import { getStoreCollectionPath } from '@tauri-store/valtio';
  *
  * const path = await getStoreCollectionPath();
  * ```
@@ -45,7 +45,7 @@ export const getStoreCollectionPath = commands.getStoreCollectionPath('valtio');
  *
  * @example
  * ```ts
- * import { getSaveStrategy } from 'tauri-plugin-valtio';
+ * import { getSaveStrategy } from '@tauri-store/valtio';
  *
  * const { strategy, interval } = await getSaveStrategy('my-store');
  * ```
@@ -57,7 +57,7 @@ export const getSaveStrategy = commands.getSaveStrategy('valtio');
  *
  * @example
  * ```ts
- * import { getStoreIds } from 'tauri-plugin-valtio';
+ * import { getStoreIds } from '@tauri-store/valtio';
  *
  * const ids = await getStoreIds();
  * ```
@@ -69,7 +69,7 @@ export const getStoreIds = commands.getStoreIds('valtio');
  *
  * @example
  * ```ts
- * import { getStorePath } from 'tauri-plugin-valtio';
+ * import { getStorePath } from '@tauri-store/valtio';
  *
  * const path = await getStorePath('my-store');
  * ```
@@ -81,9 +81,9 @@ export const getStorePath = commands.getStorePath('valtio');
  *
  * @example
  * ```ts
- * import { getStoreState } from 'tauri-plugin-valtio';
+ * import { getStoreState } from '@tauri-store/valtio';
  *
- * const state = await getStoreState('counter-store');
+ * const state = await getStoreState('my-store');
  * ```
  */
 export const getStoreState = commands.getStoreState('valtio');
@@ -93,7 +93,7 @@ export const getStoreState = commands.getStoreState('valtio');
  *
  * @example
  * ```ts
- * import { save } from 'tauri-plugin-valtio';
+ * import { save } from '@tauri-store/valtio';
  *
  * // Save a single store.
  * await save('my-store');
@@ -109,7 +109,7 @@ export const save = commands.save('valtio');
  *
  * @example
  * ```ts
- * import { saveAll } from 'tauri-plugin-valtio';
+ * import { saveAll } from '@tauri-store/valtio';
  *
  * await saveAll();
  * ```
@@ -121,7 +121,7 @@ export const saveAll = commands.saveAll('valtio');
  *
  * @example
  * ```ts
- * import { saveAllNow } from 'tauri-plugin-valtio';
+ * import { saveAllNow } from '@tauri-store/valtio';
  *
  * await saveAllNow();
  * ```
@@ -133,7 +133,7 @@ export const saveAllNow = commands.saveAllNow('valtio');
  *
  * @example
  * ```ts
- * import { saveNow } from 'tauri-plugin-valtio';
+ * import { saveNow } from '@tauri-store/valtio';
  *
  * // Save a single store.
  * await saveNow('my-store');
@@ -150,7 +150,7 @@ export const saveNow = commands.saveNow('valtio');
  *
  * @example
  * ```ts
- * import { setAutosave } from 'tauri-plugin-valtio';
+ * import { setAutosave } from '@tauri-store/valtio';
  *
  * // Save all the stores every 5 minutes.
  * await setAutosave(5 * 60 * 1000);
@@ -164,7 +164,7 @@ export const setAutosave = commands.setAutosave('valtio');
  *
  * @example
  * ```ts
- * import { setStoreCollectionPath } from 'tauri-plugin-valtio';
+ * import { setStoreCollectionPath } from '@tauri-store/valtio';
  *
  * await setStoreCollectionPath('/path/to/new/directory');
  * ```
@@ -177,7 +177,7 @@ export const setStoreCollectionPath = commands.setStoreCollectionPath('valtio');
  *
  * @example
  * ```ts
- * import { setSaveStrategy } from 'tauri-plugin-valtio';
+ * import { setSaveStrategy } from '@tauri-store/valtio';
  *
  * await setSaveStrategy('my-store', 'debounce', 1000);
  * ```
@@ -189,7 +189,7 @@ export const setSaveStrategy = commands.setSaveStrategy('valtio');
  *
  * @example
  * ```ts
- * import { setStoreOptions } from 'tauri-plugin-valtio';
+ * import { setStoreOptions } from '@tauri-store/valtio';
  *
  * await setStoreOptions('my-store', {
  *  saveOnChange: true,

@@ -8,7 +8,7 @@ import { commands } from '@tauri-store/shared';
  *
  * @example
  * ```ts
- * import { clearAutosave } from 'tauri-plugin-pinia';
+ * import { clearAutosave } from '@tauri-store/pinia';
  *
  * await clearAutosave();
  * ```
@@ -21,7 +21,7 @@ export const clearAutosave = commands.clearAutosave('pinia');
  *
  * @example
  * ```ts
- * import { getDefaultSaveStrategy } from 'tauri-plugin-pinia';
+ * import { getDefaultSaveStrategy } from '@tauri-store/pinia';
  *
  * const { strategy, interval } = await getDefaultSaveStrategy();
  * ```
@@ -33,7 +33,7 @@ export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('pinia');
  *
  * @example
  * ```ts
- * import { getStoreCollectionPath } from 'tauri-plugin-pinia';
+ * import { getStoreCollectionPath } from '@tauri-store/pinia';
  *
  * const path = await getStoreCollectionPath();
  * ```
@@ -45,7 +45,7 @@ export const getStoreCollectionPath = commands.getStoreCollectionPath('pinia');
  *
  * @example
  * ```ts
- * import { getSaveStrategy } from 'tauri-plugin-pinia';
+ * import { getSaveStrategy } from '@tauri-store/pinia';
  *
  * const { strategy, interval } = await getSaveStrategy('my-store');
  * ```
@@ -57,7 +57,7 @@ export const getSaveStrategy = commands.getSaveStrategy('pinia');
  *
  * @example
  * ```ts
- * import { getStoreIds } from 'tauri-plugin-pinia';
+ * import { getStoreIds } from '@tauri-store/pinia';
  *
  * const ids = await getStoreIds();
  * ```
@@ -69,7 +69,7 @@ export const getStoreIds = commands.getStoreIds('pinia');
  *
  * @example
  * ```ts
- * import { getStorePath } from 'tauri-plugin-pinia';
+ * import { getStorePath } from '@tauri-store/pinia';
  *
  * const path = await getStorePath('my-store');
  * ```
@@ -81,9 +81,9 @@ export const getStorePath = commands.getStorePath('pinia');
  *
  * @example
  * ```ts
- * import { getStoreState } from 'tauri-plugin-pinia';
+ * import { getStoreState } from '@tauri-store/pinia';
  *
- * const state = await getStoreState('counter-store');
+ * const state = await getStoreState('my-store');
  * ```
  */
 export const getStoreState = commands.getStoreState('pinia');
@@ -93,7 +93,7 @@ export const getStoreState = commands.getStoreState('pinia');
  *
  * @example
  * ```ts
- * import { save } from 'tauri-plugin-pinia';
+ * import { save } from '@tauri-store/pinia';
  *
  * // Save a single store.
  * await save('my-store');
@@ -109,7 +109,7 @@ export const save = commands.save('pinia');
  *
  * @example
  * ```ts
- * import { saveAll } from 'tauri-plugin-pinia';
+ * import { saveAll } from '@tauri-store/pinia';
  *
  * await saveAll();
  * ```
@@ -121,7 +121,7 @@ export const saveAll = commands.saveAll('pinia');
  *
  * @example
  * ```ts
- * import { saveAllNow } from 'tauri-plugin-pinia';
+ * import { saveAllNow } from '@tauri-store/pinia';
  *
  * await saveAllNow();
  * ```
@@ -133,7 +133,7 @@ export const saveAllNow = commands.saveAllNow('pinia');
  *
  * @example
  * ```ts
- * import { saveNow } from 'tauri-plugin-pinia';
+ * import { saveNow } from '@tauri-store/pinia';
  *
  * // Save a single store.
  * await saveNow('my-store');
@@ -150,7 +150,7 @@ export const saveNow = commands.saveNow('pinia');
  *
  * @example
  * ```ts
- * import { setAutosave } from 'tauri-plugin-pinia';
+ * import { setAutosave } from '@tauri-store/pinia';
  *
  * // Save all the stores every 5 minutes.
  * await setAutosave(5 * 60 * 1000);
@@ -164,7 +164,7 @@ export const setAutosave = commands.setAutosave('pinia');
  *
  * @example
  * ```ts
- * import { setStoreCollectionPath } from 'tauri-plugin-pinia';
+ * import { setStoreCollectionPath } from '@tauri-store/pinia';
  *
  * await setStoreCollectionPath('/path/to/new/directory');
  * ```
@@ -177,7 +177,7 @@ export const setStoreCollectionPath = commands.setStoreCollectionPath('pinia');
  *
  * @example
  * ```ts
- * import { setSaveStrategy } from 'tauri-plugin-pinia';
+ * import { setSaveStrategy } from '@tauri-store/pinia';
  *
  * await setSaveStrategy('my-store', 'debounce', 1000);
  * ```
@@ -189,7 +189,7 @@ export const setSaveStrategy = commands.setSaveStrategy('pinia');
  *
  * @example
  * ```ts
- * import { setStoreOptions } from 'tauri-plugin-pinia';
+ * import { setStoreOptions } from '@tauri-store/pinia';
  *
  * await setStoreOptions('my-store', {
  *  saveOnChange: true,
