@@ -7,7 +7,7 @@
     "build": "pnpm run build:shared && pnpm run build:package",
     "build:docs": "pwsh scripts/build-docs.ps1",
     "build:shared": "pnpm run -F @tauri-store/shared build",
-    "build:package": "pnpm run -F \"./packages/tauri-*\" build",
+    "build:package": "pnpm run -F \"tauri-store\" -F \"./packages/plugin-*\" build",
     "clippy": "cargo +nightly clippy --workspace",
     "codegen": "cargo run -p tauri-store-cli -- codegen",
     "dev": "cargo tauri dev",
