@@ -1,6 +1,6 @@
 # @tauri-store/svelte
 
-Persistent Svelte stores and runes for Tauri.
+Persistent [Svelte](https://svelte.dev/) stores and runes for Tauri.
 
 ## Features
 
