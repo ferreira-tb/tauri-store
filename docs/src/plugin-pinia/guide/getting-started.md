@@ -94,7 +94,7 @@ app.mount('#app');
 ```
 
 ::: tip
-[`createPlugin`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/functions/createPlugin.html) is also exported as [`TauriPluginPinia`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/functions/TauriPluginPinia.html).
+[`createPlugin`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/functions/createPlugin.html) is also exported as [`TauriPluginPinia`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/variables/TauriPluginPinia.html).
 :::
 
 4. Define your Pinia store:
