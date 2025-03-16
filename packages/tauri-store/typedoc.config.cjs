@@ -2,7 +2,7 @@
 module.exports = {
   entryPoints: ['src/index.ts'],
   out: '../../docs/dist/js-docs/tauri-store',
-  titleLink: 'https://tb.dev.br/tauri-store/guide/getting-started?plugin=tauri-store',
+  titleLink: 'https://tb.dev.br/tauri-store/guide/getting-started',
   includeVersion: true,
   excludeInternal: true,
   excludePrivate: true,

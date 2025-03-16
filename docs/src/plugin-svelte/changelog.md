@@ -1,3 +1,11 @@
+---
+layout: doc
+title: Changelog
+titleTemplate: '@tauri-store/svelte'
+description: Changelog for @tauri-store/svelte
+outline: 2
+---
+
 # @tauri-store/svelte
 
 ## Next

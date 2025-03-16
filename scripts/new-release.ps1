@@ -35,17 +35,21 @@ if ($Package -ne 'tauri-store') {
   $Tag = "$Crate-v$Version"
 }
 
-$Filename = $Package
-if ($Package -ne 'tauri-store') {
-  $Filename = $Package -replace '@tauri-store/', 'plugin-'
+$Changelog = 'https://tb.dev.br/tauri-store'
+if ($Package -eq 'tauri-store') {
+  $Changelog += '/changelog'
+}
+else {
+  $Param = $Package -replace '@tauri-store/', 'plugin-'
+  $Changelog += "/$Param/changelog"
 }
 
-$Repo = 'ferreira-tb/tauri-store'
-$Changelog = "https://github.com/$Repo/blob/main/changelogs/$Filename.md"
+
 $Notes = @"
 Please refer to the [changelog]($Changelog) for details.
 "@
 
+$Repo = 'ferreira-tb/tauri-store'
 $Command = "gh release create `"$Tag`" -t `"$Title`" -n `"$($Notes.Trim())`" -R `"$Repo`""
 
 Invoke-Expression $Command

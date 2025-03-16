@@ -1,6 +1,5 @@
 mod command;
 mod fs;
-mod manifest;
 mod path;
 mod plugin;
 
@@ -12,12 +11,10 @@ use command::prelude::*;
 #[command(name = "tauri-store-cli")]
 enum Cli {
   Codegen(Codegen),
-  Docs(Docs),
 }
 
 fn main() -> Result<()> {
   match Cli::parse() {
     Cli::Codegen(cmd) => cmd.run(),
-    Cli::Docs(cmd) => cmd.run(),
   }
 }

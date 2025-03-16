@@ -3,7 +3,7 @@
   import { exit } from '@tauri-apps/plugin-process';
   import { onError, printStore } from '$lib/commands';
   import { openStore, store } from '$lib/counter.svelte';
-  import { clearAutosave, setAutosave } from 'tauri-plugin-svelte/src/lib/index.js';
+  import { clearAutosave, setAutosave } from '@tauri-store/svelte/src/lib/index.js';
 
   function onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {

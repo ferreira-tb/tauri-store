@@ -1,3 +1,10 @@
+---
+layout: doc
+title: Changelog
+description: Changelog for tauri-store
+outline: 2
+---
+
 # tauri-store
 
 ## Next

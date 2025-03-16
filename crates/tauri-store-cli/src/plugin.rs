@@ -1,8 +1,4 @@
-use crate::manifest::{Crate, Manifest};
-use crate::path::crate_dir;
-use anyhow::Result;
 use convert_case::{Case, Casing};
-use std::fs::read_to_string;
 use strum::{AsRefStr, VariantArray};
 
 const PLUGIN_PREFIX: &str = "tauri-plugin-";
@@ -20,14 +16,6 @@ pub enum Plugin {
 }
 
 impl Plugin {
-  pub fn manifest(self) -> Result<Box<dyn Manifest>> {
-    let path = crate_dir(self).join("Cargo.toml");
-    let contents = read_to_string(path)?;
-    toml::from_str::<Crate>(&contents)
-      .map(Crate::boxed)
-      .map_err(Into::into)
-  }
-
   pub fn dir_name(self) -> String {
     let crate_name = self.crate_name();
     if let Self::Store = self {

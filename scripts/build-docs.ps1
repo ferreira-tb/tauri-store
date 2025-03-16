@@ -3,8 +3,6 @@ $PSNativeCommandUseErrorActionPreference = $true
 
 pnpm run build:shared
 pnpm run sync
-
-cargo run -p tauri-store-cli -- docs
 pnpm run -F docs build
 
 function Build-PackageDocs {

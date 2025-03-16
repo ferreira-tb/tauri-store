@@ -17,12 +17,12 @@ Check the [documentation](https://tb.dev.br/tauri-store/) for more information o
 
 Currently, the following plugins are available:
 
-| Name                                                                                                  | Version                                                                                                           | Works with |
-| ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | ---------- |
-| [tauri-store](https://tb.dev.br/tauri-store/guide/getting-started?plugin=tauri-store)                 | [![npm](https://img.shields.io/npm/v/tauri-store.svg)](https://www.npmjs.com/package/tauri-store)                 | Everything |
-| [tauri-plugin-pinia](https://tb.dev.br/tauri-store/guide/getting-started?plugin=tauri-plugin-pinia)   | [![npm](https://img.shields.io/npm/v/tauri-plugin-pinia.svg)](https://www.npmjs.com/package/tauri-plugin-pinia)   | Vue, Nuxt  |
-| [tauri-plugin-svelte](https://tb.dev.br/tauri-store/guide/getting-started?plugin=tauri-plugin-svelte) | [![npm](https://img.shields.io/npm/v/tauri-plugin-svelte.svg)](https://www.npmjs.com/package/tauri-plugin-svelte) | Svelte     |
-| [tauri-plugin-valtio](https://tb.dev.br/tauri-store/guide/getting-started?plugin=tauri-plugin-valtio) | [![npm](https://img.shields.io/npm/v/tauri-plugin-valtio.svg)](https://www.npmjs.com/package/tauri-plugin-valtio) | React      |
+| Name                                                                                     | Version                                                                                                               | Works with |
+| ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------- |
+| [tauri-store](https://tb.dev.br/tauri-store/guide/getting-started)                       | [![npm](https://img.shields.io/npm/v/tauri-store.svg)](https://www.npmjs.com/package/tauri-store)                     | Everything |
+| [@tauri-store/pinia](https://tb.dev.br/tauri-store/plugin-pinia/guide/getting-started)   | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fpinia.svg)](https://www.npmjs.com/package/@tauri-store/pinia)   | Vue, Nuxt  |
+| [@tauri-store/svelte](https://tb.dev.br/tauri-store/plugin-svelte/guide/getting-started) | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fsvelte.svg)](https://www.npmjs.com/package/@tauri-store/svelte) | Svelte     |
+| [@tauri-store/valtio](https://tb.dev.br/tauri-store/plugin-valtio/guide/getting-started) | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fvaltio.svg)](https://www.npmjs.com/package/@tauri-store/valtio) | React      |
 
 ## Supported Tauri Version
 

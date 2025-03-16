@@ -32,7 +32,7 @@ import {
  *
  * [writable store]: https://svelte.dev/docs/svelte/stores#svelte-store-writable
  * [Svelte store contract]: https://svelte.dev/docs/svelte/stores#Store-contract
- * [`RuneStore`]: https://tb.dev.br/tauri-store/reference/tauri-plugin-svelte/classes/RuneStore.html
+ * [`RuneStore`]: https://tb.dev.br/tauri-store/js-docs/tauri-plugin-svelte/classes/RuneStore.html
  *
  * @example
  * ```ts

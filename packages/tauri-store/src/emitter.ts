@@ -143,11 +143,11 @@ function schedule(fn: Fn): void {
   setTimeout(fn, 0);
 }
 
-type EmitterOptions = {
+interface EmitterOptions {
   clone: CloneFn;
-};
+}
 
-type KeyEvent<S extends State, K extends keyof S> = {
+interface KeyEvent<S extends State, K extends keyof S> {
   key: K;
   value: S[K];
-};
+}

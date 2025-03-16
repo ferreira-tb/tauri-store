@@ -2,7 +2,7 @@ import { defineConfig } from '@tb-dev/eslint-config';
 
 export default defineConfig({
   project: [
-    //'docs/tsconfig.json',
+    'docs/tsconfig.json',
     'examples/pinia/tsconfig.json',
     'examples/pinia-nuxt/tsconfig.json',
     'examples/svelte/tsconfig.json',
@@ -29,7 +29,7 @@ export default defineConfig({
       'svelte/no-inline-styles': 'off',
     },
     typescript: {
-      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/naming-convention': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-explicit-any': 'off',

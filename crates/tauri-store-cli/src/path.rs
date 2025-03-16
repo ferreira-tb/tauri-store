@@ -1,12 +1,6 @@
 use crate::plugin::Plugin;
 use std::path::PathBuf;
 
-const ASSETS_DIR: &str = "crates/tauri-store-cli/assets";
-const CRATES_DIR: &str = "crates";
-const DOCS_DATA_DIR: &str = "docs/src/lib/data";
-const EXAMPLES_DIR: &str = "examples";
-const PACKAGES_DIR: &str = "packages";
-
 macro_rules! join_dir {
   ($func:ident, $dir:expr) => {
     pub fn $func() -> PathBuf {
@@ -14,7 +8,7 @@ macro_rules! join_dir {
         .expect("failed to get current dir")
         .join($dir);
 
-      if !matches!(path.try_exists(), Ok(true)) {
+      if !path.try_exists().unwrap_or(false) {
         panic!("path not found: {}", path.display());
       }
 
@@ -23,11 +17,10 @@ macro_rules! join_dir {
   };
 }
 
-join_dir!(assets_dir, ASSETS_DIR);
-join_dir!(crates_dir, CRATES_DIR);
-join_dir!(docs_data_dir, DOCS_DATA_DIR);
-join_dir!(examples_dir, EXAMPLES_DIR);
-join_dir!(packages_dir, PACKAGES_DIR);
+join_dir!(assets_dir, "crates/tauri-store-cli/assets");
+join_dir!(crates_dir, "crates");
+join_dir!(examples_dir, "examples");
+join_dir!(packages_dir, "packages");
 
 pub fn crate_dir(plugin: Plugin) -> PathBuf {
   crates_dir().join(plugin.dir_name())
