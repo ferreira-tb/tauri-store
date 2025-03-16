@@ -48,6 +48,7 @@ impl<R: Runtime> fmt::Debug for Watcher<R> {
   }
 }
 
+/// Unique watcher identifier.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct WatcherId(u32);
 
