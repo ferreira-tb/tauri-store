@@ -3,9 +3,9 @@
 Default permissions for tauri-store.
 
 - `allow-clear-autosave`
-- `allow-get-store-collection-path`
 - `allow-get-default-save-strategy`
 - `allow-get-save-strategy`
+- `allow-get-store-collection-path`
 - `allow-get-store-ids`
 - `allow-get-store-path`
 - `allow-get-store-state`
@@ -17,9 +17,9 @@ Default permissions for tauri-store.
 - `allow-save-now`
 - `allow-save-some`
 - `allow-save-some-now`
-- `allow-set-store-collection-path`
 - `allow-set-autosave`
 - `allow-set-save-strategy`
+- `allow-set-store-collection-path`
 - `allow-set-store-options`
 - `allow-unload`
 

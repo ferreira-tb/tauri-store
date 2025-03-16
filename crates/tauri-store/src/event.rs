@@ -1,5 +1,5 @@
 use crate::error::Result;
-use crate::store::{Store, StoreOptions, StoreState};
+use crate::store::{Store, StoreId, StoreOptions, StoreState};
 use serde::Serialize;
 use tauri::{AppHandle, Emitter as _, EventTarget, Runtime, WebviewWindow, Window};
 
@@ -10,7 +10,7 @@ pub const STORE_UNLOAD_EVENT: &str = "tauri-store://unload";
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct StatePayload<'a> {
-  id: &'a str,
+  id: &'a StoreId,
   state: &'a StoreState,
 }
 
@@ -23,7 +23,7 @@ impl<'a, R: Runtime> From<&'a Store<R>> for StatePayload<'a> {
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub(crate) struct ConfigPayload<'a> {
-  id: &'a str,
+  id: &'a StoreId,
   config: StoreOptions,
 }
 
@@ -96,6 +96,18 @@ impl From<Option<&str>> for EventSource {
 impl From<String> for EventSource {
   fn from(source: String) -> Self {
     Self(Some(source))
+  }
+}
+
+impl From<&String> for EventSource {
+  fn from(source: &String) -> Self {
+    Self(Some(source.to_owned()))
+  }
+}
+
+impl From<Option<String>> for EventSource {
+  fn from(source: Option<String>) -> Self {
+    Self(source)
   }
 }
 

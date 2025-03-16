@@ -18,9 +18,9 @@ $PSNativeCommandUseErrorActionPreference = $true
 
 $AllowedPackages = @(
   'tauri-store',
-  'tauri-plugin-pinia',
-  'tauri-plugin-svelte',
-  'tauri-plugin-valtio'
+  '@tauri-store/pinia',
+  '@tauri-store/svelte',
+  '@tauri-store/valtio'
 )
 
 if ($AllowedPackages -notcontains $Package) {
@@ -28,15 +28,28 @@ if ($AllowedPackages -notcontains $Package) {
 }
 
 $Title = "$Package v$Version"
-$Tag = $Title -replace '\s', '-'
-$Repo = 'ferreira-tb/tauri-store'
 
-$KebabVersion = $Version -replace '\.', '-'
-$Changelog = "https://tb.dev.br/tauri-store/changelog/$Package#v$KebabVersion"
+$Tag = $Title -replace '\s', '-'
+if ($Package -ne 'tauri-store') {
+  $Crate = $Package -replace '@tauri-store/', 'tauri-plugin-'
+  $Tag = "$Crate-v$Version"
+}
+
+$Changelog = 'https://tb.dev.br/tauri-store'
+if ($Package -eq 'tauri-store') {
+  $Changelog += '/changelog'
+}
+else {
+  $Param = $Package -replace '@tauri-store/', 'plugin-'
+  $Changelog += "/$Param/changelog"
+}
+
+
 $Notes = @"
 Please refer to the [changelog]($Changelog) for details.
 "@
 
+$Repo = 'ferreira-tb/tauri-store'
 $Command = "gh release create `"$Tag`" -t `"$Title`" -n `"$($Notes.Trim())`" -R `"$Repo`""
 
 Invoke-Expression $Command

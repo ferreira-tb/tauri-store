@@ -1,12 +1,11 @@
-use crate::error::Result;
+use super::StoreId;
 use crate::manager::ManagerExt;
-use futures::future::{BoxFuture, FutureExt};
+use futures::future::BoxFuture;
 use serde::ser::SerializeTuple;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json::Value as Json;
 use std::fmt;
 use std::result::Result as StdResult;
-use std::sync::Arc;
 use std::time::Duration;
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, Runtime};
@@ -27,17 +26,17 @@ impl<R: Runtime> SaveHandle<R> {
   }
 }
 
-pub(super) fn debounce<R: Runtime>(duration: Duration, id: Arc<str>) -> SaveHandle<R> {
+pub(super) fn debounce<R: Runtime>(duration: Duration, id: StoreId) -> SaveHandle<R> {
   SaveHandle(Box::new(Debounce::new(duration, save_handle(id))))
 }
 
-pub(super) fn throttle<R: Runtime>(duration: Duration, id: Arc<str>) -> SaveHandle<R> {
+pub(super) fn throttle<R: Runtime>(duration: Duration, id: StoreId) -> SaveHandle<R> {
   SaveHandle(Box::new(Throttle::new(duration, save_handle(id))))
 }
 
-fn save_handle<R: Runtime>(id: Arc<str>) -> SaveHandleFn<R> {
+fn save_handle<R: Runtime>(id: StoreId) -> SaveHandleFn<R> {
   Box::new(move |app| {
-    let id = Arc::clone(&id);
+    let id = id.clone();
     Box::pin(async move {
       let task = spawn_blocking(move || {
         app
@@ -46,7 +45,7 @@ fn save_handle<R: Runtime>(id: Arc<str>) -> SaveHandleFn<R> {
           .locked(|store| store.save_now())
       });
 
-      task.map(drop).await;
+      let _ = task.await;
     })
   })
 }
@@ -170,16 +169,5 @@ impl<'de> Deserialize<'de> for SaveStrategy {
     } else {
       Err(err())
     }
-  }
-}
-
-pub(super) fn to_bytes<T>(value: &T, pretty: bool) -> Result<Vec<u8>>
-where
-  T: ?Sized + Serialize,
-{
-  if pretty {
-    Ok(serde_json::to_vec_pretty(value)?)
-  } else {
-    Ok(serde_json::to_vec(value)?)
   }
 }

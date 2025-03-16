@@ -1,11 +1,10 @@
-use super::util::consts::{IMPORT_SOURCE, STORE_COLLECTION};
 use super::util::replace::store_collection;
 use super::{Context, Generator, OutputDir};
 use crate::path::{assets_dir, examples_dir};
 use crate::plugin::Plugin;
 use anyhow::Result;
 use colored::Colorize;
-use convert_case::{Case, Casing};
+use convert_case::Case;
 use std::path::{Path, PathBuf};
 use std::time::Instant;
 
@@ -56,8 +55,10 @@ fn generate_lib(assets: &Path) -> Result<()> {
   Generator::builder(&input, &output)
     .replace(&[
       ("__BUILD_CALL__", &build_call),
-      (IMPORT_SOURCE, &|it| it.as_ref().to_case(Case::Snake)),
-      (STORE_COLLECTION, &|it| store_collection(it, Case::Snake)),
+      ("__IMPORT_SOURCE__", &|it| it.crate_name_as(Case::Snake)),
+      ("__STORE_COLLECTION__", &|it| {
+        store_collection(it, Case::Snake)
+      }),
     ])
     .generate()
 }

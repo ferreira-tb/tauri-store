@@ -3,7 +3,7 @@
 #![doc = include_str!("../README.md")]
 #![doc(html_favicon_url = "https://tb.dev.br/tauri-store/favicon.ico")]
 
-mod __SNAKE_PLUGIN_NAME__;
+mod __SNAKE_PLUGIN_TITLE__;
 mod command;
 mod manager;
 
@@ -14,11 +14,11 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
 use tauri_store::CollectionBuilder;
 
+pub use __SNAKE_PLUGIN_TITLE__::__PASCAL_PLUGIN_TITLE__;
 pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
-pub use __SNAKE_PLUGIN_NAME__::__PASCAL_PLUGIN_NAME__;
 
-/// Builder for the __PASCAL_PLUGIN_NAME__ plugin.
+/// Builder for the __PASCAL_PLUGIN_TITLE__ plugin.
 #[derive(CollectionBuilder)]
 pub struct Builder<R: Runtime> {
   path: Option<PathBuf>,
@@ -26,12 +26,12 @@ pub struct Builder<R: Runtime> {
   autosave: Option<Duration>,
   on_load: Option<Box<OnLoadFn<R>>>,
   pretty: bool,
-  save_denylist: HashSet<String>,
-  sync_denylist: HashSet<String>,
+  save_denylist: HashSet<StoreId>,
+  sync_denylist: HashSet<StoreId>,
 }
 
 impl<R: Runtime> Builder<R> {
-  /// Builds the __PASCAL_PLUGIN_NAME__ plugin.
+  /// Builds the __PASCAL_PLUGIN_TITLE__ plugin.
   pub fn build(self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("__REGISTERED_PLUGIN_NAME__")
       .setup(|app, _| setup(app, self))
@@ -39,7 +39,7 @@ impl<R: Runtime> Builder<R> {
       .invoke_handler(tauri::generate_handler![
         command::clear_autosave,
         command::get_default_save_strategy,
-        command::get___STORE_COLLECTION___path,
+        command::get_store_collection_path,
         command::get_save_strategy,
         command::get_store_ids,
         command::get_store_path,
@@ -54,7 +54,7 @@ impl<R: Runtime> Builder<R> {
         command::save_some_now,
         command::set_autosave,
         command::set_save_strategy,
-        command::set___STORE_COLLECTION___path,
+        command::set_store_collection_path,
         command::set_store_options,
         command::unload
       ])
@@ -62,17 +62,22 @@ impl<R: Runtime> Builder<R> {
   }
 }
 
-#[allow(clippy::unnecessary_wraps)]
-fn setup<R: Runtime>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()> {
-  let collection = builder.into_collection(app);
-  app.manage(__PASCAL_PLUGIN_NAME__(collection));
+fn setup<R>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()>
+where
+  R: Runtime,
+{
+  let collection = builder.build_collection(app)?;
+  app.manage(__PASCAL_PLUGIN_TITLE__(collection));
 
   Ok(())
 }
 
-fn on_event<R: Runtime>(app: &AppHandle<R>, event: &RunEvent) {
+fn on_event<R>(app: &AppHandle<R>, event: &RunEvent)
+where
+  R: Runtime,
+{
   if let RunEvent::Exit = event {
-    let _ = app.__SNAKE_PLUGIN_NAME__().0.on_exit();
+    let _ = app.__SNAKE_PLUGIN_TITLE__().0.on_exit();
   }
 }
 

@@ -1,17 +1,25 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
+  "include": ["src/**/*", "src/**/*.vue", ".vitepress/**/*", ".vitepress/**/*.vue"],
   "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
+    "baseUrl": ".",
+    "target": "esnext",
+    "lib": ["esnext", "dom"],
+    "module": "esnext",
     "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "removeComments": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true,
+    "declaration": false,
+
+    "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "useUnknownInCatchVariables": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "allowUnusedLabels": false,
@@ -20,6 +28,9 @@
     "noImplicitReturns": true,
     "exactOptionalPropertyTypes": false,
     "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmitOnError": true,
+
     "types": ["vite/client"]
   }
 }

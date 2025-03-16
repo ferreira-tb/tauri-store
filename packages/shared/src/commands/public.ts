@@ -32,7 +32,7 @@ export function getSaveStrategy(plugin: string) {
 
 export function getStoreCollectionPath(plugin: string) {
   return function (): Promise<string> {
-    return invoke(`plugin:${plugin}|get_${plugin}_path`);
+    return invoke(`plugin:${plugin}|get_store_collection_path`);
   };
 }
 
@@ -106,7 +106,7 @@ export function setSaveStrategy(plugin: string) {
 
 export function setStoreCollectionPath(plugin: string) {
   return function (path: string): Promise<void> {
-    return invoke(`plugin:${plugin}|set_${plugin}_path`, { path });
+    return invoke(`plugin:${plugin}|set_store_collection_path`, { path });
   };
 }
 

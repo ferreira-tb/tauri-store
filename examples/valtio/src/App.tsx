@@ -4,7 +4,7 @@ import { useSnapshot } from 'valtio';
 import { onError, printStore } from './commands';
 import { exit } from '@tauri-apps/plugin-process';
 import { increment, incrementNested, openStore, store } from './counter';
-import { clearAutosave, setAutosave } from 'tauri-plugin-valtio/src/index.js';
+import { clearAutosave, setAutosave } from '@tauri-store/valtio/src/index.js';
 
 export default function App() {
   const storeState = useSnapshot(store.state);

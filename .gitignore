@@ -28,6 +28,10 @@ dist
 # Vite
 **/*vite*timestamp*
 
+# Vitepress
+**/.vitepress/cache
+**/.vitepress/dist
+
 # Nuxt
 .nuxt
 .output

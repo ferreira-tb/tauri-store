@@ -8,14 +8,14 @@ enum EventKind {
 
 export class EventEmitter<S extends State> extends EventTarget {
   private readonly map: Map<keyof S, unknown>;
-  private readonly options: ObservableOptions;
+  private readonly options: EmitterOptions;
 
   private readonly listeners = {
     [EventKind.Change]: 0,
     [EventKind.ChangeKey]: 0,
   };
 
-  constructor(state: S, options: ObservableOptions) {
+  constructor(state: S, options: EmitterOptions) {
     super();
 
     this.options = options;
@@ -143,11 +143,11 @@ function schedule(fn: Fn): void {
   setTimeout(fn, 0);
 }
 
-type ObservableOptions = {
+interface EmitterOptions {
   clone: CloneFn;
-};
+}
 
-type KeyEvent<S extends State, K extends keyof S> = {
+interface KeyEvent<S extends State, K extends keyof S> {
   key: K;
   value: S[K];
-};
+}

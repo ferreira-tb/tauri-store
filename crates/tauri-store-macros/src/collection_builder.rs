@@ -12,7 +12,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
       use std::sync::Arc;
       use std::time::Duration;
       use tauri::{AppHandle, Manager as _, Runtime};
-      use tauri_store::{Result, SaveStrategy, Store, StoreCollection};
+      use tauri_store::prelude::*;
 
       impl<R: Runtime> #name<R> {
         /// Creates a new builder instance with default values.
@@ -64,7 +64,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
         pub fn save_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
           self
             .save_denylist
-            .extend(denylist.iter().map(|s| s.as_ref().to_string()));
+            .extend(denylist.iter().map(|it| StoreId::from(it.as_ref())));
 
           self
         }
@@ -74,26 +74,21 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
         pub fn sync_denylist(mut self, denylist: &[impl AsRef<str>]) -> Self {
           self
             .sync_denylist
-            .extend(denylist.iter().map(|s| s.as_ref().to_string()));
+            .extend(denylist.iter().map(|it| StoreId::from(it.as_ref())));
 
           self
         }
 
-        pub(super) fn into_collection(mut self, app: &AppHandle<R>) -> Arc<StoreCollection<R>> {
-          let path = self.path.take().unwrap_or_else(|| {
-            app
-              .path()
-              .app_data_dir()
-              .expect("failed to resolve app data dir")
-              .join(env!("CARGO_PKG_NAME"))
-          });
-
+        pub(super) fn build_collection(mut self, app: &AppHandle<R>) -> Result<Arc<StoreCollection<R>>> {
           let mut collection = StoreCollection::builder()
-            .path(path)
             .default_save_strategy(self.default_save_strategy)
             .pretty(self.pretty)
             .save_denylist(self.save_denylist)
             .sync_denylist(self.sync_denylist);
+
+          if let Some(path) = self.path {
+            collection = collection.path(path);
+          }
 
           if let Some(on_load) = self.on_load {
             collection = collection.on_load(on_load);
@@ -103,7 +98,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
             collection = collection.autosave(duration);
           };
 
-          collection.build(app)
+          collection.build(app, env!("CARGO_PKG_NAME"))
         }
       }
 

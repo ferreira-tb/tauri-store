@@ -1,20 +1,63 @@
 #![allow(unused_must_use)]
 
-mod shared;
-
+use anyhow::Result;
 use itertools::Itertools;
 use serde::Deserialize;
 use serde_json::Value;
-use std::sync::Arc;
-use tauri_store::SaveStrategy;
-use tokio::sync::Notify;
+use std::env::current_dir;
+use std::path::{Path, PathBuf};
+use std::sync::{Arc, LazyLock, OnceLock};
+use tauri::test::{mock_app, MockRuntime};
+use tauri::Manager;
+use tauri_store::{SaveStrategy, Store, StoreCollection, StoreId};
+use tokio::fs;
+use tokio::sync::{Notify, OwnedSemaphorePermit as Permit, Semaphore};
 use tokio::time::{sleep, timeout, Duration};
 
-use shared::{assert_exists, with_store, StoreExt, STORE_ID};
+static STORE_ID: LazyLock<StoreId> = LazyLock::new(|| StoreId::from("store"));
+
+static TEMP_DIR: OnceLock<PathBuf> = OnceLock::new();
+static PATH: LazyLock<PathBuf> = LazyLock::new(default_path);
+static CONTEXT: LazyLock<Context> = LazyLock::new(Context::new);
+
+struct Context {
+  collection: Arc<StoreCollection<MockRuntime>>,
+  semaphore: Arc<Semaphore>,
+}
+
+impl Context {
+  fn new() -> Self {
+    let app = mock_app();
+    let collection = StoreCollection::builder()
+      .path(&*PATH)
+      .build(app.app_handle(), env!("CARGO_PKG_NAME"))
+      .unwrap();
+
+    Self {
+      collection,
+      semaphore: Arc::new(Semaphore::new(1)),
+    }
+  }
+
+  async fn acquire_permit(&self) -> Result<Permit> {
+    let permit = Arc::clone(&self.semaphore)
+      .acquire_owned()
+      .await?;
+
+    self.collection.unload_store(&STORE_ID)?;
+
+    let temp_dir = temp_dir();
+    if fs::try_exists(temp_dir).await? {
+      fs::remove_dir_all(temp_dir).await?;
+    }
+
+    Ok(permit)
+  }
+}
 
 #[tokio::test]
 async fn id() {
-  with_store(|store| assert_eq!(store.id(), STORE_ID)).await;
+  with_store(|store| assert_eq!(store.id(), *STORE_ID)).await;
 }
 
 #[tokio::test]
@@ -155,10 +198,10 @@ async fn patch_many() {
 #[tokio::test]
 async fn save() {
   with_store(|store| {
-    store.assert_exists(false);
+    assert_exists(&store.path(), false);
     store.set("key", 42).unwrap();
     store.save_now().unwrap();
-    store.assert_exists(true);
+    assert_exists(&store.path(), true);
   })
   .await;
 }
@@ -166,7 +209,7 @@ async fn save() {
 #[tokio::test]
 async fn save_debounced() {
   let (path, _permit) = with_store(|store| {
-    store.assert_exists(false);
+    assert_exists(&store.path(), false);
     store.save_on_change(true);
     store.set_save_strategy(SaveStrategy::debounce_millis(100));
 
@@ -174,7 +217,7 @@ async fn save_debounced() {
     store.set("key2", 43).unwrap();
     store.set("key3", 44).unwrap();
 
-    store.assert_exists(false);
+    assert_exists(&store.path(), false);
 
     store.path()
   })
@@ -188,13 +231,13 @@ async fn save_debounced() {
 #[tokio::test]
 async fn save_now() {
   with_store(|store| {
-    store.assert_exists(false);
+    assert_exists(&store.path(), false);
     store.save_on_change(true);
     store.set_save_strategy(SaveStrategy::debounce_millis(100));
 
     store.set("key", 42).unwrap();
     store.save_now().unwrap();
-    store.assert_exists(true);
+    assert_exists(&store.path(), true);
   })
   .await;
 }
@@ -219,10 +262,10 @@ async fn set_save_strategy() {
 #[tokio::test]
 async fn save_on_change() {
   with_store(|store| {
-    store.assert_exists(false);
+    assert_exists(&store.path(), false);
     store.save_on_change(true);
     store.set("key", 42).unwrap();
-    store.assert_exists(true);
+    assert_exists(&store.path(), true);
   })
   .await;
 }
@@ -315,4 +358,29 @@ async fn is_empty() {
     assert!(!store.is_empty());
   })
   .await;
+}
+
+async fn with_store<F, T>(f: F) -> (T, Permit)
+where
+  F: FnOnce(&mut Store<MockRuntime>) -> T,
+{
+  let permit = CONTEXT.acquire_permit().await.unwrap();
+  let value = CONTEXT
+    .collection
+    .with_store(&*STORE_ID, f)
+    .unwrap();
+
+  (value, permit)
+}
+
+pub fn assert_exists(path: &Path, yes: bool) {
+  assert!(path.try_exists().is_ok_and(|it| it == yes));
+}
+
+pub fn temp_dir() -> &'static Path {
+  TEMP_DIR.get_or_init(|| current_dir().unwrap().join(".temp"))
+}
+
+fn default_path() -> PathBuf {
+  temp_dir().join(env!("CARGO_PKG_NAME"))
 }

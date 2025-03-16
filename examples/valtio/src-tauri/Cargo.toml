@@ -35,7 +35,7 @@ version = "2"
 features = ["devtools", "protocol-asset"]
 
 [dependencies.tauri-plugin-valtio]
-path = "../../../crates/tauri-plugin-valtio"
+path = "../../../crates/plugin-valtio"
 default-features = false
 
 [dependencies.tracing-subscriber]

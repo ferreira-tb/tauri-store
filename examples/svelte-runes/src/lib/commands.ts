@@ -3,9 +3,9 @@ import { invoke } from '@tauri-apps/api/core';
 export function onError(err: unknown) {
   console.error(err);
   const message = err instanceof Error ? err.message : String(err);
-  void invoke('on_error', { message });
+  invoke('on_error', { message }).catch(console.error);
 }
 
 export function printStore() {
-  void invoke('print_store');
+  invoke('print_store').catch(onError);
 }

@@ -1,16 +1,16 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { open } from '@tauri-apps/plugin-shell';
-import type { Option } from 'tauri-plugin-pinia/src/index.js';
+import type { Option } from '@tauri-store/pinia/src/index.js';
 
-type Counter = {
+interface Counter {
   counter: number;
   counter2: Option<number>;
   counter3: Option<number>;
   nested: { foo: { bar: { baz: number } } };
   nested2: Option<{ foo: { bar: Option<{ baz: number }> } }>;
   nested3: Option<{ foo: { bar: { baz: Option<number> } } }>;
-};
+}
 
 function store() {
   const counter = ref<Counter['counter']>(0);

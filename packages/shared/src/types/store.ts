@@ -2,7 +2,7 @@ import type { MaybePromise, Option } from './utils';
 import type { LooseTimeStrategyKind, TimeStrategyRawTuple } from '../time-strategy';
 
 /** Options that can also be updated from Rust. */
-export type StoreBackendOptions = {
+export interface StoreBackendOptions {
   /**
    * Saves the store whenever there is a state change.
    * @default false
@@ -32,17 +32,17 @@ export type StoreBackendOptions = {
    * @default 'immediate'
    */
   saveStrategy?: LooseTimeStrategyKind;
-};
+}
 
 /** @internal */
-export type StoreBackendRawOptions = {
+export interface StoreBackendRawOptions {
   readonly saveOnChange?: Option<boolean>;
   readonly saveOnExit?: Option<boolean>;
   readonly saveStrategy?: Option<TimeStrategyRawTuple>;
-};
+}
 
 /** Options that can only be set from JavaScript. */
-export type StoreFrontendOptions<S extends State = State> = {
+export interface StoreFrontendOptions<S extends State = State> {
   /**
    * Keys the plugin should save or ignore.
    *
@@ -72,14 +72,6 @@ export type StoreFrontendOptions<S extends State = State> = {
   readonly hooks?: StoreHooks<S>;
 
   /**
-   * Custom error handler.
-   * @default console.error
-   *
-   * @deprecated Use {@link StoreHooks.error} instead.
-   */
-  readonly onError?: StoreHooks<S>['error'];
-
-  /**
    * Interval in milliseconds to use when syncing the store with the backend.
    * This option is only valid when {@link StoreFrontendOptions.syncStrategy} is set to `debounce` or `throttle`.
    *
@@ -103,9 +95,9 @@ export type StoreFrontendOptions<S extends State = State> = {
    * @default 'immediate'
    */
   readonly syncStrategy?: LooseTimeStrategyKind;
-};
+}
 
-export type StoreHooks<S extends State = State> = {
+export interface StoreHooks<S extends State = State> {
   /**
    * Hook that runs **before** the store sends its state to Rust.
    * Can be used to modify the state before the sync.
@@ -127,13 +119,13 @@ export type StoreHooks<S extends State = State> = {
    * @default console.error
    */
   readonly error?: (error: unknown) => MaybePromise<void>;
-};
+}
 
 /** Options to configure how the store should behave. */
 export type StoreOptions<S extends State = State> = StoreBackendOptions & StoreFrontendOptions<S>;
 
 /** A contract that a store must adhere to in order to be considered a valid implementation. */
-export type TauriStoreContract = {
+export interface TauriStoreContract {
   /** Path where the store is saved. */
   readonly getPath: () => Promise<string>;
   /** Saves the store to the disk. */
@@ -148,7 +140,7 @@ export type TauriStoreContract = {
   readonly start: () => Promise<void>;
   /** Stops watching for changes. */
   readonly stop: () => Promise<void>;
-};
+}
 
 /** State of a store. */
 export type State = Record<string, unknown>;
