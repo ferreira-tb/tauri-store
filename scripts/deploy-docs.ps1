@@ -9,4 +9,4 @@ pnpm run codegen
 pnpm run build
 pnpm run build:docs
 
-touch docs/dist/.nojekyll
+touch docs/.vitepress/dist/.nojekyll
