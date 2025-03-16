@@ -12,6 +12,8 @@ export default defineConfig({
   vite: {
     build: {
       emptyOutDir: true,
+      minify: true,
+      target: 'es2015',
     },
   },
 
