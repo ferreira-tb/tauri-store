@@ -73,6 +73,7 @@ where
   Ok(())
 }
 
+/// Source of a store event.
 pub struct EventSource(Option<String>);
 
 impl EventSource {
