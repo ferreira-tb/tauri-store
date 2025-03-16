@@ -9,9 +9,9 @@ export default defineConfig({
     'examples/svelte-runes/tsconfig.json',
     'examples/valtio/tsconfig.json',
     'packages/shared/tsconfig.json',
-    'packages/tauri-plugin-pinia/tsconfig.json',
-    'packages/tauri-plugin-svelte/tsconfig.json',
-    'packages/tauri-plugin-valtio/tsconfig.json',
+    'packages/plugin-pinia/tsconfig.json',
+    'packages/plugin-svelte/tsconfig.json',
+    'packages/plugin-valtio/tsconfig.json',
     'packages/tauri-store/tsconfig.json',
   ],
   features: {
@@ -29,7 +29,7 @@ export default defineConfig({
       'svelte/no-inline-styles': 'off',
     },
     typescript: {
-      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+      '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/naming-convention': 'off',
       '@typescript-eslint/no-confusing-void-expression': 'off',
       '@typescript-eslint/no-explicit-any': 'off',

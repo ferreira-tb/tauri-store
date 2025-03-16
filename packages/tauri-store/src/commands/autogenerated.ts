@@ -83,7 +83,7 @@ export const getStorePath = commands.getStorePath('tauri-store');
  * ```ts
  * import { getStoreState } from 'tauri-store';
  *
- * const state = await getStoreState('counter-store');
+ * const state = await getStoreState('my-store');
  * ```
  */
 export const getStoreState = commands.getStoreState('tauri-store');

@@ -3,7 +3,7 @@
 #![doc = include_str!("../README.md")]
 #![doc(html_favicon_url = "https://tb.dev.br/tauri-store/favicon.ico")]
 
-mod __SNAKE_PLUGIN_NAME__;
+mod __SNAKE_PLUGIN_TITLE__;
 mod command;
 mod manager;
 
@@ -14,11 +14,11 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
 use tauri_store::CollectionBuilder;
 
-pub use __SNAKE_PLUGIN_NAME__::__PASCAL_PLUGIN_NAME__;
+pub use __SNAKE_PLUGIN_TITLE__::__PASCAL_PLUGIN_TITLE__;
 pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
 
-/// Builder for the __PASCAL_PLUGIN_NAME__ plugin.
+/// Builder for the __PASCAL_PLUGIN_TITLE__ plugin.
 #[derive(CollectionBuilder)]
 pub struct Builder<R: Runtime> {
   path: Option<PathBuf>,
@@ -31,7 +31,7 @@ pub struct Builder<R: Runtime> {
 }
 
 impl<R: Runtime> Builder<R> {
-  /// Builds the __PASCAL_PLUGIN_NAME__ plugin.
+  /// Builds the __PASCAL_PLUGIN_TITLE__ plugin.
   pub fn build(self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("__REGISTERED_PLUGIN_NAME__")
       .setup(|app, _| setup(app, self))
@@ -67,7 +67,7 @@ where
   R: Runtime,
 {
   let collection = builder.build_collection(app)?;
-  app.manage(__PASCAL_PLUGIN_NAME__(collection));
+  app.manage(__PASCAL_PLUGIN_TITLE__(collection));
 
   Ok(())
 }
@@ -77,7 +77,7 @@ where
   R: Runtime,
 {
   if let RunEvent::Exit = event {
-    let _ = app.__SNAKE_PLUGIN_NAME__().0.on_exit();
+    let _ = app.__SNAKE_PLUGIN_TITLE__().0.on_exit();
   }
 }
 

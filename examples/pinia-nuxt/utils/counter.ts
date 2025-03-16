@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { open } from '@tauri-apps/plugin-shell';
-import type { Option } from 'tauri-plugin-pinia/src/index.js';
+import type { Option } from '@tauri-store/pinia/src/index.js';
 
 type Counter = {
   counter: number;

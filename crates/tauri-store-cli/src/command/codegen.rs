@@ -63,7 +63,8 @@ impl Generator<'_> {
         contents = contents.replace(key, &value(*plugin).to_string());
       }
 
-      let ctx = Context::new(*plugin, plugin.name());
+      let title = plugin.title();
+      let ctx = Context::new(*plugin, &title);
       (self.output)(ctx)
         .iter()
         .try_for_each(|path| write_file(path, &contents))?;

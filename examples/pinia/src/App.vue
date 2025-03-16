@@ -5,7 +5,7 @@ import { onKeyDown } from '@vueuse/core';
 import { openStore, useStore } from './counter';
 import { onError, printStore } from './commands';
 import { exit } from '@tauri-apps/plugin-process';
-import { clearAutosave, save, saveNow, setAutosave } from 'tauri-plugin-pinia/src/index.js';
+import { clearAutosave, save, saveNow, setAutosave } from '@tauri-store/pinia/src/index.js';
 
 const store = useStore();
 const { start, stop } = store.$tauri;

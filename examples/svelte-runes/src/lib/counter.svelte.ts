@@ -1,5 +1,5 @@
 import { open } from '@tauri-apps/plugin-shell';
-import { type Option, RuneStore } from 'tauri-plugin-svelte/src/lib/index.js';
+import { type Option, RuneStore } from '@tauri-store/svelte/src/lib/index.js';
 
 type Counter = {
   counter: number;

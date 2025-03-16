@@ -1,6 +1,6 @@
 "$schema" = "schemas/schema.json"
 [default]
-description = "Default permissions for __PLUGIN_NAME__."
+description = "Default permissions for __CRATE_NAME__."
 permissions = [
   "allow-clear-autosave",
   "allow-get-default-save-strategy",

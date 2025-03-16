@@ -1,5 +1,5 @@
 import { open } from '@tauri-apps/plugin-shell';
-import { type Option, store as valtio } from 'tauri-plugin-valtio/src/index.js';
+import { type Option, store as valtio } from '@tauri-store/valtio/src/index.js';
 
 type Counter = {
   counter: number;
