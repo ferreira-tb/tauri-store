@@ -1,4 +1,4 @@
-# tauri-plugin-pinia
+# @tauri-store/pinia
 
 Persistent [Pinia](https://pinia.vuejs.org/) stores for Tauri and Vue.
 

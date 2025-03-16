@@ -98,7 +98,7 @@ export class Store<S extends State> extends BaseStore<S> {
  *
  * @example
  * ```ts
- * import { store } from 'tauri-plugin-valtio';
+ * import { store } from '@tauri-store/valtio';
  *
  * export const foo = store('foo', { count: 0 });
  *

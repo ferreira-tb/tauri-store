@@ -43,15 +43,15 @@ export default defineConfig({
           },
           {
             text: '@tauri-store/pinia',
-            link: 'https://tb.dev.br/tauri-store/js-docs/tauri-plugin-pinia',
+            link: 'https://tb.dev.br/tauri-store/js-docs/plugin-pinia',
           },
           {
             text: '@tauri-store/svelte',
-            link: 'https://tb.dev.br/tauri-store/js-docs/tauri-plugin-svelte',
+            link: 'https://tb.dev.br/tauri-store/js-docs/plugin-svelte',
           },
           {
             text: '@tauri-store/valtio',
-            link: 'https://tb.dev.br/tauri-store/js-docs/tauri-plugin-valtio',
+            link: 'https://tb.dev.br/tauri-store/js-docs/plugin-valtio',
           },
         ],
       },

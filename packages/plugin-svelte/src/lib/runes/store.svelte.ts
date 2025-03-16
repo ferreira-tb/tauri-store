@@ -27,7 +27,7 @@ const DEFAULT_FLUSH: NonNullable<Flush> = 'post';
  *
  * @example
  * ```ts
- * import { RuneStore } from 'tauri-plugin-svelte';
+ * import { RuneStore } from '@tauri-store/svelte';
  *
  * const store = new RuneStore('counter', { count: 0 });
  *
@@ -165,7 +165,7 @@ function createEffectRoot(fn: Fn, flush: Flush = DEFAULT_FLUSH): Fn {
  *
  * @example
  * ```ts
- * import { runeStore, RuneStore } from 'tauri-plugin-svelte';
+ * import { runeStore, RuneStore } from '@tauri-store/svelte';
  *
  * // These are equivalent.
  * const foo = new RuneStore('foo', { value: 0 });

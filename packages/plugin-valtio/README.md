@@ -1,4 +1,4 @@
-# tauri-plugin-valtio
+# @tauri-store/valtio
 
 Persistent [Valtio](https://valtio.dev/) stores for Tauri and React.
 

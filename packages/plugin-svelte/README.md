@@ -1,4 +1,4 @@
-# tauri-plugin-svelte
+# @tauri-store/svelte
 
 Persistent Svelte stores and runes for Tauri.
 

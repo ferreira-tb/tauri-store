@@ -32,11 +32,11 @@ import {
  *
  * [writable store]: https://svelte.dev/docs/svelte/stores#svelte-store-writable
  * [Svelte store contract]: https://svelte.dev/docs/svelte/stores#Store-contract
- * [`RuneStore`]: https://tb.dev.br/tauri-store/js-docs/tauri-plugin-svelte/classes/RuneStore.html
+ * [`RuneStore`]: https://tb.dev.br/tauri-store/js-docs/plugin-svelte/classes/RuneStore.html
  *
  * @example
  * ```ts
- * import { Store } from 'tauri-plugin-svelte';
+ * import { Store } from '@tauri-store/svelte';
  *
  * const store = new Store('counter', { count: 0 });
  *
@@ -178,7 +178,7 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
  *
  * @example
  * ```ts
- * import { store, Store } from 'tauri-plugin-svelte';
+ * import { store, Store } from '@tauri-store/svelte';
  *
  * // These are equivalent.
  * const foo = new Store('foo', { value: 0 });
