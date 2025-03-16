@@ -1,7 +1,7 @@
 [package]
 name = "tauri-store-utils"
 description = "Utilities for the Tauri store"
-version = "0.3.0-beta.2"
+version = "0.3.0-beta.3"
 documentation = "https://docs.rs/tauri-store-utils"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
