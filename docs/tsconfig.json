@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*", "src/**/*.vue", ".vitepress/**/*", ".vitepress/**/*.vue"],
+  "include": [".vitepress/**/*", ".vitepress/**/*.vue", "src/**/*", "src/**/*.vue", "types/**/*"],
   "compilerOptions": {
     "baseUrl": ".",
     "target": "esnext",
