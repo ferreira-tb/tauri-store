@@ -1,7 +1,7 @@
 /** @type {import('typedoc').TypeDocOptions} */
 module.exports = {
   entryPoints: ['src/lib/index.ts'],
-  out: '../../docs/dist/js-docs/plugin-svelte',
+  out: '../../docs/.vitepress/dist/js-docs/plugin-svelte',
   titleLink: 'https://tb.dev.br/tauri-store/plugin-svelte/guide/getting-started',
   includeVersion: true,
   excludeInternal: true,
