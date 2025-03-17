@@ -22,7 +22,7 @@ workspace = true
 
 [package.metadata.docs.rs]
 no-default-features = true
-features = ["plugin"]
+features = ["plugin", "unstable-migration"]
 rustc-args = ["--cfg", "docsrs"]
 rustdoc-args = ["--cfg", "docsrs"]
 
@@ -72,7 +72,8 @@ version = "2"
 features = ["test"]
 
 [features]
-default = ["plugin"]
+default = ["plugin", "unstable-migration"]
 plugin = ["dep:tauri-plugin"]
 derive = ["dep:tauri-store-macros"]
 file-sync-all = []
+unstable-migration = []

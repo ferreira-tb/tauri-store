@@ -4,6 +4,9 @@ mod save;
 mod state;
 mod watch;
 
+#[cfg(feature = "unstable-migration")]
+mod migration;
+
 use crate::error::Result;
 use crate::manager::ManagerExt;
 use options::set_options;

@@ -22,7 +22,7 @@ workspace = true
 
 [package.metadata.docs.rs]
 no-default-features = true
-features = []
+features = ["unstable-migration"]
 rustc-args = ["--cfg", "docsrs"]
 rustdoc-args = ["--cfg", "docsrs"]
 
@@ -48,3 +48,4 @@ features = ["build"]
 
 [features]
 file-sync-all = ["tauri-store/file-sync-all"]
+unstable-migration = ["tauri-store/unstable-migration"]

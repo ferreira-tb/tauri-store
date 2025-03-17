@@ -2,7 +2,7 @@
   "name": "monorepo",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.6.3",
+  "packageManager": "pnpm@10.6.4",
   "scripts": {
     "build": "pnpm run build:shared && pnpm run build:package",
     "build:docs": "pwsh scripts/build-docs.ps1",
