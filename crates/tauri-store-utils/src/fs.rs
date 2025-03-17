@@ -8,6 +8,7 @@ use std::io::Result;
 use std::io::Write;
 use std::path::Path;
 
+/// Reads the contents of a file and deserializes it into a value.
 #[builder]
 pub fn read_file<T>(
   #[builder(start_fn)] path: impl AsRef<Path>,
@@ -36,6 +37,7 @@ where
   }
 }
 
+/// Writes a JSON-serializable value to a file.
 #[builder]
 pub fn write_file<T>(
   #[builder(start_fn)] path: impl AsRef<Path>,
@@ -52,7 +54,12 @@ where
     fs::create_dir_all(parent)?;
   }
 
-  let bytes = to_bytes(value, pretty)?;
+  let bytes = if pretty {
+    to_vec_pretty(value)?
+  } else {
+    to_vec(value)?
+  };
+
   let mut file = if create_new {
     File::create_new(path)?
   } else {
@@ -66,15 +73,4 @@ where
   }
 
   Ok(())
-}
-
-fn to_bytes<T>(value: &T, pretty: bool) -> Result<Vec<u8>>
-where
-  T: ?Sized + Serialize,
-{
-  if pretty {
-    Ok(to_vec_pretty(value)?)
-  } else {
-    Ok(to_vec(value)?)
-  }
 }
