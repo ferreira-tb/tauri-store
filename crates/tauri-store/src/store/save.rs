@@ -26,11 +26,11 @@ impl<R: Runtime> SaveHandle<R> {
   }
 }
 
-pub(super) fn debounce<R: Runtime>(duration: Duration, id: StoreId) -> SaveHandle<R> {
+pub(super) fn debounce<R: Runtime>(id: StoreId, duration: Duration) -> SaveHandle<R> {
   SaveHandle(Box::new(Debounce::new(duration, save_handle(id))))
 }
 
-pub(super) fn throttle<R: Runtime>(duration: Duration, id: StoreId) -> SaveHandle<R> {
+pub(super) fn throttle<R: Runtime>(id: StoreId, duration: Duration) -> SaveHandle<R> {
   SaveHandle(Box::new(Throttle::new(duration, save_handle(id))))
 }
 

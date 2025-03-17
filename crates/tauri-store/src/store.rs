@@ -4,9 +4,6 @@ mod save;
 mod state;
 mod watch;
 
-#[cfg(feature = "unstable-migration")]
-mod migration;
-
 use crate::error::Result;
 use crate::manager::ManagerExt;
 use options::set_options;
@@ -218,13 +215,13 @@ impl<R: Runtime> Store<R> {
       SaveStrategy::Debounce(duration) => {
         self
           .debounce_save_handle
-          .get_or_init(|| debounce(duration, self.id.clone()))
+          .get_or_init(|| debounce(self.id.clone(), duration))
           .call(&self.app);
       }
       SaveStrategy::Throttle(duration) => {
         self
           .throttle_save_handle
-          .get_or_init(|| throttle(duration, self.id.clone()))
+          .get_or_init(|| throttle(self.id.clone(), duration))
           .call(&self.app);
       }
     }
