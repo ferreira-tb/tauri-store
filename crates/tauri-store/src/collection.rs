@@ -4,7 +4,7 @@ mod path;
 
 use crate::error::Result;
 use crate::event::{emit, STORE_UNLOAD_EVENT};
-use crate::meta;
+use crate::meta::Meta;
 use crate::store::{SaveStrategy, Store, StoreId, StoreResource, StoreState, WatcherId};
 use autosave::Autosave;
 use dashmap::DashMap;
@@ -94,7 +94,7 @@ impl<R: Runtime> StoreCollection<R> {
   /// This will move all *currently active* stores to the new directory.
   pub fn set_path(&self, path: impl AsRef<Path>) -> Result<()> {
     set_path(self, path)?;
-    meta::save(self)?;
+    Meta::write(self)?;
     Ok(())
   }
 
@@ -318,7 +318,9 @@ impl<R: Runtime> StoreCollection<R> {
       }
     }
 
-    meta::save(self)
+    Meta::write(self)?;
+
+    Ok(())
   }
 }
 

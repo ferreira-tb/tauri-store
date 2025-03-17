@@ -1,7 +1,7 @@
 use super::{OnLoadFn, StoreCollection, RESOURCE_ID};
 use crate::collection::autosave::Autosave;
 use crate::error::Result;
-use crate::meta;
+use crate::meta::Meta;
 use crate::store::{SaveStrategy, Store, StoreId};
 use dashmap::DashMap;
 use std::collections::HashSet;
@@ -110,27 +110,29 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
       "store collection is already initialized"
     );
 
-    let path = self.path.take().unwrap_or_else(|| {
-      app
-        .path()
-        .app_data_dir()
-        .expect("failed to resolve app data dir")
-        .join(name)
-    });
+    let app = app.app_handle();
+    let meta = Meta::read(app, name)?;
+    let path = meta
+      .path
+      .or_else(|| self.path.take())
+      .unwrap_or_else(|| {
+        app
+          .path()
+          .app_data_dir()
+          .expect("failed to resolve app data dir")
+          .join(name)
+      });
 
     self.save_denylist = self.save_denylist.filter(|it| !it.is_empty());
     self.sync_denylist = self.sync_denylist.filter(|it| !it.is_empty());
 
-    let autosave = Autosave::new(self.autosave);
-
-    let app = app.app_handle();
     let collection = Arc::new(StoreCollection::<R> {
       app: app.clone(),
       name: Box::from(name),
       path: Mutex::new(path),
       stores: DashMap::new(),
       on_load: self.on_load,
-      autosave: Mutex::new(autosave),
+      autosave: Mutex::new(Autosave::new(self.autosave)),
       default_save_strategy: self.default_save_strategy,
       save_denylist: self.save_denylist,
       sync_denylist: self.sync_denylist,
@@ -146,7 +148,6 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
 
     let _ = RESOURCE_ID.set(rid);
 
-    meta::load(&collection)?;
     collection.autosave.lock().unwrap().start(app);
 
     Ok(collection)

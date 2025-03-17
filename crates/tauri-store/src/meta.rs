@@ -6,6 +6,9 @@ use std::path::PathBuf;
 use tauri::{Manager, Runtime};
 use tauri_store_utils::{read_file, write_file};
 
+#[cfg(feature = "unstable-migration")]
+use crate::migration::MigrationHistory;
+
 #[cfg(debug_assertions)]
 const FILENAME: &str = "meta.dev.tauristore";
 #[cfg(not(debug_assertions))]
@@ -14,7 +17,44 @@ const FILENAME: &str = "meta.tauristore";
 #[derive(Debug, Serialize, Deserialize)]
 pub(crate) struct Meta {
   pub(crate) path: Option<PathBuf>,
-  pub(crate) version: Version,
+  version: Version,
+
+  #[cfg(feature = "unstable-migration")]
+  migration: MigrationHistory,
+}
+
+impl Meta {
+  pub(crate) fn read<R, M>(app: &M, name: &str) -> Result<Self>
+  where
+    R: Runtime,
+    M: Manager<R>,
+  {
+    let path = meta_file_path(app, name)?;
+    let meta = read_file(&path)
+      .create(true)
+      .create_pretty(true)
+      .create_sync(cfg!(feature = "file-sync-all"))
+      .call()?;
+
+    Ok(meta)
+  }
+
+  pub(crate) fn write<R>(collection: &StoreCollection<R>) -> Result<()>
+  where
+    R: Runtime,
+  {
+    let mut meta = Self::read(&collection.app, &collection.name)?;
+    meta.path = Some(collection.path());
+    meta.version = current_version();
+
+    let path = meta_file_path(&collection.app, &collection.name)?;
+    write_file(path, &meta)
+      .pretty(true)
+      .sync(cfg!(feature = "file-sync-all"))
+      .call()?;
+
+    Ok(())
+  }
 }
 
 impl Default for Meta {
@@ -22,54 +62,22 @@ impl Default for Meta {
     Self {
       path: None,
       version: current_version(),
+
+      #[cfg(feature = "unstable-migration")]
+      migration: MigrationHistory::default(),
     }
   }
 }
 
-pub(crate) fn load<R>(collection: &StoreCollection<R>) -> Result<()>
+fn meta_file_path<R, M>(app: &M, name: &str) -> Result<PathBuf>
 where
   R: Runtime,
+  M: Manager<R>,
 {
-  let path = path(collection)?;
-  let meta: Meta = read_file(&path)
-    .create(true)
-    .create_pretty(true)
-    .create_sync(cfg!(feature = "file-sync-all"))
-    .call()?;
-
-  if let Some(path) = meta.path {
-    *collection.path.lock().unwrap() = path;
-  }
-
-  Ok(())
-}
-
-pub(crate) fn save<R>(collection: &StoreCollection<R>) -> Result<()>
-where
-  R: Runtime,
-{
-  let meta = Meta {
-    path: Some(collection.path()),
-    version: current_version(),
-  };
-
-  write_file(path(collection)?, &meta)
-    .sync(cfg!(feature = "file-sync-all"))
-    .pretty(true)
-    .call()?;
-
-  Ok(())
-}
-
-fn path<R>(collection: &StoreCollection<R>) -> Result<PathBuf>
-where
-  R: Runtime,
-{
-  let path = collection
-    .app
+  let path = app
     .path()
     .app_config_dir()?
-    .join(collection.name.as_ref())
+    .join(name)
     .join(FILENAME);
 
   Ok(path)

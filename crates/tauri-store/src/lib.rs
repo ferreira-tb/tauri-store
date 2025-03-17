@@ -14,6 +14,9 @@ mod command;
 #[cfg(feature = "plugin")]
 mod plugin;
 
+#[cfg(feature = "unstable-migration")]
+mod migration;
+
 pub use collection::{OnLoadFn, StoreCollection};
 pub use error::{BoxResult, Error, Result};
 pub use manager::ManagerExt;
