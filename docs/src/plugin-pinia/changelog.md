@@ -10,7 +10,7 @@ outline: 2
 
 ## Next
 
-_Nothing yet._
+- Update `tauri-store` to `0.9.1`.
 
 ## 3.0.0
 

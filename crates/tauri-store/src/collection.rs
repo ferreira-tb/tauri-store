@@ -245,6 +245,7 @@ impl<R: Runtime> StoreCollection<R> {
 
   /// Default save strategy for the stores.
   /// This can be overridden on a per-store basis.
+  #[inline]
   pub fn default_save_strategy(&self) -> SaveStrategy {
     self.default_save_strategy
   }

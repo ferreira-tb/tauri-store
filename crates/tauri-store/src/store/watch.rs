@@ -11,7 +11,7 @@ static CURRENT_ID: AtomicU32 = AtomicU32::new(0);
 type WatcherFn<R> = dyn Fn(AppHandle<R>) -> Result<()> + Send + Sync;
 
 pub(crate) struct Watcher<R: Runtime> {
-  pub(crate) id: WatcherId,
+  id: WatcherId,
   inner: Arc<WatcherFn<R>>,
 }
 
@@ -24,6 +24,11 @@ impl<R: Runtime> Watcher<R> {
       id: WatcherId(CURRENT_ID.fetch_add(1, Relaxed)),
       inner: Arc::new(f),
     }
+  }
+
+  #[inline]
+  pub fn id(&self) -> WatcherId {
+    self.id
   }
 
   pub fn call(&self, app: AppHandle<R>) {

@@ -3974,7 +3974,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store"
-version = "0.9.0"
+version = "0.9.1"
 dependencies = [
  "anyhow",
  "dashmap",
@@ -4011,7 +4011,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-macros"
-version = "0.9.0"
+version = "0.9.1"
 dependencies = [
  "proc-macro2",
  "quote",

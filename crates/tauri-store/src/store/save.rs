@@ -69,31 +69,37 @@ impl SaveStrategy {
   const THROTTLE: &'static str = "throttle";
 
   /// Returns [`Debounce`](SaveStrategy::Debounce) with the given duration, in milliseconds.
+  #[inline]
   pub const fn debounce_millis(millis: u64) -> Self {
     Self::Debounce(Duration::from_millis(millis))
   }
 
   /// Returns [`Debounce`](SaveStrategy::Debounce) with the given duration, in seconds.
+  #[inline]
   pub const fn debounce_secs(secs: u64) -> Self {
     Self::Debounce(Duration::from_secs(secs))
   }
 
   /// Returns [`Throttle`](SaveStrategy::Throttle) with the given duration, in milliseconds.
+  #[inline]
   pub const fn throttle_millis(millis: u64) -> Self {
     Self::Throttle(Duration::from_millis(millis))
   }
 
   /// Returns [`Throttle`](SaveStrategy::Throttle) with the given duration, in seconds.
+  #[inline]
   pub const fn throttle_secs(secs: u64) -> Self {
     Self::Throttle(Duration::from_secs(secs))
   }
 
   /// Whether the strategy is [`Debounce`](SaveStrategy::Debounce).
+  #[inline]
   pub const fn is_debounce(&self) -> bool {
     matches!(self, Self::Debounce(_))
   }
 
   /// Whether the strategy is [`Throttle`](SaveStrategy::Throttle).
+  #[inline]
   pub const fn is_throttle(&self) -> bool {
     matches!(self, Self::Throttle(_))
   }

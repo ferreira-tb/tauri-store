@@ -16,7 +16,7 @@ pub(crate) struct StatePayload<'a> {
 
 impl<'a, R: Runtime> From<&'a Store<R>> for StatePayload<'a> {
   fn from(store: &'a Store<R>) -> Self {
-    Self { id: &store.id, state: &store.state }
+    Self { id: &store.id, state: store.state() }
   }
 }
 
@@ -77,6 +77,7 @@ where
 pub struct EventSource(Option<String>);
 
 impl EventSource {
+  #[inline]
   pub const fn is_backend(&self) -> bool {
     self.0.is_none()
   }
