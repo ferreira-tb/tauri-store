@@ -127,6 +127,6 @@ const store = new RuneStore('counter', { counter: 0 });
 
 function increment() {
   // "state" is reactive!
-  store.state.count += 1;
+  store.state.counter += 1;
 }
 ```

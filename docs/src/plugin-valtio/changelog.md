@@ -10,6 +10,8 @@ outline: 2
 
 ## Next
 
+### Dependencies
+
 - Update `tauri-store` to `0.9.1`.
 
 ## 2.0.0
