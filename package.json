@@ -18,15 +18,16 @@
     "eslint:fix": "eslint . --config eslint.config.js --fix",
     "example": "pwsh scripts/start-example.ps1",
     "format": "prettier . --write && cargo fmt --all",
+    "playground": "pwsh scripts/start-playground.ps1",
     "sync": "pnpm run --recursive --if-present sync",
     "test:crate": "pwsh scripts/test.ps1",
     "type-check": "pnpm run --recursive --if-present type-check",
     "update": "pwsh scripts/update.ps1"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^6.5.3",
+    "@tb-dev/eslint-config": "^6.6.0",
     "@types/node": "^22.13.10",
-    "@types/react": "^19.0.10",
+    "@types/react": "^19.0.11",
     "@types/react-dom": "^19.0.4",
     "eslint": "^9.22.0",
     "prettier": "^3.5.3",

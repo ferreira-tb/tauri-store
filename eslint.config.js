@@ -5,6 +5,7 @@ export default defineConfig({
     'docs/tsconfig.json',
     'examples/pinia/tsconfig.json',
     'examples/pinia-nuxt/tsconfig.json',
+    'examples/playground/tsconfig.json',
     'examples/svelte/tsconfig.json',
     'examples/svelte-runes/tsconfig.json',
     'examples/valtio/tsconfig.json',
@@ -26,6 +27,7 @@ export default defineConfig({
     svelte: {
       'svelte/block-lang': 'off',
       'svelte/no-at-html-tags': 'off',
+      'svelte/no-ignored-unsubscribe': 'off',
       'svelte/no-inline-styles': 'off',
     },
     typescript: {

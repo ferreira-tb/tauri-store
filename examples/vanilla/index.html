@@ -9,47 +9,9 @@
 
   <body>
     <script type="module">
-      import { exit } from '@tauri-apps/plugin-process';
-      import { onError, printStore } from './src/commands.js';
-      import { clearAutosave, setAutosave } from 'tauri-store/src/index.js';
-      import { increment, incrementNested, openStore, store } from './src/counter.js';
+      import { init } from './src/index.js';
 
-      window.addEventListener('DOMContentLoaded', async () => {
-        await store.start();
-
-        const onClick = (id, callback) => {
-          const el = document.getElementById(id);
-          el.addEventListener('click', callback);
-        };
-
-        onClick('set-autosave', () => setAutosave(5000));
-        onClick('clear-autosave', () => clearAutosave());
-        onClick('increment', () => increment());
-        onClick('increment-nested', () => incrementNested());
-        onClick('start', () => store.start());
-        onClick('stop', () => store.stop());
-        onClick('save', () => store.save());
-        onClick('save-now', () => store.saveNow());
-        onClick('print', () => printStore());
-        onClick('open', () => openStore());
-
-        update(store.state());
-        store.subscribe(update);
-
-        function update(state) {
-          const counter = state.counter;
-          const nested = state.nested.foo.bar.baz;
-          const p = document.getElementById('counter-value');
-          p.textContent = `Counter: ${counter} Nested: ${nested}`;
-        }
-      });
-
-      window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          exit(0).catch(onError);
-        }
-      });
+      init();
     </script>
 
     <main>

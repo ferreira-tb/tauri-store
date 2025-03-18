@@ -1,28 +1,12 @@
-<# 
-  .SYNOPSIS
-  Build and run the specified example.
-#>
-
 param(
-  [string]$Example,
   [string[]]$Features = @()
 )
 
 $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
-if (-not $Example -or ($Example -eq 'random')) {
-  $Exclude = @('assets', 'playground')
-
-  $Examples = Get-ChildItem -Path './examples' -Directory -Exclude $Exclude |
-    Select-Object -ExpandProperty Name
-
-  $Example = Get-Random -InputObject $Examples
-}
-
-Write-Host "Starting example: $($Example.ToUpper())"
-
 pnpm run build:shared
+pnpm run -F '@tauri-store/pinia' build
 
 $ArgumentList = 'tauri dev'
 foreach ($Feature in $Features) {
@@ -31,7 +15,7 @@ foreach ($Feature in $Features) {
 
 $WorkingDir = Get-Location |
   Select-Object -ExpandProperty Path |
-  Join-Path -ChildPath "examples/$Example"
+  Join-Path -ChildPath 'examples/playground'
 
 $Params = @{
   FilePath         = 'cargo'

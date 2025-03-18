@@ -1,5 +1,5 @@
 [package]
-name = "example-pinia"
+name = "playground"
 publish = false
 version = "0.1.0"
 
@@ -10,7 +10,7 @@ workspace = true
 workspace = true
 
 [lib]
-name = "example_pinia_lib"
+name = "playground_lib"
 crate-type = ["cdylib", "rlib", "staticlib"]
 
 [lints]
@@ -23,10 +23,6 @@ tauri-plugin-process = "2"
 tauri-plugin-shell = "2"
 tauri-plugin-window-state = "2"
 tracing = "0.1"
-
-[dependencies.serde]
-version = "1"
-features = ["derive"]
 
 [dependencies.tauri]
 version = "2"

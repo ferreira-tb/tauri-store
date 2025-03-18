@@ -48,7 +48,7 @@ optional = true
 path = "../tauri-store-macros"
 
 [dependencies.tauri-store-utils]
-version = "0.3.0"
+version = "0.3.1"
 path = "../tauri-store-utils"
 
 [dependencies.tokio]
