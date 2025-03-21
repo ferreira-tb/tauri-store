@@ -14,10 +14,7 @@ use tauri::{Manager, Runtime};
 use tauri::plugin::TauriPlugin;
 
 #[cfg(feature = "unstable-migration")]
-use {
-  crate::migration::{Migration, MigrationContext, Migrator},
-  crate::store::StoreState,
-};
+use crate::migration::{Migration, MigrationContext, Migrator};
 
 #[cfg(tauri_store_tracing)]
 use tracing::trace;
@@ -82,15 +79,35 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
 
   /// Sets a list of stores that should not be saved to disk.
   #[must_use]
-  pub fn save_denylist(mut self, save_denylist: HashSet<StoreId>) -> Self {
-    self.save_denylist = Some(save_denylist);
+  pub fn save_denylist<I, T>(mut self, denylist: I) -> Self
+  where
+    I: IntoIterator<Item = T>,
+    T: AsRef<str>,
+  {
+    self.save_denylist = Some(
+      denylist
+        .into_iter()
+        .map(|it| StoreId::from(it.as_ref()))
+        .collect(),
+    );
+
     self
   }
 
   /// Sets a list of stores that should not be synchronized across windows.
   #[must_use]
-  pub fn sync_denylist(mut self, sync_denylist: HashSet<StoreId>) -> Self {
-    self.sync_denylist = Some(sync_denylist);
+  pub fn sync_denylist<I, T>(mut self, denylist: I) -> Self
+  where
+    I: IntoIterator<Item = T>,
+    T: AsRef<str>,
+  {
+    self.sync_denylist = Some(
+      denylist
+        .into_iter()
+        .map(|it| StoreId::from(it.as_ref()))
+        .collect(),
+    );
+
     self
   }
 
@@ -119,9 +136,9 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
   #[cfg(feature = "unstable-migration")]
   pub fn on_before_each_migration<F>(mut self, f: F) -> Self
   where
-    F: Fn(&StoreState, MigrationContext) -> Result<()> + Send + Sync + 'static,
+    F: Fn(MigrationContext) -> Result<()> + Send + Sync + 'static,
   {
-    self.migrator.before_each = Some(Box::new(f));
+    self.migrator.on_before_each(f);
     self
   }
 

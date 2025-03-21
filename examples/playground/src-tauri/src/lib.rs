@@ -15,9 +15,11 @@ pub fn run() {
     .plugin(tauri_plugin_window_state::Builder::new().build())
     .plugin(
       tauri_plugin_pinia::Builder::new()
-        .default_save_strategy(SaveStrategy::throttle_secs(3))
         .autosave(Duration::from_secs(60))
+        .default_save_strategy(SaveStrategy::throttle_secs(3))
         .pretty(true)
+        .save_denylist(["dont-save-1", "dont-save-2"])
+        .sync_denylist(["dont-sync-1", "dont-sync-2"])
         .build(),
     )
     .setup(|app| open_window(app.handle()))

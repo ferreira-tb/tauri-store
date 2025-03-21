@@ -8,17 +8,19 @@ use std::collections::HashMap;
 use tauri_store_utils::Version as VersionTrait;
 
 type MigrationFn = dyn Fn(&mut StoreState) -> Result<()> + Send + Sync;
-type BeforeEachMigrationFn = dyn Fn(&StoreState, MigrationContext) -> Result<()> + Send + Sync;
+type BeforeEachMigrationFn = dyn Fn(MigrationContext) -> Result<()> + Send + Sync;
 
+#[doc(hidden)]
 #[derive(Default)]
-pub(crate) struct Migrator {
+pub struct Migrator {
   migrations: HashMap<StoreId, Vec<Migration>>,
+  before_each: Option<Box<BeforeEachMigrationFn>>,
   pub(crate) history: MigrationHistory,
-  pub(crate) before_each: Option<Box<BeforeEachMigrationFn>>,
 }
 
 impl Migrator {
-  pub(crate) fn add_migration(&mut self, id: StoreId, migration: Migration) {
+  #[doc(hidden)]
+  pub fn add_migration(&mut self, id: StoreId, migration: Migration) {
     self
       .migrations
       .entry(id)
@@ -26,7 +28,8 @@ impl Migrator {
       .push(migration);
   }
 
-  pub(crate) fn add_migrations<I>(&mut self, id: StoreId, migrations: I)
+  #[doc(hidden)]
+  pub fn add_migrations<I>(&mut self, id: StoreId, migrations: I)
   where
     I: IntoIterator<Item = Migration>,
   {
@@ -37,7 +40,8 @@ impl Migrator {
       .extend(migrations);
   }
 
-  pub(crate) fn migrate(&mut self, id: &StoreId, state: &mut StoreState) -> Result<u32> {
+  #[doc(hidden)]
+  pub fn migrate(&mut self, id: &StoreId, state: &mut StoreState) -> Result<u32> {
     let mut migrations = self
       .migrations
       .get(id)
@@ -59,8 +63,7 @@ impl Migrator {
       let current = &migration.version;
       if let Some(before_each) = &self.before_each {
         let next = iter.peek().map(|it| &it.version);
-        let context = MigrationContext { id, current, previous, next };
-        before_each(state, context)?;
+        before_each(MigrationContext { id, state, current, previous, next })?;
       }
 
       (migration.inner)(state)?;
@@ -71,6 +74,14 @@ impl Migrator {
     }
 
     Ok(done)
+  }
+
+  #[doc(hidden)]
+  pub fn on_before_each<F>(&mut self, f: F)
+  where
+    F: Fn(MigrationContext) -> Result<()> + Send + Sync + 'static,
+  {
+    self.before_each = Some(Box::new(f));
   }
 }
 
@@ -127,6 +138,7 @@ impl Eq for Migration {}
 #[derive(Debug)]
 pub struct MigrationContext<'a> {
   pub id: &'a StoreId,
+  pub state: &'a StoreState,
   pub current: &'a Version,
   pub previous: Option<&'a Version>,
   pub next: Option<&'a Version>,

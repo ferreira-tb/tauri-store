@@ -1,3 +1,4 @@
+mod id;
 mod options;
 mod resource;
 mod save;
@@ -9,7 +10,6 @@ use crate::manager::ManagerExt;
 use options::set_options;
 use save::{debounce, throttle, SaveHandle};
 use serde::de::DeserializeOwned;
-use serde::{Deserialize, Serialize};
 use serde_json::{json, Value as Json};
 use std::collections::HashMap;
 use std::fmt;
@@ -25,6 +25,7 @@ use crate::event::{
   STORE_STATE_CHANGE_EVENT,
 };
 
+pub use id::StoreId;
 pub use options::StoreOptions;
 pub(crate) use resource::StoreResource;
 pub use save::SaveStrategy;
@@ -425,52 +426,6 @@ impl<R: Runtime> fmt::Debug for Store<R> {
       .field("save_on_change", &self.save_on_change)
       .field("save_strategy", &self.save_strategy)
       .finish_non_exhaustive()
-  }
-}
-
-/// Unique identifier for a store.
-#[derive(Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct StoreId(Arc<str>);
-
-impl StoreId {
-  pub fn new(id: &str) -> Self {
-    Self::from(id)
-  }
-}
-
-impl AsRef<str> for StoreId {
-  fn as_ref(&self) -> &str {
-    &self.0
-  }
-}
-
-impl Clone for StoreId {
-  fn clone(&self) -> Self {
-    Self(Arc::clone(&self.0))
-  }
-}
-
-impl From<&str> for StoreId {
-  fn from(id: &str) -> Self {
-    Self(Arc::from(id))
-  }
-}
-
-impl From<String> for StoreId {
-  fn from(id: String) -> Self {
-    Self(Arc::from(id))
-  }
-}
-
-impl From<&String> for StoreId {
-  fn from(id: &String) -> Self {
-    Self(Arc::from(id.as_str()))
-  }
-}
-
-impl fmt::Display for StoreId {
-  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    write!(f, "{}", self.0)
   }
 }
 
