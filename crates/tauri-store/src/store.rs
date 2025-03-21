@@ -63,7 +63,8 @@ impl<R: Runtime> Store<R> {
     #[cfg(tauri_store_tracing)]
     debug!("store loaded: {id}");
 
-    let store = Self {
+    #[allow(unused_mut)]
+    let mut store = Self {
       app: app.clone(),
       id,
       state,
@@ -75,7 +76,28 @@ impl<R: Runtime> Store<R> {
       watchers: HashMap::new(),
     };
 
+    #[cfg(feature = "unstable-migration")]
+    store.run_pending_migrations(app)?;
+
     Ok(StoreResource::create(app, store))
+  }
+
+  #[cfg(feature = "unstable-migration")]
+  fn run_pending_migrations(&mut self, app: &AppHandle<R>) -> Result<()> {
+    use crate::meta::Meta;
+
+    let collection = app.store_collection();
+    let done = collection
+      .migrator
+      .lock()
+      .unwrap()
+      .migrate(&self.id, &mut self.state)?;
+
+    if done > 0 {
+      Meta::write(&collection)?;
+    }
+
+    Ok(())
   }
 
   /// The id of the store.
@@ -294,8 +316,7 @@ impl<R: Runtime> Store<R> {
   where
     F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
   {
-    let listener = Watcher::new(f);
-    let id = listener.id();
+    let (id, listener) = Watcher::new(f);
     self.watchers.insert(id, listener);
     id
   }

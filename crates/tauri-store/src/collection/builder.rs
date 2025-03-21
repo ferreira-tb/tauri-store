@@ -13,6 +13,12 @@ use tauri::{Manager, Runtime};
 #[cfg(feature = "plugin")]
 use tauri::plugin::TauriPlugin;
 
+#[cfg(feature = "unstable-migration")]
+use {
+  crate::migration::{Migration, MigrationContext, Migrator},
+  crate::store::StoreState,
+};
+
 #[cfg(tauri_store_tracing)]
 use tracing::trace;
 
@@ -25,6 +31,9 @@ pub struct StoreCollectionBuilder<R: Runtime> {
   pretty: bool,
   save_denylist: Option<HashSet<StoreId>>,
   sync_denylist: Option<HashSet<StoreId>>,
+
+  #[cfg(feature = "unstable-migration")]
+  migrator: Migrator,
 }
 
 impl<R: Runtime> StoreCollectionBuilder<R> {
@@ -85,6 +94,37 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
     self
   }
 
+  #[must_use]
+  #[cfg(feature = "unstable-migration")]
+  pub fn migration(mut self, id: impl Into<StoreId>, migration: Migration) -> Self {
+    self.migrator.add_migration(id.into(), migration);
+    self
+  }
+
+  #[must_use]
+  #[cfg(feature = "unstable-migration")]
+  pub fn migrations<I>(mut self, id: impl Into<StoreId>, migrations: I) -> Self
+  where
+    I: IntoIterator<Item = Migration>,
+  {
+    self
+      .migrator
+      .add_migrations(id.into(), migrations);
+
+    self
+  }
+
+  /// Sets a closure to be called before each migration step.
+  #[must_use]
+  #[cfg(feature = "unstable-migration")]
+  pub fn on_before_each_migration<F>(mut self, f: F) -> Self
+  where
+    F: Fn(&StoreState, MigrationContext) -> Result<()> + Send + Sync + 'static,
+  {
+    self.migrator.before_each = Some(Box::new(f));
+    self
+  }
+
   /// Initializes the plugin with a [`StoreCollection`](crate::collection::StoreCollection).
   ///
   /// # Panics
@@ -112,7 +152,9 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
 
     let app = app.app_handle();
     let meta = Meta::read(app, name)?;
+
     let path = meta
+      .inner
       .path
       .or_else(|| self.path.take())
       .unwrap_or_else(|| {
@@ -122,6 +164,11 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
           .expect("failed to resolve app data dir")
           .join(name)
       });
+
+    #[cfg(feature = "unstable-migration")]
+    if let Some(history) = meta.inner.migration_history {
+      self.migrator.history = history;
+    }
 
     self.save_denylist = self.save_denylist.filter(|it| !it.is_empty());
     self.sync_denylist = self.sync_denylist.filter(|it| !it.is_empty());
@@ -137,6 +184,9 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
       save_denylist: self.save_denylist,
       sync_denylist: self.sync_denylist,
       pretty: self.pretty,
+
+      #[cfg(feature = "unstable-migration")]
+      migrator: Mutex::new(self.migrator),
     });
 
     #[cfg(tauri_store_tracing)]
@@ -164,6 +214,9 @@ impl<R: Runtime> Default for StoreCollectionBuilder<R> {
       pretty: false,
       save_denylist: None,
       sync_denylist: None,
+
+      #[cfg(feature = "unstable-migration")]
+      migrator: Migrator::default(),
     }
   }
 }

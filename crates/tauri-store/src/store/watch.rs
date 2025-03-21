@@ -16,22 +16,15 @@ pub(crate) struct Watcher<R: Runtime> {
 }
 
 impl<R: Runtime> Watcher<R> {
-  pub fn new<F>(f: F) -> Self
+  pub(crate) fn new<F>(f: F) -> (WatcherId, Self)
   where
     F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
   {
-    Self {
-      id: WatcherId(CURRENT_ID.fetch_add(1, Relaxed)),
-      inner: Arc::new(f),
-    }
+    let id = WatcherId(CURRENT_ID.fetch_add(1, Relaxed));
+    (id, Self { id, inner: Arc::new(f) })
   }
 
-  #[inline]
-  pub fn id(&self) -> WatcherId {
-    self.id
-  }
-
-  pub fn call(&self, app: AppHandle<R>) {
+  pub(crate) fn call(&self, app: AppHandle<R>) {
     let _ = (self.inner)(app);
   }
 }

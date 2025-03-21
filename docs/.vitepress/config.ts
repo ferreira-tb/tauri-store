@@ -101,6 +101,11 @@ export default defineConfig({
       },
     ],
 
+    socialLinks: [
+      { icon: 'github', link: 'https://github.com/ferreira-tb/tauri-store' },
+      { icon: 'discord', link: 'https://discord.gg/ARd7McmVNv' },
+    ],
+
     sidebar: {
       '/': [
         {
@@ -151,10 +156,5 @@ export default defineConfig({
         },
       ],
     },
-
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/ferreira-tb/tauri-store' },
-      { icon: 'discord', link: 'https://discord.gg/ARd7McmVNv' },
-    ],
   },
 });

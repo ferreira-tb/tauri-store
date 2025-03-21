@@ -8,17 +8,19 @@ use crate::meta::Meta;
 use crate::store::{SaveStrategy, Store, StoreId, StoreResource, StoreState, WatcherId};
 use autosave::Autosave;
 use dashmap::DashMap;
-use path::set_path;
 use serde::de::DeserializeOwned;
 use serde_json::Value as Json;
 use std::collections::HashSet;
 use std::fmt;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::sync::{Arc, Mutex, OnceLock};
 use std::time::Duration;
 use tauri::{AppHandle, Resource, ResourceId, Runtime};
 
 pub use builder::StoreCollectionBuilder;
+
+#[cfg(feature = "unstable-migration")]
+use crate::migration::Migrator;
 
 pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
 
@@ -38,6 +40,9 @@ pub struct StoreCollection<R: Runtime> {
   pub(crate) save_denylist: Option<HashSet<StoreId>>,
   pub(crate) sync_denylist: Option<HashSet<StoreId>>,
   pub(crate) pretty: bool,
+
+  #[cfg(feature = "unstable-migration")]
+  pub(crate) migrator: Mutex<Migrator>,
 }
 
 impl<R: Runtime> StoreCollection<R> {
@@ -83,19 +88,6 @@ impl<R: Runtime> StoreCollection<R> {
       .iter()
       .map(|it| it.key().clone())
       .collect()
-  }
-
-  /// Directory where the stores are saved.
-  pub fn path(&self) -> PathBuf {
-    self.path.lock().unwrap().clone()
-  }
-
-  /// Sets the directory where the stores are saved.
-  /// This will move all *currently active* stores to the new directory.
-  pub fn set_path(&self, path: impl AsRef<Path>) -> Result<()> {
-    set_path(self, path)?;
-    Meta::write(self)?;
-    Ok(())
   }
 
   /// Calls a closure with a mutable reference to the store with the given id.

@@ -1,17 +1,8 @@
-param(
-  [string[]]$Features = @()
-)
-
 $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
 pnpm run build:shared
 pnpm run -F '@tauri-store/pinia' build
-
-$ArgumentList = 'tauri dev'
-foreach ($Feature in $Features) {
-  $ArgumentList += " -f $Feature"
-}
 
 $WorkingDir = Get-Location |
   Select-Object -ExpandProperty Path |
@@ -19,7 +10,7 @@ $WorkingDir = Get-Location |
 
 $Params = @{
   FilePath         = 'cargo'
-  ArgumentList     = $ArgumentList
+  ArgumentList     = 'tauri dev'
   WorkingDirectory = $WorkingDir
   NoNewWindow      = $true
   Wait             = $true

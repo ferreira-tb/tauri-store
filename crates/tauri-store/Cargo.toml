@@ -72,7 +72,7 @@ version = "2"
 features = ["test"]
 
 [features]
-default = ["plugin", "unstable-migration"]
+default = ["plugin"]
 plugin = ["dep:tauri-plugin"]
 derive = ["dep:tauri-store-macros"]
 file-sync-all = []

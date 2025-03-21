@@ -37,13 +37,6 @@ impl<R: Runtime> StoreResource<R> {
       .map_err(Into::into)
   }
 
-  pub(crate) fn locked<F, T>(&self, f: F) -> T
-  where
-    F: FnOnce(&mut Store<R>) -> T,
-  {
-    f(&mut *self.inner.lock().unwrap())
-  }
-
   pub(crate) fn save(app: &AppHandle<R>, rid: ResourceId) -> Result<()> {
     Self::get(app, rid)?.locked(|store| store.save())
   }
@@ -53,6 +46,13 @@ impl<R: Runtime> StoreResource<R> {
       store.abort_pending_save();
       store.save_now()
     })
+  }
+
+  pub(crate) fn locked<F, T>(&self, f: F) -> T
+  where
+    F: FnOnce(&mut Store<R>) -> T,
+  {
+    f(&mut *self.inner.lock().unwrap())
   }
 }
 

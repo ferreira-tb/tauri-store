@@ -4,7 +4,7 @@
   "description": "Persistent stores for Tauri",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@10.6.4",
+  "packageManager": "pnpm@10.6.5",
   "homepage": "https://tb.dev.br/tauri-store",
   "license": "MIT",
   "repository": {
