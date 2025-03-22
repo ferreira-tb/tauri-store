@@ -9,7 +9,9 @@ outline: 2
 
 ## Next
 
-_Nothing yet._
+### Features
+
+- <Badge type="warning" text="experimental" /> Add `unstable-migration` feature.
 
 ## 0.9.0
 

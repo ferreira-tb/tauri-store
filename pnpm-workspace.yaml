@@ -2,6 +2,7 @@ packages:
   - 'docs'
   - 'examples/pinia'
   - 'examples/pinia-nuxt'
+  - 'examples/playground'
   - 'examples/svelte'
   - 'examples/svelte-runes'
   - 'examples/valtio'

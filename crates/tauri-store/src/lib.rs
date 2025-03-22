@@ -11,6 +11,8 @@ mod store;
 
 #[cfg(feature = "plugin")]
 mod command;
+#[cfg(feature = "unstable-migration")]
+mod migration;
 #[cfg(feature = "plugin")]
 mod plugin;
 
@@ -24,11 +26,14 @@ pub use event::{
   EventSource, STORE_CONFIG_CHANGE_EVENT, STORE_STATE_CHANGE_EVENT, STORE_UNLOAD_EVENT,
 };
 
+#[cfg(feature = "derive")]
+pub use tauri_store_macros::{Collection, CollectionBuilder};
+
 #[cfg(feature = "plugin")]
 pub use plugin::{init, Builder};
 
-#[cfg(feature = "derive")]
-pub use tauri_store_macros::{Collection, CollectionBuilder};
+#[cfg(feature = "unstable-migration")]
+pub use migration::{Migration, MigrationContext, Migrator};
 
 use tauri::{Manager, Runtime};
 

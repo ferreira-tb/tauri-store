@@ -17,7 +17,9 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   /// [store collection]: https://tb.dev.br/tauri-store/rust-docs/tauri_store/struct.StoreCollection.html
   /// [resources table]: https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html
   fn __SNAKE_PLUGIN_TITLE__(&self) -> State<__PASCAL_PLUGIN_TITLE__<R>> {
-    self.state::<__PASCAL_PLUGIN_TITLE__<R>>()
+    self
+      .app_handle()
+      .state::<__PASCAL_PLUGIN_TITLE__<R>>()
   }
 
   /// Calls a closure with a mutable reference to the store with the given id.

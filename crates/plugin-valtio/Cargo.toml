@@ -1,7 +1,7 @@
 [package]
 name = "tauri-plugin-valtio"
 description = "Persistent Valtio stores for Tauri"
-version = "2.0.0"
+version = "2.1.0"
 documentation = "https://docs.rs/tauri-plugin-valtio"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
@@ -22,7 +22,7 @@ workspace = true
 
 [package.metadata.docs.rs]
 no-default-features = true
-features = []
+features = ["unstable-migration"]
 rustc-args = ["--cfg", "docsrs"]
 rustdoc-args = ["--cfg", "docsrs"]
 
@@ -34,7 +34,7 @@ serde = "1.0"
 tauri = "2"
 
 [dependencies.tauri-store]
-version = "0.9.0"
+version = "0.9.1"
 path = "../tauri-store"
 default-features = false
 features = ["derive"]
@@ -48,3 +48,4 @@ features = ["build"]
 
 [features]
 file-sync-all = ["tauri-store/file-sync-all"]
+unstable-migration = ["tauri-store/unstable-migration"]

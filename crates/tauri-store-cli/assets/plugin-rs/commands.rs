@@ -1,9 +1,9 @@
 use crate::manager::ManagerExt;
+use __IMPORT_SOURCE__::{Result, SaveStrategy, StoreId, StoreOptions, StoreState, with_store};
 use std::path::PathBuf;
 use std::time::Duration;
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
-use __IMPORT_SOURCE__::{with_store, Result, SaveStrategy, StoreId, StoreOptions, StoreState};
 
 #[tauri::command]
 pub(crate) async fn clear_autosave<R>(app: AppHandle<R>)
@@ -66,7 +66,7 @@ pub(crate) async fn load<R>(app: AppHandle<R>, id: StoreId) -> Result<StoreState
 where
   R: Runtime,
 {
-  with_store(&app, id, |store| store.state().clone())
+  spawn_blocking(move || with_store(&app, id, |store| store.state().clone())).await?
 }
 
 #[tauri::command]

@@ -14,9 +14,15 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, Manager, RunEvent, Runtime};
 use tauri_store::CollectionBuilder;
 
+#[cfg(feature = "unstable-migration")]
+use tauri_store::Migrator;
+
 pub use __SNAKE_PLUGIN_TITLE__::__PASCAL_PLUGIN_TITLE__;
 pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
+
+#[cfg(feature = "unstable-migration")]
+pub use tauri_store::{Migration, MigrationContext};
 
 /// Builder for the __PASCAL_PLUGIN_TITLE__ plugin.
 #[derive(CollectionBuilder)]
@@ -28,6 +34,9 @@ pub struct Builder<R: Runtime> {
   pretty: bool,
   save_denylist: HashSet<StoreId>,
   sync_denylist: HashSet<StoreId>,
+
+  #[cfg(feature = "unstable-migration")]
+  migrator: Migrator,
 }
 
 impl<R: Runtime> Builder<R> {

@@ -10,7 +10,13 @@ outline: 2
 
 ## Next
 
-_Nothing yet._
+### Bug Fixes
+
+- Fix panic when calling [`ManagerExt::valtio`](https://docs.rs/tauri-plugin-valtio/2.0.0/tauri_plugin_valtio/trait.ManagerExt.html#method.valtio) from [`Window`](https://docs.rs/tauri/2.3.1/tauri/window/struct.Window.html) or [`WebviewWindow`](https://docs.rs/tauri/2.3.1/tauri/webview/struct.WebviewWindow.html).
+
+### Dependencies
+
+- Update `tauri-store` to `0.9.1`.
 
 ## 2.0.0
 

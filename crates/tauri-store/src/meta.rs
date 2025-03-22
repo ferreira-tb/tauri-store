@@ -1,80 +1,105 @@
 use crate::collection::StoreCollection;
 use crate::error::Result;
-use semver::Version;
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
+use std::sync::{Mutex, MutexGuard, OnceLock};
 use tauri::{Manager, Runtime};
 use tauri_store_utils::{read_file, write_file};
+
+#[cfg(feature = "unstable-migration")]
+use crate::migration::MigrationHistory;
 
 #[cfg(debug_assertions)]
 const FILENAME: &str = "meta.dev.tauristore";
 #[cfg(not(debug_assertions))]
 const FILENAME: &str = "meta.tauristore";
 
-#[derive(Debug, Serialize, Deserialize)]
+// We cannot use `LazyLock` because our MSRV is 1.77.2.
+static LOCK: OnceLock<Mutex<()>> = OnceLock::new();
+
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub(crate) struct Meta {
-  pub(crate) path: Option<PathBuf>,
-  pub(crate) version: Version,
+  pub path: Option<PathBuf>,
+
+  #[cfg(feature = "unstable-migration")]
+  pub migration_history: Option<MigrationHistory>,
 }
 
-impl Default for Meta {
-  fn default() -> Self {
-    Self {
-      path: None,
-      version: current_version(),
+impl Meta {
+  pub(crate) fn read<R, M>(app: &M, name: &str) -> Result<MetaGuard>
+  where
+    R: Runtime,
+    M: Manager<R>,
+  {
+    read(&meta_file_path(app, name)?)
+  }
+
+  pub(crate) fn write<R>(collection: &StoreCollection<R>) -> Result<()>
+  where
+    R: Runtime,
+  {
+    let path = meta_file_path(&collection.app, &collection.name)?;
+    let mut meta = read(&path)?;
+    meta.inner.path = Some(collection.path());
+
+    #[cfg(feature = "unstable-migration")]
+    {
+      let history = migration_history(collection);
+      meta.inner.migration_history = Some(history);
     }
+
+    write_file(path, &meta.inner)
+      .pretty(true)
+      .sync(cfg!(feature = "file-sync-all"))
+      .call()?;
+
+    Ok(())
   }
 }
 
-pub(crate) fn load<R>(collection: &StoreCollection<R>) -> Result<()>
-where
-  R: Runtime,
-{
-  let path = path(collection)?;
-  let meta: Meta = read_file(&path)
+pub(crate) struct MetaGuard {
+  pub(crate) inner: Meta,
+  _guard: MutexGuard<'static, ()>,
+}
+
+fn read(path: &Path) -> Result<MetaGuard> {
+  let guard = LOCK
+    .get_or_init(Mutex::default)
+    .lock()
+    .expect("meta lock is poisoned");
+
+  let meta = read_file(path)
     .create(true)
     .create_pretty(true)
     .create_sync(cfg!(feature = "file-sync-all"))
     .call()?;
 
-  if let Some(path) = meta.path {
-    *collection.path.lock().unwrap() = path;
-  }
-
-  Ok(())
+  Ok(MetaGuard { inner: meta, _guard: guard })
 }
 
-pub(crate) fn save<R>(collection: &StoreCollection<R>) -> Result<()>
+fn meta_file_path<R, M>(app: &M, name: &str) -> Result<PathBuf>
 where
   R: Runtime,
+  M: Manager<R>,
 {
-  let meta = Meta {
-    path: Some(collection.path()),
-    version: current_version(),
-  };
-
-  write_file(path(collection)?, &meta)
-    .sync(cfg!(feature = "file-sync-all"))
-    .pretty(true)
-    .call()?;
-
-  Ok(())
-}
-
-fn path<R>(collection: &StoreCollection<R>) -> Result<PathBuf>
-where
-  R: Runtime,
-{
-  let path = collection
-    .app
+  let path = app
     .path()
     .app_config_dir()?
-    .join(collection.name.as_ref())
+    .join(name)
     .join(FILENAME);
 
   Ok(path)
 }
 
-fn current_version() -> Version {
-  Version::parse(env!("CARGO_PKG_VERSION")).unwrap()
+#[cfg(feature = "unstable-migration")]
+fn migration_history<R>(collection: &StoreCollection<R>) -> MigrationHistory
+where
+  R: Runtime,
+{
+  collection
+    .migrator
+    .lock()
+    .unwrap()
+    .history
+    .clone()
 }

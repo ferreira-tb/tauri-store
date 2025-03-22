@@ -69,7 +69,7 @@ pub(crate) async fn load<R>(app: AppHandle<R>, id: StoreId) -> Result<StoreState
 where
   R: Runtime,
 {
-  with_store(&app, id, |store| store.state().clone())
+  spawn_blocking(move || with_store(&app, id, |store| store.state().clone())).await?
 }
 
 #[tauri::command]

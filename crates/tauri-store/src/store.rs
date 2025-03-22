@@ -1,3 +1,4 @@
+mod id;
 mod options;
 mod resource;
 mod save;
@@ -5,12 +6,10 @@ mod state;
 mod watch;
 
 use crate::error::Result;
-use crate::io_err;
 use crate::manager::ManagerExt;
 use options::set_options;
 use save::{debounce, throttle, SaveHandle};
 use serde::de::DeserializeOwned;
-use serde::{Deserialize, Serialize};
 use serde_json::{json, Value as Json};
 use std::collections::HashMap;
 use std::fmt;
@@ -26,6 +25,7 @@ use crate::event::{
   STORE_STATE_CHANGE_EVENT,
 };
 
+pub use id::StoreId;
 pub use options::StoreOptions;
 pub(crate) use resource::StoreResource;
 pub use save::SaveStrategy;
@@ -46,13 +46,13 @@ type ResourceTuple<R> = (ResourceId, Arc<StoreResource<R>>);
 pub struct Store<R: Runtime> {
   app: AppHandle<R>,
   pub(crate) id: StoreId,
-  pub(crate) state: StoreState,
-  pub(crate) watchers: HashMap<WatcherId, Watcher<R>>,
+  state: StoreState,
   pub(crate) save_on_exit: bool,
   save_on_change: bool,
   save_strategy: Option<SaveStrategy>,
   debounce_save_handle: OnceLock<SaveHandle<R>>,
   throttle_save_handle: OnceLock<SaveHandle<R>>,
+  watchers: HashMap<WatcherId, Watcher<R>>,
 }
 
 impl<R: Runtime> Store<R> {
@@ -64,22 +64,49 @@ impl<R: Runtime> Store<R> {
     #[cfg(tauri_store_tracing)]
     debug!("store loaded: {id}");
 
-    let store = Self {
+    #[allow(unused_mut)]
+    let mut store = Self {
       app: app.clone(),
       id,
       state,
-      watchers: HashMap::new(),
       save_on_change: false,
       save_on_exit: true,
       save_strategy: None,
       debounce_save_handle: OnceLock::new(),
       throttle_save_handle: OnceLock::new(),
+      watchers: HashMap::new(),
     };
+
+    #[cfg(feature = "unstable-migration")]
+    store.run_pending_migrations(app)?;
 
     Ok(StoreResource::create(app, store))
   }
 
+  #[cfg(feature = "unstable-migration")]
+  fn run_pending_migrations(&mut self, app: &AppHandle<R>) -> Result<()> {
+    use crate::meta::Meta;
+
+    let collection = app.store_collection();
+    let result = collection
+      .migrator
+      .lock()
+      .expect("migrator is poisoned")
+      .migrate(&self.id, &mut self.state);
+
+    if result.done > 0 {
+      Meta::write(&collection)?;
+    }
+
+    if let Some(err) = result.error {
+      Err(err)
+    } else {
+      Ok(())
+    }
+  }
+
   /// The id of the store.
+  #[inline]
   pub fn id(&self) -> StoreId {
     self.id.clone()
   }
@@ -95,28 +122,30 @@ impl<R: Runtime> Store<R> {
   }
 
   /// Gets a reference to the store state.
+  #[inline]
   pub fn state(&self) -> &StoreState {
     &self.state
   }
 
   /// Tries to parse the store state as an instance of type `T`.
-  pub fn try_state<T: DeserializeOwned>(&self) -> Result<T> {
+  pub fn try_state<T>(&self) -> Result<T>
+  where
+    T: DeserializeOwned,
+  {
     Ok(serde_json::from_value(json!(self.state))?)
   }
 
   /// Gets a value from the store.
   pub fn get(&self, key: impl AsRef<str>) -> Option<&Json> {
-    self.state.0.get(key.as_ref())
+    self.state.get(key)
   }
 
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
-  pub fn try_get<T: DeserializeOwned>(&self, key: impl AsRef<str>) -> Result<T> {
-    let key = key.as_ref();
-    let Some(value) = self.state.0.get(key).cloned() else {
-      return io_err!(NotFound, "key not found: {key}");
-    };
-
-    Ok(serde_json::from_value(value)?)
+  pub fn try_get<T>(&self, key: impl AsRef<str>) -> Result<T>
+  where
+    T: DeserializeOwned,
+  {
+    self.state.try_get(key)
   }
 
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
@@ -126,7 +155,7 @@ impl<R: Runtime> Store<R> {
   where
     T: DeserializeOwned,
   {
-    self.try_get(key).unwrap_or(default)
+    self.state.try_get_or(key, default)
   }
 
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
@@ -136,7 +165,7 @@ impl<R: Runtime> Store<R> {
   where
     T: DeserializeOwned + Default,
   {
-    self.try_get(key).unwrap_or_default()
+    self.state.try_get_or_default(key)
   }
 
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
@@ -146,16 +175,12 @@ impl<R: Runtime> Store<R> {
   where
     T: DeserializeOwned,
   {
-    self.try_get(key).unwrap_or_else(|_| f())
+    self.state.try_get_or_else(key, f)
   }
 
   /// Sets a key-value pair in the store.
   pub fn set(&mut self, key: impl AsRef<str>, value: impl Into<Json>) -> Result<()> {
-    self
-      .state
-      .0
-      .insert(key.as_ref().to_owned(), value.into());
-
+    self.state.set(key, value);
     self.on_state_change(None::<&str>)
   }
 
@@ -166,43 +191,48 @@ impl<R: Runtime> Store<R> {
     S: Into<StoreState>,
     E: Into<EventSource>,
   {
-    self.state.0.extend(state.into().0);
+    self.state.patch(state);
     self.on_state_change(source)
   }
 
   /// Patches the store state.
-  pub fn patch<S: Into<StoreState>>(&mut self, state: S) -> Result<()> {
+  pub fn patch<S>(&mut self, state: S) -> Result<()>
+  where
+    S: Into<StoreState>,
+  {
     self.patch_with_source(state, None::<&str>)
   }
 
   /// Whether the store has a key.
   pub fn has(&self, key: impl AsRef<str>) -> bool {
-    self.state.0.contains_key(key.as_ref())
+    self.state.has(key)
   }
 
   /// Creates an iterator over the store keys.
   pub fn keys(&self) -> impl Iterator<Item = &String> {
-    self.state.0.keys()
+    self.state.keys()
   }
 
   /// Creates an iterator over the store values.
   pub fn values(&self) -> impl Iterator<Item = &Json> {
-    self.state.0.values()
+    self.state.values()
   }
 
   /// Creates an iterator over the store entries.
   pub fn entries(&self) -> impl Iterator<Item = (&String, &Json)> {
-    self.state.0.iter()
+    self.state.entries()
   }
 
   /// Returns the amount of items in the store.
+  #[inline]
   pub fn len(&self) -> usize {
-    self.state.0.len()
+    self.state.len()
   }
 
   /// Whether the store is empty.
+  #[inline]
   pub fn is_empty(&self) -> bool {
-    self.state.0.is_empty()
+    self.state.is_empty()
   }
 
   /// Save the store state to the disk.
@@ -212,13 +242,13 @@ impl<R: Runtime> Store<R> {
       SaveStrategy::Debounce(duration) => {
         self
           .debounce_save_handle
-          .get_or_init(|| debounce(duration, self.id.clone()))
+          .get_or_init(|| debounce(self.id.clone(), duration))
           .call(&self.app);
       }
       SaveStrategy::Throttle(duration) => {
         self
           .throttle_save_handle
-          .get_or_init(|| throttle(duration, self.id.clone()))
+          .get_or_init(|| throttle(self.id.clone(), duration))
           .call(&self.app);
       }
     }
@@ -250,11 +280,13 @@ impl<R: Runtime> Store<R> {
 
   /// Whether to save the store on exit.
   /// This is enabled by default.
+  #[inline]
   pub fn save_on_exit(&mut self, enabled: bool) {
     self.save_on_exit = enabled;
   }
 
   /// Whether to save the store on state change.
+  #[inline]
   pub fn save_on_change(&mut self, enabled: bool) {
     self.save_on_change = enabled;
   }
@@ -289,8 +321,7 @@ impl<R: Runtime> Store<R> {
   where
     F: Fn(AppHandle<R>) -> Result<()> + Send + Sync + 'static,
   {
-    let listener = Watcher::new(f);
-    let id = listener.id;
+    let (id, listener) = Watcher::new(f);
     self.watchers.insert(id, listener);
     id
   }
@@ -402,53 +433,10 @@ impl<R: Runtime> fmt::Debug for Store<R> {
   }
 }
 
-/// Unique identifier for a store.
-#[derive(Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub struct StoreId(Arc<str>);
-
-impl StoreId {
-  pub fn new(id: &str) -> Self {
-    Self::from(id)
-  }
-}
-
-impl AsRef<str> for StoreId {
-  fn as_ref(&self) -> &str {
-    &self.0
-  }
-}
-
-impl Clone for StoreId {
-  fn clone(&self) -> Self {
-    Self(Arc::clone(&self.0))
-  }
-}
-
-impl From<&str> for StoreId {
-  fn from(id: &str) -> Self {
-    Self(Arc::from(id))
-  }
-}
-
-impl From<String> for StoreId {
-  fn from(id: String) -> Self {
-    Self(Arc::from(id))
-  }
-}
-
-impl From<&String> for StoreId {
-  fn from(id: &String) -> Self {
-    Self(Arc::from(id.as_str()))
-  }
-}
-
-impl fmt::Display for StoreId {
-  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-    write!(f, "{}", self.0)
-  }
-}
-
-fn store_path<R: Runtime>(app: &AppHandle<R>, id: &StoreId) -> PathBuf {
+fn store_path<R>(app: &AppHandle<R>, id: &StoreId) -> PathBuf
+where
+  R: Runtime,
+{
   append_filename(&app.store_collection().path(), id)
 }
 

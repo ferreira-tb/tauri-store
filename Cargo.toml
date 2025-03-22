@@ -4,6 +4,7 @@ members = [
   "crates/*",
   "examples/pinia-nuxt/src-tauri",
   "examples/pinia/src-tauri",
+  "examples/playground/src-tauri",
   "examples/svelte-runes/src-tauri",
   "examples/svelte/src-tauri",
   "examples/valtio/src-tauri",
@@ -11,7 +12,6 @@ members = [
 ]
 
 [workspace.package]
-version = "1.0.0"
 edition = "2021"
 rust-version = "1.77.2"
 categories = ["filesystem", "gui", "web-programming"]
@@ -23,6 +23,7 @@ check-cfg = ['cfg(tauri_store_tracing)']
 [workspace.lints.clippy]
 clone_on_ref_ptr = "deny"
 filetype_is_file = "deny"
+incompatible_msrv = "deny"
 map_unwrap_or = "allow"
 missing_errors_doc = "allow"
 missing_panics_doc = "allow"
