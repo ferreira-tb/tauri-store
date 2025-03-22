@@ -10,6 +10,10 @@ outline: 2
 
 ## Next
 
+_Nothing yet._
+
+## 3.1.0
+
 ### Features
 
 - Add experimental support for store migrations.
