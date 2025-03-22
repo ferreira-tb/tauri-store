@@ -62,19 +62,19 @@ export default defineConfig({
         items: [
           {
             text: 'tauri-store',
-            link: 'https://tb.dev.br/tauri-store/rust-docs/tauri_store',
+            link: 'https://docs.rs/tauri-store/latest/tauri_store',
           },
           {
             text: 'tauri-plugin-pinia',
-            link: 'https://tb.dev.br/tauri-store/rust-docs/tauri_plugin_pinia',
+            link: 'https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia',
           },
           {
             text: 'tauri-plugin-svelte',
-            link: 'https://tb.dev.br/tauri-store/rust-docs/tauri_plugin_svelte',
+            link: 'https://docs.rs/tauri-plugin-svelte/latest/tauri_plugin_svelte',
           },
           {
             text: 'tauri-plugin-valtio',
-            link: 'https://tb.dev.br/tauri-store/rust-docs/tauri_plugin_valtio',
+            link: 'https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio',
           },
         ],
       },
