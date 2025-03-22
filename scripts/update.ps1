@@ -21,6 +21,7 @@ $Skip = @(
   '@tauri-apps/api',
   'pinia',
   'svelte',
+  'tauri-plugin',
   'tokio',
   'valtio',
   'vue'

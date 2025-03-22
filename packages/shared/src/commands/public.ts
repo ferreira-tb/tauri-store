@@ -90,6 +90,7 @@ export function setAutosave(plugin: string) {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function setSaveStrategy(plugin: string) {
   function set(storeId: string, strategy: 'immediate'): Promise<void>;
   function set(storeId: string, strategy: 'debounce' | 'throttle', interval: number): Promise<void>;
