@@ -97,6 +97,9 @@ export interface StoreFrontendOptions<S extends State = State> {
   readonly syncStrategy?: LooseTimeStrategyKind;
 }
 
+/**
+ * Hooks to run custom logic at specific points in the store lifecycle.
+ */
 export interface StoreHooks<S extends State = State> {
   /**
    * Hook that runs **before** the store sends its state to Rust.

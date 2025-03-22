@@ -354,6 +354,9 @@ importers:
       '@tauri-store/shared':
         specifier: workspace:*
         version: link:../shared
+      alien-signals:
+        specifier: ^1.0.6
+        version: 1.0.6
 
 packages:
 
@@ -2084,6 +2087,9 @@ packages:
 
   alien-signals@1.0.3:
     resolution: {integrity: sha512-zQOh3wAYK5ujENxvBBR3CFGF/b6afaSzZ/c9yNhJ1ENrGHETvpUuKQsa93Qrclp0+PzTF93MaZ7scVp1uUozhA==}
+
+  alien-signals@1.0.6:
+    resolution: {integrity: sha512-aITl4ODHNX9mqBqwZWr5oTYP74hemqVGV4KRLSQacjoZIdwNxbedHF656+c4zuGLtRtcowitoXdIfyrXgzniVg==}
 
   ansi-colors@4.1.3:
     resolution: {integrity: sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw==}
@@ -7525,6 +7531,8 @@ snapshots:
   alien-signals@0.4.14: {}
 
   alien-signals@1.0.3: {}
+
+  alien-signals@1.0.6: {}
 
   ansi-colors@4.1.3: {}
 

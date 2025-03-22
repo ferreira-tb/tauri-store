@@ -5,7 +5,7 @@ use semver::Version;
 use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 use std::collections::HashMap;
-use tauri_store_utils::Version as VersionTrait;
+use tauri_store_utils::Semver;
 
 #[cfg(tauri_store_tracing)]
 use tracing::debug;
@@ -115,14 +115,13 @@ impl Migration {
   ///
   /// Panics if the version is not a valid [semver](https://semver.org/).
   #[allow(clippy::needless_pass_by_value)]
-  pub fn new<V, F>(version: V, up: F) -> Self
+  pub fn new<F>(version: impl Semver, up: F) -> Self
   where
-    V: VersionTrait,
     F: Fn(&mut StoreState) -> Result<()> + Send + Sync + 'static,
   {
     Self {
       inner: Box::new(up),
-      version: version.version(),
+      version: version.semver(),
     }
   }
 

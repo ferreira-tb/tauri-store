@@ -1,7 +1,7 @@
 import { exit } from '@tauri-apps/plugin-process';
 import { onError, printStore } from './commands.js';
 import { clearAutosave, setAutosave } from 'tauri-store/src/index.js';
-import { increment, incrementNested, openStore, store } from './counter.js';
+import { increment, incrementNested, openStore, store } from './store.js';
 
 export function init() {
   window.addEventListener('DOMContentLoaded', async () => {
