@@ -1,6 +1,5 @@
 use crate::collection::StoreCollection;
 use crate::error::Result;
-use semver::Version;
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 use std::sync::{Mutex, MutexGuard, OnceLock};
@@ -18,10 +17,9 @@ const FILENAME: &str = "meta.tauristore";
 // We cannot use `LazyLock` because our MSRV is 1.77.2.
 static LOCK: OnceLock<Mutex<()>> = OnceLock::new();
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 pub(crate) struct Meta {
   pub path: Option<PathBuf>,
-  pub version: Version,
 
   #[cfg(feature = "unstable-migration")]
   pub migration_history: Option<MigrationHistory>,
@@ -54,7 +52,12 @@ impl Meta {
   {
     let mut meta = Self::read(&collection.app, &collection.name)?;
     meta.inner.path = Some(collection.path());
-    meta.inner.version = current_version();
+
+    #[cfg(feature = "unstable-migration")]
+    {
+      let history = collection.migration_history();
+      meta.inner.migration_history = Some(history);
+    }
 
     let path = meta_file_path(&collection.app, &collection.name)?;
     write_file(path, &meta.inner)
@@ -63,18 +66,6 @@ impl Meta {
       .call()?;
 
     Ok(())
-  }
-}
-
-impl Default for Meta {
-  fn default() -> Self {
-    Self {
-      path: None,
-      version: current_version(),
-
-      #[cfg(feature = "unstable-migration")]
-      migration_history: None,
-    }
   }
 }
 
@@ -95,8 +86,4 @@ where
     .join(FILENAME);
 
   Ok(path)
-}
-
-fn current_version() -> Version {
-  Version::parse(env!("CARGO_PKG_VERSION")).unwrap()
 }

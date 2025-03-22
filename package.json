@@ -12,7 +12,7 @@
     "clippy": "cargo +nightly clippy --workspace",
     "codegen": "cargo run -p tauri-store-cli -- codegen",
     "dev": "cargo tauri dev",
-    "docs:crate": "cargo +nightly doc -p tauri-* --open --no-deps --lib",
+    "docs:crate": "cargo +nightly doc -p tauri-* --open --no-deps --lib --all-features",
     "docs:package": "pnpm run -F docs dev --host",
     "eslint": "eslint . --config eslint.config.js",
     "eslint:fix": "eslint . --config eslint.config.js --fix",

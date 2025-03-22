@@ -88,17 +88,21 @@ impl<R: Runtime> Store<R> {
     use crate::meta::Meta;
 
     let collection = app.store_collection();
-    let done = collection
+    let result = collection
       .migrator
       .lock()
-      .unwrap()
-      .migrate(&self.id, &mut self.state)?;
+      .expect("migrator is poisoned")
+      .migrate(&self.id, &mut self.state);
 
-    if done > 0 {
+    if result.done > 0 {
       Meta::write(&collection)?;
     }
 
-    Ok(())
+    if let Some(err) = result.error {
+      Err(err)
+    } else {
+      Ok(())
+    }
   }
 
   /// The id of the store.

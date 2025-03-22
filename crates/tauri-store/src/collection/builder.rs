@@ -112,12 +112,22 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
   }
 
   #[must_use]
+  #[doc(hidden)]
+  #[cfg(feature = "unstable-migration")]
+  pub fn migrator(mut self, migrator: Migrator) -> Self {
+    self.migrator = migrator;
+    self
+  }
+
+  /// Defines a migration for a store.
+  #[must_use]
   #[cfg(feature = "unstable-migration")]
   pub fn migration(mut self, id: impl Into<StoreId>, migration: Migration) -> Self {
     self.migrator.add_migration(id.into(), migration);
     self
   }
 
+  /// Defines multiple migrations for a store.
   #[must_use]
   #[cfg(feature = "unstable-migration")]
   pub fn migrations<I>(mut self, id: impl Into<StoreId>, migrations: I) -> Self
@@ -136,7 +146,7 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
   #[cfg(feature = "unstable-migration")]
   pub fn on_before_each_migration<F>(mut self, f: F) -> Self
   where
-    F: Fn(MigrationContext) -> Result<()> + Send + Sync + 'static,
+    F: Fn(MigrationContext) + Send + Sync + 'static,
   {
     self.migrator.on_before_each(f);
     self

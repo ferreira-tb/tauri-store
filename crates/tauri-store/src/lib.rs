@@ -11,11 +11,10 @@ mod store;
 
 #[cfg(feature = "plugin")]
 mod command;
+#[cfg(feature = "unstable-migration")]
+mod migration;
 #[cfg(feature = "plugin")]
 mod plugin;
-
-#[cfg(feature = "unstable-migration")]
-pub mod migration;
 
 pub use collection::{OnLoadFn, StoreCollection};
 pub use error::{BoxResult, Error, Result};
@@ -32,6 +31,9 @@ pub use tauri_store_macros::{Collection, CollectionBuilder};
 
 #[cfg(feature = "plugin")]
 pub use plugin::{init, Builder};
+
+#[cfg(feature = "unstable-migration")]
+pub use migration::{Migration, MigrationContext, Migrator};
 
 use tauri::{Manager, Runtime};
 

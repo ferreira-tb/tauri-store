@@ -20,7 +20,7 @@ use tauri::{AppHandle, Resource, ResourceId, Runtime};
 pub use builder::StoreCollectionBuilder;
 
 #[cfg(feature = "unstable-migration")]
-use crate::migration::Migrator;
+use crate::migration::{MigrationHistory, Migrator};
 
 pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
 
@@ -276,6 +276,11 @@ impl<R: Runtime> StoreCollection<R> {
     self
       .get_resource(store_id)?
       .locked(|store| Ok(store.unwatch(watcher_id)))
+  }
+
+  #[cfg(feature = "unstable-migration")]
+  pub(crate) fn migration_history(&self) -> MigrationHistory {
+    self.migrator.lock().unwrap().history.clone()
   }
 
   /// Removes the store from the collection.

@@ -18,11 +18,14 @@ use tauri::{AppHandle, Manager, RunEvent, Runtime};
 use tauri_store::CollectionBuilder;
 
 #[cfg(feature = "unstable-migration")]
-use tauri_store::migration::Migrator;
+use tauri_store::Migrator;
 
 pub use manager::ManagerExt;
 pub use svelte::Svelte;
 pub use tauri_store::prelude::*;
+
+#[cfg(feature = "unstable-migration")]
+pub use tauri_store::{Migration, MigrationContext};
 
 /// Builder for the Svelte plugin.
 #[derive(CollectionBuilder)]

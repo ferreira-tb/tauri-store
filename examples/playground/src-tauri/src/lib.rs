@@ -1,4 +1,5 @@
 mod command;
+mod migration;
 
 use anyhow::Result;
 use std::time::Duration;
@@ -20,6 +21,8 @@ pub fn run() {
         .pretty(true)
         .save_denylist(["dont-save-1", "dont-save-2"])
         .sync_denylist(["dont-sync-1", "dont-sync-2"])
+        .on_before_each_migration(|_| ())
+        .migrations("playground", migration::all())
         .build(),
     )
     .setup(|app| open_window(app.handle()))
