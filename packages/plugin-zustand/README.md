@@ -1,6 +1,6 @@
-# tauri-plugin-zustand
+# @tauri-store/zustand
 
-> This package has been renamed to [**@tauri-store/zustand**](https://www.npmjs.com/package/@tauri-store/zustand).
+> **IMPORTANT**: This is work in progress and **SHOULD NOT** be used before it reaches **v0.1.0**. Expect breaking changes on every release before that. Tracking issue: [ferreira-tb/tauri-store#106](https://github.com/ferreira-tb/tauri-store/issues/106).
 
 Persistent [Zustand](https://zustand.docs.pmnd.rs/getting-started/introduction) stores for Tauri and React.
 

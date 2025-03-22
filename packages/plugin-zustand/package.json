@@ -1,5 +1,5 @@
 {
-  "name": "tauri-plugin-zustand",
+  "name": "@tauri-store/zustand",
   "version": "0.0.2",
   "description": "Persistent Zustand stores for Tauri",
   "type": "module",
