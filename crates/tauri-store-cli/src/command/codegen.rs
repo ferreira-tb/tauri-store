@@ -21,11 +21,11 @@ pub struct Codegen {
 }
 
 impl Codegen {
-  pub fn run(&self) -> Result<()> {
+  pub fn run(self) -> Result<()> {
     crates::generate()?;
     packages::generate()?;
     examples::generate()?;
-    permissions::generate(self)?;
+    permissions::generate(&self)?;
 
     Ok(())
   }
