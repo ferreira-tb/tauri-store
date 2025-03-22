@@ -27,6 +27,7 @@ import type { TauriStoreContract } from '@tauri-store/shared';
  * ```
  */
 export function createPlugin(pluginOptions: TauriPluginPiniaOptions = {}) {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   return function (ctx: PiniaPluginContext) {
     const store = new Store(ctx, pluginOptions);
     const $tauri: TauriStoreContract = {

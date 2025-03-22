@@ -23,6 +23,7 @@ export default defineConfig({
     vue: true,
   },
   ignores: ['**/.nuxt', '**/.svelte-kit', '**/assets'],
+  moduleBoundaryTypesFiles: ['packages/**/*.ts'],
   overrides: {
     svelte: {
       'svelte/block-lang': 'off',
@@ -37,8 +38,6 @@ export default defineConfig({
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
-
-      // '@typescript-eslint/explicit-module-boundary-types': 'error',
     },
     vue: {
       'vue/enforce-style-attribute': 'off',
