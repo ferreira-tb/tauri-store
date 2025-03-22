@@ -7,6 +7,7 @@
   "packageManager": "pnpm@10.6.5",
   "homepage": "https://tb.dev.br/tauri-store/plugin-zustand/guide/getting-started",
   "license": "MIT",
+  "funding": "https://github.com/sponsors/ferreira-tb",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ferreira-tb/tauri-store.git"
