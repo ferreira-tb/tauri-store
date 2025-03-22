@@ -13,6 +13,8 @@ pub enum Plugin {
   Svelte,
   #[strum(serialize = "tauri-plugin-valtio")]
   Valtio,
+  #[strum(serialize = "tauri-plugin-zustand")]
+  Zustand,
 }
 
 impl Plugin {

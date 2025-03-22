@@ -285,6 +285,36 @@ importers:
         specifier: workspace:*
         version: link:../../packages/tauri-store
 
+  examples/zustand:
+    devDependencies:
+      '@tauri-apps/api':
+        specifier: ^2.4.0
+        version: 2.4.0
+      '@tauri-apps/plugin-process':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@tauri-apps/plugin-shell':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@tauri-store/zustand':
+        specifier: workspace:*
+        version: link:../../packages/plugin-zustand
+      '@tb-dev/utils':
+        specifier: ^5.1.4
+        version: 5.1.4
+      '@vitejs/plugin-react':
+        specifier: ^4.3.4
+        version: 4.3.4(vite@6.2.2(@types/node@22.13.11)(jiti@2.4.2)(terser@5.38.2)(yaml@2.7.0))
+      react:
+        specifier: ^19.0.0
+        version: 19.0.0
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.0.0(react@19.0.0)
+      zustand:
+        specifier: ^5.0.3
+        version: 5.0.3(@types/react@19.0.12)(react@19.0.0)
+
   packages/plugin-pinia:
     dependencies:
       '@tauri-apps/api':

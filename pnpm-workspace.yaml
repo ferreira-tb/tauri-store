@@ -7,4 +7,5 @@ packages:
   - 'examples/svelte-runes'
   - 'examples/valtio'
   - 'examples/vanilla'
+  - 'examples/zustand'
   - 'packages/*'

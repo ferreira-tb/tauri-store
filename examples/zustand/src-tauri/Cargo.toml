@@ -1,0 +1,45 @@
+[package]
+name = "example-zustand"
+publish = false
+version = "0.1.0"
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[lib]
+name = "example_zustand_lib"
+crate-type = ["cdylib", "rlib", "staticlib"]
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow = "1"
+serde_json = "1"
+tauri-plugin-process = "2"
+tauri-plugin-shell = "2"
+tauri-plugin-window-state = "2"
+tracing = "0.1"
+
+[dependencies.serde]
+version = "1"
+features = ["derive"]
+
+[dependencies.tauri]
+version = "2"
+features = ["devtools", "protocol-asset"]
+
+[dependencies.tauri-plugin-zustand]
+path = "../../../crates/plugin-zustand"
+default-features = false
+
+[dependencies.tracing-subscriber]
+version = "0.3"
+features = ["chrono", "env-filter", "fmt", "parking_lot", "registry"]
+
+[build-dependencies.tauri-build]
+version = "2"
+features = []

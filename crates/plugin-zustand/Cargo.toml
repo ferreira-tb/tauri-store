@@ -1,15 +1,15 @@
 [package]
-name = "tauri-plugin-pinia"
-description = "Persistent Pinia stores for Tauri"
-version = "3.1.0"
-documentation = "https://docs.rs/tauri-plugin-pinia"
-homepage = "https://tb.dev.br/tauri-store/plugin-pinia/guide/getting-started"
+name = "tauri-plugin-zustand"
+description = "Persistent Zustand stores for Tauri"
+version = "0.0.2"
+documentation = "https://docs.rs/tauri-plugin-zustand"
+homepage = "https://tb.dev.br/tauri-store/plugin-zustand/guide/getting-started"
 repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
-keywords = ["pinia", "plugin", "store", "tauri", "vue"]
-links = "tauri-plugin-pinia"
+keywords = ["plugin", "react", "store", "tauri", "zustand"]
+links = "tauri-plugin-zustand"
 
 [package.edition]
 workspace = true
