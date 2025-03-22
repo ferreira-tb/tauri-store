@@ -1,7 +1,7 @@
 use crate::collection::StoreCollection;
 use crate::error::Result;
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::sync::{Mutex, MutexGuard, OnceLock};
 use tauri::{Manager, Runtime};
 use tauri_store_utils::{read_file, write_file};
@@ -31,26 +31,15 @@ impl Meta {
     R: Runtime,
     M: Manager<R>,
   {
-    let guard = LOCK
-      .get_or_init(Mutex::default)
-      .lock()
-      .expect("meta lock is poisoned");
-
-    let path = meta_file_path(app, name)?;
-    let meta = read_file(&path)
-      .create(true)
-      .create_pretty(true)
-      .create_sync(cfg!(feature = "file-sync-all"))
-      .call()?;
-
-    Ok(MetaGuard { inner: meta, _guard: guard })
+    read(&meta_file_path(app, name)?)
   }
 
   pub(crate) fn write<R>(collection: &StoreCollection<R>) -> Result<()>
   where
     R: Runtime,
   {
-    let mut meta = Self::read(&collection.app, &collection.name)?;
+    let path = meta_file_path(&collection.app, &collection.name)?;
+    let mut meta = read(&path)?;
     meta.inner.path = Some(collection.path());
 
     #[cfg(feature = "unstable-migration")]
@@ -59,7 +48,6 @@ impl Meta {
       meta.inner.migration_history = Some(history);
     }
 
-    let path = meta_file_path(&collection.app, &collection.name)?;
     write_file(path, &meta.inner)
       .pretty(true)
       .sync(cfg!(feature = "file-sync-all"))
@@ -72,6 +60,21 @@ impl Meta {
 pub(crate) struct MetaGuard {
   pub(crate) inner: Meta,
   _guard: MutexGuard<'static, ()>,
+}
+
+fn read(path: &Path) -> Result<MetaGuard> {
+  let guard = LOCK
+    .get_or_init(Mutex::default)
+    .lock()
+    .expect("meta lock is poisoned");
+
+  let meta = read_file(path)
+    .create(true)
+    .create_pretty(true)
+    .create_sync(cfg!(feature = "file-sync-all"))
+    .call()?;
+
+  Ok(MetaGuard { inner: meta, _guard: guard })
 }
 
 fn meta_file_path<R, M>(app: &M, name: &str) -> Result<PathBuf>
