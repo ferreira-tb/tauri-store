@@ -30,8 +30,8 @@ The [`tauri-store`](https://crates.io/crates/tauri-store) crate is a framework-a
 
 You can enable some [Cargo features](https://doc.rust-lang.org/cargo/reference/features.html) to customize the plugin's behavior.
 
-- `file-sync-all`: calls [`File::sync_all`](https://doc.rust-lang.org/std/fs/struct.File.html#method.sync_all) after writing to the store file to ensure that all in-memory data reaches the filesystem. Enabling this can significantly degrade performance.
-- `unstable-migration`: allows to migrate the store file whenever there is a change in its schema.
+- `file-sync-all`: call [`File::sync_all`](https://doc.rust-lang.org/std/fs/struct.File.html#method.sync_all) after writing to the store file to ensure that all in-memory data reaches the filesystem. Enabling this can significantly degrade performance.
+- `unstable-migration`: allow to migrate stores from one version to another, making arbitrary changes to its structure.
 
 ## Versioning
 

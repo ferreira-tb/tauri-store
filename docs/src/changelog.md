@@ -9,6 +9,10 @@ outline: 2
 
 ## Next
 
+_Nothing yet._
+
+## 0.10.0
+
 ### Breaking Changes
 
 - Remove `Store.subscribeKey`.
