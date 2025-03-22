@@ -14,7 +14,7 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   ///
   /// This likely indicates that the method was called before the plugin was properly initialized.
   ///
-  /// [store collection]: https://tb.dev.br/tauri-store/rust-docs/tauri_store/struct.StoreCollection.html
+  /// [store collection]: https://docs.rs/tauri-store/latest/tauri_store/struct.StoreCollection.html
   /// [resources table]: https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html
   fn __SNAKE_PLUGIN_TITLE__(&self) -> State<__PASCAL_PLUGIN_TITLE__<R>> {
     self
