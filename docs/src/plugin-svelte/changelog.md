@@ -10,13 +10,17 @@ outline: 2
 
 ## Next
 
+### Features
+
+- Add experimental support for store migrations.
+
 ### Bug Fixes
 
 - Fix panic when calling [`ManagerExt::svelte`](https://docs.rs/tauri-plugin-svelte/2.0.0/tauri_plugin_svelte/trait.ManagerExt.html#method.svelte) from [`Window`](https://docs.rs/tauri/2.3.1/tauri/window/struct.Window.html) or [`WebviewWindow`](https://docs.rs/tauri/2.3.1/tauri/webview/struct.WebviewWindow.html).
 
 ### Dependencies
 
-- Update `tauri-store` to `0.9.1`.
+- Update `tauri-store` to `0.10.0`.
 
 ## 2.0.0
 

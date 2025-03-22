@@ -26,6 +26,15 @@ export const store = new Store('counter-store', counter, {
   },
 });
 
+if (!Object.hasOwn(window, '$store')) {
+  Object.defineProperty(window, '$store', {
+    value: store,
+    writable: false,
+    configurable: false,
+    enumerable: true,
+  });
+}
+
 export async function openStore() {
   const path = await store.getPath();
   await open(path);

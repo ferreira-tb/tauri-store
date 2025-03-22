@@ -9,9 +9,14 @@ outline: 2
 
 ## Next
 
+### Breaking Changes
+
+- Remove `Store.subscribeKey`.
+
 ### Features
 
-- <Badge type="warning" text="experimental" /> Add `unstable-migration` feature.
+- Add experimental support for store migrations.
+- Use [`alien-signals`](https://www.npmjs.com/package/alien-signals) as the underlying reactivity system.
 
 ## 0.9.0
 

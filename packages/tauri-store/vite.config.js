@@ -14,7 +14,7 @@ export default defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: [/^@tauri-apps/, /^@tauri-store/],
+      external: [/^@tauri-apps/, /^@tauri-store/, 'alien-signals'],
     },
   },
 });

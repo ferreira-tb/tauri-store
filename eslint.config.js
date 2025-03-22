@@ -22,7 +22,7 @@ export default defineConfig({
     svelte: true,
     vue: true,
   },
-  ignores: ['**/.nuxt', '**/.svelte-kit', '**/components/base', '**/tauri-store-cli/assets'],
+  ignores: ['**/.nuxt', '**/.svelte-kit', '**/assets'],
   overrides: {
     svelte: {
       'svelte/block-lang': 'off',

@@ -1,72 +1,80 @@
+use semver::Version;
 use std::borrow::Cow;
+use std::sync::Arc;
 
-pub trait Version {
+pub trait Semver {
   /// Returns the semver version.
   ///
   /// # Panics
   ///
   /// Panics if the version is not a valid [semver](https://semver.org/).
-  fn version(&self) -> semver::Version;
+  fn semver(&self) -> Version;
 }
 
-impl Version for semver::Version {
+impl Semver for Version {
   #[inline]
-  fn version(&self) -> semver::Version {
+  fn semver(&self) -> Version {
     self.clone()
   }
 }
 
-impl Version for &str {
-  fn version(&self) -> semver::Version {
-    semver::Version::parse(self).unwrap_or_else(|_| {
+impl Semver for &str {
+  fn semver(&self) -> Version {
+    Version::parse(self).unwrap_or_else(|_| {
       panic!("{self} is not a valid semver version");
     })
   }
 }
 
-impl Version for String {
+impl Semver for String {
   #[inline]
-  fn version(&self) -> semver::Version {
-    self.as_str().version()
+  fn semver(&self) -> Version {
+    self.as_str().semver()
   }
 }
 
-impl Version for &String {
+impl Semver for &String {
   #[inline]
-  fn version(&self) -> semver::Version {
-    self.as_str().version()
+  fn semver(&self) -> Version {
+    self.as_str().semver()
   }
 }
 
-impl Version for Box<str> {
-  fn version(&self) -> semver::Version {
-    self.as_ref().version()
+impl Semver for Arc<str> {
+  fn semver(&self) -> Version {
+    self.as_ref().semver()
   }
 }
 
-impl Version for Cow<'_, str> {
-  fn version(&self) -> semver::Version {
-    self.as_ref().version()
+impl Semver for Box<str> {
+  fn semver(&self) -> Version {
+    self.as_ref().semver()
   }
 }
 
-impl Version for u64 {
+impl Semver for Cow<'_, str> {
+  fn semver(&self) -> Version {
+    self.as_ref().semver()
+  }
+}
+
+impl Semver for u64 {
   #[inline]
-  fn version(&self) -> semver::Version {
-    semver::Version::new(*self, 0, 0)
+  fn semver(&self) -> Version {
+    Version::new(*self, 0, 0)
   }
 }
 
-impl Version for (u64, u64) {
+impl Semver for (u64, u64) {
   #[inline]
-  fn version(&self) -> semver::Version {
-    semver::Version::new(self.0, self.1, 0)
+  fn semver(&self) -> Version {
+    Version::new(self.0, self.1, 0)
   }
 }
 
-impl Version for (u64, u64, u64) {
+impl Semver for (u64, u64, u64) {
   #[inline]
-  fn version(&self) -> semver::Version {
-    semver::Version::new(self.0, self.1, self.2)
+  fn semver(&self) -> Version {
+    Version::new(self.0, self.1, self.2)
   }
 }
