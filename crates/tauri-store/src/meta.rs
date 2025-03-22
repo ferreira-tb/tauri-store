@@ -55,7 +55,7 @@ impl Meta {
 
     #[cfg(feature = "unstable-migration")]
     {
-      let history = collection.migration_history();
+      let history = migration_history(collection);
       meta.inner.migration_history = Some(history);
     }
 
@@ -86,4 +86,17 @@ where
     .join(FILENAME);
 
   Ok(path)
+}
+
+#[cfg(feature = "unstable-migration")]
+fn migration_history<R>(collection: &StoreCollection<R>) -> MigrationHistory
+where
+  R: Runtime,
+{
+  collection
+    .migrator
+    .lock()
+    .unwrap()
+    .history
+    .clone()
 }
