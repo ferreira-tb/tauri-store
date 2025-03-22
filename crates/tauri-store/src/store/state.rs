@@ -11,17 +11,17 @@ use std::result::Result as StdResult;
 pub struct StoreState(HashMap<String, Json>);
 
 impl StoreState {
-  /// Creates an empty [StoreState].
+  /// Creates an empty [`StoreState`].
   pub fn new() -> Self {
     Self::default()
   }
 
-  /// Creates an empty [StoreState] with at least the specified capacity.
+  /// Creates an empty [`StoreState`] with at least the specified capacity.
   pub fn with_capacity(capacity: usize) -> Self {
     Self(HashMap::with_capacity(capacity))
   }
 
-  /// Consumes the [StoreState] and returns the inner map.
+  /// Consumes the [`StoreState`] and returns the inner [`HashMap`](std::collections::HashMap).
   #[inline]
   pub fn into_inner(self) -> HashMap<String, Json> {
     self.0
