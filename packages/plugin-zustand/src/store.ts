@@ -56,7 +56,7 @@ export class TauriStore<S extends State, Store extends StoreApi<S>>
     this.unwatch = this.watch();
   };
 
-  protected watch = (): Fn => {
+  protected readonly watch = (): Fn => {
     let patchBackend = (state: S) => {
       this.patchBackend(state);
     };
