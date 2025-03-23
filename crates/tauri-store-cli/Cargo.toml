@@ -5,7 +5,7 @@ path = "src/main.rs"
 [package]
 name = "tauri-store-cli"
 description = "Command line tools for tauri-store"
-version = "1.0.1"
+version = "1.0.0"
 publish = false
 rust-version = "1.85"
 edition = "2024"
