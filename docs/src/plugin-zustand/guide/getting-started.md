@@ -87,16 +87,13 @@ tauri::Builder::default()
 import { create } from 'zustand';
 import { createTauriStore } from '@tauri-store/zustand';
 
-type State = {
+type CounterStore = {
   counter: number;
-};
-
-type Action = {
   increment: () => void;
 };
 
 // A Zustand store, like any other.
-export const useCounterStore = create<Action & State>((set) => ({
+export const useCounterStore = create<CounterStore>((set) => ({
   counter: 0,
   increment: () => set((state) => ({ counter: state.counter + 1 })),
 }));

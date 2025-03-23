@@ -120,8 +120,6 @@ export const useStore = defineStore('counter', () => {
 5. Start it:
 
 ```typescript
-import { useStore } from '@/stores/counter';
-
 const store = useStore();
 await store.$tauri.start();
 ```

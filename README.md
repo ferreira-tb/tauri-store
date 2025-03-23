@@ -25,6 +25,22 @@ Currently, the following plugins are available:
 | [@tauri-store/valtio](https://tb.dev.br/tauri-store/plugin-valtio/guide/getting-started)   | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fvaltio.svg)](https://www.npmjs.com/package/@tauri-store/valtio)   | React      |
 | [@tauri-store/zustand](https://tb.dev.br/tauri-store/plugin-zustand/guide/getting-started) | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fzustand.svg)](https://www.npmjs.com/package/@tauri-store/zustand) | React      |
 
+## Examples
+
+You can find example projects in the [examples directory](https://github.com/ferreira-tb/tauri-store/tree/main/examples). To check them out, clone the repository and run the examples using the following commands:
+
+```sh
+git clone https://github.com/ferreira-tb/tauri-store.git
+cd tauri-store
+pnpm run example <example-name>
+```
+
+For example, to run the [`pinia`](https://github.com/ferreira-tb/tauri-store/tree/main/examples/pinia) example, you can use:
+
+```sh
+pnpm run example pinia
+```
+
 ## Supported Tauri Version
 
 The plugins require Tauri `2.0` or later.

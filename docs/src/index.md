@@ -27,6 +27,22 @@ The [`tauri-store`](https://crates.io/crates/tauri-store) crate is a framework-a
 | [@tauri-store/valtio](./plugin-valtio/guide/getting-started.md)   | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fvaltio.svg)](https://www.npmjs.com/package/@tauri-store/valtio)   | React      |
 | [@tauri-store/zustand](./plugin-zustand/guide/getting-started.md) | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fzustand.svg)](https://www.npmjs.com/package/@tauri-store/zustand) | React      |
 
+## Examples
+
+You can find example projects in the [examples directory](https://github.com/ferreira-tb/tauri-store/tree/main/examples) of the GitHub repository. To check them out, clone the repository and run the examples using the following commands:
+
+```sh
+git clone https://github.com/ferreira-tb/tauri-store.git
+cd tauri-store
+pnpm run example <example-name>
+```
+
+For example, to run the [`pinia`](https://github.com/ferreira-tb/tauri-store/tree/main/examples/pinia) example, you can use:
+
+```sh
+pnpm run example pinia
+```
+
 ## Cargo features
 
 You can enable some [Cargo features](https://doc.rust-lang.org/cargo/reference/features.html) to customize the plugin's behavior.
