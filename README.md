@@ -32,6 +32,7 @@ You can find example projects in the [examples directory](https://github.com/fer
 ```sh
 git clone https://github.com/ferreira-tb/tauri-store.git
 cd tauri-store
+pnpm install
 pnpm run example <example-name>
 ```
 
