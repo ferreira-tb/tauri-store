@@ -94,8 +94,6 @@ export const store = new Store('counter', { counter: 0 });
 4. Start it:
 
 ```typescript
-import { store } from '$lib/stores/counter';
-
 await store.start();
 ```
 

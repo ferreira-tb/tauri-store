@@ -98,8 +98,6 @@ export const increment = () => {
 4. Start it:
 
 ```typescript
-import { counterStore } from '@/stores/counter';
-
 await counterStore.start();
 ```
 
