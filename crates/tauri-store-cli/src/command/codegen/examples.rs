@@ -24,6 +24,11 @@ pub(super) fn generate() -> Result<()> {
 fn generate_lib(assets: &Path) -> Result<()> {
   let input = assets.join("lib.rs");
   let output = |ctx: Context<'_>| match ctx.plugin {
+    Plugin::Store => {
+      let vanilla = example_lib("vanilla");
+      OutputDir::from(vanilla)
+    }
+
     Plugin::Pinia => {
       let pinia = example_lib("pinia");
       let nuxt = example_lib("pinia-nuxt");
@@ -38,9 +43,9 @@ fn generate_lib(assets: &Path) -> Result<()> {
       let valtio = example_lib("valtio");
       OutputDir::from(valtio)
     }
-    Plugin::Store => {
-      let vanilla = example_lib("vanilla");
-      OutputDir::from(vanilla)
+    Plugin::Zustand => {
+      let zustand = example_lib("zustand");
+      OutputDir::from(zustand)
     }
   };
 

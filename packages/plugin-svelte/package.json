@@ -1,12 +1,13 @@
 {
   "name": "@tauri-store/svelte",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Persistent Svelte stores and runes for Tauri",
   "type": "module",
   "private": false,
   "packageManager": "pnpm@10.6.5",
-  "homepage": "https://tb.dev.br/tauri-store",
+  "homepage": "https://tb.dev.br/tauri-store/plugin-svelte/guide/getting-started",
   "license": "MIT",
+  "funding": "https://github.com/sponsors/ferreira-tb",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ferreira-tb/tauri-store.git"

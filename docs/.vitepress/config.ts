@@ -55,6 +55,10 @@ export default defineConfig({
             text: '@tauri-store/valtio',
             link: 'https://tb.dev.br/tauri-store/js-docs/plugin-valtio',
           },
+          {
+            text: '@tauri-store/zustand',
+            link: 'https://tb.dev.br/tauri-store/js-docs/plugin-zustand',
+          },
         ],
       },
       {
@@ -76,6 +80,10 @@ export default defineConfig({
             text: 'tauri-plugin-valtio',
             link: 'https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio',
           },
+          {
+            text: 'tauri-plugin-zustand',
+            link: 'https://docs.rs/tauri-plugin-zustand/latest/tauri_plugin_zustand',
+          },
         ],
       },
       {
@@ -96,6 +104,10 @@ export default defineConfig({
           {
             text: '@tauri-store/valtio',
             link: '/plugin-valtio/changelog',
+          },
+          {
+            text: '@tauri-store/zustand',
+            link: '/plugin-zustand/changelog',
           },
         ],
       },
@@ -152,6 +164,18 @@ export default defineConfig({
             { text: 'Synchronization', link: '/plugin-valtio/guide/synchronization' },
             { text: 'Accessing from Rust', link: '/plugin-valtio/guide/accessing-from-rust' },
             { text: 'Lifecycle hooks', link: '/plugin-valtio/guide/lifecycle-hooks' },
+          ],
+        },
+      ],
+      '/plugin-zustand/': [
+        {
+          text: 'Guide',
+          items: [
+            { text: 'Getting started', link: '/plugin-zustand/guide/getting-started' },
+            { text: 'Persisting state', link: '/plugin-zustand/guide/persisting-state' },
+            { text: 'Synchronization', link: '/plugin-zustand/guide/synchronization' },
+            { text: 'Accessing from Rust', link: '/plugin-zustand/guide/accessing-from-rust' },
+            { text: 'Lifecycle hooks', link: '/plugin-zustand/guide/lifecycle-hooks' },
           ],
         },
       ],

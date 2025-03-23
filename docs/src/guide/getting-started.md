@@ -16,7 +16,7 @@ Install the [Rust crate](https://crates.io/crates/tauri-store) by adding the fol
 
 ::: code-group
 
-```toml [Cargo.toml]
+```toml [src-tauri/Cargo.toml]
 [dependencies]
 tauri-store = "0.10"
 ```
@@ -28,19 +28,23 @@ Install the [JavaScript package](https://www.npmjs.com/package/tauri-store) with
 ::: code-group
 
 ```shell [npm]
-npm install tauri-store@latest
+npm install tauri-store
 ```
 
 ```shell [pnpm]
-pnpm add tauri-store@latest
+pnpm add tauri-store
+```
+
+```shell [deno]
+deno add npm:tauri-store
 ```
 
 ```shell [bun]
-bun add tauri-store@latest
+bun add tauri-store
 ```
 
 ```shell [yarn]
-yarn add tauri-store@latest
+yarn add tauri-store
 ```
 
 :::

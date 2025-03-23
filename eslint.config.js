@@ -9,10 +9,12 @@ export default defineConfig({
     'examples/svelte/tsconfig.json',
     'examples/svelte-runes/tsconfig.json',
     'examples/valtio/tsconfig.json',
+    'examples/zustand/tsconfig.json',
     'packages/shared/tsconfig.json',
     'packages/plugin-pinia/tsconfig.json',
     'packages/plugin-svelte/tsconfig.json',
     'packages/plugin-valtio/tsconfig.json',
+    'packages/plugin-zustand/tsconfig.json',
     'packages/tauri-store/tsconfig.json',
   ],
   features: {

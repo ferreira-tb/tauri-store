@@ -17,7 +17,7 @@ Install the [Rust crate](https://crates.io/crates/tauri-plugin-valtio) by adding
 
 ::: code-group
 
-```toml [Cargo.toml]
+```toml [src-tauri/Cargo.toml]
 [dependencies]
 tauri-plugin-valtio = "2"
 ```
@@ -29,19 +29,23 @@ Install the [JavaScript package](https://www.npmjs.com/package/@tauri-store/valt
 ::: code-group
 
 ```shell [npm]
-npm install @tauri-store/valtio@latest
+npm install @tauri-store/valtio
 ```
 
 ```shell [pnpm]
-pnpm add @tauri-store/valtio@latest
+pnpm add @tauri-store/valtio
+```
+
+```shell [deno]
+deno add npm:@tauri-store/valtio
 ```
 
 ```shell [bun]
-bun add @tauri-store/valtio@latest
+bun add @tauri-store/valtio
 ```
 
 ```shell [yarn]
-yarn add @tauri-store/valtio@latest
+yarn add @tauri-store/valtio
 ```
 
 :::
@@ -107,7 +111,7 @@ Stores won't be saved nor synchronized until you call the [start](https://tb.dev
 
 ```tsx
 import { useSnapshot } from 'valtio';
-import { counterStore } from '@/stores/counter';
+import { counterStore, increment } from '@/stores/counter';
 
 export default function MyComponent() {
   // `state` is the actual valtio proxy.
@@ -116,7 +120,7 @@ export default function MyComponent() {
   return (
     <div>
       <p>Counter: {snap.counter}</p>
-      <button type="button" onClick={counterStore.increment}>
+      <button type="button" onClick={increment}>
         <span>Increment</span>
       </button>
     </div>

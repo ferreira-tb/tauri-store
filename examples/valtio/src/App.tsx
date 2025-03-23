@@ -3,22 +3,14 @@ import { useEffect } from 'react';
 import { useSnapshot } from 'valtio';
 import { onError, printStore } from './commands';
 import { exit } from '@tauri-apps/plugin-process';
-import { increment, incrementNested, openStore, store } from './counter';
+import { increment, incrementNested, openStore, store } from './store';
 import { clearAutosave, setAutosave } from '@tauri-store/valtio/src/index.js';
 
 export default function App() {
   const storeState = useSnapshot(store.state);
 
   useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        exit(0).catch(onError);
-      }
-    };
-
     window.addEventListener('keydown', onKeyDown);
-
     return () => {
       window.removeEventListener('keydown', onKeyDown);
     };
@@ -73,4 +65,11 @@ export default function App() {
       </section>
     </main>
   );
+}
+
+function onKeyDown(e: KeyboardEvent) {
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    exit(0).catch(onError);
+  }
 }

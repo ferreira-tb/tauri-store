@@ -17,7 +17,7 @@ Install the [Rust crate](https://crates.io/crates/tauri-plugin-svelte) by adding
 
 ::: code-group
 
-```toml [Cargo.toml]
+```toml [src-tauri/Cargo.toml]
 [dependencies]
 tauri-plugin-svelte = "2"
 ```
@@ -29,19 +29,23 @@ Install the [JavaScript package](https://www.npmjs.com/package/@tauri-store/svel
 ::: code-group
 
 ```shell [npm]
-npm install @tauri-store/svelte@latest
+npm install @tauri-store/svelte
 ```
 
 ```shell [pnpm]
-pnpm add @tauri-store/svelte@latest
+pnpm add @tauri-store/svelte
+```
+
+```shell [deno]
+deno add npm:@tauri-store/svelte
 ```
 
 ```shell [bun]
-bun add @tauri-store/svelte@latest
+bun add @tauri-store/svelte
 ```
 
 ```shell [yarn]
-yarn add @tauri-store/svelte@latest
+yarn add @tauri-store/svelte
 ```
 
 :::

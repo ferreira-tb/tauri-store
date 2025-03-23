@@ -9,6 +9,7 @@ members = [
   "examples/svelte/src-tauri",
   "examples/valtio/src-tauri",
   "examples/vanilla/src-tauri",
+  "examples/zustand/src-tauri",
 ]
 
 [workspace.package]

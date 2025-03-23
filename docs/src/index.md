@@ -19,12 +19,13 @@ Persistent stores for Tauri.
 
 The [`tauri-store`](https://crates.io/crates/tauri-store) crate is a framework-agnostic backend for store plugins. Currently, the following plugins are available:
 
-| Name                                                            | Version                                                                                                               | Works with |
-| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------- |
-| [tauri-store](./guide/getting-started.md)                       | [![npm](https://img.shields.io/npm/v/tauri-store.svg)](https://www.npmjs.com/package/tauri-store)                     | Everything |
-| [@tauri-store/pinia](./plugin-pinia/guide/getting-started.md)   | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fpinia.svg)](https://www.npmjs.com/package/@tauri-store/pinia)   | Vue, Nuxt  |
-| [@tauri-store/svelte](./plugin-svelte/guide/getting-started.md) | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fsvelte.svg)](https://www.npmjs.com/package/@tauri-store/svelte) | Svelte     |
-| [@tauri-store/valtio](./plugin-valtio/guide/getting-started.md) | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fvaltio.svg)](https://www.npmjs.com/package/@tauri-store/valtio) | React      |
+| Name                                                              | Version                                                                                                                 | Works with |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------- |
+| [tauri-store](./guide/getting-started.md)                         | [![npm](https://img.shields.io/npm/v/tauri-store.svg)](https://www.npmjs.com/package/tauri-store)                       | Everything |
+| [@tauri-store/pinia](./plugin-pinia/guide/getting-started.md)     | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fpinia.svg)](https://www.npmjs.com/package/@tauri-store/pinia)     | Vue, Nuxt  |
+| [@tauri-store/svelte](./plugin-svelte/guide/getting-started.md)   | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fsvelte.svg)](https://www.npmjs.com/package/@tauri-store/svelte)   | Svelte     |
+| [@tauri-store/valtio](./plugin-valtio/guide/getting-started.md)   | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fvaltio.svg)](https://www.npmjs.com/package/@tauri-store/valtio)   | React      |
+| [@tauri-store/zustand](./plugin-zustand/guide/getting-started.md) | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fzustand.svg)](https://www.npmjs.com/package/@tauri-store/zustand) | React      |
 
 ## Cargo features
 
@@ -35,7 +36,7 @@ You can enable some [Cargo features](https://doc.rust-lang.org/cargo/reference/f
 
 ## Versioning
 
-This crate follows [Cargo guidelines](https://doc.rust-lang.org/cargo/reference/semver.html) for SemVer compatibility. However, features prefixed with `unstable` are experimental and may introduce breaking changes between minor versions or even be completely removed.
+This crate follows [Cargo guidelines](https://doc.rust-lang.org/cargo/reference/semver.html) for [SemVer](https://semver.org/) compatibility. However, features prefixed with `unstable` are experimental and may introduce breaking changes between minor versions or even be completely removed.
 
 ## Any questions?
 

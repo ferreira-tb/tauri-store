@@ -11,6 +11,12 @@ outline: 2
 
 _Nothing yet._
 
+## 0.10.1
+
+### Documentation
+
+- Update README.
+
 ## 0.10.0
 
 ### Breaking Changes

@@ -1,9 +1,9 @@
 [package]
 name = "tauri-plugin-svelte"
 description = "Persistent Svelte stores for Tauri"
-version = "2.1.0"
+version = "2.1.1"
 documentation = "https://docs.rs/tauri-plugin-svelte"
-homepage = "https://tb.dev.br/tauri-store"
+homepage = "https://tb.dev.br/tauri-store/plugin-svelte/guide/getting-started"
 repository = "https://github.com/ferreira-tb/tauri-store"
 authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"

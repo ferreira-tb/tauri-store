@@ -1,12 +1,13 @@
 {
   "name": "@tauri-store/shared",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "Utilities for Tauri Store",
   "type": "module",
   "private": false,
   "packageManager": "pnpm@10.6.5",
   "homepage": "https://tb.dev.br/tauri-store",
   "license": "MIT",
+  "funding": "https://github.com/sponsors/ferreira-tb",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ferreira-tb/tauri-store.git"

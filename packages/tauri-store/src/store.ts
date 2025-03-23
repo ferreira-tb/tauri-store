@@ -62,8 +62,8 @@ export class Store<S extends State> extends BaseStore<S> implements TauriStoreCo
   };
 
   protected readonly watch = (): Fn => {
-    let patchBackend = (value: S) => {
-      this.patchBackend(value);
+    let patchBackend = (state: S) => {
+      this.patchBackend(state);
     };
 
     if (this.syncStrategy === 'debounce') {

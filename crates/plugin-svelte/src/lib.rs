@@ -2,7 +2,7 @@
 // Check the `codegen` command in the `tauri-store-cli` crate.
 
 #![forbid(unsafe_code)]
-#![cfg_attr(docsrs, feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_auto_cfg))]
 #![doc = include_str!("../README.md")]
 #![doc(html_favicon_url = "https://tb.dev.br/tauri-store/favicon.ico")]
 
