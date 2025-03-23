@@ -1,3 +1,7 @@
+#![cfg_attr(docsrs, feature(doc_auto_cfg))]
+#![doc = include_str!("../README.md")]
+#![doc(html_favicon_url = "https://tb.dev.br/tauri-store/favicon.ico")]
+
 mod fs;
 mod manager;
 mod sync;

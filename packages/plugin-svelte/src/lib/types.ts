@@ -13,16 +13,16 @@ export type {
 } from '@tauri-store/shared';
 
 /**
- * Options for the Svelte store.
- */
-export type TauriPluginSvelteStoreOptions<S extends State> = StoreOptions<S>;
-
-/**
- * Implementing `Writable<S>` ensures that the store also adheres to the Svelte store contract.
+ * `Writable<S>` ensures that the store also adheres to the Svelte store contract.
  *
  * @see https://svelte.dev/docs/svelte/stores#Store-contract
  */
 export type StoreContract<S extends State> = TauriStoreContract & Writable<S>;
+
+/**
+ * Options for the Svelte store.
+ */
+export type TauriPluginSvelteStoreOptions<S extends State> = StoreOptions<S>;
 
 /**
  * Options for the Svelte rune store.

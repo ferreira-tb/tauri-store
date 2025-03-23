@@ -17,6 +17,9 @@ import {
   TimeStrategy,
 } from '@tauri-store/shared';
 
+/**
+ * Wrapper for the Valtio proxy state.
+ */
 export class Store<S extends State> extends BaseStore<S> {
   public readonly id: string;
   public readonly state: S;

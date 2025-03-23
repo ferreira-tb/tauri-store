@@ -1,3 +1,4 @@
+import { deepClone } from 'valtio/utils';
 import { open } from '@tauri-apps/plugin-shell';
 import { type Option, store as valtio } from '@tauri-store/valtio/src/index.js';
 
@@ -29,7 +30,7 @@ export const store = valtio('counter-store', counter, {
 
   hooks: {
     beforeBackendSync: (state) => {
-      state = structuredClone(state);
+      state = deepClone(state);
       state.counter2 &&= null;
       if (state.nested2) {
         state.nested2.foo.bar &&= null;

@@ -1,3 +1,17 @@
+export { createTauriStore, tauri, type TauriStore } from './store';
+
+export type {
+  MaybePromise,
+  Option,
+  State,
+  StoreBackendOptions,
+  StoreFrontendOptions,
+  StoreHooks,
+  StoreOptions,
+  TauriPluginZustandStoreOptions,
+  TauriStoreContract,
+} from './types';
+
 export {
   clearAutosave,
   getDefaultSaveStrategy,

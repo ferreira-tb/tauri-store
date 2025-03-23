@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useEffect } from 'react';
-import { useSnapshot } from 'valtio';
 import { onError, printStore } from './commands';
 import { exit } from '@tauri-apps/plugin-process';
-import { increment, incrementNested, openStore, store } from './store';
-import { clearAutosave, setAutosave } from '@tauri-store/valtio/src/index.js';
+import { openStore, tauriHandler, useCounterStore } from './store';
+import { clearAutosave, setAutosave } from '@tauri-store/zustand/src/index.js';
 
 export default function App() {
-  const storeState = useSnapshot(store.state);
+  const counter = useCounterStore((state) => state.counter);
+  const nested = useCounterStore((state) => state.nested);
+  const increment = useCounterStore((state) => state.increment);
+  const incrementNested = useCounterStore((state) => state.incrementNested);
 
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown);
@@ -17,7 +19,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    store.start().catch(onError);
+    tauriHandler.start().catch(onError);
   }, []);
 
   return (
@@ -33,8 +35,8 @@ export default function App() {
 
       <section id="counter">
         <p>
-          Counter: {storeState.counter}
-          Nested: {storeState.nested.foo.bar.baz}
+          Counter: {counter}
+          Nested: {nested.foo.bar.baz}
         </p>
         <div className="action">
           <button type="button" onClick={increment}>
@@ -43,16 +45,16 @@ export default function App() {
           <button type="button" onClick={incrementNested}>
             Increment Nested
           </button>
-          <button type="button" onClick={store.start}>
+          <button type="button" onClick={() => tauriHandler.start()}>
             Start
           </button>
-          <button type="button" onClick={store.stop}>
+          <button type="button" onClick={() => tauriHandler.stop()}>
             Stop
           </button>
-          <button type="button" onClick={store.save}>
+          <button type="button" onClick={() => tauriHandler.save()}>
             Save
           </button>
-          <button type="button" onClick={store.saveNow}>
+          <button type="button" onClick={() => tauriHandler.saveNow()}>
             Save Now
           </button>
           <button type="button" onClick={printStore}>

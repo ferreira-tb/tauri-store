@@ -30,7 +30,7 @@ const counterStore = store('counter', value, {
 
 Registers a hook to be called before a store sends its state to Rust. This can be used to modify the state before it is sent to the backend.
 
-Note that `state` is a [snapshot](https://valtio.dev/docs/api/advanced/snapshot), so it's deeply frozen. If you need to mutate it, you can use [`deepClone`](https://valtio.dev/docs/how-tos/how-to-reset-state) from `valtio/utils` or [`structuredClone`](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone) to create a new object.
+Note that `state` is a [snapshot](https://valtio.dev/docs/api/advanced/snapshot), so it's deeply frozen. If you need to mutate it, you can create a new object using [`deepClone`](https://valtio.dev/docs/how-tos/how-to-reset-state) from `valtio/utils` or [`structuredClone`](https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone).
 
 ```typescript
 import { deepClone } from 'valtio/utils';

@@ -17,7 +17,7 @@ Install the [Rust crate](https://crates.io/crates/tauri-plugin-pinia) by adding 
 
 ::: code-group
 
-```toml [Cargo.toml]
+```toml [src-tauri/Cargo.toml]
 [dependencies]
 tauri-plugin-pinia = "3"
 ```
@@ -29,19 +29,23 @@ Install the [JavaScript package](https://www.npmjs.com/package/@tauri-store/pini
 ::: code-group
 
 ```shell [npm]
-npm install @tauri-store/pinia@latest
+npm install @tauri-store/pinia
 ```
 
 ```shell [pnpm]
-pnpm add @tauri-store/pinia@latest
+pnpm add @tauri-store/pinia
+```
+
+```shell [deno]
+deno add npm:@tauri-store/pinia
 ```
 
 ```shell [bun]
-bun add @tauri-store/pinia@latest
+bun add @tauri-store/pinia
 ```
 
 ```shell [yarn]
-yarn add @tauri-store/pinia@latest
+yarn add @tauri-store/pinia
 ```
 
 :::

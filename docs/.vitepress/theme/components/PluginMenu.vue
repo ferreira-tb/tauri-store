@@ -10,6 +10,7 @@ const items: { link: string; text: PluginName }[] = [
   { text: '@tauri-store/pinia', link: '/plugin-pinia/guide/getting-started' },
   { text: '@tauri-store/svelte', link: '/plugin-svelte/guide/getting-started' },
   { text: '@tauri-store/valtio', link: '/plugin-valtio/guide/getting-started' },
+  { text: '@tauri-store/zustand', link: '/plugin-zustand/guide/getting-started' },
 ];
 </script>
 

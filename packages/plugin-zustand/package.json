@@ -1,6 +1,6 @@
 {
   "name": "@tauri-store/zustand",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Persistent Zustand stores for Tauri",
   "type": "module",
   "private": false,
