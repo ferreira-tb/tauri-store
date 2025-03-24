@@ -3,11 +3,9 @@ import { defineStore } from 'pinia';
 
 function store() {
   const counter = ref<number>(0);
-  const version = ref<number>(0);
 
   return {
     counter,
-    version,
   };
 }
 

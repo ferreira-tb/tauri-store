@@ -1,5 +1,5 @@
 [package]
-name = "playground"
+name = "example-migration"
 publish = false
 version = "0.1.0"
 
@@ -10,7 +10,7 @@ workspace = true
 workspace = true
 
 [lib]
-name = "playground_lib"
+name = "example_migration_lib"
 crate-type = ["cdylib", "rlib", "staticlib"]
 
 [lints]
@@ -20,17 +20,20 @@ workspace = true
 anyhow = "1"
 serde_json = "1"
 tauri-plugin-process = "2"
-tauri-plugin-shell = "2"
 tauri-plugin-window-state = "2"
 tracing = "0.1"
+
+[dependencies.serde]
+version = "1"
+features = ["derive"]
 
 [dependencies.tauri]
 version = "2"
 features = ["devtools", "protocol-asset"]
 
-[dependencies.tauri-plugin-pinia]
-path = "../../../crates/plugin-pinia"
-features = ["file-sync-all"]
+[dependencies.tauri-store]
+path = "../../../crates/tauri-store"
+features = ["unstable-migration"]
 
 [dependencies.tracing-subscriber]
 version = "0.3"

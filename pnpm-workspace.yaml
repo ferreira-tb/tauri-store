@@ -1,5 +1,6 @@
 packages:
   - 'docs'
+  - 'examples/migration'
   - 'examples/pinia'
   - 'examples/pinia-nuxt'
   - 'examples/playground'

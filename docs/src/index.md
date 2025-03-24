@@ -38,10 +38,16 @@ pnpm install
 pnpm run example <example-name>
 ```
 
-For example, to run the [`pinia`](https://github.com/ferreira-tb/tauri-store/tree/main/examples/pinia) example, you can use:
+To run the [`pinia`](https://github.com/ferreira-tb/tauri-store/tree/main/examples/pinia) example, you can use:
 
 ```sh
 pnpm run example pinia
+```
+
+For a completely random example, run:
+
+```sh
+pnpm run example random
 ```
 
 ## Cargo features

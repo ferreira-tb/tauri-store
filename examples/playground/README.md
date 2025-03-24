@@ -1,5 +1,5 @@
 # Playground
 
 ```sh
-pnpm run playground
+pnpm run example playground
 ```

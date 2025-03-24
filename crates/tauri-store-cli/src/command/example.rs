@@ -6,7 +6,7 @@ use itertools::Itertools;
 use rand::seq::IndexedRandom;
 use std::fs::read_dir;
 
-const EXCLUDE: &[&str] = &["assets", "playground"];
+const EXCLUDE: &[&str] = &["assets", "migration", "playground"];
 
 #[derive(Debug, Args)]
 pub struct Example {
@@ -44,14 +44,15 @@ impl Example {
 
   fn pick_example(&mut self) -> Result<String> {
     if let Some(example) = self.example.take() {
-      Ok(example)
-    } else {
-      examples()?
-        .choose(&mut rand::rng())
-        .map(ToOwned::to_owned)
-        .map(Ok)
-        .unwrap()
+      if example != "random" {
+        return Ok(example);
+      }
     }
+
+    examples()?
+      .choose(&mut rand::rng())
+      .map(|ex| Ok(ex.to_owned()))
+      .unwrap()
   }
 }
 
