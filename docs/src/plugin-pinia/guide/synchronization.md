@@ -9,7 +9,7 @@ description: Synchronization
 
 Whenever the state changes, the store notifies Rust to keep the frontend and backend in sync. However, since data is serialized with each notification, frequent updates can be resource-intensive. One way to address this issue is by applying debouncing or throttling, making the synchronization process more efficient.
 
-```typescript
+```typescript{10-11}
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 
@@ -37,7 +37,7 @@ If a store should be [saved to disk](./persisting-state.md), but not synchronize
 
 ::: code-group
 
-```rust [src-tauri/src/lib.rs]
+```rust{2} [src-tauri/src/lib.rs]
 tauri_plugin_pinia::Builder::new()
   .sync_denylist(&["store-1", "store-2"])
   .build()

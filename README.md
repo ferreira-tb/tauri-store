@@ -33,10 +33,10 @@ You can find example projects in the [examples directory](https://github.com/fer
 git clone https://github.com/ferreira-tb/tauri-store.git
 cd tauri-store
 pnpm install
-pnpm run example <example-name>
+pnpm run example [EXAMPLE_NAME]
 ```
 
-To run the [`pinia`](https://github.com/ferreira-tb/tauri-store/tree/main/examples/pinia) example, you can use:
+For example, to run the [`pinia`](https://github.com/ferreira-tb/tauri-store/tree/main/examples/pinia) project, you can use:
 
 ```sh
 pnpm run example pinia

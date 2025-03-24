@@ -13,7 +13,7 @@ Note that all values are stored as [`serde_json::Value`](https://docs.rs/serde_j
 
 A list of all available methods for the stores can be found [here](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.Store.html).
 
-```rust
+```rust{7}
 use tauri_plugin_pinia::ManagerExt;
 
 #[tauri::command]
@@ -29,7 +29,7 @@ fn get_counter(app: AppHandle) -> i32 {
 
 You can also use the [`try_get`](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.Pinia.html#method.try_get) method to get the value directly as the desired type.
 
-```rust
+```rust{7}
 use tauri_plugin_pinia::ManagerExt;
 
 #[tauri::command]
@@ -50,7 +50,7 @@ use tauri_plugin_pinia::ManagerExt;
 
 #[tauri::command]
 fn watch_store(app: AppHandle) {
-  let id = app.pinia().watch("store", |app| {
+  app.pinia().watch("store", |app| {
     let counter = app
       .pinia()
       .try_get::<i32>("store", "counter")?;
@@ -59,10 +59,5 @@ fn watch_store(app: AppHandle) {
 
     Ok(())
   });
-
-  // It returns an id that can be used to remove the watcher.
-  if let Ok(id) = id {
-    app.pinia().unwatch("store", id).unwrap();
-  }
 }
 ```

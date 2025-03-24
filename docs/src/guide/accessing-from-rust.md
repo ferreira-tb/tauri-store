@@ -12,7 +12,7 @@ Note that all values are stored as [`serde_json::Value`](https://docs.rs/serde_j
 
 A list of all available methods for the stores can be found [here](https://docs.rs/tauri-store/latest/tauri_store/struct.Store.html).
 
-```rust
+```rust{7}
 use tauri_store::ManagerExt;
 
 #[tauri::command]
@@ -28,7 +28,7 @@ fn get_counter(app: AppHandle) -> i32 {
 
 You can also use the [`try_get`](https://docs.rs/tauri-store/latest/tauri_store/struct.StoreCollection.html#method.try_get) method to get the value directly as the desired type.
 
-```rust
+```rust{7}
 use tauri_store::ManagerExt;
 
 #[tauri::command]
@@ -49,7 +49,7 @@ use tauri_store::ManagerExt;
 
 #[tauri::command]
 fn watch_store(app: AppHandle) {
-  let id = app.store_collection().watch("store", |app| {
+  app.store_collection().watch("store", |app| {
     let counter = app
       .store_collection()
       .try_get::<i32>("store", "counter")?;
@@ -58,10 +58,5 @@ fn watch_store(app: AppHandle) {
 
     Ok(())
   });
-
-  // It returns an id that can be used to remove the watcher.
-  if let Ok(id) = id {
-    app.store_collection().unwatch("store", id).unwrap();
-  }
 }
 ```

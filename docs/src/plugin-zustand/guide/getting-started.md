@@ -70,7 +70,7 @@ yarn add @tauri-store/zustand
 
 ::: code-group
 
-```rust [src-tauri/src/lib.rs]
+```rust{2} [src-tauri/src/lib.rs]
 tauri::Builder::default()
   .plugin(tauri_plugin_zustand::init())
   .run(tauri::generate_context!())

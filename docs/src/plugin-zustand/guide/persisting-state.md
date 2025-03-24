@@ -47,7 +47,7 @@ manager.zustand().save_all();
 
 If there's a need to save a store whenever its state changes, you can enable the [`saveOnChange`](https://tb.dev.br/tauri-store/js-docs/plugin-zustand/interfaces/StoreBackendOptions.html#saveonchange) option when defining the store.
 
-```typescript
+```typescript{9}
 import { create } from 'zustand';
 import { createTauriStore } from '@tauri-store/zustand';
 
@@ -71,7 +71,7 @@ You can also enable [`autosave`](https://docs.rs/tauri-plugin-zustand/latest/tau
 
 ::: code-group
 
-```rust [src-tauri/src/lib.rs]
+```rust{5} [src-tauri/src/lib.rs]
 use std::time::Duration;
 
 // Save every five minutes.
@@ -88,7 +88,7 @@ By default, the stores are saved in a directory called `tauri-plugin-zustand` wi
 
 ::: code-group
 
-```rust [src-tauri/src/lib.rs]
+```rust{2} [src-tauri/src/lib.rs]
 tauri_plugin_zustand::Builder::new()
   .path("/path/to/custom/directory")
   .build();
@@ -120,7 +120,7 @@ If a store should be [synchronized](./synchronization.md), but not saved to disk
 
 ::: code-group
 
-```rust [src-tauri/src/lib.rs]
+```rust{2} [src-tauri/src/lib.rs]
 tauri_plugin_zustand::Builder::new()
   .save_denylist(&["store-1", "store-2"])
   .build();
