@@ -21,7 +21,7 @@ const items: { link: string; text: PluginName }[] = [
     <template #trigger>
       <div class="trigger">
         <div class="icon">
-          <component :is="icon" size="2rem" />
+          <component :is="icon" :key="plugin" size="2rem" />
         </div>
         <div class="label">
           <span>Select a plugin</span>
