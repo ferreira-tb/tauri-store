@@ -11,7 +11,7 @@ type Counter = {
   nested3: Option<{ foo: { bar: { baz: Option<number> } } }>;
 };
 
-const counter: Counter = {
+const defaultValue: Counter = {
   counter: 0,
   counter2: 0,
   counter3: 0,
@@ -20,7 +20,7 @@ const counter: Counter = {
   nested3: { foo: { bar: { baz: 0 } } },
 };
 
-export const store = valtio('counter-store', counter, {
+export const store = valtio('counter-store', defaultValue, {
   filterKeys: ['counter', 'nested', 'nested2', 'nested3'],
   filterKeysStrategy: 'pick',
   saveOnExit: true,

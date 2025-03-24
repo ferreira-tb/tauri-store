@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 2.2.0
+
+### Features
+
+- Add `toStore` helper function to create a store from an existing Valtio proxy.
+
 ## 2.1.1
 
 ### Documentation
