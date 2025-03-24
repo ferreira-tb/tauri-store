@@ -29,7 +29,7 @@ The [`tauri-store`](https://crates.io/crates/tauri-store) crate is a framework-a
 
 ## Examples
 
-You can find example projects in the [examples directory](https://github.com/ferreira-tb/tauri-store/tree/main/examples) of the GitHub repository. To check them out, clone the repository and run the examples using the following commands:
+You can find example projects in the [examples directory](https://github.com/ferreira-tb/tauri-store/tree/main/examples) of the GitHub repository. To check them out, run the following commands:
 
 ```sh
 git clone https://github.com/ferreira-tb/tauri-store.git
