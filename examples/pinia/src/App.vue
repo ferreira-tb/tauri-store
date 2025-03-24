@@ -2,7 +2,7 @@
 import '../../assets/style.css';
 import { onMounted } from 'vue';
 import { onKeyDown } from '@vueuse/core';
-import { openStore, useStore } from './counter';
+import { openStore, useStore } from './store';
 import { onError, printStore } from './commands';
 import { exit } from '@tauri-apps/plugin-process';
 import { clearAutosave, save, saveNow, setAutosave } from '@tauri-store/pinia/src/index.js';

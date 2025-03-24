@@ -1,5 +1,5 @@
 import * as commands from './commands';
-import { proxy, snapshot, subscribe } from 'valtio';
+import { snapshot, subscribe, proxy as toProxy } from 'valtio';
 import type { StoreBuilderReturn, TauriPluginValtioStoreOptions } from './types';
 import {
   BaseStore,
@@ -20,16 +20,16 @@ import {
 /**
  * Wrapper for the Valtio proxy state.
  */
-export class Store<S extends State> extends BaseStore<S> {
+class Store<S extends State> extends BaseStore<S> {
   public readonly id: string;
   public readonly state: S;
   protected options: TauriPluginValtioStoreOptions<S>;
 
-  constructor(id: string, state: S, options: TauriPluginValtioStoreOptions<S> = {}) {
+  constructor(id: string, proxy: S, options: TauriPluginValtioStoreOptions<S> = {}) {
     super();
 
     this.id = id;
-    this.state = proxy(state);
+    this.state = proxy;
 
     const saveStrategy = new TimeStrategy(options.saveStrategy, options.saveInterval);
     const syncStrategy = new TimeStrategy(options.syncStrategy, options.syncInterval);
@@ -103,11 +103,11 @@ export class Store<S extends State> extends BaseStore<S> {
  * ```ts
  * import { store } from '@tauri-store/valtio';
  *
- * export const foo = store('foo', { count: 0 });
+ * export const foo = store('foo', { counter: 0 });
  *
  * // "state" is the actual valtio proxy.
  * export const increment = () => {
- *  foo.state.count++;
+ *  foo.state.counter++;
  * };
  * ```
  */
@@ -116,9 +116,31 @@ export function store<S extends State>(
   state: S,
   options: TauriPluginValtioStoreOptions<S> = {}
 ): StoreBuilderReturn<S> {
-  const _store = new Store(id, state, options);
+  const proxy = toProxy(state);
+  return toStore(id, proxy, options);
+}
+
+/**
+ * Create a new store with the given `id` from an existing proxy state.
+ *
+ * @example
+ * ```ts
+ * import { proxy } from 'valtio';
+ * import { toStore } from '@tauri-store/valtio';
+ *
+ * const state = proxy({ counter: 0 });
+ *
+ * export const foo = toStore('foo', state);
+ * ```
+ */
+export function toStore<S extends State>(
+  id: string,
+  proxy: S,
+  options: TauriPluginValtioStoreOptions<S> = {}
+): StoreBuilderReturn<S> {
+  const _store = new Store(id, proxy, options);
   return {
-    state: _store.state,
+    state: proxy,
     getPath: () => commands.getStorePath(_store.id),
     save: () => commands.save(_store.id),
     saveAll: () => commands.saveAll(),
@@ -128,3 +150,5 @@ export function store<S extends State>(
     stop: () => _store.stop(),
   };
 }
+
+export type { Store };

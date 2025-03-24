@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { openStore, store } from '$lib/counter';
+  import { openStore, store } from '$lib/store';
   import { exit } from '@tauri-apps/plugin-process';
   import { onError, printStore } from '$lib/commands';
   import { clearAutosave, setAutosave } from '@tauri-store/svelte/src/lib/index.js';

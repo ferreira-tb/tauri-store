@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { exit } from '@tauri-apps/plugin-process';
   import { onError, printStore } from '$lib/commands';
-  import { openStore, store } from '$lib/counter.svelte';
+  import { openStore, store } from '$lib/store.svelte';
   import { clearAutosave, setAutosave } from '@tauri-store/svelte/src/lib/index.js';
 
   function onKeyDown(event: KeyboardEvent) {

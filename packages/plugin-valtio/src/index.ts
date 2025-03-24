@@ -1,4 +1,4 @@
-export { store, type Store } from './store';
+export { store, type Store, toStore } from './store';
 
 export type {
   MaybePromise,

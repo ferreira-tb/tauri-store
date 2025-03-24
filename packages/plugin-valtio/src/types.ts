@@ -17,5 +17,10 @@ export type {
 export type TauriPluginValtioStoreOptions<S extends State> = StoreOptions<S>;
 
 export interface StoreBuilderReturn<S extends State> extends TauriStoreContract {
+  /**
+   * Valtio proxy state.
+   *
+   * @see https://valtio.dev/docs/api/basic/proxy
+   */
   state: S;
 }

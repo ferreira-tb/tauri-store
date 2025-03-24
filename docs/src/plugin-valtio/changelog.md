@@ -12,6 +12,20 @@ outline: 2
 
 _Nothing yet._
 
+## 2.2.0
+
+### Features
+
+- Add `toStore` helper function to create a store from an existing proxy.
+
+```typescript
+import { proxy } from 'valtio';
+import { toStore } from '@tauri-store/valtio';
+
+const state = proxy({ counter: 0 });
+const foo = toStore('foo', state);
+```
+
 ## 2.1.1
 
 ### Documentation
