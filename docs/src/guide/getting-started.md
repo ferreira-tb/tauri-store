@@ -69,7 +69,7 @@ yarn add tauri-store
 
 ::: code-group
 
-```rust [src-tauri/src/lib.rs]
+```rust{2} [src-tauri/src/lib.rs]
 tauri::Builder::default()
   .plugin(tauri_store::init())
   .run(tauri::generate_context!())
@@ -113,6 +113,9 @@ store.set('counter', 42);
 
 // Update a value with a callback.
 store.update('counter', (value) => value + 1);
+
+// Set multiple values at once.
+store.patch({ counter: 0 });
 
 // Listen to changes.
 store.subscribe((state) => {

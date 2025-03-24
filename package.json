@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@tb-dev/eslint-config": "^6.7.1",
-    "@types/node": "^22.13.11",
+    "@types/node": "^22.13.13",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "eslint": "^9.23.0",
@@ -38,7 +38,7 @@
     "typedoc": "^0.28.1",
     "typedoc-plugin-mdn-links": "^5.0.1",
     "typescript": "~5.8.2",
-    "vite": "^6.2.2",
+    "vite": "^6.2.3",
     "vite-plugin-dts": "^4.5.3"
   }
 }

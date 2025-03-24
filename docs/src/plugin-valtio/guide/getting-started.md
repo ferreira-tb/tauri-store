@@ -70,7 +70,7 @@ yarn add @tauri-store/valtio
 
 ::: code-group
 
-```rust [src-tauri/src/lib.rs]
+```rust{2} [src-tauri/src/lib.rs]
 tauri::Builder::default()
   .plugin(tauri_plugin_valtio::init())
   .run(tauri::generate_context!())

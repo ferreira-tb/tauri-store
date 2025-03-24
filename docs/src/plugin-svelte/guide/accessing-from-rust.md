@@ -13,7 +13,7 @@ Note that all values are stored as [`serde_json::Value`](https://docs.rs/serde_j
 
 A list of all available methods for the stores can be found [here](https://docs.rs/tauri-plugin-svelte/latest/tauri_plugin_svelte/struct.Store.html).
 
-```rust
+```rust{7}
 use tauri_plugin_svelte::ManagerExt;
 
 #[tauri::command]

@@ -46,7 +46,7 @@ manager.store_collection().save_all();
 
 If there's a need to save a store whenever its state changes, you can enable the [`saveOnChange`](https://tb.dev.br/tauri-store/js-docs/tauri-store/interfaces/StoreBackendOptions.html#saveonchange) option when defining the store.
 
-```typescript
+```typescript{5}
 import { store } from 'tauri-store';
 
 const value = { counter: 0 };
@@ -66,7 +66,7 @@ You can also enable [`autosave`](https://docs.rs/tauri-store/latest/tauri_store/
 
 ::: code-group
 
-```rust [src-tauri/src/lib.rs]
+```rust{5} [src-tauri/src/lib.rs]
 use std::time::Duration;
 
 // Save every five minutes.
@@ -83,7 +83,7 @@ By default, the stores are saved in a directory called `tauri-store` within your
 
 ::: code-group
 
-```rust [src-tauri/src/lib.rs]
+```rust{2} [src-tauri/src/lib.rs]
 tauri_store::Builder::new()
   .path("/path/to/custom/directory")
   .build_plugin();
@@ -115,7 +115,7 @@ If a store should be [synchronized](./synchronization.md), but not saved to disk
 
 ::: code-group
 
-```rust [src-tauri/src/lib.rs]
+```rust{2} [src-tauri/src/lib.rs]
 tauri_store::Builder::new()
   .save_denylist(&["store-1", "store-2"])
   .build_plugin();
