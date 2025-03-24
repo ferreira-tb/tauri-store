@@ -16,7 +16,15 @@ _Nothing yet._
 
 ### Features
 
-- Add `toStore` helper function to create a store from an existing Valtio proxy.
+- Add `toStore` helper function to create a store from an existing proxy.
+
+```typescript
+import { proxy } from 'valtio';
+import { toStore } from '@tauri-store/valtio';
+
+const state = proxy({ counter: 0 });
+const foo = toStore('foo', state);
+```
 
 ## 2.1.1
 
