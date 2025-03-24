@@ -85,7 +85,7 @@ tauri::Builder::default()
 ```typescript [src/stores/counter.ts]
 import { Store } from 'tauri-store';
 
-const counterStore = new Store('counter', { counter: 0 });
+const store = new Store('counter', { counter: 0 });
 ```
 
 :::
@@ -93,7 +93,7 @@ const counterStore = new Store('counter', { counter: 0 });
 4. Start it:
 
 ```typescript
-await counterStore.start();
+await store.start();
 ```
 
 ::: tip
