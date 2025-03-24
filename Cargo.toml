@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
   "crates/*",
+  "examples/migration/src-tauri",
   "examples/pinia-nuxt/src-tauri",
   "examples/pinia/src-tauri",
   "examples/playground/src-tauri",
@@ -39,3 +40,10 @@ single_match_else = "allow"
 [workspace.lints.clippy.pedantic]
 level = "deny"
 priority = -1
+
+[profile.release-cli]
+inherits = "release"
+codegen-units = 1
+lto = "fat"
+opt-level = 3
+strip = "symbols"

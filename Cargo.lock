@@ -872,6 +872,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "example-migration"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-process",
+ "tauri-plugin-window-state",
+ "tauri-store",
+ "tracing",
+ "tracing-subscriber",
+]
+
+[[package]]
 name = "example-pinia"
 version = "0.1.0"
 dependencies = [

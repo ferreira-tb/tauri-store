@@ -72,6 +72,24 @@ importers:
         specifier: ^3.5.13
         version: 3.5.13(typescript@5.8.2)
 
+  examples/migration:
+    devDependencies:
+      '@tauri-apps/api':
+        specifier: ^2.4.0
+        version: 2.4.0
+      '@tauri-apps/plugin-process':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@tauri-apps/plugin-shell':
+        specifier: ^2.2.0
+        version: 2.2.0
+      '@tb-dev/utils':
+        specifier: ^5.1.4
+        version: 5.1.4
+      tauri-store:
+        specifier: workspace:*
+        version: link:../../packages/tauri-store
+
   examples/pinia:
     devDependencies:
       '@tauri-apps/api':

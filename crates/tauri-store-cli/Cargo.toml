@@ -1,5 +1,5 @@
 [[bin]]
-name = "tauri-store"
+name = "ts"
 path = "src/main.rs"
 
 [package]

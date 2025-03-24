@@ -1,4 +1,4 @@
-use tauri_plugin_pinia::Migration;
+use tauri_store::Migration;
 
 pub fn all() -> Vec<Migration> {
   vec![v1(), v2(), v3()]
