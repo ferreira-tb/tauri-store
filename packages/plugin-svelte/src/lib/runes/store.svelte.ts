@@ -81,8 +81,8 @@ export class RuneStore<S extends State> extends BaseStore<S> implements TauriSto
   };
 
   protected readonly watch = (): Fn => {
-    let patchBackend = (value: S) => {
-      this.patchBackend(value);
+    let patchBackend = (state: S) => {
+      this.patchBackend(state);
     };
 
     if (this.syncStrategy === 'debounce') {

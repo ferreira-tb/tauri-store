@@ -129,8 +129,7 @@ export function store<S extends State>(
  * import { toStore } from '@tauri-store/valtio';
  *
  * const state = proxy({ counter: 0 });
- *
- * export const foo = toStore('foo', state);
+ * const foo = toStore('foo', state);
  * ```
  */
 export function toStore<S extends State>(

@@ -59,18 +59,19 @@ export class Store extends BaseStore {
   }
 
   protected watch(): Fn {
-    const patchBackend = this.patchBackend.bind(this);
+    let patchBackend = (state: State) => {
+      this.patchBackend({ ...state });
+    };
+
     const options: WatchOptions = {
       deep: this.options.deep,
       flush: this.options.flush,
     };
 
     if (this.syncStrategy === 'debounce') {
-      const fn = debounce(patchBackend, this.syncInterval);
-      return watch(this.ctx.store.$state, fn, options);
+      patchBackend = debounce(patchBackend, this.syncInterval);
     } else if (this.syncStrategy === 'throttle') {
-      const fn = throttle(patchBackend, this.syncInterval);
-      return watch(this.ctx.store.$state, fn, options);
+      patchBackend = throttle(patchBackend, this.syncInterval);
     }
 
     return watch(this.ctx.store.$state, patchBackend, options);
