@@ -18,7 +18,7 @@ import {
   TimeStrategy,
 } from '@tauri-store/shared';
 
-export class TauriStore<S extends State, Store extends StoreApi<S>>
+class TauriStore<S extends State, Store extends StoreApi<S>>
   extends BaseStore<S>
   implements TauriStoreContract
 {
@@ -154,3 +154,5 @@ export function createTauriStore<S extends State, Store extends StoreApi<S>>(
  * [`createTauriStore`]: https://tb.dev.br/tauri-store/js-docs/plugin-zustand/functions/createTauriStore.html
  */
 export const tauri = createTauriStore;
+
+export type { TauriStore };

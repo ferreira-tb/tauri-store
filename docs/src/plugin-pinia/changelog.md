@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 3.1.2
+
+### Bug Fixes
+
+- Avoid recursive call in the `beforeBackendSync` hook.
+
 ## 3.1.1
 
 ### Documentation

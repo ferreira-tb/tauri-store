@@ -1,7 +1,7 @@
 {
   "name": "example-valtio",
   "type": "module",
-  "packageManager": "pnpm@10.6.5",
+  "packageManager": "pnpm@10.7.0",
   "private": true,
   "scripts": {
     "type-check": "tsc --noEmit",
