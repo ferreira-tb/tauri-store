@@ -25,8 +25,8 @@
     "update": "pwsh scripts/update.ps1"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^6.7.1",
-    "@types/node": "^22.13.13",
+    "@tb-dev/eslint-config": "^6.7.2",
+    "@types/node": "^22.13.14",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "eslint": "^9.23.0",

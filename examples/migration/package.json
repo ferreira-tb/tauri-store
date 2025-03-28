@@ -10,7 +10,7 @@
   "devDependencies": {
     "@tauri-apps/api": "^2.4.0",
     "@tauri-apps/plugin-process": "^2.2.0",
-    "@tb-dev/utils": "^5.1.4",
+    "@tb-dev/utils": "^6.0.0",
     "tauri-store": "workspace:*"
   }
 }
