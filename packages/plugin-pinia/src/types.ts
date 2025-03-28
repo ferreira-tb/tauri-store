@@ -1,5 +1,5 @@
 import type { WatchOptions } from 'vue';
-import type { StoreFrontendOptions, StoreOptions } from '@tauri-store/shared';
+import type { StoreOptions } from '@tauri-store/shared';
 
 export type {
   MaybePromise,
@@ -15,7 +15,7 @@ export type {
 /**
  * Options for the Pinia plugin.
  */
-export interface TauriPluginPiniaOptions extends StoreFrontendOptions {
+export interface TauriPluginPiniaOptions extends StoreOptions {
   /**
    * @see https://vuejs.org/api/reactivity-core.html#watch
    * @default true
@@ -32,4 +32,4 @@ export interface TauriPluginPiniaOptions extends StoreFrontendOptions {
 /**
  * Options for the Pinia store.
  */
-export type TauriPluginPiniaStoreOptions = StoreOptions & TauriPluginPiniaOptions;
+export type TauriPluginPiniaStoreOptions = TauriPluginPiniaOptions;
