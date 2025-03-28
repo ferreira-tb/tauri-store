@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 3.2.0
+
+### Features
+
+- Add [more options](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/interfaces/StoreBackendOptions.html) to the [createPlugin](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/functions/createPlugin.html) function.
+
 ## 3.1.2
 
 ### Bug Fixes

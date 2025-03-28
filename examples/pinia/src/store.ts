@@ -33,11 +33,8 @@ function store() {
 
 export const useStore = defineStore('counter-store', store, {
   tauri: {
-    saveOnExit: true,
-    saveOnChange: true,
     saveStrategy: 'debounce',
     saveInterval: 1000,
-
     hooks: {
       beforeBackendSync: (state: Counter) => {
         state.counter2 = 42;

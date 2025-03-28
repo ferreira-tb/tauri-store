@@ -10,6 +10,7 @@ const pinia = createPinia();
 
 pinia.use(
   TauriPluginPinia({
+    saveOnChange: true,
     hooks: { error: onError },
   })
 );
