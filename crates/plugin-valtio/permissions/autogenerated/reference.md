@@ -2,6 +2,8 @@
 
 Default permissions for tauri-plugin-valtio.
 
+#### This default permission set includes the following:
+
 - `allow-clear-autosave`
 - `allow-get-default-save-strategy`
 - `allow-get-save-strategy`
