@@ -9,6 +9,38 @@ Persistent stores for Tauri.
 - Debounce or throttle store updates.
 - Access the stores from both JavaScript and Rust.
 
+## Usage
+
+```typescript
+import { Store } from 'tauri-store';
+
+const store = new Store('my-store', { counter: 0 });
+
+// Get a value. This is a synchronous operation!
+const counter = store.get('counter');
+console.log(counter);
+
+// Set a value.
+store.set('counter', 42);
+
+// Update a value with a callback.
+store.update('counter', (value) => value + 1);
+
+// Set multiple values at once.
+store.patch({ counter: 0 });
+
+// Listen to changes.
+store.subscribe((state) => {
+  console.log(state);
+});
+
+// Save the store. Unlike the others, this is asynchronous.
+await store.save();
+```
+
+> [!TIP]
+> There are also [custom plugins](#plugins) that tightly integrate with your favorite framework or library.
+
 ## Documentation
 
 Check the [documentation](https://tb.dev.br/tauri-store/) for more information on how to install and use the plugins.
