@@ -135,6 +135,36 @@ impl<R: Runtime> Store<R> {
     Ok(serde_json::from_value(json!(self.state))?)
   }
 
+  /// Tries to parse the store state as an instance of type `T`.
+  ///
+  /// If it cannot be parsed, returns the provided default value.
+  pub fn try_state_or<T>(&self, default: T) -> T
+  where
+    T: DeserializeOwned,
+  {
+    self.try_state().unwrap_or(default)
+  }
+
+  /// Tries to parse the store state as an instance of type `T`.
+  ///
+  /// If it cannot be parsed, returns the default value of `T`.
+  pub fn try_state_or_default<T>(&self) -> T
+  where
+    T: DeserializeOwned + Default,
+  {
+    self.try_state().unwrap_or_default()
+  }
+
+  /// Tries to parse the store state as an instance of type `T`.
+  ///
+  /// If it cannot be parsed, returns the result of the provided closure.
+  pub fn try_state_or_else<T>(&self, f: impl FnOnce() -> T) -> T
+  where
+    T: DeserializeOwned,
+  {
+    self.try_state().unwrap_or_else(|_| f())
+  }
+
   /// Gets a value from the store.
   pub fn get(&self, key: impl AsRef<str>) -> Option<&Json> {
     self.state.get(key)

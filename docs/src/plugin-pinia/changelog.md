@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 3.3.0
+
+### Features
+
+- Add [`try_state_or`](https://docs.rs/tauri-plugin-pinia/3.3.0/tauri_plugin_pinia/struct.Store.html#method.try_state_or), [`try_state_or_default`](https://docs.rs/tauri-plugin-pinia/3.3.0/tauri_plugin_pinia/struct.Store.html#method.try_state_or_default), and [`try_state_or_else`](https://docs.rs/tauri-plugin-pinia/3.3.0/tauri_plugin_pinia/struct.Store.html#method.try_state_or_else) methods.
+
 ## 3.2.0
 
 ### Features

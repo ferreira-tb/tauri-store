@@ -55,6 +55,11 @@ impl Context {
   }
 }
 
+#[derive(Default, Deserialize)]
+struct Foo {
+  key: u8,
+}
+
 #[tokio::test]
 async fn id() {
   with_store(|store| assert_eq!(store.id(), *STORE_ID)).await;
@@ -62,11 +67,6 @@ async fn id() {
 
 #[tokio::test]
 async fn try_state() {
-  #[derive(Deserialize)]
-  struct Foo {
-    key: u8,
-  }
-
   with_store(|store| {
     let state = store.try_state::<Foo>();
     assert!(state.is_err());
@@ -74,6 +74,46 @@ async fn try_state() {
     store.set("key", 42).unwrap();
     let state = store.try_state::<Foo>();
     assert!(state.is_ok_and(|state| state.key == 42));
+  })
+  .await;
+}
+
+#[tokio::test]
+async fn try_state_or() {
+  with_store(|store| {
+    let state = store.try_state_or(Foo { key: 100 });
+    assert_eq!(state.key, 100);
+
+    store.set("key", 42).unwrap();
+    let state = store.try_state_or(Foo { key: 100 });
+    assert_eq!(state.key, 42);
+  })
+  .await;
+}
+
+#[tokio::test]
+async fn try_state_or_default() {
+  with_store(|store| {
+    let state = store.try_state_or_default::<Foo>();
+    assert_eq!(state.key, 0);
+
+    store.set("key", 42).unwrap();
+    let state = store.try_state_or_default::<Foo>();
+    assert_eq!(state.key, 42);
+  })
+  .await;
+}
+
+#[tokio::test]
+async fn try_state_or_else() {
+  with_store(|store| {
+    let else_fn = || Foo { key: 100 };
+    let state = store.try_state_or_else(else_fn);
+    assert_eq!(state.key, 100);
+
+    store.set("key", 42).unwrap();
+    let state = store.try_state_or_else(else_fn);
+    assert_eq!(state.key, 42);
   })
   .await;
 }

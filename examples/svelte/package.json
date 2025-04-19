@@ -1,7 +1,7 @@
 {
   "name": "example-svelte",
   "type": "module",
-  "packageManager": "pnpm@10.7.1",
+  "packageManager": "pnpm@10.8.1",
   "private": true,
   "scripts": {
     "sync": "svelte-kit sync",
@@ -11,14 +11,14 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.8",
-    "@sveltejs/kit": "^2.20.3",
+    "@sveltejs/kit": "^2.20.7",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
-    "@tauri-apps/api": "^2.4.1",
+    "@tauri-apps/api": "^2.5.0",
     "@tauri-apps/plugin-process": "^2.2.1",
     "@tauri-apps/plugin-shell": "^2.2.1",
     "@tauri-store/svelte": "workspace:*",
-    "@tb-dev/utils": "^6.0.0",
-    "svelte": "^5.25.6",
-    "svelte-check": "^4.1.5"
+    "@tb-dev/utils": "^6.0.2",
+    "svelte": "^5.28.1",
+    "svelte-check": "^4.1.6"
   }
 }
