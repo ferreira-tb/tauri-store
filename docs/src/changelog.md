@@ -11,6 +11,12 @@ outline: 2
 
 _Nothing yet._
 
+## 0.10.3
+
+### Features
+
+- Add [`try_state_or`](https://docs.rs/tauri-store/0.10.3/tauri_store/struct.Store.html#method.try_state_or), [`try_state_or_default`](https://docs.rs/tauri-store/0.10.3/tauri_store/struct.Store.html#method.try_state_or_default), and [`try_state_or_else`](https://docs.rs/tauri-store/0.10.3/tauri_store/struct.Store.html#method.try_state_or_else) methods.
+
 ## 0.10.2
 
 ### Dependencies

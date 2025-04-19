@@ -297,207 +297,248 @@
         {
           "description": "Enables the clear_autosave command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-clear-autosave"
+          "const": "allow-clear-autosave",
+          "markdownDescription": "Enables the clear_autosave command without any pre-configured scope."
         },
         {
           "description": "Denies the clear_autosave command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-clear-autosave"
+          "const": "deny-clear-autosave",
+          "markdownDescription": "Denies the clear_autosave command without any pre-configured scope."
         },
         {
           "description": "Enables the get_default_save_strategy command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-get-default-save-strategy"
+          "const": "allow-get-default-save-strategy",
+          "markdownDescription": "Enables the get_default_save_strategy command without any pre-configured scope."
         },
         {
           "description": "Denies the get_default_save_strategy command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-get-default-save-strategy"
+          "const": "deny-get-default-save-strategy",
+          "markdownDescription": "Denies the get_default_save_strategy command without any pre-configured scope."
         },
         {
           "description": "Enables the get_save_strategy command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-get-save-strategy"
+          "const": "allow-get-save-strategy",
+          "markdownDescription": "Enables the get_save_strategy command without any pre-configured scope."
         },
         {
           "description": "Denies the get_save_strategy command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-get-save-strategy"
+          "const": "deny-get-save-strategy",
+          "markdownDescription": "Denies the get_save_strategy command without any pre-configured scope."
         },
         {
           "description": "Enables the get_store_collection_path command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-get-store-collection-path"
+          "const": "allow-get-store-collection-path",
+          "markdownDescription": "Enables the get_store_collection_path command without any pre-configured scope."
         },
         {
           "description": "Denies the get_store_collection_path command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-get-store-collection-path"
+          "const": "deny-get-store-collection-path",
+          "markdownDescription": "Denies the get_store_collection_path command without any pre-configured scope."
         },
         {
           "description": "Enables the get_store_ids command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-get-store-ids"
+          "const": "allow-get-store-ids",
+          "markdownDescription": "Enables the get_store_ids command without any pre-configured scope."
         },
         {
           "description": "Denies the get_store_ids command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-get-store-ids"
+          "const": "deny-get-store-ids",
+          "markdownDescription": "Denies the get_store_ids command without any pre-configured scope."
         },
         {
           "description": "Enables the get_store_path command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-get-store-path"
+          "const": "allow-get-store-path",
+          "markdownDescription": "Enables the get_store_path command without any pre-configured scope."
         },
         {
           "description": "Denies the get_store_path command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-get-store-path"
+          "const": "deny-get-store-path",
+          "markdownDescription": "Denies the get_store_path command without any pre-configured scope."
         },
         {
           "description": "Enables the get_store_state command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-get-store-state"
+          "const": "allow-get-store-state",
+          "markdownDescription": "Enables the get_store_state command without any pre-configured scope."
         },
         {
           "description": "Denies the get_store_state command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-get-store-state"
+          "const": "deny-get-store-state",
+          "markdownDescription": "Denies the get_store_state command without any pre-configured scope."
         },
         {
           "description": "Enables the load command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-load"
+          "const": "allow-load",
+          "markdownDescription": "Enables the load command without any pre-configured scope."
         },
         {
           "description": "Denies the load command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-load"
+          "const": "deny-load",
+          "markdownDescription": "Denies the load command without any pre-configured scope."
         },
         {
           "description": "Enables the patch command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-patch"
+          "const": "allow-patch",
+          "markdownDescription": "Enables the patch command without any pre-configured scope."
         },
         {
           "description": "Denies the patch command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-patch"
+          "const": "deny-patch",
+          "markdownDescription": "Denies the patch command without any pre-configured scope."
         },
         {
           "description": "Enables the save command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-save"
+          "const": "allow-save",
+          "markdownDescription": "Enables the save command without any pre-configured scope."
         },
         {
           "description": "Denies the save command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-save"
+          "const": "deny-save",
+          "markdownDescription": "Denies the save command without any pre-configured scope."
         },
         {
           "description": "Enables the save_all command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-save-all"
+          "const": "allow-save-all",
+          "markdownDescription": "Enables the save_all command without any pre-configured scope."
         },
         {
           "description": "Denies the save_all command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-save-all"
+          "const": "deny-save-all",
+          "markdownDescription": "Denies the save_all command without any pre-configured scope."
         },
         {
           "description": "Enables the save_all_now command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-save-all-now"
+          "const": "allow-save-all-now",
+          "markdownDescription": "Enables the save_all_now command without any pre-configured scope."
         },
         {
           "description": "Denies the save_all_now command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-save-all-now"
+          "const": "deny-save-all-now",
+          "markdownDescription": "Denies the save_all_now command without any pre-configured scope."
         },
         {
           "description": "Enables the save_now command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-save-now"
+          "const": "allow-save-now",
+          "markdownDescription": "Enables the save_now command without any pre-configured scope."
         },
         {
           "description": "Denies the save_now command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-save-now"
+          "const": "deny-save-now",
+          "markdownDescription": "Denies the save_now command without any pre-configured scope."
         },
         {
           "description": "Enables the save_some command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-save-some"
+          "const": "allow-save-some",
+          "markdownDescription": "Enables the save_some command without any pre-configured scope."
         },
         {
           "description": "Denies the save_some command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-save-some"
+          "const": "deny-save-some",
+          "markdownDescription": "Denies the save_some command without any pre-configured scope."
         },
         {
           "description": "Enables the save_some_now command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-save-some-now"
+          "const": "allow-save-some-now",
+          "markdownDescription": "Enables the save_some_now command without any pre-configured scope."
         },
         {
           "description": "Denies the save_some_now command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-save-some-now"
+          "const": "deny-save-some-now",
+          "markdownDescription": "Denies the save_some_now command without any pre-configured scope."
         },
         {
           "description": "Enables the set_autosave command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-set-autosave"
+          "const": "allow-set-autosave",
+          "markdownDescription": "Enables the set_autosave command without any pre-configured scope."
         },
         {
           "description": "Denies the set_autosave command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-set-autosave"
+          "const": "deny-set-autosave",
+          "markdownDescription": "Denies the set_autosave command without any pre-configured scope."
         },
         {
           "description": "Enables the set_save_strategy command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-set-save-strategy"
+          "const": "allow-set-save-strategy",
+          "markdownDescription": "Enables the set_save_strategy command without any pre-configured scope."
         },
         {
           "description": "Denies the set_save_strategy command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-set-save-strategy"
+          "const": "deny-set-save-strategy",
+          "markdownDescription": "Denies the set_save_strategy command without any pre-configured scope."
         },
         {
           "description": "Enables the set_store_collection_path command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-set-store-collection-path"
+          "const": "allow-set-store-collection-path",
+          "markdownDescription": "Enables the set_store_collection_path command without any pre-configured scope."
         },
         {
           "description": "Denies the set_store_collection_path command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-set-store-collection-path"
+          "const": "deny-set-store-collection-path",
+          "markdownDescription": "Denies the set_store_collection_path command without any pre-configured scope."
         },
         {
           "description": "Enables the set_store_options command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-set-store-options"
+          "const": "allow-set-store-options",
+          "markdownDescription": "Enables the set_store_options command without any pre-configured scope."
         },
         {
           "description": "Denies the set_store_options command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-set-store-options"
+          "const": "deny-set-store-options",
+          "markdownDescription": "Denies the set_store_options command without any pre-configured scope."
         },
         {
           "description": "Enables the unload command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-unload"
+          "const": "allow-unload",
+          "markdownDescription": "Enables the unload command without any pre-configured scope."
         },
         {
           "description": "Denies the unload command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-unload"
+          "const": "deny-unload",
+          "markdownDescription": "Denies the unload command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for tauri-store.",
+          "description": "Default permissions for tauri-store.\n#### This default permission set includes:\n\n- `allow-clear-autosave`\n- `allow-get-default-save-strategy`\n- `allow-get-save-strategy`\n- `allow-get-store-collection-path`\n- `allow-get-store-ids`\n- `allow-get-store-path`\n- `allow-get-store-state`\n- `allow-load`\n- `allow-patch`\n- `allow-save`\n- `allow-save-all`\n- `allow-save-all-now`\n- `allow-save-now`\n- `allow-save-some`\n- `allow-save-some-now`\n- `allow-set-autosave`\n- `allow-set-save-strategy`\n- `allow-set-store-collection-path`\n- `allow-set-store-options`\n- `allow-unload`",
           "type": "string",
-          "const": "default"
+          "const": "default",
+          "markdownDescription": "Default permissions for tauri-store.\n#### This default permission set includes:\n\n- `allow-clear-autosave`\n- `allow-get-default-save-strategy`\n- `allow-get-save-strategy`\n- `allow-get-store-collection-path`\n- `allow-get-store-ids`\n- `allow-get-store-path`\n- `allow-get-store-state`\n- `allow-load`\n- `allow-patch`\n- `allow-save`\n- `allow-save-all`\n- `allow-save-all-now`\n- `allow-save-now`\n- `allow-save-some`\n- `allow-save-some-now`\n- `allow-set-autosave`\n- `allow-set-save-strategy`\n- `allow-set-store-collection-path`\n- `allow-set-store-options`\n- `allow-unload`"
         }
       ]
     }

@@ -115,6 +115,42 @@ impl<R: Runtime> StoreCollection<R> {
       .locked(|store| store.try_state())
   }
 
+  /// Gets the store state, then tries to parse it as an instance of type `T`.
+  ///
+  /// If it cannot be parsed, returns the provided default value.
+  pub fn try_state_or<T>(&self, store_id: impl AsRef<str>, default: T) -> Result<T>
+  where
+    T: DeserializeOwned,
+  {
+    self
+      .get_resource(store_id)?
+      .locked(move |store| Ok(store.try_state_or(default)))
+  }
+
+  /// Gets the store state, then tries to parse it as an instance of type `T`.
+  ///
+  /// If it cannot be parsed, returns the default value of `T`.
+  pub fn try_state_or_default<T>(&self, store_id: impl AsRef<str>) -> Result<T>
+  where
+    T: DeserializeOwned + Default,
+  {
+    self
+      .get_resource(store_id)?
+      .locked(|store| Ok(store.try_state_or_default()))
+  }
+
+  /// Gets the store state, then tries to parse it as an instance of type `T`.
+  ///
+  /// If it cannot be parsed, returns the result of the provided closure.
+  pub fn try_state_or_else<T>(&self, store_id: impl AsRef<str>, f: impl FnOnce() -> T) -> Result<T>
+  where
+    T: DeserializeOwned,
+  {
+    self
+      .get_resource(store_id)?
+      .locked(|store| Ok(store.try_state_or_else(f)))
+  }
+
   /// Gets a value from a store.
   pub fn get(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Option<Json> {
     self

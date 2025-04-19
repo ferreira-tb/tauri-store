@@ -45,12 +45,42 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
           self.0.state(store_id)
         }
 
-        /// Gets the store state if it exists, then tries to parse it as an instance of type `T`.
+        /// Gets the store state, then tries to parse it as an instance of type `T`.
         pub fn try_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
         where
           T: DeserializeOwned,
         {
           self.0.try_state(store_id)
+        }
+
+        /// Gets the store state, then tries to parse it as an instance of type `T`.
+        ///
+        /// If it cannot be parsed, returns the provided default value.
+        pub fn try_state_or<T>(&self, store_id: impl AsRef<str>, default: T) -> Result<T>
+        where
+          T: DeserializeOwned,
+        {
+          self.0.try_state_or(store_id, default)
+        }
+
+        /// Gets the store state, then tries to parse it as an instance of type `T`.
+        ///
+        /// If it cannot be parsed, returns the default value of `T`.
+        pub fn try_state_or_default<T>(&self, store_id: impl AsRef<str>) -> Result<T>
+        where
+          T: DeserializeOwned + Default,
+        {
+          self.0.try_state_or_default(store_id)
+        }
+
+        /// Gets the store state, then tries to parse it as an instance of type `T`.
+        ///
+        /// If it cannot be parsed, returns the result of the provided closure.
+        pub fn try_state_or_else<T>(&self, store_id: impl AsRef<str>, f: impl FnOnce() -> T) -> Result<T>
+        where
+          T: DeserializeOwned,
+        {
+          self.0.try_state_or_else(store_id, f)
         }
 
         /// Gets a value from a store.

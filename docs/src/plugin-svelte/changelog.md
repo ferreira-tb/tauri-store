@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 2.2.0
+
+### Features
+
+- Add [`try_state_or`](https://docs.rs/tauri-plugin-svelte/2.2.0/tauri_plugin_svelte/struct.Store.html#method.try_state_or), [`try_state_or_default`](https://docs.rs/tauri-plugin-svelte/2.2.0/tauri_plugin_svelte/struct.Store.html#method.try_state_or_default), and [`try_state_or_else`](https://docs.rs/tauri-plugin-svelte/2.2.0/tauri_plugin_svelte/struct.Store.html#method.try_state_or_else) methods.
+
 ## 2.1.1
 
 ### Documentation
