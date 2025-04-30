@@ -1,7 +1,7 @@
 {
   "name": "example-vanilla",
   "type": "module",
-  "packageManager": "pnpm@10.8.1",
+  "packageManager": "pnpm@10.10.0",
   "private": true,
   "scripts": {
     "vite:build": "vite build",
@@ -11,7 +11,7 @@
     "@tauri-apps/api": "^2.5.0",
     "@tauri-apps/plugin-process": "^2.2.1",
     "@tauri-apps/plugin-shell": "^2.2.1",
-    "@tb-dev/utils": "^6.0.2",
+    "@tb-dev/utils": "^6.0.3",
     "tauri-store": "workspace:*"
   }
 }

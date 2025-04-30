@@ -1,7 +1,7 @@
 {
   "name": "example-pinia-nuxt",
   "type": "module",
-  "packageManager": "pnpm@10.8.1",
+  "packageManager": "pnpm@10.10.0",
   "private": true,
   "scripts": {
     "nuxt:build": "nuxt build",
@@ -19,10 +19,10 @@
     "@tauri-store/pinia": "workspace:*",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vueuse/core": "^13.1.0",
-    "nuxt": "^3.16.2",
+    "nuxt": "^3.17.1",
     "pinia": "^3.0.2",
     "vue": "^3.5.13",
-    "vue-router": "^4.5.0",
-    "vue-tsc": "~2.2.8"
+    "vue-router": "^4.5.1",
+    "vue-tsc": "~2.2.10"
   }
 }

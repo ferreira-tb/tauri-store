@@ -4,7 +4,7 @@
   "description": "Persistent Valtio stores for Tauri",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@10.8.1",
+  "packageManager": "pnpm@10.10.0",
   "homepage": "https://tb.dev.br/tauri-store/plugin-valtio/guide/getting-started",
   "license": "MIT",
   "funding": "https://github.com/sponsors/ferreira-tb",
