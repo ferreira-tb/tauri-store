@@ -1,7 +1,7 @@
 {
   "name": "playground",
   "type": "module",
-  "packageManager": "pnpm@10.8.1",
+  "packageManager": "pnpm@10.10.0",
   "private": true,
   "scripts": {
     "type-check": "vue-tsc --noEmit",
@@ -17,6 +17,6 @@
     "@vueuse/core": "^13.1.0",
     "pinia": "^3.0.2",
     "vue": "^3.5.13",
-    "vue-tsc": "^2.2.8"
+    "vue-tsc": "^2.2.10"
   }
 }
