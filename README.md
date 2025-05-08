@@ -11,6 +11,9 @@ Persistent stores for Tauri.
 
 ## Usage
 
+> [!TIP]
+> There are also [custom plugins](#plugins) that tightly integrate with your favorite framework or library.
+
 ```typescript
 import { Store } from 'tauri-store';
 
@@ -37,9 +40,6 @@ store.subscribe((state) => {
 // Save the store. Unlike the others, this is asynchronous.
 await store.save();
 ```
-
-> [!TIP]
-> There are also [custom plugins](#plugins) that tightly integrate with your favorite framework or library.
 
 ## Documentation
 

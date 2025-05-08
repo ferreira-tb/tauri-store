@@ -1,6 +1,6 @@
 {
   "name": "@tauri-store/svelte",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Persistent Svelte stores and runes for Tauri",
   "type": "module",
   "private": false,
@@ -56,9 +56,9 @@
     "svelte": "^5.15.0"
   },
   "devDependencies": {
-    "@sveltejs/kit": "^2.20.7",
+    "@sveltejs/kit": "^2.20.8",
     "@sveltejs/package": "^2.3.11",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
-    "svelte-check": "^4.1.6"
+    "svelte-check": "^4.1.7"
   }
 }

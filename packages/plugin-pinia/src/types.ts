@@ -2,14 +2,19 @@ import type { WatchOptions } from 'vue';
 import type { StoreOptions } from '@tauri-store/shared';
 
 export type {
+  LooseTimeStrategyKind,
   MaybePromise,
   Option,
   State,
   StoreBackendOptions,
   StoreFrontendOptions,
   StoreHooks,
+  StoreKeyFilter,
+  StoreKeyFilterStrategy,
   StoreOptions,
   TauriStoreContract,
+  TimeStrategy,
+  TimeStrategyKind,
 } from '@tauri-store/shared';
 
 /**

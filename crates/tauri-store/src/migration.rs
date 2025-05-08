@@ -7,9 +7,6 @@ use std::cmp::Ordering;
 use std::collections::HashMap;
 use tauri_store_utils::Semver;
 
-#[cfg(tauri_store_tracing)]
-use tracing::debug;
-
 type MigrationFn = dyn Fn(&mut StoreState) -> Result<()> + Send + Sync;
 type BeforeEachMigrationFn = dyn Fn(MigrationContext) + Send + Sync;
 
@@ -55,9 +52,6 @@ impl Migrator {
       migrations.retain(|migration| migration.version > *last);
     }
 
-    #[cfg(tauri_store_tracing)]
-    debug!("{} pending migration(s) for {}", migrations.len(), id);
-
     if migrations.is_empty() {
       return MigrationResult::new(0);
     }
@@ -71,10 +65,6 @@ impl Migrator {
       if let Some(before_each) = &self.before_each {
         let next = iter.peek().map(|it| &it.version);
         let context = MigrationContext { id, state, current, previous, next };
-
-        #[cfg(tauri_store_tracing)]
-        debug!(before_each_migration = ?context);
-
         before_each(context);
       }
 
@@ -85,9 +75,6 @@ impl Migrator {
       self.history.set(id, current);
       previous = Some(current);
       done += 1;
-
-      #[cfg(tauri_store_tracing)]
-      debug!("migration {current} done for {id}");
     }
 
     MigrationResult::new(done)

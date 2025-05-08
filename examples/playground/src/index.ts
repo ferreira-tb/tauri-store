@@ -1,7 +1,6 @@
 import App from './App.vue';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { onError } from './commands';
 import {
   clearAutosave,
   getDefaultSaveStrategy,
@@ -60,7 +59,7 @@ const pinia = createPinia();
 
 pinia.use(
   TauriPluginPinia({
-    hooks: { error: onError },
+    hooks: { error: console.error },
   })
 );
 

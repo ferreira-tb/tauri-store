@@ -12,12 +12,6 @@ use tokio::sync::mpsc::{unbounded_channel, UnboundedReceiver};
 use tokio::task::AbortHandle;
 use tokio::time::sleep;
 
-#[cfg(tauri_store_tracing)]
-use {std::sync::atomic::AtomicU64, std::sync::atomic::Ordering::SeqCst, tracing::debug};
-
-#[cfg(tauri_store_tracing)]
-static ID: AtomicU64 = AtomicU64::new(0);
-
 type ThrottledFn<R, Fut> = dyn Fn(AppHandle<R>) -> Fut + Send + Sync + 'static;
 
 /// Throttles a function call.
@@ -32,9 +26,6 @@ where
   sender: Arc<OptionalSender>,
   abort_handle: Arc<OptionalAbortHandle>,
   duration: Duration,
-
-  #[cfg(tauri_store_tracing)]
-  id: u64,
 }
 
 impl<R, T, Fut> Throttle<R, T, Fut>
@@ -53,9 +44,6 @@ where
       sender: Arc::new(OptionalSender::default()),
       abort_handle: Arc::new(OptionalAbortHandle::default()),
       duration,
-
-      #[cfg(tauri_store_tracing)]
-      id: ID.fetch_add(1, SeqCst),
     }
   }
 
@@ -64,18 +52,12 @@ where
       return;
     }
 
-    #[cfg(tauri_store_tracing)]
-    debug!("spawning throttle {}", self.id);
-
     let (tx, rx) = unbounded_channel();
     let actor = Actor {
       function: Arc::downgrade(&self.inner),
       waiting: Arc::downgrade(&self.waiting),
       receiver: rx,
       duration: self.duration,
-
-      #[cfg(tauri_store_tracing)]
-      id: self.id,
     };
 
     let _ = tx.send(Message::Call);
@@ -88,9 +70,6 @@ where
     self.sender.take();
     self.abort_handle.abort();
     self.waiting.store(false, Relaxed);
-
-    #[cfg(tauri_store_tracing)]
-    debug!("throttle {} aborted", self.id);
   }
 }
 
@@ -130,9 +109,6 @@ where
   waiting: Weak<AtomicBool>,
   receiver: UnboundedReceiver<Message>,
   duration: Duration,
-
-  #[cfg(tauri_store_tracing)]
-  id: u64,
 }
 
 impl<R, T, Fut> Actor<R, T, Fut>
@@ -150,10 +126,6 @@ where
 
           if compare_exchange(&waiting, false, true) {
             (function)(app.clone()).await;
-
-            #[cfg(tauri_store_tracing)]
-            debug!("throttle {} called", self.id);
-
             spawn(async move {
               sleep(self.duration).await;
               waiting.store(false, Relaxed);

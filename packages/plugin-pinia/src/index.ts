@@ -3,19 +3,6 @@ import type { TauriStoreContract } from '@tauri-store/shared';
 
 export { createPlugin, TauriPluginPinia } from './plugin';
 
-export type {
-  MaybePromise,
-  Option,
-  State,
-  StoreBackendOptions,
-  StoreFrontendOptions,
-  StoreHooks,
-  StoreOptions,
-  TauriPluginPiniaOptions,
-  TauriPluginPiniaStoreOptions,
-  TauriStoreContract,
-} from './types';
-
 export {
   clearAutosave,
   getDefaultSaveStrategy,
@@ -33,6 +20,24 @@ export {
   setStoreCollectionPath,
   setStoreOptions,
 } from './commands';
+
+export type {
+  LooseTimeStrategyKind,
+  MaybePromise,
+  Option,
+  State,
+  StoreBackendOptions,
+  StoreFrontendOptions,
+  StoreHooks,
+  StoreKeyFilter,
+  StoreKeyFilterStrategy,
+  StoreOptions,
+  TauriPluginPiniaOptions,
+  TauriPluginPiniaStoreOptions,
+  TauriStoreContract,
+  TimeStrategy,
+  TimeStrategyKind,
+} from './types';
 
 declare module 'pinia' {
   export interface PiniaCustomProperties {

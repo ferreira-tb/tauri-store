@@ -2,17 +2,17 @@
   import { onMount } from 'svelte';
   import { openStore, store } from '$lib/store';
   import { exit } from '@tauri-apps/plugin-process';
-  import { onError, printStore } from '$lib/commands';
+  import { printStore } from '$lib/commands';
   import { clearAutosave, setAutosave } from '@tauri-store/svelte/src/lib/index.js';
 
   function onKeyDown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
-      exit(0).catch(onError);
+      void exit(0);
     }
   }
 
-  onMount(() => {
-    store.start().catch(onError);
+  onMount(async () => {
+    await store.start();
   });
 </script>
 

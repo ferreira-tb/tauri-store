@@ -1,18 +1,5 @@
 export { store, type Store, toStore } from './store';
 
-export type {
-  MaybePromise,
-  Option,
-  State,
-  StoreBackendOptions,
-  StoreBuilderReturn,
-  StoreFrontendOptions,
-  StoreHooks,
-  StoreOptions,
-  TauriPluginValtioStoreOptions,
-  TauriStoreContract,
-} from './types';
-
 export {
   clearAutosave,
   getDefaultSaveStrategy,
@@ -30,3 +17,21 @@ export {
   setStoreCollectionPath,
   setStoreOptions,
 } from './commands';
+
+export type {
+  LooseTimeStrategyKind,
+  MaybePromise,
+  Option,
+  State,
+  StoreBackendOptions,
+  StoreBuilderReturn,
+  StoreFrontendOptions,
+  StoreHooks,
+  StoreKeyFilter,
+  StoreKeyFilterStrategy,
+  StoreOptions,
+  TauriPluginValtioStoreOptions,
+  TauriStoreContract,
+  TimeStrategy,
+  TimeStrategyKind,
+} from './types';

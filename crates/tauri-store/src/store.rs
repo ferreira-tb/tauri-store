@@ -32,9 +32,6 @@ pub use save::SaveStrategy;
 pub use state::StoreState;
 pub use watch::WatcherId;
 
-#[cfg(tauri_store_tracing)]
-use tracing::debug;
-
 #[cfg(debug_assertions)]
 const FILE_EXTENSION: &str = "dev.json";
 #[cfg(not(debug_assertions))]
@@ -60,9 +57,6 @@ impl<R: Runtime> Store<R> {
     let id = StoreId::from(id.as_ref());
     let path = store_path(app, &id);
     let state = read_file(&path).call()?;
-
-    #[cfg(tauri_store_tracing)]
-    debug!("store loaded: {id}");
 
     #[allow(unused_mut)]
     let mut store = Self {
@@ -301,9 +295,6 @@ impl<R: Runtime> Store<R> {
       .sync(cfg!(feature = "file-sync-all"))
       .pretty(collection.pretty)
       .call()?;
-
-    #[cfg(tauri_store_tracing)]
-    debug!("store saved: {}", self.id);
 
     Ok(())
   }

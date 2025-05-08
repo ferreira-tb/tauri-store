@@ -1,6 +1,6 @@
 {
   "name": "tauri-store",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "description": "Persistent stores for Tauri",
   "type": "module",
   "private": false,
@@ -47,6 +47,6 @@
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
     "@tauri-store/shared": "workspace:*",
-    "alien-signals": "^2.0.0"
+    "alien-signals": "^2.0.4"
   }
 }
