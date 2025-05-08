@@ -4,6 +4,7 @@ import type { StoreOptions } from '@tauri-store/shared';
 export type {
   LooseTimeStrategyKind,
   MaybePromise,
+  Nil,
   Option,
   State,
   StoreBackendOptions,
