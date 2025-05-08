@@ -1,22 +1,5 @@
 export { Store, store } from './store';
 
-export type {
-  CloneFn,
-  LooseTimeStrategyKind,
-  MaybePromise,
-  Option,
-  State,
-  StoreBackendOptions,
-  StoreFrontendOptions,
-  StoreHooks,
-  StoreKeyFilter,
-  StoreKeyFilterStrategy,
-  StoreOptions,
-  TauriStoreContract,
-  TauriStoreOptions,
-  TimeStrategyKind,
-} from './types';
-
 export {
   clearAutosave,
   getDefaultSaveStrategy,
@@ -34,3 +17,21 @@ export {
   setStoreCollectionPath,
   setStoreOptions,
 } from './commands';
+
+export type {
+  CloneFn,
+  LooseTimeStrategyKind,
+  MaybePromise,
+  Option,
+  State,
+  StoreBackendOptions,
+  StoreFrontendOptions,
+  StoreHooks,
+  StoreKeyFilter,
+  StoreKeyFilterStrategy,
+  StoreOptions,
+  TauriStoreContract,
+  TauriStoreOptions,
+  TimeStrategy,
+  TimeStrategyKind,
+} from './types';

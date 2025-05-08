@@ -35,6 +35,7 @@ export type {
   TauriPluginPiniaOptions,
   TauriPluginPiniaStoreOptions,
   TauriStoreContract,
+  TimeStrategy,
   TimeStrategyKind,
 } from './types';
 

@@ -35,5 +35,6 @@ export type {
   TauriPluginSvelteRuneStoreOptions,
   TauriPluginSvelteStoreOptions,
   TauriStoreContract,
+  TimeStrategy,
   TimeStrategyKind,
 } from './types';

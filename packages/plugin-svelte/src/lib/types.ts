@@ -13,6 +13,7 @@ export type {
   StoreKeyFilterStrategy,
   StoreOptions,
   TauriStoreContract,
+  TimeStrategy,
   TimeStrategyKind,
 } from '@tauri-store/shared';
 

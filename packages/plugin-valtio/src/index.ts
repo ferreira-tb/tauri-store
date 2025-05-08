@@ -32,5 +32,6 @@ export type {
   StoreOptions,
   TauriPluginValtioStoreOptions,
   TauriStoreContract,
+  TimeStrategy,
   TimeStrategyKind,
 } from './types';
