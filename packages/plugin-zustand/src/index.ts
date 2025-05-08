@@ -21,6 +21,7 @@ export {
 export type {
   LooseTimeStrategyKind,
   MaybePromise,
+  Nil,
   Option,
   State,
   StoreBackendOptions,
