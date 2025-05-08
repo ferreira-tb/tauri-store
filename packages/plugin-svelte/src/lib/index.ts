@@ -2,20 +2,6 @@ export { Store, store } from './store';
 
 export { RuneStore, runeStore } from './runes';
 
-export type {
-  MaybePromise,
-  Option,
-  State,
-  StoreBackendOptions,
-  StoreContract,
-  StoreFrontendOptions,
-  StoreHooks,
-  StoreOptions,
-  TauriPluginSvelteRuneStoreOptions,
-  TauriPluginSvelteStoreOptions,
-  TauriStoreContract,
-} from './types';
-
 export {
   clearAutosave,
   getDefaultSaveStrategy,
@@ -33,3 +19,19 @@ export {
   setStoreCollectionPath,
   setStoreOptions,
 } from './commands';
+
+export type {
+  LooseTimeStrategyKind,
+  MaybePromise,
+  Option,
+  State,
+  StoreBackendOptions,
+  StoreContract,
+  StoreFrontendOptions,
+  StoreHooks,
+  StoreOptions,
+  TauriPluginSvelteRuneStoreOptions,
+  TauriPluginSvelteStoreOptions,
+  TauriStoreContract,
+  TimeStrategyKind,
+} from './types';

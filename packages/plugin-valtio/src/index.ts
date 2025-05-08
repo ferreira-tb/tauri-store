@@ -1,6 +1,7 @@
 export { store, type Store, toStore } from './store';
 
 export type {
+  LooseTimeStrategyKind,
   MaybePromise,
   Option,
   State,
@@ -11,6 +12,7 @@ export type {
   StoreOptions,
   TauriPluginValtioStoreOptions,
   TauriStoreContract,
+  TimeStrategyKind,
 } from './types';
 
 export {

@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 3.4.0
+
+### Features
+
+- Expose [`TimeStrategyKind`](https://tb.dev.br/tauri-store/js-docs/shared/types/TimeStrategyKind.html) and [`LooseTimeStrategyKind`](https://tb.dev.br/tauri-store/js-docs/shared/types/LooseTimeStrategyKind.html) types.
+
 ## 3.3.0
 
 ### Features

@@ -4,6 +4,7 @@ import type { TauriStoreContract } from '@tauri-store/shared';
 export { createPlugin, TauriPluginPinia } from './plugin';
 
 export type {
+  LooseTimeStrategyKind,
   MaybePromise,
   Option,
   State,
@@ -14,6 +15,7 @@ export type {
   TauriPluginPiniaOptions,
   TauriPluginPiniaStoreOptions,
   TauriStoreContract,
+  TimeStrategyKind,
 } from './types';
 
 export {

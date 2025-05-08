@@ -1,6 +1,7 @@
 import type { State, StoreOptions } from '@tauri-store/shared';
 
 export type {
+  LooseTimeStrategyKind,
   MaybePromise,
   Option,
   State,
@@ -9,6 +10,7 @@ export type {
   StoreHooks,
   StoreOptions,
   TauriStoreContract,
+  TimeStrategyKind,
 } from '@tauri-store/shared';
 
 /**

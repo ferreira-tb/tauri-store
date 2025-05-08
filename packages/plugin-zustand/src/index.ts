@@ -1,6 +1,7 @@
 export { createTauriStore, tauri, type TauriStore } from './store';
 
 export type {
+  LooseTimeStrategyKind,
   MaybePromise,
   Option,
   State,
@@ -10,6 +11,7 @@ export type {
   StoreOptions,
   TauriPluginZustandStoreOptions,
   TauriStoreContract,
+  TimeStrategyKind,
 } from './types';
 
 export {

@@ -2,6 +2,7 @@ export { Store, store } from './store';
 
 export type {
   CloneFn,
+  LooseTimeStrategyKind,
   MaybePromise,
   Option,
   State,
@@ -11,6 +12,7 @@ export type {
   StoreOptions,
   TauriStoreContract,
   TauriStoreOptions,
+  TimeStrategyKind,
 } from './types';
 
 export {
