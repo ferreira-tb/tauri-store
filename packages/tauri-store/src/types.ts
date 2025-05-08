@@ -8,6 +8,8 @@ export type {
   StoreBackendOptions,
   StoreFrontendOptions,
   StoreHooks,
+  StoreKeyFilter,
+  StoreKeyFilterStrategy,
   StoreOptions,
   TauriStoreContract,
   TimeStrategyKind,

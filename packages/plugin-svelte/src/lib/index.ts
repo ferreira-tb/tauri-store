@@ -29,6 +29,8 @@ export type {
   StoreContract,
   StoreFrontendOptions,
   StoreHooks,
+  StoreKeyFilter,
+  StoreKeyFilterStrategy,
   StoreOptions,
   TauriPluginSvelteRuneStoreOptions,
   TauriPluginSvelteStoreOptions,
