@@ -11,15 +11,6 @@ use tokio::sync::mpsc::{unbounded_channel, UnboundedReceiver, UnboundedSender};
 use tokio::task::AbortHandle;
 use tokio::time::sleep;
 
-#[cfg(tauri_store_tracing)]
-use {
-  std::sync::atomic::{AtomicU64, Ordering},
-  tracing::{debug, trace},
-};
-
-#[cfg(tauri_store_tracing)]
-static ID: AtomicU64 = AtomicU64::new(0);
-
 type DebouncedFn<R, Fut> = dyn Fn(AppHandle<R>) -> Fut + Send + Sync + 'static;
 
 /// Debounces a function call.
@@ -33,9 +24,6 @@ where
   sender: Arc<OptionalSender>,
   abort_handle: Arc<OptionalAbortHandle>,
   duration: Duration,
-
-  #[cfg(tauri_store_tracing)]
-  id: u64,
 }
 
 impl<R, T, Fut> Debounce<R, T, Fut>
@@ -53,9 +41,6 @@ where
       sender: Arc::new(OptionalSender::default()),
       abort_handle: Arc::new(OptionalAbortHandle::default()),
       duration,
-
-      #[cfg(tauri_store_tracing)]
-      id: ID.fetch_add(1, Ordering::SeqCst),
     }
   }
 
@@ -64,17 +49,11 @@ where
       return;
     }
 
-    #[cfg(tauri_store_tracing)]
-    trace!("spawning debounce {}", self.id);
-
     let (tx, rx) = unbounded_channel();
     let actor = Actor {
       function: Arc::downgrade(&self.inner),
       receiver: rx,
       duration: self.duration,
-
-      #[cfg(tauri_store_tracing)]
-      id: self.id,
     };
 
     self.sender.replace(tx);
@@ -84,9 +63,6 @@ where
   pub fn abort(&self) {
     self.sender.take();
     self.abort_handle.abort();
-
-    #[cfg(tauri_store_tracing)]
-    debug!("debounce {} aborted", self.id);
   }
 }
 
@@ -125,9 +101,6 @@ where
   function: Weak<DebouncedFn<R, Fut>>,
   receiver: UnboundedReceiver<Message>,
   duration: Duration,
-
-  #[cfg(tauri_store_tracing)]
-  id: u64,
 }
 
 impl<R, T, Fut> Actor<R, T, Fut>
@@ -148,9 +121,6 @@ where
             if let Some(f) = self.function.upgrade() {
               (f)(app).await;
             }
-
-            #[cfg(tauri_store_tracing)]
-            debug!("debounce {} completed", self.id);
 
             break;
           }

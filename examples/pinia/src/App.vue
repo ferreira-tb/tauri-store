@@ -1,21 +1,19 @@
 <script setup lang="ts">
 import '../../assets/style.css';
 import { onMounted } from 'vue';
+import { printStore } from './commands';
 import { onKeyDown } from '@vueuse/core';
 import { openStore, useStore } from './store';
-import { onError, printStore } from './commands';
 import { exit } from '@tauri-apps/plugin-process';
 import { clearAutosave, save, saveNow, setAutosave } from '@tauri-store/pinia/src/index.js';
 
 const store = useStore();
 const { start, stop } = store.$tauri;
 
-onKeyDown('Escape', () => {
-  exit(0).catch(onError);
-});
+onKeyDown('Escape', () => void exit(0));
 
-onMounted(() => {
-  start().catch(onError);
+onMounted(async () => {
+  await start();
 });
 </script>
 

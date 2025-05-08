@@ -1,14 +1,9 @@
-mod command;
-
-use anyhow::Result;
 use std::time::Duration;
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 use tauri_plugin_pinia::{BoxResult, SaveStrategy};
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-  setup_tracing().unwrap();
-
   tauri::Builder::default()
     .plugin(tauri_plugin_process::init())
     .plugin(tauri_plugin_shell::init())
@@ -23,7 +18,7 @@ pub fn run() {
         .build(),
     )
     .setup(|app| open_window(app.handle()))
-    .invoke_handler(tauri::generate_handler![command::on_error])
+    .invoke_handler(tauri::generate_handler![])
     .run(tauri::generate_context!())
     .unwrap();
 }
@@ -39,31 +34,6 @@ fn open_window(app: &AppHandle) -> BoxResult<()> {
     .visible(true)
     .always_on_top(true)
     .build()?;
-
-  Ok(())
-}
-
-fn setup_tracing() -> Result<()> {
-  use tracing::subscriber::set_global_default;
-  use tracing_subscriber::fmt::time::ChronoLocal;
-  use tracing_subscriber::fmt::Layer;
-  use tracing_subscriber::layer::SubscriberExt;
-  use tracing_subscriber::{EnvFilter, Registry};
-
-  const TIMESTAMP: &str = "%F %T%.3f %:z";
-
-  let filter = EnvFilter::builder()
-    .from_env()?
-    .add_directive("tauri_store=trace".parse()?)
-    .add_directive("tauri_store_utils=trace".parse()?);
-
-  let stderr = Layer::default()
-    .with_ansi(true)
-    .with_timer(ChronoLocal::new(TIMESTAMP.into()))
-    .with_writer(std::io::stderr)
-    .pretty();
-
-  set_global_default(Registry::default().with(stderr).with(filter))?;
 
   Ok(())
 }

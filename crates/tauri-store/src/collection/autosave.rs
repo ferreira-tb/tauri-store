@@ -8,9 +8,6 @@ use tauri_store_utils::set_interval;
 use tokio::sync::Semaphore;
 use tokio::task::AbortHandle;
 
-#[cfg(tauri_store_tracing)]
-use tracing::{debug, trace};
-
 type AutosaveFn<R> = Box<dyn Fn(AppHandle<R>) -> BoxFuture<'static, ()> + Send + 'static>;
 
 pub(crate) struct Autosave {
@@ -34,18 +31,12 @@ impl Autosave {
       let semaphore = Arc::clone(&self.semaphore);
       let abort_handle = set_interval(app, duration, save(semaphore));
       self.abort_handle = Some(abort_handle);
-
-      #[cfg(tauri_store_tracing)]
-      debug!("autosave started");
     }
   }
 
   pub fn stop(&mut self) {
     if let Some(handle) = self.abort_handle.take() {
       handle.abort();
-
-      #[cfg(tauri_store_tracing)]
-      debug!("autosave aborted");
     }
   }
 
@@ -64,9 +55,6 @@ fn save<R: Runtime>(semaphore: Arc<Semaphore>) -> AutosaveFn<R> {
         .expect("semaphore will not be closed");
 
       let _ = spawn_blocking(move || app.store_collection().save_all()).await;
-
-      #[cfg(tauri_store_tracing)]
-      trace!("autosave ticked");
     })
   })
 }

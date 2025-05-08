@@ -2,7 +2,6 @@
 import '../../assets/style.css';
 import { onMounted } from 'vue';
 import { useStore } from './store';
-import { onError } from './commands';
 import { onKeyDown } from '@vueuse/core';
 import { exit } from '@tauri-apps/plugin-process';
 import { clearAutosave, save, saveNow, setAutosave } from '@tauri-store/pinia/src/index.js';
@@ -10,12 +9,10 @@ import { clearAutosave, save, saveNow, setAutosave } from '@tauri-store/pinia/sr
 const store = useStore();
 const { start, stop } = store.$tauri;
 
-onKeyDown('Escape', () => {
-  exit(0).catch(onError);
-});
+onKeyDown('Escape', () => void exit(0));
 
-onMounted(() => {
-  start().catch(onError);
+onMounted(async () => {
+  await start();
 });
 </script>
 

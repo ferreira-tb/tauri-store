@@ -1,9 +1,7 @@
-use anyhow::Result;
+use __IMPORT_SOURCE__::{ManagerExt, SaveStrategy};
 use serde::{Deserialize, Serialize};
 use std::time::Duration;
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
-use tracing::{error, warn};
-use __IMPORT_SOURCE__::{ManagerExt, SaveStrategy};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -13,8 +11,6 @@ struct CounterStore {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-  setup_tracing().unwrap();
-
   tauri::Builder::default()
     .plugin(tauri_plugin_process::init())
     .plugin(tauri_plugin_shell::init())
@@ -33,8 +29,6 @@ pub fn run() {
     })
     .invoke_handler(tauri::generate_handler![
       get_counter,
-      on_error,
-      on_warn,
       print_store,
       try_get_counter,
       try_store_state
@@ -56,41 +50,6 @@ fn open_window(app: &AppHandle, id: u8) {
     .always_on_top(true)
     .build()
     .unwrap();
-}
-
-fn setup_tracing() -> Result<()> {
-  use tracing::subscriber::set_global_default;
-  use tracing_subscriber::fmt::time::ChronoLocal;
-  use tracing_subscriber::fmt::Layer;
-  use tracing_subscriber::layer::SubscriberExt;
-  use tracing_subscriber::{EnvFilter, Registry};
-
-  const TIMESTAMP: &str = "%F %T%.3f %:z";
-
-  let filter = EnvFilter::builder()
-    .from_env()?
-    .add_directive("tauri_store=trace".parse()?)
-    .add_directive("tauri_store_utils=trace".parse()?);
-
-  let stderr = Layer::default()
-    .with_ansi(true)
-    .with_timer(ChronoLocal::new(TIMESTAMP.into()))
-    .with_writer(std::io::stderr)
-    .pretty();
-
-  set_global_default(Registry::default().with(stderr).with(filter))?;
-
-  Ok(())
-}
-
-#[tauri::command]
-async fn on_error(message: String) {
-  error!(error = message);
-}
-
-#[tauri::command]
-async fn on_warn(message: String) {
-  warn!(warning = message);
 }
 
 #[tauri::command]

@@ -16,9 +16,6 @@ use tauri::plugin::TauriPlugin;
 #[cfg(feature = "unstable-migration")]
 use crate::migration::{Migration, MigrationContext, Migrator};
 
-#[cfg(tauri_store_tracing)]
-use tracing::trace;
-
 /// Builder for the [`StoreCollection`](crate::collection::StoreCollection).
 pub struct StoreCollectionBuilder<R: Runtime> {
   path: Option<PathBuf>,
@@ -215,9 +212,6 @@ impl<R: Runtime> StoreCollectionBuilder<R> {
       #[cfg(feature = "unstable-migration")]
       migrator: Mutex::new(self.migrator),
     });
-
-    #[cfg(tauri_store_tracing)]
-    trace!(?collection);
 
     let rid = app
       .resources_table()

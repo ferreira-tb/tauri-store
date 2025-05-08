@@ -22,7 +22,6 @@ serde_json = "1"
 tauri-plugin-process = "2"
 tauri-plugin-shell = "2"
 tauri-plugin-window-state = "2"
-tracing = "0.1"
 
 [dependencies.serde]
 version = "1"
@@ -36,10 +35,6 @@ features = ["devtools", "protocol-asset"]
 path = "../../../crates/tauri-store"
 default-features = false
 features = ["plugin"]
-
-[dependencies.tracing-subscriber]
-version = "0.3"
-features = ["chrono", "env-filter", "fmt", "parking_lot", "registry"]
 
 [build-dependencies.tauri-build]
 version = "2"

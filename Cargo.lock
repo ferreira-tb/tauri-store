@@ -893,8 +893,6 @@ dependencies = [
  "tauri-plugin-process",
  "tauri-plugin-window-state",
  "tauri-store",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -910,8 +908,6 @@ dependencies = [
  "tauri-plugin-process",
  "tauri-plugin-shell",
  "tauri-plugin-window-state",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -927,8 +923,6 @@ dependencies = [
  "tauri-plugin-process",
  "tauri-plugin-shell",
  "tauri-plugin-window-state",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -944,8 +938,6 @@ dependencies = [
  "tauri-plugin-shell",
  "tauri-plugin-svelte",
  "tauri-plugin-window-state",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -961,8 +953,6 @@ dependencies = [
  "tauri-plugin-shell",
  "tauri-plugin-svelte",
  "tauri-plugin-window-state",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -978,8 +968,6 @@ dependencies = [
  "tauri-plugin-shell",
  "tauri-plugin-valtio",
  "tauri-plugin-window-state",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -995,8 +983,6 @@ dependencies = [
  "tauri-plugin-shell",
  "tauri-plugin-window-state",
  "tauri-store",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -1012,8 +998,6 @@ dependencies = [
  "tauri-plugin-shell",
  "tauri-plugin-window-state",
  "tauri-plugin-zustand",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -2089,15 +2073,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "matchers"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8263075bb86c5a1b1427b5ae862e8889656f126e9f77c484496e8b47cf5c5558"
-dependencies = [
- "regex-automata 0.1.10",
-]
-
-[[package]]
 name = "matches"
 version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2207,16 +2182,6 @@ name = "nodrop"
 version = "0.1.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "72ef4a56884ca558e5ddb05a1d1e7e1bfd9a68d9ed024c21704cc98872dae1bb"
-
-[[package]]
-name = "nu-ansi-term"
-version = "0.46.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "77a8165726e8236064dbb45459242600304b42a5ea24ee2948e18e023bf7ba84"
-dependencies = [
- "overload",
- "winapi",
-]
 
 [[package]]
 name = "num-conv"
@@ -2512,12 +2477,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "overload"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b15813163c1d831bf4a13c3610c05c0d03b39feb07f7e09fa234dac9b15aaf39"
-
-[[package]]
 name = "pango"
 version = "0.18.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2741,8 +2700,6 @@ dependencies = [
  "tauri-plugin-process",
  "tauri-plugin-shell",
  "tauri-plugin-window-state",
- "tracing",
- "tracing-subscriber",
 ]
 
 [[package]]
@@ -3037,17 +2994,8 @@ checksum = "b544ef1b4eac5dc2db33ea63606ae9ffcfac26c1416a2806ae0bf5f56b201191"
 dependencies = [
  "aho-corasick",
  "memchr",
- "regex-automata 0.4.9",
- "regex-syntax 0.8.5",
-]
-
-[[package]]
-name = "regex-automata"
-version = "0.1.10"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c230d73fb8d8c1b9c0b3135c5142a8acee3a0558fb8db5cf1cb65f8d7862132"
-dependencies = [
- "regex-syntax 0.6.29",
+ "regex-automata",
+ "regex-syntax",
 ]
 
 [[package]]
@@ -3058,14 +3006,8 @@ checksum = "809e8dc61f6de73b46c85f4c96486310fe304c434cfa43669d7b40f711150908"
 dependencies = [
  "aho-corasick",
  "memchr",
- "regex-syntax 0.8.5",
+ "regex-syntax",
 ]
-
-[[package]]
-name = "regex-syntax"
-version = "0.6.29"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f162c6dd7b008981e4d40210aca20b4bd0f9b60ca9271061b07f78537722f2e1"
 
 [[package]]
 name = "regex-syntax"
@@ -3366,15 +3308,6 @@ dependencies = [
  "cfg-if",
  "cpufeatures",
  "digest",
-]
-
-[[package]]
-name = "sharded-slab"
-version = "0.1.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f40ca3c46823713e0d4209592e8d6e826aa57e928f09752619fc696c499637f6"
-dependencies = [
- "lazy_static",
 ]
 
 [[package]]
@@ -3805,7 +3738,6 @@ dependencies = [
  "tauri",
  "tauri-plugin",
  "tauri-store",
- "tracing",
 ]
 
 [[package]]
@@ -3847,7 +3779,6 @@ dependencies = [
  "tauri",
  "tauri-plugin",
  "tauri-store",
- "tracing",
 ]
 
 [[package]]
@@ -3858,7 +3789,6 @@ dependencies = [
  "tauri",
  "tauri-plugin",
  "tauri-store",
- "tracing",
 ]
 
 [[package]]
@@ -3884,7 +3814,6 @@ dependencies = [
  "tauri",
  "tauri-plugin",
  "tauri-store",
- "tracing",
 ]
 
 [[package]]
@@ -3953,7 +3882,6 @@ dependencies = [
  "tauri-store-utils",
  "thiserror 2.0.12",
  "tokio",
- "tracing",
 ]
 
 [[package]]
@@ -3982,7 +3910,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-utils"
-version = "0.4.1"
+version = "0.4.2"
 dependencies = [
  "bon",
  "semver",
@@ -3991,7 +3919,6 @@ dependencies = [
  "tauri",
  "thiserror 2.0.12",
  "tokio",
- "tracing",
 ]
 
 [[package]]
@@ -4098,16 +4025,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.101",
-]
-
-[[package]]
-name = "thread_local"
-version = "1.1.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8b9ef9bad013ada3808854ceac7b46812a6465ba368859a37e2100283d2d719c"
-dependencies = [
- "cfg-if",
- "once_cell",
 ]
 
 [[package]]
@@ -4288,19 +4205,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "784e0ac535deb450455cbfa28a6f0df145ea1bb7ae51b821cf5e7927fdcfbdd0"
 dependencies = [
  "pin-project-lite",
- "tracing-attributes",
  "tracing-core",
-]
-
-[[package]]
-name = "tracing-attributes"
-version = "0.1.28"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "395ae124c09f9e6918a2310af6038fba074bcf474ac352496d5910dd59a2226d"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.101",
 ]
 
 [[package]]
@@ -4310,38 +4215,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e672c95779cf947c5311f83787af4fa8fffd12fb27e4993211a84bdfd9610f9c"
 dependencies = [
  "once_cell",
- "valuable",
-]
-
-[[package]]
-name = "tracing-log"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ee855f1f400bd0e5c02d150ae5de3840039a3f54b025156404e34c23c03f47c3"
-dependencies = [
- "log",
- "once_cell",
- "tracing-core",
-]
-
-[[package]]
-name = "tracing-subscriber"
-version = "0.3.19"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e8189decb5ac0fa7bc8b96b7cb9b2701d60d48805aca84a238004d665fcc4008"
-dependencies = [
- "chrono",
- "matchers",
- "nu-ansi-term",
- "once_cell",
- "parking_lot",
- "regex",
- "sharded-slab",
- "smallvec",
- "thread_local",
- "tracing",
- "tracing-core",
- "tracing-log",
 ]
 
 [[package]]
@@ -4494,12 +4367,6 @@ dependencies = [
  "getrandom 0.3.2",
  "serde",
 ]
-
-[[package]]
-name = "valuable"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ba73ea9cf16a25df0c8caa16c51acb937d5712a8429db78a3ee29d5dcacd3a65"
 
 [[package]]
 name = "version-compare"

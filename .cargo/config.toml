@@ -1,6 +1,5 @@
 [build]
 target-dir = "target"
-rustflags = ["--cfg", "tauri_store_tracing"]
 
 [env]
 CARGO_TARGET_DIR = "target"

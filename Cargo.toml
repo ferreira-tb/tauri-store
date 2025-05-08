@@ -18,10 +18,6 @@ edition = "2021"
 rust-version = "1.77.2"
 categories = ["filesystem", "gui", "web-programming"]
 
-[workspace.lints.rust.unexpected_cfgs]
-level = "warn"
-check-cfg = ['cfg(tauri_store_tracing)']
-
 [workspace.lints.clippy]
 clone_on_ref_ptr = "deny"
 filetype_is_file = "deny"
@@ -47,3 +43,4 @@ codegen-units = 1
 lto = "fat"
 opt-level = 3
 strip = "symbols"
+panic = "abort"
