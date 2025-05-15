@@ -1,7 +1,7 @@
 {
   "name": "example-zustand",
   "type": "module",
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.11.0",
   "private": true,
   "scripts": {
     "type-check": "tsc --noEmit",
@@ -17,6 +17,6 @@
     "@vitejs/plugin-react": "^4.4.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "zustand": "^5.0.3"
+    "zustand": "^5.0.4"
   }
 }
