@@ -1,6 +1,6 @@
-# @tauri-store/svelte
+# @tauri-store/pinia
 
-Persistent [Svelte](https://svelte.dev/) stores and runes for Tauri.
+Persistent refs for Tauri and Vue.
 
 ## Features
 
@@ -11,7 +11,7 @@ Persistent [Svelte](https://svelte.dev/) stores and runes for Tauri.
 
 ## Documentation
 
-Check the [documentation](https://tb.dev.br/tauri-store/plugin-svelte/guide/getting-started) for more information on how to install and use the plugin.
+Check the [documentation](https://tb.dev.br/tauri-store/plugin-vue/guide/getting-started) for more information on how to install and use the plugin.
 
 ## Plugins
 

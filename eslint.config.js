@@ -15,6 +15,7 @@ export default defineConfig({
     'packages/plugin-pinia/tsconfig.json',
     'packages/plugin-svelte/tsconfig.json',
     'packages/plugin-valtio/tsconfig.json',
+    'packages/plugin-vue/tsconfig.json',
     'packages/plugin-zustand/tsconfig.json',
     'packages/tauri-store/tsconfig.json',
   ],

@@ -382,6 +382,18 @@ importers:
         specifier: ^2.1.2
         version: 2.1.4(@types/react@19.1.4)(react@19.1.0)
 
+  packages/plugin-vue:
+    dependencies:
+      '@tauri-apps/api':
+        specifier: ^2.0.3
+        version: 2.5.0
+      '@tauri-store/shared':
+        specifier: workspace:*
+        version: link:../shared
+      vue:
+        specifier: ^3.5.13
+        version: 3.5.14(typescript@5.8.3)
+
   packages/plugin-zustand:
     dependencies:
       '@tauri-apps/api':
