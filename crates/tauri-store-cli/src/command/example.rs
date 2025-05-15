@@ -37,7 +37,7 @@ impl Example {
     }
 
     command("cargo")
-      .args(args.iter().map(AsRef::as_ref))
+      .args(args.iter().map(String::as_str))
       .dir(examples_dir().join(example))
       .call()
   }

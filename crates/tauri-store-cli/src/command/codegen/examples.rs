@@ -43,6 +43,10 @@ fn generate_lib(assets: &Path) -> Result<()> {
       let valtio = example_lib("valtio");
       OutputDir::from(valtio)
     }
+    Plugin::Vue => {
+      let vue = example_lib("vue");
+      OutputDir::from(vue)
+    }
     Plugin::Zustand => {
       let zustand = example_lib("zustand");
       OutputDir::from(zustand)

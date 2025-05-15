@@ -1,0 +1,40 @@
+[package]
+name = "example-vue"
+publish = false
+version = "0.1.0"
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[lib]
+name = "example_vue_lib"
+crate-type = ["cdylib", "rlib", "staticlib"]
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow = "1"
+serde_json = "1"
+tauri-plugin-process = "2"
+tauri-plugin-shell = "2"
+tauri-plugin-window-state = "2"
+
+[dependencies.serde]
+version = "1"
+features = ["derive"]
+
+[dependencies.tauri]
+version = "2"
+features = ["devtools", "protocol-asset"]
+
+[dependencies.tauri-plugin-vue]
+path = "../../../crates/plugin-vue"
+default-features = false
+
+[build-dependencies.tauri-build]
+version = "2"
+features = []

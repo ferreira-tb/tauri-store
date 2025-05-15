@@ -300,6 +300,33 @@ importers:
         specifier: workspace:*
         version: link:../../packages/tauri-store
 
+  examples/vue:
+    devDependencies:
+      '@tauri-apps/api':
+        specifier: ^2.5.0
+        version: 2.5.0
+      '@tauri-apps/plugin-process':
+        specifier: ^2.2.1
+        version: 2.2.1
+      '@tauri-apps/plugin-shell':
+        specifier: ^2.2.1
+        version: 2.2.1
+      '@tauri-store/vue':
+        specifier: workspace:*
+        version: link:../../packages/plugin-vue
+      '@vitejs/plugin-vue':
+        specifier: ^5.2.4
+        version: 5.2.4(vite@6.3.5(@types/node@22.15.18)(jiti@2.4.2)(terser@5.39.0)(yaml@2.7.1))(vue@3.5.14(typescript@5.8.3))
+      '@vueuse/core':
+        specifier: ^13.2.0
+        version: 13.2.0(vue@3.5.14(typescript@5.8.3))
+      vue:
+        specifier: ^3.5.14
+        version: 3.5.14(typescript@5.8.3)
+      vue-tsc:
+        specifier: ^2.2.10
+        version: 2.2.10(typescript@5.8.3)
+
   examples/zustand:
     devDependencies:
       '@tauri-apps/api':

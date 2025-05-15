@@ -1,7 +1,15 @@
 [workspace]
 resolver = "2"
 members = [
-  "crates/*",
+  "crates/plugin-pinia",
+  "crates/plugin-svelte",
+  "crates/plugin-valtio",
+  "crates/plugin-vue",
+  "crates/plugin-zustand",
+  "crates/tauri-store",
+  "crates/tauri-store-cli",
+  "crates/tauri-store-macros",
+  "crates/tauri-store-utils",
   "examples/migration/src-tauri",
   "examples/pinia-nuxt/src-tauri",
   "examples/pinia/src-tauri",
@@ -10,6 +18,7 @@ members = [
   "examples/svelte/src-tauri",
   "examples/valtio/src-tauri",
   "examples/vanilla/src-tauri",
+  "examples/vue/src-tauri",
   "examples/zustand/src-tauri",
 ]
 

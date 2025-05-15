@@ -27,8 +27,7 @@ $ErrorActionPreference = 'Stop'
 $PSNativeCommandUseErrorActionPreference = $true
 
 if (-not $SkipCodegen -and -not $Fast) {
-  pnpm run codegen
-  pnpm run format
+  pnpm run codegen --format
 }
 
 if (-not $SkipLint -and -not $Fast) {

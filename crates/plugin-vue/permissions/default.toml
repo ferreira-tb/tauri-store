@@ -1,0 +1,25 @@
+"$schema" = "schemas/schema.json"
+[default]
+description = "Default permissions for tauri-plugin-vue."
+permissions = [
+  "allow-clear-autosave",
+  "allow-get-default-save-strategy",
+  "allow-get-save-strategy",
+  "allow-get-store-collection-path",
+  "allow-get-store-ids",
+  "allow-get-store-path",
+  "allow-get-store-state",
+  "allow-load",
+  "allow-patch",
+  "allow-save",
+  "allow-save-all",
+  "allow-save-all-now",
+  "allow-save-now",
+  "allow-save-some",
+  "allow-save-some-now",
+  "allow-set-autosave",
+  "allow-set-save-strategy",
+  "allow-set-store-collection-path",
+  "allow-set-store-options",
+  "allow-unload",
+]

@@ -1,5 +1,5 @@
 use crate::__SNAKE_PLUGIN_TITLE__::__PASCAL_PLUGIN_TITLE__;
-use tauri::{AppHandle, Manager, Runtime, State, WebviewWindow, Window};
+use tauri::{Manager, Runtime, State};
 use tauri_store::{Result, Store};
 
 /// Extension for the [`Manager`] trait providing access to the __PASCAL_PLUGIN_TITLE__ plugin.
@@ -31,6 +31,4 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   }
 }
 
-impl<R: Runtime> ManagerExt<R> for AppHandle<R> {}
-impl<R: Runtime> ManagerExt<R> for WebviewWindow<R> {}
-impl<R: Runtime> ManagerExt<R> for Window<R> {}
+impl<R: Runtime, T: Manager<R>> ManagerExt<R> for T {}

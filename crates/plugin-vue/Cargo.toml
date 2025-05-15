@@ -1,0 +1,48 @@
+[package]
+name = "tauri-plugin-vue"
+description = "Persistent refs for Tauri and Vue"
+version = "0.0.1"
+documentation = "https://docs.rs/tauri-plugin-vue"
+homepage = "https://tb.dev.br/tauri-store/plugin-vue/guide/getting-started"
+repository = "https://github.com/ferreira-tb/tauri-store"
+authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
+license = "MIT"
+readme = "./README.md"
+keywords = ["nuxt", "plugin", "store", "tauri", "vue"]
+links = "tauri-plugin-vue"
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.categories]
+workspace = true
+
+[package.metadata.docs.rs]
+no-default-features = true
+features = ["unstable-migration"]
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs"]
+
+[lints]
+workspace = true
+
+[dependencies]
+serde = "1.0"
+tauri = "2"
+
+[dependencies.tauri-store]
+version = "0.10"
+path = "../tauri-store"
+default-features = false
+features = ["derive"]
+
+[build-dependencies.tauri-plugin]
+version = "2.2"
+features = ["build"]
+
+[features]
+file-sync-all = ["tauri-store/file-sync-all"]
+unstable-migration = ["tauri-store/unstable-migration"]

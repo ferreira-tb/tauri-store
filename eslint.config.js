@@ -10,6 +10,7 @@ export default defineConfig({
     'examples/svelte/tsconfig.json',
     'examples/svelte-runes/tsconfig.json',
     'examples/valtio/tsconfig.json',
+    'examples/vue/tsconfig.json',
     'examples/zustand/tsconfig.json',
     'packages/shared/tsconfig.json',
     'packages/plugin-pinia/tsconfig.json',
@@ -20,21 +21,11 @@ export default defineConfig({
     'packages/tauri-store/tsconfig.json',
   ],
   features: {
-    react: true,
-    reactCompiler: false,
-    reactHooks: false,
-    svelte: true,
     vue: true,
   },
   ignores: ['**/.nuxt', '**/.svelte-kit', '**/assets'],
   moduleBoundaryTypesFiles: ['packages/**/*.ts'],
   overrides: {
-    svelte: {
-      'svelte/block-lang': 'off',
-      'svelte/no-at-html-tags': 'off',
-      'svelte/no-ignored-unsubscribe': 'off',
-      'svelte/no-inline-styles': 'off',
-    },
     typescript: {
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/naming-convention': 'off',

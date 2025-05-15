@@ -986,6 +986,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "example-vue"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-process",
+ "tauri-plugin-shell",
+ "tauri-plugin-vue",
+ "tauri-plugin-window-state",
+]
+
+[[package]]
 name = "example-zustand"
 version = "0.1.0"
 dependencies = [
@@ -3761,6 +3776,16 @@ dependencies = [
 [[package]]
 name = "tauri-plugin-valtio"
 version = "2.4.0"
+dependencies = [
+ "serde",
+ "tauri",
+ "tauri-plugin",
+ "tauri-store",
+]
+
+[[package]]
+name = "tauri-plugin-vue"
+version = "0.0.1"
 dependencies = [
  "serde",
  "tauri",
