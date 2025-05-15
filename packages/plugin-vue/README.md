@@ -1,6 +1,6 @@
-# @tauri-store/pinia
+# @tauri-store/vue
 
-Persistent refs for Tauri and Vue.
+Persistence for Tauri and Vue.
 
 ## Features
 
