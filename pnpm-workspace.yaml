@@ -1,3 +1,5 @@
+ignoreWorkspaceRootCheck: true
+
 packages:
   - 'docs'
   - 'examples/migration'
