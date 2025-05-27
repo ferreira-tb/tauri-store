@@ -1,7 +1,5 @@
 # tauri-plugin-vue
 
-> **IMPORTANT**: This is work in progress and **SHOULD NOT** be used before it reaches **v0.1.0**. Expect breaking changes on every release before that.
-
 Persistence for Tauri and Vue.
 
 ## Features
