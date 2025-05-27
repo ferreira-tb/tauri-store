@@ -170,6 +170,18 @@ importers:
       '@tauri-store/pinia':
         specifier: workspace:*
         version: link:../../packages/plugin-pinia
+      '@tauri-store/svelte':
+        specifier: workspace:*
+        version: link:../../packages/plugin-svelte
+      '@tauri-store/valtio':
+        specifier: workspace:*
+        version: link:../../packages/plugin-valtio
+      '@tauri-store/vue':
+        specifier: workspace:*
+        version: link:../../packages/plugin-vue
+      '@tauri-store/zustand':
+        specifier: workspace:*
+        version: link:../../packages/plugin-zustand
       '@vitejs/plugin-vue':
         specifier: ^5.2.4
         version: 5.2.4(vite@6.3.5(@types/node@22.15.21)(jiti@2.4.2)(terser@5.40.0)(yaml@2.8.0))(vue@3.5.15(typescript@5.8.3))

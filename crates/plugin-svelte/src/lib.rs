@@ -16,8 +16,11 @@ use std::collections::HashSet;
 use std::path::PathBuf;
 use std::time::Duration;
 use tauri::plugin::TauriPlugin;
-use tauri::{AppHandle, Manager, RunEvent, Runtime};
+use tauri::{AppHandle, RunEvent, Runtime};
 use tauri_store::CollectionBuilder;
+
+// The `CollectionBuilder` macro depends on this import.
+use svelte::SvelteMarker as Marker;
 
 #[cfg(feature = "unstable-migration")]
 use tauri_store::Migrator;
@@ -35,7 +38,7 @@ pub struct Builder<R: Runtime> {
   path: Option<PathBuf>,
   default_save_strategy: SaveStrategy,
   autosave: Option<Duration>,
-  on_load: Option<Box<OnLoadFn<R>>>,
+  on_load: Option<Box<OnLoadFn<R, Marker>>>,
   pretty: bool,
   save_denylist: HashSet<StoreId>,
   sync_denylist: HashSet<StoreId>,
@@ -80,9 +83,7 @@ fn setup<R>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()>
 where
   R: Runtime,
 {
-  let collection = builder.build_collection(app)?;
-  app.manage(Svelte(collection));
-
+  builder.build_collection(app)?;
   Ok(())
 }
 

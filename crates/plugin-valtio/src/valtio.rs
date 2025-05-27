@@ -3,10 +3,14 @@
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
 
-use std::sync::Arc;
-use tauri::Runtime;
-use tauri_store::{Collection, StoreCollection};
+use tauri::{Runtime, State};
+use tauri_store::{Collection, CollectionMarker, StoreCollection};
 
 /// The Valtio plugin.
 #[derive(Collection)]
-pub struct Valtio<R: Runtime>(pub(crate) Arc<StoreCollection<R>>);
+pub struct Valtio<'a, R: Runtime>(pub(crate) State<'a, StoreCollection<R, ValtioMarker>>);
+
+/// Marker for the Valtio plugin.
+pub struct ValtioMarker;
+
+impl CollectionMarker for ValtioMarker {}

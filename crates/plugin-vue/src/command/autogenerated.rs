@@ -8,7 +8,7 @@ use std::path::PathBuf;
 use std::time::Duration;
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
-use tauri_store::{with_store, Result, SaveStrategy, StoreId, StoreOptions, StoreState};
+use tauri_store::{Result, SaveStrategy, StoreId, StoreOptions, StoreState};
 
 #[tauri::command]
 pub(crate) async fn clear_autosave<R>(app: AppHandle<R>)
@@ -47,7 +47,7 @@ pub(crate) async fn get_store_path<R>(app: AppHandle<R>, id: StoreId) -> Result<
 where
   R: Runtime,
 {
-  with_store(&app, id, |store| store.path())
+  app.vue().with_store(id, |store| store.path())
 }
 
 #[tauri::command]
@@ -55,7 +55,9 @@ pub(crate) async fn get_save_strategy<R>(app: AppHandle<R>, id: StoreId) -> Resu
 where
   R: Runtime,
 {
-  with_store(&app, id, |store| store.save_strategy())
+  app
+    .vue()
+    .with_store(id, |store| store.save_strategy())
 }
 
 #[tauri::command]
@@ -71,7 +73,12 @@ pub(crate) async fn load<R>(app: AppHandle<R>, id: StoreId) -> Result<StoreState
 where
   R: Runtime,
 {
-  spawn_blocking(move || with_store(&app, id, |store| store.state().clone())).await?
+  spawn_blocking(move || {
+    app
+      .vue()
+      .with_store(id, |store| store.state().clone())
+  })
+  .await?
 }
 
 #[tauri::command]
@@ -81,7 +88,9 @@ where
 {
   let app = window.app_handle();
   let label = window.label().to_owned();
-  with_store(app, id, move |store| store.patch_with_source(state, label))?
+  app
+    .vue()
+    .with_store(id, move |store| store.patch_with_source(state, label))?
 }
 
 #[tauri::command]
@@ -159,7 +168,9 @@ pub(crate) async fn set_save_strategy<R>(
 where
   R: Runtime,
 {
-  with_store(&app, id, |store| store.set_save_strategy(strategy))
+  app
+    .vue()
+    .with_store(id, |store| store.set_save_strategy(strategy))
 }
 
 #[tauri::command]
@@ -173,7 +184,7 @@ where
 {
   let app = window.app_handle();
   let label = window.label().to_owned();
-  with_store(app, id, move |store| {
+  app.vue().with_store(id, move |store| {
     store.set_options_with_source(options, label)
   })?
 }

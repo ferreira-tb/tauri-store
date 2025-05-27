@@ -1,5 +1,6 @@
 mod autosave;
 mod builder;
+mod marker;
 mod path;
 
 use crate::error::Result;
@@ -12,46 +13,55 @@ use serde::de::DeserializeOwned;
 use serde_json::Value as Json;
 use std::collections::HashSet;
 use std::fmt;
+use std::marker::PhantomData;
 use std::path::PathBuf;
-use std::sync::{Arc, Mutex, OnceLock};
+use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tauri::{AppHandle, Resource, ResourceId, Runtime};
 
 pub use builder::StoreCollectionBuilder;
+pub use marker::{CollectionMarker, DefaultMarker};
 
 #[cfg(feature = "unstable-migration")]
 use crate::migration::Migrator;
 
-pub(crate) static RESOURCE_ID: OnceLock<ResourceId> = OnceLock::new();
-
 /// Closure to be called when a store is loaded.
-pub type OnLoadFn<R> = dyn Fn(&Store<R>) -> Result<()> + Send + Sync;
+pub type OnLoadFn<R, C> = dyn Fn(&Store<R, C>) -> Result<()> + Send + Sync;
 
 /// A collection of stores.
 /// This is the core component for store plugins.
-pub struct StoreCollection<R: Runtime> {
+pub struct StoreCollection<R, C>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
   pub(crate) app: AppHandle<R>,
   pub(crate) name: Box<str>,
   pub(crate) path: Mutex<PathBuf>,
   pub(crate) stores: DashMap<StoreId, ResourceId>,
-  pub(crate) on_load: Option<Box<OnLoadFn<R>>>,
+  pub(crate) on_load: Option<Box<OnLoadFn<R, C>>>,
   pub(crate) autosave: Mutex<Autosave>,
   pub(crate) default_save_strategy: SaveStrategy,
   pub(crate) save_denylist: Option<HashSet<StoreId>>,
   pub(crate) sync_denylist: Option<HashSet<StoreId>>,
   pub(crate) pretty: bool,
+  phantom: PhantomData<C>,
 
   #[cfg(feature = "unstable-migration")]
   pub(crate) migrator: Mutex<Migrator>,
 }
 
-impl<R: Runtime> StoreCollection<R> {
+impl<R, C> StoreCollection<R, C>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
   /// Builds a new store collection.
-  pub fn builder() -> StoreCollectionBuilder<R> {
-    StoreCollectionBuilder::new()
+  pub fn builder() -> StoreCollectionBuilder<R, C> {
+    StoreCollectionBuilder::<R, C>::new()
   }
 
-  pub(crate) fn get_resource(&self, id: impl AsRef<str>) -> Result<Arc<StoreResource<R>>> {
+  pub(crate) fn get_resource(&self, id: impl AsRef<str>) -> Result<Arc<StoreResource<R, C>>> {
     let id = StoreId::from(id.as_ref());
     let rid = match self.rid(&id) {
       Some(rid) => rid,
@@ -93,7 +103,7 @@ impl<R: Runtime> StoreCollection<R> {
   /// Calls a closure with a mutable reference to the store with the given id.
   pub fn with_store<F, T>(&self, store_id: impl AsRef<str>, f: F) -> Result<T>
   where
-    F: FnOnce(&mut Store<R>) -> T,
+    F: FnOnce(&mut Store<R, C>) -> T,
   {
     Ok(self.get_resource(store_id)?.locked(f))
   }
@@ -260,7 +270,7 @@ impl<R: Runtime> StoreCollection<R> {
     self
       .rids()
       .into_iter()
-      .try_for_each(|rid| StoreResource::save(&self.app, rid))
+      .try_for_each(|rid| StoreResource::<R, C>::save(&self.app, rid))
   }
 
   /// Saves all the stores to the disk immediately, ignoring the save strategy.
@@ -268,7 +278,7 @@ impl<R: Runtime> StoreCollection<R> {
     self
       .rids()
       .into_iter()
-      .try_for_each(|rid| StoreResource::save_now(&self.app, rid))
+      .try_for_each(|rid| StoreResource::<R, C>::save_now(&self.app, rid))
   }
 
   /// Default save strategy for the stores.
@@ -282,7 +292,7 @@ impl<R: Runtime> StoreCollection<R> {
   pub fn set_autosave(&self, duration: Duration) {
     if let Ok(mut autosave) = self.autosave.lock() {
       autosave.set_duration(duration);
-      autosave.start(&self.app);
+      autosave.start::<R, C>(&self.app);
     }
   }
 
@@ -321,7 +331,7 @@ impl<R: Runtime> StoreCollection<R> {
       // The store needs to be saved immediately here.
       // Otherwise, the plugin might try to load it again if `StoreCollection::get_resource` is called.
       // This scenario will happen whenever the save strategy is not `Immediate`.
-      let resource = StoreResource::take(&self.app, rid)?;
+      let resource = StoreResource::<R, C>::take(&self.app, rid)?;
       resource.locked(|store| store.save_now())?;
 
       emit(&self.app, STORE_UNLOAD_EVENT, id, None::<&str>)?;
@@ -336,7 +346,7 @@ impl<R: Runtime> StoreCollection<R> {
     self.clear_autosave();
 
     for rid in self.rids() {
-      if let Ok(resource) = StoreResource::take(&self.app, rid) {
+      if let Ok(resource) = StoreResource::<R, C>::take(&self.app, rid) {
         resource.locked(|store| {
           store.abort_pending_save();
           if store.save_on_exit {
@@ -352,9 +362,18 @@ impl<R: Runtime> StoreCollection<R> {
   }
 }
 
-impl<R: Runtime> Resource for StoreCollection<R> {}
+impl<R, C> Resource for StoreCollection<R, C>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
+}
 
-impl<R: Runtime> fmt::Debug for StoreCollection<R> {
+impl<R, C> fmt::Debug for StoreCollection<R, C>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     f.debug_struct("StoreCollection")
       .field("default_save_strategy", &self.default_save_strategy)

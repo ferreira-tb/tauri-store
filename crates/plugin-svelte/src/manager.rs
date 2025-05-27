@@ -3,9 +3,9 @@
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
 
-use crate::svelte::Svelte;
-use tauri::{Manager, Runtime, State};
-use tauri_store::{Result, Store};
+use crate::svelte::{Svelte, SvelteMarker};
+use tauri::{Manager, Runtime};
+use tauri_store::{ManagerExt as _, Result, Store};
 
 /// Extension for the [`Manager`] trait providing access to the Svelte plugin.
 ///
@@ -15,22 +15,28 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   ///
   /// # Panics
   ///
-  /// Panics if the internal [store collection] is not in the [resources table].
+  /// Panics if the internal [store collection] is not yet being managed by Tauri.
   ///
-  /// This likely indicates that the method was called before the plugin was properly initialized.
+  /// This likely indicates that it was called before the plugin was properly initialized.
   ///
   /// [store collection]: https://docs.rs/tauri-store/latest/tauri_store/struct.StoreCollection.html
-  /// [resources table]: https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html
-  fn svelte(&self) -> State<Svelte<R>> {
-    self.app_handle().state::<Svelte<R>>()
+  fn svelte(&self) -> Svelte<R> {
+    Svelte(
+      self
+        .app_handle()
+        .store_collection_with_marker::<SvelteMarker>(),
+    )
   }
 
   /// Calls a closure with a mutable reference to the store with the given id.
   fn with_store<F, T>(&self, id: impl AsRef<str>, f: F) -> Result<T>
   where
-    F: FnOnce(&mut Store<R>) -> T,
+    F: FnOnce(&mut Store<R, SvelteMarker>) -> T,
   {
-    self.svelte().with_store(id, f)
+    self
+      .app_handle()
+      .store_collection_with_marker::<SvelteMarker>()
+      .with_store(id, f)
   }
 }
 

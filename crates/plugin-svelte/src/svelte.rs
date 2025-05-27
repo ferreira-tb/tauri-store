@@ -3,10 +3,14 @@
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
 
-use std::sync::Arc;
-use tauri::Runtime;
-use tauri_store::{Collection, StoreCollection};
+use tauri::{Runtime, State};
+use tauri_store::{Collection, CollectionMarker, StoreCollection};
 
 /// The Svelte plugin.
 #[derive(Collection)]
-pub struct Svelte<R: Runtime>(pub(crate) Arc<StoreCollection<R>>);
+pub struct Svelte<'a, R: Runtime>(pub(crate) State<'a, StoreCollection<R, SvelteMarker>>);
+
+/// Marker for the Svelte plugin.
+pub struct SvelteMarker;
+
+impl CollectionMarker for SvelteMarker {}

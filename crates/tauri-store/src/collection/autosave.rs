@@ -8,6 +8,8 @@ use tauri_store_utils::set_interval;
 use tokio::sync::Semaphore;
 use tokio::task::AbortHandle;
 
+use super::CollectionMarker;
+
 type AutosaveFn<R> = Box<dyn Fn(AppHandle<R>) -> BoxFuture<'static, ()> + Send + 'static>;
 
 pub(crate) struct Autosave {
@@ -25,11 +27,15 @@ impl Autosave {
     }
   }
 
-  pub fn start<R: Runtime>(&mut self, app: &AppHandle<R>) {
+  pub fn start<R, C>(&mut self, app: &AppHandle<R>)
+  where
+    R: Runtime,
+    C: CollectionMarker,
+  {
     self.stop();
     if let Some(duration) = self.duration {
       let semaphore = Arc::clone(&self.semaphore);
-      let abort_handle = set_interval(app, duration, save(semaphore));
+      let abort_handle = set_interval(app, duration, save::<R, C>(semaphore));
       self.abort_handle = Some(abort_handle);
     }
   }
@@ -45,7 +51,11 @@ impl Autosave {
   }
 }
 
-fn save<R: Runtime>(semaphore: Arc<Semaphore>) -> AutosaveFn<R> {
+fn save<R, C>(semaphore: Arc<Semaphore>) -> AutosaveFn<R>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
   Box::new(move |app| {
     let semaphore = Arc::clone(&semaphore);
     Box::pin(async move {
@@ -54,7 +64,7 @@ fn save<R: Runtime>(semaphore: Arc<Semaphore>) -> AutosaveFn<R> {
         .await
         .expect("semaphore will not be closed");
 
-      let _ = spawn_blocking(move || app.store_collection().save_all()).await;
+      let _ = spawn_blocking(move || app.store_collection_with_marker::<C>().save_all()).await;
     })
   })
 }

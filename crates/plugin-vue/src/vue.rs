@@ -3,10 +3,14 @@
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
 
-use std::sync::Arc;
-use tauri::Runtime;
-use tauri_store::{Collection, StoreCollection};
+use tauri::{Runtime, State};
+use tauri_store::{Collection, CollectionMarker, StoreCollection};
 
 /// The Vue plugin.
 #[derive(Collection)]
-pub struct Vue<R: Runtime>(pub(crate) Arc<StoreCollection<R>>);
+pub struct Vue<'a, R: Runtime>(pub(crate) State<'a, StoreCollection<R, VueMarker>>);
+
+/// Marker for the Vue plugin.
+pub struct VueMarker;
+
+impl CollectionMarker for VueMarker {}

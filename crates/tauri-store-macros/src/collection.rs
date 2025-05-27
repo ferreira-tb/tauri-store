@@ -1,21 +1,24 @@
 use proc_macro::TokenStream;
+use proc_macro2::{Ident, Span};
 use quote::quote;
 use syn::DeriveInput;
 
 #[allow(clippy::too_many_lines)]
 pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
   let name = &ast.ident;
+  let marker = format!("{name}Marker");
+  let marker_ident = Ident::new(&marker, Span::call_site());
+
   let stream = quote! {
     mod __impl_collection {
-      use super::#name;
+      use super::{#name, #marker_ident};
       use serde::de::DeserializeOwned;
       use std::path::{Path, PathBuf};
-      use std::sync::Arc;
       use std::time::Duration;
       use tauri::{AppHandle, Runtime};
       use tauri_store::prelude::*;
 
-      impl<R: Runtime> #name<R> {
+      impl<'a, R: Runtime> #name<'a, R> {
         /// Lists all the store ids.
         pub fn ids(&self) -> Vec<StoreId> {
           self.0.ids()
@@ -35,7 +38,7 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
         /// Calls a closure with a mutable reference to the store with the given id.
         pub fn with_store<F, T>(&self, id: impl AsRef<str>, f: F) -> Result<T>
         where
-          F: FnOnce(&mut Store<R>) -> T,
+          F: FnOnce(&mut Store<R, #marker_ident>) -> T,
         {
           self.0.with_store(id, f)
         }
@@ -206,12 +209,6 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
         pub(crate) fn unload_store(&self, id: &StoreId) -> Result<()> {
           self.0.unload_store(id)
         }
-      }
-    }
-
-    impl<R: Runtime> Clone for #name<R> {
-      fn clone(&self) -> Self {
-        Self(Arc::clone(&self.0))
       }
     }
   };

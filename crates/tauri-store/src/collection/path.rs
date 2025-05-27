@@ -1,3 +1,4 @@
+use super::marker::CollectionMarker;
 use super::StoreCollection;
 use crate::error::Result;
 use crate::io_err;
@@ -8,7 +9,11 @@ use std::path::{Path, PathBuf};
 use std::{fs, mem};
 use tauri::Runtime;
 
-impl<R: Runtime> StoreCollection<R> {
+impl<R, C> StoreCollection<R, C>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
   /// Directory where the stores are saved.
   pub fn path(&self) -> PathBuf {
     self.path.lock().unwrap().clone()
@@ -27,7 +32,7 @@ impl<R: Runtime> StoreCollection<R> {
     let resources = self
       .rids()
       .into_iter()
-      .map(|rid| StoreResource::get(&self.app, rid))
+      .map(|rid| StoreResource::<R, C>::get(&self.app, rid))
       .process_results(|res| res.collect_vec())
       .unwrap_or_default();
 
@@ -61,9 +66,10 @@ impl<R: Runtime> StoreCollection<R> {
   }
 }
 
-fn move_store<R>(store: &Store<R>, from: &Path, to: &Path) -> Result<()>
+fn move_store<R, C>(store: &Store<R, C>, from: &Path, to: &Path) -> Result<()>
 where
   R: Runtime,
+  C: CollectionMarker,
 {
   // Calling `Store::path` would be a deadlock!
   // We need to manually append the filename to the path.

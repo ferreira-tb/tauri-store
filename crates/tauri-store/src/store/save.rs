@@ -1,5 +1,6 @@
 use super::StoreId;
 use crate::manager::ManagerExt;
+use crate::CollectionMarker;
 use futures::future::BoxFuture;
 use serde::ser::SerializeTuple;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
@@ -26,21 +27,33 @@ impl<R: Runtime> SaveHandle<R> {
   }
 }
 
-pub(super) fn debounce<R: Runtime>(id: StoreId, duration: Duration) -> SaveHandle<R> {
-  SaveHandle(Box::new(Debounce::new(duration, save_handle(id))))
+pub(super) fn debounce<R, C>(id: StoreId, duration: Duration) -> SaveHandle<R>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
+  SaveHandle(Box::new(Debounce::new(duration, save_handle::<R, C>(id))))
 }
 
-pub(super) fn throttle<R: Runtime>(id: StoreId, duration: Duration) -> SaveHandle<R> {
-  SaveHandle(Box::new(Throttle::new(duration, save_handle(id))))
+pub(super) fn throttle<R, C>(id: StoreId, duration: Duration) -> SaveHandle<R>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
+  SaveHandle(Box::new(Throttle::new(duration, save_handle::<R, C>(id))))
 }
 
-fn save_handle<R: Runtime>(id: StoreId) -> SaveHandleFn<R> {
+fn save_handle<R, C>(id: StoreId) -> SaveHandleFn<R>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
   Box::new(move |app| {
     let id = id.clone();
     Box::pin(async move {
       let task = spawn_blocking(move || {
         app
-          .store_collection()
+          .store_collection_with_marker::<C>()
           .get_resource(&id)?
           .locked(|store| store.save_now())
       });

@@ -3,5 +3,14 @@
   "identifier": "default",
   "description": "Capability for the windows",
   "windows": ["*"],
-  "permissions": ["core:event:default", "pinia:default", "process:allow-exit", "shell:allow-open"]
+  "permissions": [
+    "core:event:default",
+    "pinia:default",
+    "svelte:default",
+    "valtio:default",
+    "vue:default",
+    "zustand:default",
+    "process:allow-exit",
+    "shell:allow-open"
+  ]
 }

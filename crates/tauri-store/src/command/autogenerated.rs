@@ -4,7 +4,7 @@
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
 
 use crate::manager::ManagerExt;
-use crate::{with_store, Result, SaveStrategy, StoreId, StoreOptions, StoreState};
+use crate::{Result, SaveStrategy, StoreId, StoreOptions, StoreState};
 use std::path::PathBuf;
 use std::time::Duration;
 use tauri::async_runtime::spawn_blocking;
@@ -47,7 +47,9 @@ pub(crate) async fn get_store_path<R>(app: AppHandle<R>, id: StoreId) -> Result<
 where
   R: Runtime,
 {
-  with_store(&app, id, |store| store.path())
+  app
+    .store_collection()
+    .with_store(id, |store| store.path())
 }
 
 #[tauri::command]
@@ -55,7 +57,9 @@ pub(crate) async fn get_save_strategy<R>(app: AppHandle<R>, id: StoreId) -> Resu
 where
   R: Runtime,
 {
-  with_store(&app, id, |store| store.save_strategy())
+  app
+    .store_collection()
+    .with_store(id, |store| store.save_strategy())
 }
 
 #[tauri::command]
@@ -71,7 +75,12 @@ pub(crate) async fn load<R>(app: AppHandle<R>, id: StoreId) -> Result<StoreState
 where
   R: Runtime,
 {
-  spawn_blocking(move || with_store(&app, id, |store| store.state().clone())).await?
+  spawn_blocking(move || {
+    app
+      .store_collection()
+      .with_store(id, |store| store.state().clone())
+  })
+  .await?
 }
 
 #[tauri::command]
@@ -81,7 +90,9 @@ where
 {
   let app = window.app_handle();
   let label = window.label().to_owned();
-  with_store(app, id, move |store| store.patch_with_source(state, label))?
+  app
+    .store_collection()
+    .with_store(id, move |store| store.patch_with_source(state, label))?
 }
 
 #[tauri::command]
@@ -159,7 +170,9 @@ pub(crate) async fn set_save_strategy<R>(
 where
   R: Runtime,
 {
-  with_store(&app, id, |store| store.set_save_strategy(strategy))
+  app
+    .store_collection()
+    .with_store(id, |store| store.set_save_strategy(strategy))
 }
 
 #[tauri::command]
@@ -173,9 +186,11 @@ where
 {
   let app = window.app_handle();
   let label = window.label().to_owned();
-  with_store(app, id, move |store| {
-    store.set_options_with_source(options, label)
-  })?
+  app
+    .store_collection()
+    .with_store(id, move |store| {
+      store.set_options_with_source(options, label)
+    })?
 }
 
 #[tauri::command]

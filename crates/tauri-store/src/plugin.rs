@@ -1,3 +1,4 @@
+use crate::collection::DefaultMarker;
 use crate::command;
 use crate::error::BoxResult;
 use crate::manager::ManagerExt;
@@ -8,10 +9,13 @@ pub use crate::collection::StoreCollectionBuilder as Builder;
 
 /// Initializes the store plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
-  build(Builder::default())
+  build(Builder::<R, DefaultMarker>::default())
 }
 
-pub(crate) fn build<R: Runtime>(builder: Builder<R>) -> TauriPlugin<R> {
+pub(crate) fn build<R>(builder: Builder<R, DefaultMarker>) -> TauriPlugin<R>
+where
+  R: Runtime,
+{
   tauri::plugin::Builder::new("tauri-store")
     .on_event(on_event)
     .setup(|app, _| setup(app, builder))
@@ -40,7 +44,7 @@ pub(crate) fn build<R: Runtime>(builder: Builder<R>) -> TauriPlugin<R> {
     .build()
 }
 
-fn setup<R>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()>
+fn setup<R>(app: &AppHandle<R>, builder: Builder<R, DefaultMarker>) -> BoxResult<()>
 where
   R: Runtime,
 {

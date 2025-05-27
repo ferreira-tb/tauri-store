@@ -2689,7 +2689,11 @@ dependencies = [
  "tauri-plugin-pinia",
  "tauri-plugin-process",
  "tauri-plugin-shell",
+ "tauri-plugin-svelte",
+ "tauri-plugin-valtio",
+ "tauri-plugin-vue",
  "tauri-plugin-window-state",
+ "tauri-plugin-zustand",
 ]
 
 [[package]]

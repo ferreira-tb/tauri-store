@@ -1,6 +1,6 @@
-use crate::__SNAKE_PLUGIN_TITLE__::__PASCAL_PLUGIN_TITLE__;
-use tauri::{Manager, Runtime, State};
-use tauri_store::{Result, Store};
+use crate::__SNAKE_PLUGIN_TITLE__::{__PASCAL_PLUGIN_TITLE__, __PASCAL_PLUGIN_TITLE__Marker};
+use tauri::{Manager, Runtime};
+use tauri_store::{ManagerExt as _, Result, Store};
 
 /// Extension for the [`Manager`] trait providing access to the __PASCAL_PLUGIN_TITLE__ plugin.
 ///
@@ -10,24 +10,28 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   ///
   /// # Panics
   ///
-  /// Panics if the internal [store collection] is not in the [resources table].
+  /// Panics if the internal [store collection] is not yet being managed by Tauri.
   ///
-  /// This likely indicates that the method was called before the plugin was properly initialized.
+  /// This likely indicates that it was called before the plugin was properly initialized.
   ///
   /// [store collection]: https://docs.rs/tauri-store/latest/tauri_store/struct.StoreCollection.html
-  /// [resources table]: https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html
-  fn __SNAKE_PLUGIN_TITLE__(&self) -> State<__PASCAL_PLUGIN_TITLE__<R>> {
-    self
-      .app_handle()
-      .state::<__PASCAL_PLUGIN_TITLE__<R>>()
+  fn __SNAKE_PLUGIN_TITLE__(&self) -> __PASCAL_PLUGIN_TITLE__<R> {
+    __PASCAL_PLUGIN_TITLE__(
+      self
+        .app_handle()
+        .store_collection_with_marker::<__PASCAL_PLUGIN_TITLE__Marker>(),
+    )
   }
 
   /// Calls a closure with a mutable reference to the store with the given id.
   fn with_store<F, T>(&self, id: impl AsRef<str>, f: F) -> Result<T>
   where
-    F: FnOnce(&mut Store<R>) -> T,
+    F: FnOnce(&mut Store<R, __PASCAL_PLUGIN_TITLE__Marker>) -> T,
   {
-    self.__SNAKE_PLUGIN_TITLE__().with_store(id, f)
+    self
+      .app_handle()
+      .store_collection_with_marker::<__PASCAL_PLUGIN_TITLE__Marker>()
+      .with_store(id, f)
   }
 }
 

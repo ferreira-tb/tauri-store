@@ -1,4 +1,4 @@
-use crate::collection::StoreCollection;
+use crate::collection::{CollectionMarker, StoreCollection};
 use crate::error::Result;
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
@@ -34,9 +34,10 @@ impl Meta {
     read(&meta_file_path(app, name)?)
   }
 
-  pub(crate) fn write<R>(collection: &StoreCollection<R>) -> Result<()>
+  pub(crate) fn write<R, C>(collection: &StoreCollection<R, C>) -> Result<()>
   where
     R: Runtime,
+    C: CollectionMarker,
   {
     let path = meta_file_path(&collection.app, &collection.name)?;
     let mut meta = read(&path)?;
@@ -92,9 +93,10 @@ where
 }
 
 #[cfg(feature = "unstable-migration")]
-fn migration_history<R>(collection: &StoreCollection<R>) -> MigrationHistory
+fn migration_history<R, C>(collection: &StoreCollection<R, C>) -> MigrationHistory
 where
   R: Runtime,
+  C: CollectionMarker,
 {
   collection
     .migrator
