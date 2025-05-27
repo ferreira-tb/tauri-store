@@ -1,7 +1,7 @@
 {
   "name": "example-migration",
   "type": "module",
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.11.0",
   "private": true,
   "scripts": {
     "vite:build": "vite build",
@@ -10,7 +10,7 @@
   "devDependencies": {
     "@tauri-apps/api": "^2.5.0",
     "@tauri-apps/plugin-process": "^2.2.1",
-    "@tb-dev/utils": "^6.0.4",
+    "@tb-dev/utils": "^7.0.1",
     "tauri-store": "workspace:*"
   }
 }

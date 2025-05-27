@@ -56,6 +56,10 @@ export default defineConfig({
             link: 'https://tb.dev.br/tauri-store/js-docs/plugin-valtio',
           },
           {
+            text: '@tauri-store/vue',
+            link: 'https://tb.dev.br/tauri-store/js-docs/plugin-vue',
+          },
+          {
             text: '@tauri-store/zustand',
             link: 'https://tb.dev.br/tauri-store/js-docs/plugin-zustand',
           },
@@ -81,6 +85,10 @@ export default defineConfig({
             link: 'https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio',
           },
           {
+            text: 'tauri-plugin-vue',
+            link: 'https://docs.rs/tauri-plugin-vue/latest/tauri_plugin_vue',
+          },
+          {
             text: 'tauri-plugin-zustand',
             link: 'https://docs.rs/tauri-plugin-zustand/latest/tauri_plugin_zustand',
           },
@@ -104,6 +112,10 @@ export default defineConfig({
           {
             text: '@tauri-store/valtio',
             link: '/plugin-valtio/changelog',
+          },
+          {
+            text: '@tauri-store/vue',
+            link: '/plugin-vue/changelog',
           },
           {
             text: '@tauri-store/zustand',
@@ -164,6 +176,18 @@ export default defineConfig({
             { text: 'Synchronization', link: '/plugin-valtio/guide/synchronization' },
             { text: 'Accessing from Rust', link: '/plugin-valtio/guide/accessing-from-rust' },
             { text: 'Lifecycle hooks', link: '/plugin-valtio/guide/lifecycle-hooks' },
+          ],
+        },
+      ],
+      '/plugin-vue/': [
+        {
+          text: 'Guide',
+          items: [
+            { text: 'Getting started', link: '/plugin-vue/guide/getting-started' },
+            { text: 'Persisting state', link: '/plugin-vue/guide/persisting-state' },
+            { text: 'Synchronization', link: '/plugin-vue/guide/synchronization' },
+            { text: 'Accessing from Rust', link: '/plugin-vue/guide/accessing-from-rust' },
+            { text: 'Lifecycle hooks', link: '/plugin-vue/guide/lifecycle-hooks' },
           ],
         },
       ],

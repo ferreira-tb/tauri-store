@@ -4,7 +4,7 @@
   "description": "Persistent stores for Tauri",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.11.0",
   "homepage": "https://tb.dev.br/tauri-store",
   "license": "MIT",
   "funding": "https://github.com/sponsors/ferreira-tb",
@@ -47,6 +47,6 @@
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
     "@tauri-store/shared": "workspace:*",
-    "alien-signals": "^2.0.4"
+    "alien-signals": "^2.0.5"
   }
 }

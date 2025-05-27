@@ -18,7 +18,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "conventionalCommits.promptScopes": true,
-  "conventionalCommits.scopes": ["core", "pinia", "svelte", "valtio", "zustand"],
+  "conventionalCommits.scopes": ["core", "pinia", "svelte", "valtio", "vue", "zustand"],
   "files.associations": {
     "*.css": "tailwindcss"
   },

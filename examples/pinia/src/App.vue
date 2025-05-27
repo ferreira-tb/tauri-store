@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import '../../assets/style.css';
 import { onMounted } from 'vue';
 import { printStore } from './commands';
 import { onKeyDown } from '@vueuse/core';

@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [dts({ rollupTypes: true })],
+  plugins: [dts({ rollupTypes: false })],
   build: {
     outDir: 'dist',
     emptyOutDir: true,

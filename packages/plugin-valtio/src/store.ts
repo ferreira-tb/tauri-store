@@ -139,6 +139,7 @@ export function toStore<S extends State>(
 ): StoreBuilderReturn<S> {
   const _store = new Store(id, proxy, options);
   return {
+    id: _store.id,
     state: proxy,
     getPath: () => commands.getStorePath(_store.id),
     save: () => commands.save(_store.id),

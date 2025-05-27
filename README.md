@@ -55,6 +55,7 @@ Currently, the following plugins are available:
 | [@tauri-store/pinia](https://tb.dev.br/tauri-store/plugin-pinia/guide/getting-started)     | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fpinia.svg)](https://www.npmjs.com/package/@tauri-store/pinia)     | Vue, Nuxt  |
 | [@tauri-store/svelte](https://tb.dev.br/tauri-store/plugin-svelte/guide/getting-started)   | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fsvelte.svg)](https://www.npmjs.com/package/@tauri-store/svelte)   | Svelte     |
 | [@tauri-store/valtio](https://tb.dev.br/tauri-store/plugin-valtio/guide/getting-started)   | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fvaltio.svg)](https://www.npmjs.com/package/@tauri-store/valtio)   | React      |
+| [@tauri-store/vue](https://tb.dev.br/tauri-store/plugin-vue/guide/getting-started)         | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fvue.svg)](https://www.npmjs.com/package/@tauri-store/vue)         | Vue, Nuxt  |
 | [@tauri-store/zustand](https://tb.dev.br/tauri-store/plugin-zustand/guide/getting-started) | [![npm](https://img.shields.io/npm/v/%40tauri-store%2Fzustand.svg)](https://www.npmjs.com/package/@tauri-store/zustand) | React      |
 
 ## Examples

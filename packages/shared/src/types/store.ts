@@ -129,6 +129,9 @@ export type StoreOptions<S extends State = State> = StoreBackendOptions & StoreF
 
 /** A contract that a store must adhere to in order to be considered a valid implementation. */
 export interface TauriStoreContract {
+  /** Store id. */
+  readonly id: string;
+
   /** Path where the store is saved. */
   readonly getPath: () => Promise<string>;
   /** Saves the store to the disk. */
