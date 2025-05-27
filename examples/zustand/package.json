@@ -13,10 +13,10 @@
     "@tauri-apps/plugin-process": "^2.2.1",
     "@tauri-apps/plugin-shell": "^2.2.1",
     "@tauri-store/zustand": "workspace:*",
-    "@tb-dev/utils": "^6.0.4",
-    "@vitejs/plugin-react": "^4.4.1",
+    "@tb-dev/utils": "^7.0.1",
+    "@vitejs/plugin-react": "^4.5.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "zustand": "^5.0.4"
+    "zustand": "^5.0.5"
   }
 }

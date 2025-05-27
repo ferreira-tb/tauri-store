@@ -47,6 +47,6 @@
   "dependencies": {
     "@tauri-apps/api": "^2.0.3",
     "@tauri-store/shared": "workspace:*",
-    "alien-signals": "^2.0.4"
+    "alien-signals": "^2.0.5"
   }
 }
