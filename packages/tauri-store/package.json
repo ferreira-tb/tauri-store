@@ -1,6 +1,6 @@
 {
   "name": "tauri-store",
-  "version": "0.10.5",
+  "version": "0.11.0",
   "description": "Persistent stores for Tauri",
   "type": "module",
   "private": false,

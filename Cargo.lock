@@ -1608,12 +1608,13 @@ dependencies = [
 
 [[package]]
 name = "hyper-util"
-version = "0.1.12"
+version = "0.1.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf9f1e950e0d9d1d3c47184416723cf29c0d1f93bd8cccf37e4beb6b44f31710"
+checksum = "b1c293b6b3d21eca78250dc7dbebd6b9210ec5530e038cbfe0661b5c47ab06e8"
 dependencies = [
  "bytes",
  "futures-channel",
+ "futures-core",
  "futures-util",
  "http",
  "http-body",
@@ -3730,7 +3731,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-pinia"
-version = "3.4.0"
+version = "3.5.0"
 dependencies = [
  "serde",
  "tauri",
@@ -3771,16 +3772,6 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-svelte"
-version = "2.3.0"
-dependencies = [
- "serde",
- "tauri",
- "tauri-plugin",
- "tauri-store",
-]
-
-[[package]]
-name = "tauri-plugin-valtio"
 version = "2.4.0"
 dependencies = [
  "serde",
@@ -3790,8 +3781,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "tauri-plugin-valtio"
+version = "2.5.0"
+dependencies = [
+ "serde",
+ "tauri",
+ "tauri-plugin",
+ "tauri-store",
+]
+
+[[package]]
 name = "tauri-plugin-vue"
-version = "0.0.3"
+version = "0.1.0"
 dependencies = [
  "serde",
  "tauri",
@@ -3816,7 +3817,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-zustand"
-version = "0.1.2"
+version = "0.2.0"
 dependencies = [
  "serde",
  "tauri",
@@ -3875,7 +3876,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store"
-version = "0.10.5"
+version = "0.11.0"
 dependencies = [
  "anyhow",
  "dashmap",
@@ -3909,7 +3910,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-macros"
-version = "0.10.5"
+version = "0.11.0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3918,7 +3919,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-utils"
-version = "0.4.2"
+version = "0.5.0"
 dependencies = [
  "bon",
  "semver",

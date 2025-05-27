@@ -1,7 +1,7 @@
 [package]
 name = "tauri-plugin-svelte"
 description = "Persistent Svelte stores for Tauri"
-version = "2.3.0"
+version = "2.4.0"
 documentation = "https://docs.rs/tauri-plugin-svelte"
 homepage = "https://tb.dev.br/tauri-store/plugin-svelte/guide/getting-started"
 repository = "https://github.com/ferreira-tb/tauri-store"
@@ -34,7 +34,7 @@ serde = "1.0"
 tauri = "2"
 
 [dependencies.tauri-store]
-version = "0.10"
+version = "0.11"
 path = "../tauri-store"
 default-features = false
 features = ["derive"]
