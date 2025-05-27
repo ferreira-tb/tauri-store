@@ -3,7 +3,7 @@ import type { State, StoreOptions } from '@tauri-store/shared';
 export type {
   LooseTimeStrategyKind,
   MaybePromise,
-  Nil,
+  nil,
   Option,
   State,
   StoreBackendOptions,

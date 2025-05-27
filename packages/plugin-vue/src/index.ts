@@ -1,3 +1,6 @@
+export { storeRef, type StoreRefOptions } from './ref';
+export { createStore, globalStore, setGlobalStoreOptions, store, type Store } from './store';
+
 export {
   clearAutosave,
   getDefaultSaveStrategy,
@@ -15,3 +18,22 @@ export {
   setStoreCollectionPath,
   setStoreOptions,
 } from './commands';
+
+export type {
+  LooseTimeStrategyKind,
+  MaybePromise,
+  nil,
+  Option,
+  State,
+  StoreBackendOptions,
+  StoreFrontendOptions,
+  StoreHooks,
+  StoreKeyFilter,
+  StoreKeyFilterStrategy,
+  StoreOptions,
+  StoreRef,
+  TauriPluginVueStoreOptions,
+  TauriStoreContract,
+  TimeStrategy,
+  TimeStrategyKind,
+} from './types';

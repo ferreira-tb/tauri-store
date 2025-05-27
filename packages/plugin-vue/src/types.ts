@@ -1,5 +1,5 @@
-import type { WatchOptions } from 'vue';
-import type { StoreOptions } from '@tauri-store/shared';
+import type { Ref, WatchOptions } from 'vue';
+import type { State, StoreOptions, TauriStoreContract } from '@tauri-store/shared';
 
 export type {
   LooseTimeStrategyKind,
@@ -19,9 +19,9 @@ export type {
 } from '@tauri-store/shared';
 
 /**
- * Options for the Pinia plugin.
+ * Options for the store.
  */
-export interface TauriPluginPiniaOptions extends StoreOptions {
+export interface TauriPluginVueStoreOptions<S extends State> extends StoreOptions<S> {
   /**
    * @see https://vuejs.org/api/reactivity-core.html#watch
    * @default true
@@ -35,7 +35,4 @@ export interface TauriPluginPiniaOptions extends StoreOptions {
   readonly flush?: WatchOptions['flush'];
 }
 
-/**
- * Options for the Pinia store.
- */
-export type TauriPluginPiniaStoreOptions = TauriPluginPiniaOptions;
+export type StoreRef<T> = Ref<T> & { $tauri: TauriStoreContract };

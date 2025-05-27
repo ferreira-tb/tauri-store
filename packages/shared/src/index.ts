@@ -24,7 +24,7 @@ export type {
   ConfigChangePayload,
   Fn,
   MaybePromise,
-  Nil,
+  nil,
   Option,
   State,
   StateChangePayload,

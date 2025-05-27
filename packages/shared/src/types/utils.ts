@@ -5,10 +5,10 @@ export type Fn = () => void;
 export type MaybePromise<T> = T | PromiseLike<T>;
 
 /** Null or undefined. */
-export type Nil = null | undefined;
+export type nil = null | undefined;
 
 /** Something may be nullish. */
-export type Option<T> = T | Nil;
+export type Option<T> = T | nil;
 
 /** Removes the readonly modifier from all properties of T. */
 export type Writable<T> = { -readonly [P in keyof T]: T[P] };

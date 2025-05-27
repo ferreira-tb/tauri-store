@@ -31,6 +31,7 @@ export function createPlugin(pluginOptions: TauriPluginPiniaOptions = {}) {
   return function (ctx: PiniaPluginContext) {
     const store = new Store(ctx, pluginOptions);
     const $tauri: TauriStoreContract = {
+      id: store.id,
       getPath: () => commands.getStorePath(store.id),
       save: () => commands.save(store.id),
       saveAll: () => commands.saveAll(),

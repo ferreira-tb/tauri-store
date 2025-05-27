@@ -22,7 +22,7 @@ export type {
   CloneFn,
   LooseTimeStrategyKind,
   MaybePromise,
-  Nil,
+  nil,
   Option,
   State,
   StoreBackendOptions,
