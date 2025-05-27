@@ -14,7 +14,7 @@
     "@tauri-apps/plugin-shell": "^2.2.1",
     "@tauri-store/pinia": "workspace:*",
     "@vitejs/plugin-vue": "^5.2.4",
-    "@vueuse/core": "^13.2.0",
+    "@vueuse/core": "^13.3.0",
     "pinia": "^3.0.2",
     "vue": "^3.5.15",
     "vue-tsc": "^2.2.10"

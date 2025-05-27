@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@tb-dev/utils": "^7.0.1",
-    "@vueuse/core": "^13.2.0",
+    "@vueuse/core": "^13.3.0",
     "change-case": "^5.4.4",
     "vitepress": "^2.0.0-alpha.5",
     "vue": "^3.5.15"
