@@ -11,6 +11,18 @@ outline: 2
 
 _Nothing yet._
 
+## 0.11.0
+
+The breaking changes in this release will only affect you if you are developing your own plugin using `tauri-store` as the backend.
+
+### Breaking Changes
+
+- Introduce a [`CollectionMarker`](https://docs.rs/tauri-store/0.11.0/tauri_store/trait.CollectionMarker.html) generic for the [`Store`](https://docs.rs/tauri-store/0.11.0/tauri_store/struct.Store.html) and [`StoreCollection`](https://docs.rs/tauri-store/0.11.0/tauri_store/struct.StoreCollection.html) types to enable plugin interoperability.
+
+### Features
+
+- Add [`store_collection_with_marker`](https://docs.rs/tauri-store/0.11.0/tauri_store/trait.ManagerExt.html#method.store_collection_with_marker).
+
 ## 0.10.5
 
 ### Features

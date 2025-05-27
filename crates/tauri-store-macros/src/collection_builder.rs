@@ -7,10 +7,9 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
   let name = &ast.ident;
   let stream = quote! {
     mod __impl_collection_builder {
-      use super::#name;
+      use super::{#name, Marker};
       use std::collections::HashSet;
       use std::path::Path;
-      use std::sync::Arc;
       use std::time::Duration;
       use tauri::{AppHandle, Manager as _, Runtime};
       use tauri_store::prelude::*;
@@ -42,7 +41,7 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
         #[must_use]
         pub fn on_load<F>(mut self, f: F) -> Self
         where
-          F: Fn(&Store<R>) -> Result<()> + Send + Sync + 'static,
+          F: Fn(&Store<R, Marker>) -> Result<()> + Send + Sync + 'static,
         {
           self.on_load = Some(Box::new(f));
           self
@@ -124,31 +123,31 @@ pub fn impl_collection_builder(ast: &DeriveInput) -> TokenStream {
           self
         }
 
-        pub(super) fn build_collection(mut self, app: &AppHandle<R>) -> Result<Arc<StoreCollection<R>>> {
-          let mut collection = StoreCollection::builder()
+        pub(super) fn build_collection(mut self, app: &AppHandle<R>) -> Result<()> {
+          let mut builder = StoreCollection::<R, Marker>::builder()
             .default_save_strategy(self.default_save_strategy)
             .pretty(self.pretty)
             .save_denylist(&self.save_denylist)
             .sync_denylist(&self.sync_denylist);
 
           if let Some(path) = self.path {
-            collection = collection.path(path);
+            builder = builder.path(path);
           }
 
           if let Some(on_load) = self.on_load {
-            collection = collection.on_load(on_load);
+            builder = builder.on_load(on_load);
           }
 
           if let Some(duration) = self.autosave {
-            collection = collection.autosave(duration);
+            builder = builder.autosave(duration);
           };
 
           #[cfg(feature = "unstable-migration")]
           {
-            collection = collection.migrator(self.migrator);
+            builder = builder.migrator(self.migrator);
           }
 
-          collection.build(app, env!("CARGO_PKG_NAME"))
+          builder.build(app, env!("CARGO_PKG_NAME"))
         }
       }
 

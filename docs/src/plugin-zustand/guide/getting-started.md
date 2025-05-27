@@ -19,7 +19,7 @@ Install the [Rust crate](https://crates.io/crates/tauri-plugin-zustand) by addin
 
 ```toml [src-tauri/Cargo.toml]
 [dependencies]
-tauri-plugin-zustand = "0.1"
+tauri-plugin-zustand = "0.2"
 ```
 
 :::

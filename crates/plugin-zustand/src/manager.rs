@@ -3,9 +3,9 @@
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
 
-use crate::zustand::Zustand;
-use tauri::{Manager, Runtime, State};
-use tauri_store::{Result, Store};
+use crate::zustand::{Zustand, ZustandMarker};
+use tauri::{Manager, Runtime};
+use tauri_store::{ManagerExt as _, Result, Store};
 
 /// Extension for the [`Manager`] trait providing access to the Zustand plugin.
 ///
@@ -15,22 +15,28 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   ///
   /// # Panics
   ///
-  /// Panics if the internal [store collection] is not in the [resources table].
+  /// Panics if the internal [store collection] is not yet being managed by Tauri.
   ///
-  /// This likely indicates that the method was called before the plugin was properly initialized.
+  /// This likely indicates that it was called before the plugin was properly initialized.
   ///
   /// [store collection]: https://docs.rs/tauri-store/latest/tauri_store/struct.StoreCollection.html
-  /// [resources table]: https://docs.rs/tauri/latest/tauri/struct.ResourceTable.html
-  fn zustand(&self) -> State<Zustand<R>> {
-    self.app_handle().state::<Zustand<R>>()
+  fn zustand(&self) -> Zustand<R> {
+    Zustand(
+      self
+        .app_handle()
+        .store_collection_with_marker::<ZustandMarker>(),
+    )
   }
 
   /// Calls a closure with a mutable reference to the store with the given id.
   fn with_store<F, T>(&self, id: impl AsRef<str>, f: F) -> Result<T>
   where
-    F: FnOnce(&mut Store<R>) -> T,
+    F: FnOnce(&mut Store<R, ZustandMarker>) -> T,
   {
-    self.zustand().with_store(id, f)
+    self
+      .app_handle()
+      .store_collection_with_marker::<ZustandMarker>()
+      .with_store(id, f)
   }
 }
 

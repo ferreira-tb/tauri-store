@@ -1,3 +1,5 @@
+use crate::CollectionMarker;
+
 use super::save::SaveStrategy;
 use super::Store;
 use serde::{Deserialize, Serialize};
@@ -13,8 +15,12 @@ pub struct StoreOptions {
   pub save_strategy: Option<SaveStrategy>,
 }
 
-impl<R: Runtime> From<&Store<R>> for StoreOptions {
-  fn from(store: &Store<R>) -> Self {
+impl<R, C> From<&Store<R, C>> for StoreOptions
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
+  fn from(store: &Store<R, C>) -> Self {
     Self {
       save_on_exit: Some(store.save_on_exit),
       save_on_change: Some(store.save_on_change),
@@ -24,9 +30,10 @@ impl<R: Runtime> From<&Store<R>> for StoreOptions {
 }
 
 #[allow(clippy::needless_pass_by_value)]
-pub(super) fn set_options<R>(store: &mut Store<R>, options: StoreOptions)
+pub(super) fn set_options<R, C>(store: &mut Store<R, C>, options: StoreOptions)
 where
   R: Runtime,
+  C: CollectionMarker,
 {
   if let Some(enabled) = options.save_on_exit {
     store.save_on_exit = enabled;

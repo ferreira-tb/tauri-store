@@ -8,52 +8,28 @@ use std::env::current_dir;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, LazyLock, OnceLock};
 use tauri::test::{mock_app, MockRuntime};
-use tauri::Manager;
-use tauri_store::{SaveStrategy, Store, StoreCollection, StoreId};
+use tauri::{AppHandle, Manager};
+use tauri_store::{DefaultMarker, ManagerExt, SaveStrategy, Store, StoreCollection, StoreId};
 use tokio::fs;
-use tokio::sync::{Notify, OwnedSemaphorePermit as Permit, Semaphore};
+use tokio::sync::{Notify, Semaphore, SemaphorePermit};
 use tokio::time::{sleep, timeout, Duration};
 
 static STORE_ID: LazyLock<StoreId> = LazyLock::new(|| StoreId::from("store"));
 
 static TEMP_DIR: OnceLock<PathBuf> = OnceLock::new();
 static PATH: LazyLock<PathBuf> = LazyLock::new(default_path);
-static CONTEXT: LazyLock<Context> = LazyLock::new(Context::new);
 
-struct Context {
-  collection: Arc<StoreCollection<MockRuntime>>,
-  semaphore: Arc<Semaphore>,
-}
+static SEMAPHORE: Semaphore = Semaphore::const_new(1);
+static HANDLE: LazyLock<AppHandle<MockRuntime>> = LazyLock::new(|| {
+  let app = mock_app();
+  let handle = app.app_handle();
+  StoreCollection::<_, DefaultMarker>::builder()
+    .path(&*PATH)
+    .build(app.app_handle(), env!("CARGO_PKG_NAME"))
+    .unwrap();
 
-impl Context {
-  fn new() -> Self {
-    let app = mock_app();
-    let collection = StoreCollection::builder()
-      .path(&*PATH)
-      .build(app.app_handle(), env!("CARGO_PKG_NAME"))
-      .unwrap();
-
-    Self {
-      collection,
-      semaphore: Arc::new(Semaphore::new(1)),
-    }
-  }
-
-  async fn acquire_permit(&self) -> Result<Permit> {
-    let permit = Arc::clone(&self.semaphore)
-      .acquire_owned()
-      .await?;
-
-    self.collection.unload_store(&STORE_ID)?;
-
-    let temp_dir = temp_dir();
-    if fs::try_exists(temp_dir).await? {
-      fs::remove_dir_all(temp_dir).await?;
-    }
-
-    Ok(permit)
-  }
-}
+  handle.clone()
+});
 
 #[derive(Default, Deserialize)]
 struct Foo {
@@ -400,17 +376,31 @@ async fn is_empty() {
   .await;
 }
 
-async fn with_store<F, T>(f: F) -> (T, Permit)
+async fn with_store<'a, F, T>(f: F) -> (T, SemaphorePermit<'a>)
 where
-  F: FnOnce(&mut Store<MockRuntime>) -> T,
+  F: FnOnce(&mut Store<MockRuntime, DefaultMarker>) -> T,
 {
-  let permit = CONTEXT.acquire_permit().await.unwrap();
-  let value = CONTEXT
-    .collection
+  let permit = acquire_permit().await.unwrap();
+  let value = HANDLE
+    .store_collection()
     .with_store(&*STORE_ID, f)
     .unwrap();
 
   (value, permit)
+}
+
+async fn acquire_permit<'a>() -> Result<SemaphorePermit<'a>> {
+  let permit = SEMAPHORE.acquire().await?;
+  HANDLE
+    .store_collection()
+    .unload_store(&STORE_ID)?;
+
+  let temp_dir = temp_dir();
+  if fs::try_exists(temp_dir).await? {
+    fs::remove_dir_all(temp_dir).await?;
+  }
+
+  Ok(permit)
 }
 
 pub fn assert_exists(path: &Path, yes: bool) {

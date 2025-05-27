@@ -5,6 +5,7 @@ mod save;
 mod state;
 mod watch;
 
+use crate::collection::CollectionMarker;
 use crate::error::Result;
 use crate::manager::ManagerExt;
 use options::set_options;
@@ -13,6 +14,7 @@ use serde::de::DeserializeOwned;
 use serde_json::{json, Value as Json};
 use std::collections::HashMap;
 use std::fmt;
+use std::marker::PhantomData;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, OnceLock};
 use tauri::async_runtime::spawn_blocking;
@@ -37,10 +39,14 @@ const FILE_EXTENSION: &str = "dev.json";
 #[cfg(not(debug_assertions))]
 const FILE_EXTENSION: &str = "json";
 
-type ResourceTuple<R> = (ResourceId, Arc<StoreResource<R>>);
+type ResourceTuple<R, C> = (ResourceId, Arc<StoreResource<R, C>>);
 
 /// A key-value store that can persist its state to disk.
-pub struct Store<R: Runtime> {
+pub struct Store<R, C>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
   app: AppHandle<R>,
   pub(crate) id: StoreId,
   state: StoreState,
@@ -50,12 +56,17 @@ pub struct Store<R: Runtime> {
   debounce_save_handle: OnceLock<SaveHandle<R>>,
   throttle_save_handle: OnceLock<SaveHandle<R>>,
   watchers: HashMap<WatcherId, Watcher<R>>,
+  phantom: PhantomData<C>,
 }
 
-impl<R: Runtime> Store<R> {
-  pub(crate) fn load(app: &AppHandle<R>, id: impl AsRef<str>) -> Result<ResourceTuple<R>> {
+impl<R, C> Store<R, C>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
+  pub(crate) fn load(app: &AppHandle<R>, id: impl AsRef<str>) -> Result<ResourceTuple<R, C>> {
     let id = StoreId::from(id.as_ref());
-    let path = store_path(app, &id);
+    let path = store_path::<R, C>(app, &id);
     let state = read_file(&path).call()?;
 
     #[allow(unused_mut)]
@@ -69,6 +80,7 @@ impl<R: Runtime> Store<R> {
       debounce_save_handle: OnceLock::new(),
       throttle_save_handle: OnceLock::new(),
       watchers: HashMap::new(),
+      phantom: PhantomData,
     };
 
     #[cfg(feature = "unstable-migration")]
@@ -81,7 +93,7 @@ impl<R: Runtime> Store<R> {
   fn run_pending_migrations(&mut self, app: &AppHandle<R>) -> Result<()> {
     use crate::meta::Meta;
 
-    let collection = app.store_collection();
+    let collection = app.store_collection_with_marker::<C>();
     let result = collection
       .migrator
       .lock()
@@ -107,7 +119,7 @@ impl<R: Runtime> Store<R> {
 
   /// Path to the store file.
   pub fn path(&self) -> PathBuf {
-    store_path(&self.app, &self.id)
+    store_path::<R, C>(&self.app, &self.id)
   }
 
   /// Gets a handle to the application instance.
@@ -266,13 +278,13 @@ impl<R: Runtime> Store<R> {
       SaveStrategy::Debounce(duration) => {
         self
           .debounce_save_handle
-          .get_or_init(|| debounce(self.id.clone(), duration))
+          .get_or_init(|| debounce::<R, C>(self.id.clone(), duration))
           .call(&self.app);
       }
       SaveStrategy::Throttle(duration) => {
         self
           .throttle_save_handle
-          .get_or_init(|| throttle(self.id.clone(), duration))
+          .get_or_init(|| throttle::<R, C>(self.id.clone(), duration))
           .call(&self.app);
       }
     }
@@ -282,7 +294,7 @@ impl<R: Runtime> Store<R> {
 
   /// Save the store immediately, ignoring the save strategy.
   pub fn save_now(&self) -> Result<()> {
-    let collection = self.app.store_collection();
+    let collection = self.app.store_collection_with_marker::<C>();
     if collection
       .save_denylist
       .as_ref()
@@ -314,9 +326,12 @@ impl<R: Runtime> Store<R> {
 
   /// Current save strategy used by this store.
   pub fn save_strategy(&self) -> SaveStrategy {
-    self
-      .save_strategy
-      .unwrap_or_else(|| self.app.store_collection().default_save_strategy)
+    self.save_strategy.unwrap_or_else(|| {
+      self
+        .app
+        .store_collection_with_marker::<C>()
+        .default_save_strategy
+    })
   }
 
   /// Sets the save strategy for this store.
@@ -386,7 +401,7 @@ impl<R: Runtime> Store<R> {
     if !source.is_backend()
       && self
         .app
-        .store_collection()
+        .store_collection_with_marker::<C>()
         .sync_denylist
         .as_ref()
         .is_some_and(|it| it.contains(&self.id))
@@ -441,7 +456,11 @@ impl<R: Runtime> Store<R> {
   }
 }
 
-impl<R: Runtime> fmt::Debug for Store<R> {
+impl<R, C> fmt::Debug for Store<R, C>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     f.debug_struct("Store")
       .field("id", &self.id)
@@ -454,11 +473,12 @@ impl<R: Runtime> fmt::Debug for Store<R> {
   }
 }
 
-fn store_path<R>(app: &AppHandle<R>, id: &StoreId) -> PathBuf
+fn store_path<R, C>(app: &AppHandle<R>, id: &StoreId) -> PathBuf
 where
   R: Runtime,
+  C: CollectionMarker,
 {
-  append_filename(&app.store_collection().path(), id)
+  append_filename(&app.store_collection_with_marker::<C>().path(), id)
 }
 
 /// Appends the store filename to the given directory path.

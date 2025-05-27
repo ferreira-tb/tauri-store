@@ -1,5 +1,6 @@
 use crate::error::Result;
 use crate::store::{Store, StoreId, StoreOptions, StoreState};
+use crate::CollectionMarker;
 use serde::Serialize;
 use tauri::{AppHandle, Emitter as _, EventTarget, Runtime, WebviewWindow, Window};
 
@@ -14,8 +15,12 @@ pub(crate) struct StatePayload<'a> {
   state: &'a StoreState,
 }
 
-impl<'a, R: Runtime> From<&'a Store<R>> for StatePayload<'a> {
-  fn from(store: &'a Store<R>) -> Self {
+impl<'a, R, C> From<&'a Store<R, C>> for StatePayload<'a>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
+  fn from(store: &'a Store<R, C>) -> Self {
     Self { id: &store.id, state: store.state() }
   }
 }
@@ -27,8 +32,12 @@ pub(crate) struct ConfigPayload<'a> {
   config: StoreOptions,
 }
 
-impl<'a, R: Runtime> From<&'a Store<R>> for ConfigPayload<'a> {
-  fn from(store: &'a Store<R>) -> Self {
+impl<'a, R, C> From<&'a Store<R, C>> for ConfigPayload<'a>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
+  fn from(store: &'a Store<R, C>) -> Self {
     Self { id: &store.id, config: store.into() }
   }
 }

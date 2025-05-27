@@ -31,6 +31,22 @@ features = ["devtools", "protocol-asset"]
 path = "../../../crates/plugin-pinia"
 features = ["file-sync-all"]
 
+[dependencies.tauri-plugin-svelte]
+path = "../../../crates/plugin-svelte"
+features = ["file-sync-all"]
+
+[dependencies.tauri-plugin-valtio]
+path = "../../../crates/plugin-valtio"
+features = ["file-sync-all"]
+
+[dependencies.tauri-plugin-vue]
+path = "../../../crates/plugin-vue"
+features = ["file-sync-all"]
+
+[dependencies.tauri-plugin-zustand]
+path = "../../../crates/plugin-zustand"
+features = ["file-sync-all"]
+
 [build-dependencies.tauri-build]
 version = "2"
 features = []

@@ -3,10 +3,14 @@
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
 
-use std::sync::Arc;
-use tauri::Runtime;
-use tauri_store::{Collection, StoreCollection};
+use tauri::{Runtime, State};
+use tauri_store::{Collection, CollectionMarker, StoreCollection};
 
 /// The Zustand plugin.
 #[derive(Collection)]
-pub struct Zustand<R: Runtime>(pub(crate) Arc<StoreCollection<R>>);
+pub struct Zustand<'a, R: Runtime>(pub(crate) State<'a, StoreCollection<R, ZustandMarker>>);
+
+/// Marker for the Zustand plugin.
+pub struct ZustandMarker;
+
+impl CollectionMarker for ZustandMarker {}

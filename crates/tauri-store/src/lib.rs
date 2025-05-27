@@ -17,7 +17,7 @@ mod migration;
 #[cfg(feature = "plugin")]
 mod plugin;
 
-pub use collection::{OnLoadFn, StoreCollection};
+pub use collection::{CollectionMarker, DefaultMarker, OnLoadFn, StoreCollection};
 pub use error::{BoxResult, Error, Result};
 pub use manager::ManagerExt;
 pub use serde_json::Value as Json;
@@ -35,15 +35,3 @@ pub use plugin::{init, Builder};
 
 #[cfg(feature = "unstable-migration")]
 pub use migration::{Migration, MigrationContext, Migrator};
-
-use tauri::{Manager, Runtime};
-
-/// Calls a closure with a mutable reference to the store with the given id.
-pub fn with_store<R, M, F, T>(manager: &M, id: impl AsRef<str>, f: F) -> Result<T>
-where
-  R: Runtime,
-  M: Manager<R> + ManagerExt<R>,
-  F: FnOnce(&mut Store<R>) -> T,
-{
-  manager.store_collection().with_store(id, f)
-}

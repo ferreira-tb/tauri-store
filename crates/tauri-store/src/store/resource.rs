@@ -1,18 +1,27 @@
 use super::{ResourceTuple, Store};
+use crate::collection::CollectionMarker;
 use crate::error::Result;
 use std::sync::{Arc, Mutex};
 use tauri::{AppHandle, Manager, Resource, ResourceId, Runtime};
 
-pub(crate) struct StoreResource<R: Runtime> {
-  pub(crate) inner: Mutex<Store<R>>,
+pub(crate) struct StoreResource<R, C>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
+  pub(crate) inner: Mutex<Store<R, C>>,
 }
 
-impl<R: Runtime> StoreResource<R> {
-  fn new(store: Store<R>) -> Self {
+impl<R, C> StoreResource<R, C>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
+  fn new(store: Store<R, C>) -> Self {
     Self { inner: Mutex::new(store) }
   }
 
-  pub(super) fn create(app: &AppHandle<R>, store: Store<R>) -> ResourceTuple<R> {
+  pub(super) fn create(app: &AppHandle<R>, store: Store<R, C>) -> ResourceTuple<R, C> {
     let resource = Arc::new(Self::new(store));
     let rid = app
       .resources_table()
@@ -50,10 +59,15 @@ impl<R: Runtime> StoreResource<R> {
 
   pub(crate) fn locked<F, T>(&self, f: F) -> T
   where
-    F: FnOnce(&mut Store<R>) -> T,
+    F: FnOnce(&mut Store<R, C>) -> T,
   {
     f(&mut *self.inner.lock().unwrap())
   }
 }
 
-impl<R: Runtime> Resource for StoreResource<R> {}
+impl<R, C> Resource for StoreResource<R, C>
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
+}

@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 0.2.0
+
+### Dependencies
+
+- Update `tauri-store` to `0.11.0`.
+
 ## 0.1.2
 
 ### Features
