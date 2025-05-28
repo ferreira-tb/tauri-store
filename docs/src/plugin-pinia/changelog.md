@@ -14,6 +14,10 @@ _Nothing yet._
 
 ## 3.5.0
 
+### Features
+
+- Allow to start stores automatically.
+
 ### Dependencies
 
 - Update `tauri-store` to `0.11.0`.
