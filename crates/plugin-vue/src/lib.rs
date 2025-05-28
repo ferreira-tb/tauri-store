@@ -19,18 +19,18 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, RunEvent, Runtime};
 use tauri_store::CollectionBuilder;
 
-// The `CollectionBuilder` macro depends on this import.
-use vue::VueMarker as Marker;
-
 #[cfg(feature = "unstable-migration")]
 use tauri_store::Migrator;
 
 pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
-pub use vue::Vue;
+pub use vue::{Vue, VueMarker};
 
 #[cfg(feature = "unstable-migration")]
 pub use tauri_store::{Migration, MigrationContext};
+
+// The `CollectionBuilder` macro depends on this.
+type Marker = VueMarker;
 
 /// Builder for the Vue plugin.
 #[derive(CollectionBuilder)]

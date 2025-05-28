@@ -19,18 +19,18 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, RunEvent, Runtime};
 use tauri_store::CollectionBuilder;
 
-// The `CollectionBuilder` macro depends on this import.
-use svelte::SvelteMarker as Marker;
-
 #[cfg(feature = "unstable-migration")]
 use tauri_store::Migrator;
 
 pub use manager::ManagerExt;
-pub use svelte::Svelte;
+pub use svelte::{Svelte, SvelteMarker};
 pub use tauri_store::prelude::*;
 
 #[cfg(feature = "unstable-migration")]
 pub use tauri_store::{Migration, MigrationContext};
+
+// The `CollectionBuilder` macro depends on this.
+type Marker = SvelteMarker;
 
 /// Builder for the Svelte plugin.
 #[derive(CollectionBuilder)]
