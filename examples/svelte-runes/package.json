@@ -17,7 +17,7 @@
     "@tauri-apps/plugin-process": "^2.2.1",
     "@tauri-apps/plugin-shell": "^2.2.1",
     "@tauri-store/svelte": "workspace:*",
-    "@tb-dev/utils": "^7.0.1",
+    "@tb-dev/utils": "^7.0.2",
     "svelte": "^5.33.4",
     "svelte-check": "^4.2.1"
   }

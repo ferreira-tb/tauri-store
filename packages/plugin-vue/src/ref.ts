@@ -1,14 +1,6 @@
 import { computed } from 'vue';
 import { globalStore, setGlobalStoreOptions } from './store';
-import type { StoreBackendOptions, StoreRef } from './types';
-
-export interface StoreRefOptions {
-  /**
-   * Write the default value to the store when it does not exist.
-   * @default true
-   */
-  writeDefaults?: boolean;
-}
+import type { StoreBackendOptions, StoreRef, StoreRefOptions } from './types';
 
 export function storeRef<T>(
   key: string,
@@ -16,7 +8,7 @@ export function storeRef<T>(
   options?: StoreRefOptions,
   globalOptions?: StoreBackendOptions
 ): StoreRef<T> {
-  if (options?.writeDefaults ?? true) {
+  if (options?.writeDefault ?? true) {
     globalStore.value[key] ??= value;
   }
 

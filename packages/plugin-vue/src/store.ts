@@ -169,6 +169,7 @@ function _createStore<S extends State>(
 export const store = createStore;
 
 export const globalStore = _createStore(GLOBAL_STORE_ID, {} as State, {
+  autoStart: true,
   saveOnChange: true,
   saveOnExit: true,
 });

@@ -36,3 +36,11 @@ export interface TauriPluginVueStoreOptions<S extends State> extends StoreOption
 }
 
 export type StoreRef<T> = Ref<T> & { $tauri: TauriStoreContract };
+
+export interface StoreRefOptions {
+  /**
+   * Write the default value to the store if its current value is nullish.
+   * @default true
+   */
+  writeDefault?: boolean;
+}
