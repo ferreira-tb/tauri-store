@@ -11,3 +11,9 @@ outline: 2
 ## Next
 
 _Nothing yet._
+
+## 0.1.1
+
+### Features
+
+- Expose marker struct.

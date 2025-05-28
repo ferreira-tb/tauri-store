@@ -14,18 +14,18 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, RunEvent, Runtime};
 use tauri_store::CollectionBuilder;
 
-// The `CollectionBuilder` macro depends on this import.
-use __SNAKE_PLUGIN_TITLE__::__PASCAL_PLUGIN_TITLE__Marker as Marker;
-
 #[cfg(feature = "unstable-migration")]
 use tauri_store::Migrator;
 
-pub use __SNAKE_PLUGIN_TITLE__::__PASCAL_PLUGIN_TITLE__;
+pub use __SNAKE_PLUGIN_TITLE__::{__PASCAL_PLUGIN_TITLE__, __PASCAL_PLUGIN_TITLE__Marker};
 pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
 
 #[cfg(feature = "unstable-migration")]
 pub use tauri_store::{Migration, MigrationContext};
+
+// The `CollectionBuilder` macro depends on this.
+type Marker = __PASCAL_PLUGIN_TITLE__Marker;
 
 /// Builder for the __PASCAL_PLUGIN_TITLE__ plugin.
 #[derive(CollectionBuilder)]

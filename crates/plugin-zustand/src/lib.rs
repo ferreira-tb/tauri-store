@@ -19,18 +19,18 @@ use tauri::plugin::TauriPlugin;
 use tauri::{AppHandle, RunEvent, Runtime};
 use tauri_store::CollectionBuilder;
 
-// The `CollectionBuilder` macro depends on this import.
-use zustand::ZustandMarker as Marker;
-
 #[cfg(feature = "unstable-migration")]
 use tauri_store::Migrator;
 
 pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
-pub use zustand::Zustand;
+pub use zustand::{Zustand, ZustandMarker};
 
 #[cfg(feature = "unstable-migration")]
 pub use tauri_store::{Migration, MigrationContext};
+
+// The `CollectionBuilder` macro depends on this.
+type Marker = ZustandMarker;
 
 /// Builder for the Zustand plugin.
 #[derive(CollectionBuilder)]

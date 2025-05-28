@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 3.6.0
+
+### Features
+
+- Expose marker struct.
+
 ## 3.5.0
 
 ### Features
