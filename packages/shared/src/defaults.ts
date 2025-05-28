@@ -1,5 +1,7 @@
 import type { StoreOptions } from './types';
 
+export const DEFAULT_AUTO_START: Required<StoreOptions>['autoStart'] = false;
+
 export const DEFAULT_FILTER_KEYS: Required<StoreOptions>['filterKeys'] = null;
 
 export const DEFAULT_FILTER_KEYS_STRATEGY: Required<StoreOptions>['filterKeysStrategy'] = 'omit';

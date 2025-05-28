@@ -9,6 +9,7 @@ export { debounce, merge, throttle } from './utils';
 export { type LooseTimeStrategyKind, TimeStrategy, type TimeStrategyKind } from './time-strategy';
 
 export {
+  DEFAULT_AUTO_START,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
   DEFAULT_HOOKS,

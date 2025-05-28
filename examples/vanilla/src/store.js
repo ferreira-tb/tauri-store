@@ -11,6 +11,7 @@ const counter = {
 };
 
 export const store = new Store('counter-store', counter, {
+  autoStart: true,
   filterKeys: ['counter', 'nested', 'nested2', 'nested3'],
   filterKeysStrategy: 'pick',
   saveOnExit: true,
@@ -26,14 +27,12 @@ export const store = new Store('counter-store', counter, {
   },
 });
 
-if (!Object.hasOwn(window, '$store')) {
-  Object.defineProperty(window, '$store', {
-    value: store,
-    writable: false,
-    configurable: false,
-    enumerable: true,
-  });
-}
+Object.defineProperty(window, '$store', {
+  value: store,
+  writable: false,
+  configurable: false,
+  enumerable: true,
+});
 
 export async function openStore() {
   const path = await store.getPath();

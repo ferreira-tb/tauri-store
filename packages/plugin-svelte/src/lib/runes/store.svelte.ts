@@ -4,6 +4,7 @@ import type { TauriPluginSvelteRuneStoreOptions } from '../types';
 import {
   BaseStore,
   debounce,
+  DEFAULT_AUTO_START,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
   DEFAULT_HOOKS,
@@ -55,6 +56,7 @@ export class RuneStore<S extends State> extends BaseStore<S> implements TauriSto
     const syncStrategy = new TimeStrategy(options.syncStrategy, options.syncInterval);
 
     this.options = {
+      autoStart: options.autoStart ?? DEFAULT_AUTO_START,
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
       flush: options.flush ?? DEFAULT_FLUSH,
@@ -66,6 +68,8 @@ export class RuneStore<S extends State> extends BaseStore<S> implements TauriSto
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
     } satisfies Required<TauriPluginSvelteRuneStoreOptions<S>>;
+
+    void this.checkAutoStart();
   }
 
   protected readonly load = async (): Promise<void> => {

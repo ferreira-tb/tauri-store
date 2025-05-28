@@ -11,6 +11,7 @@ import {
 import {
   BaseStore,
   debounce,
+  DEFAULT_AUTO_START,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
   DEFAULT_HOOKS,
@@ -73,6 +74,7 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     const syncStrategy = new TimeStrategy(options.syncStrategy, options.syncInterval);
 
     this.options = {
+      autoStart: options.autoStart ?? DEFAULT_AUTO_START,
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
       hooks: merge(options.hooks, DEFAULT_HOOKS as StoreHooks<S>),
@@ -83,6 +85,8 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
     } satisfies Required<TauriPluginSvelteStoreOptions<S>>;
+
+    void this.checkAutoStart();
   }
 
   public set(value: S): void {

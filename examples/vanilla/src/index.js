@@ -4,9 +4,7 @@ import { clearAutosave, setAutosave } from 'tauri-store/src/index.js';
 import { increment, incrementNested, openStore, store } from './store.js';
 
 export function init() {
-  window.addEventListener('DOMContentLoaded', async () => {
-    await store.start();
-
+  window.addEventListener('DOMContentLoaded', () => {
     const onClick = (id, callback) => {
       const el = document.querySelector(`#${id}`);
       el.addEventListener('click', callback);

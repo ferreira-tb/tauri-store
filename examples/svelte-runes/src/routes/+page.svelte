@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { exit } from '@tauri-apps/plugin-process';
   import { printStore } from '$lib/commands';
   import { openStore, store } from '$lib/store.svelte';
@@ -10,10 +9,6 @@
       void exit(0);
     }
   }
-
-  onMount(async () => {
-    await store.start();
-  });
 </script>
 
 <svelte:window onkeydown={onKeyDown} />

@@ -1,8 +1,8 @@
 import { flushPromises } from './utils';
 import { listen, StoreEvent } from './event';
 import type { patch, setStoreOptions } from './commands';
-import { DEFAULT_FILTER_KEYS_STRATEGY } from './defaults';
 import { type LooseTimeStrategyKind, TimeStrategy } from './time-strategy';
+import { DEFAULT_AUTO_START, DEFAULT_FILTER_KEYS_STRATEGY } from './defaults';
 import type {
   ConfigChangePayload,
   Option,
@@ -177,6 +177,22 @@ export abstract class BaseStore<S extends State = State> {
     }
 
     return result;
+  }
+
+  // TODO: Don't you think we could give this a better name?
+  protected async checkAutoStart(): Promise<void> {
+    try {
+      let autoStart = this.options.autoStart ?? DEFAULT_AUTO_START;
+      if (typeof autoStart !== 'boolean') {
+        autoStart = await autoStart(this.id);
+      }
+
+      if (autoStart) {
+        await this.start();
+      }
+    } catch (err) {
+      this.onError?.(err);
+    }
   }
 
   /**

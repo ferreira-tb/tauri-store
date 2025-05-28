@@ -44,6 +44,13 @@ export interface StoreBackendRawOptions {
 /** Options that can only be set from JavaScript. */
 export interface StoreFrontendOptions<S extends State = State> {
   /**
+   * Whether to automatically start the store.
+   *
+   * @default false
+   */
+  readonly autoStart?: boolean | ((storeId: string) => MaybePromise<boolean>);
+
+  /**
    * Keys the plugin should save or ignore.
    *
    * The behavior depends on the value of {@link StoreFrontendOptions.filterKeysStrategy}.

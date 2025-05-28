@@ -17,10 +17,6 @@ export default function App() {
     };
   }, []);
 
-  useEffect(() => {
-    store.start();
-  }, []);
-
   return (
     <main>
       <div className="action">

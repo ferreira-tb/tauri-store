@@ -4,6 +4,7 @@ import type { TauriPluginZustandStoreOptions } from './types';
 import {
   BaseStore,
   debounce,
+  DEFAULT_AUTO_START,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
   DEFAULT_HOOKS,
@@ -36,6 +37,7 @@ class TauriStore<S extends State, Store extends StoreApi<S>>
     const syncStrategy = new TimeStrategy(options.syncStrategy, options.syncInterval);
 
     this.options = {
+      autoStart: options.autoStart ?? DEFAULT_AUTO_START,
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
       hooks: merge(options.hooks, DEFAULT_HOOKS as StoreHooks<S>),
@@ -46,6 +48,8 @@ class TauriStore<S extends State, Store extends StoreApi<S>>
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
     } satisfies Required<TauriPluginZustandStoreOptions<S>>;
+
+    void this.checkAutoStart();
   }
 
   protected readonly load = async (): Promise<void> => {

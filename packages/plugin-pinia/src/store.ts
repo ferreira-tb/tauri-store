@@ -5,6 +5,7 @@ import type { TauriPluginPiniaOptions, TauriPluginPiniaStoreOptions } from './ty
 import {
   BaseStore,
   debounce,
+  DEFAULT_AUTO_START,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
   DEFAULT_HOOKS,
@@ -32,6 +33,7 @@ export class Store extends BaseStore {
     const syncStrategy = new TimeStrategy(options.syncStrategy, options.syncInterval);
 
     this.options = {
+      autoStart: options.autoStart ?? DEFAULT_AUTO_START,
       deep: options.deep ?? true,
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
@@ -44,6 +46,8 @@ export class Store extends BaseStore {
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
     } satisfies Required<TauriPluginPiniaStoreOptions>;
+
+    void this.checkAutoStart();
   }
 
   protected async load(): Promise<void> {

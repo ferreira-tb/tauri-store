@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
 import { printStore } from './commands';
 import { onKeyDown } from '@vueuse/core';
 import { openStore, useStore } from './store';
@@ -10,10 +9,6 @@ const store = useStore();
 const { start, stop } = store.$tauri;
 
 onKeyDown('Escape', () => void exit(0));
-
-onMounted(async () => {
-  await start();
-});
 </script>
 
 <template>
