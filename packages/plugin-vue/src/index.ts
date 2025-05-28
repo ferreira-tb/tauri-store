@@ -1,4 +1,4 @@
-export { storeRef, type StoreRefOptions } from './ref';
+export { storeRef } from './ref';
 export { createStore, globalStore, setGlobalStoreOptions, store, type Store } from './store';
 
 export {
@@ -32,6 +32,7 @@ export type {
   StoreKeyFilterStrategy,
   StoreOptions,
   StoreRef,
+  StoreRefOptions,
   TauriPluginVueStoreOptions,
   TauriStoreContract,
   TimeStrategy,
