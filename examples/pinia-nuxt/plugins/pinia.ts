@@ -5,6 +5,8 @@ import { TauriPluginPinia } from '@tauri-store/pinia/src/index.js';
 export default defineNuxtPlugin(({ $pinia }) => {
   ($pinia as Pinia).use(
     TauriPluginPinia({
+      autoStart: true,
+      saveOnChange: true,
       hooks: { error: console.error },
     })
   );

@@ -12,6 +12,7 @@ import {
 import {
   BaseStore,
   debounce,
+  DEFAULT_AUTO_START,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
   DEFAULT_HOOKS,
@@ -44,6 +45,7 @@ export class Store<S extends State> extends BaseStore<S> {
     const syncStrategy = new TimeStrategy(options.syncStrategy, options.syncInterval);
 
     this.options = {
+      autoStart: options.autoStart ?? DEFAULT_AUTO_START,
       deep: options.deep ?? true,
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
@@ -56,6 +58,8 @@ export class Store<S extends State> extends BaseStore<S> {
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
     } satisfies Required<TauriPluginVueStoreOptions<S>>;
+
+    void this.checkAutoStart();
   }
 
   protected readonly load = async (): Promise<void> => {

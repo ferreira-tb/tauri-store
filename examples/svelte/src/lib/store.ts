@@ -20,6 +20,7 @@ const defaultValue: Counter = {
 };
 
 export const store = new Store('counter-store', defaultValue, {
+  autoStart: true,
   filterKeys: ['counter', 'nested', 'nested2', 'nested3'],
   filterKeysStrategy: 'pick',
   saveOnExit: true,

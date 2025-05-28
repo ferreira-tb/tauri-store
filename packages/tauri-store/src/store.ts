@@ -4,6 +4,7 @@ import { effect, effectScope, signal } from 'alien-signals';
 import {
   BaseStore,
   debounce,
+  DEFAULT_AUTO_START,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
   DEFAULT_HOOKS,
@@ -36,6 +37,7 @@ export class Store<S extends State> extends BaseStore<S> implements TauriStoreCo
     const syncStrategy = new TimeStrategy(options.syncStrategy, options.syncInterval);
 
     this.options = {
+      autoStart: options.autoStart ?? DEFAULT_AUTO_START,
       clone: options.clone ?? true,
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
@@ -47,6 +49,8 @@ export class Store<S extends State> extends BaseStore<S> implements TauriStoreCo
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
     } satisfies Required<TauriStoreOptions<S>>;
+
+    void this.checkAutoStart();
   }
 
   protected readonly load = async (): Promise<void> => {

@@ -4,6 +4,7 @@ import type { StoreBuilderReturn, TauriPluginValtioStoreOptions } from './types'
 import {
   BaseStore,
   debounce,
+  DEFAULT_AUTO_START,
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
   DEFAULT_HOOKS,
@@ -35,6 +36,7 @@ class Store<S extends State> extends BaseStore<S> {
     const syncStrategy = new TimeStrategy(options.syncStrategy, options.syncInterval);
 
     this.options = {
+      autoStart: options.autoStart ?? DEFAULT_AUTO_START,
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
       hooks: merge(options.hooks, DEFAULT_HOOKS as StoreHooks<S>),
@@ -45,6 +47,8 @@ class Store<S extends State> extends BaseStore<S> {
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
     } satisfies Required<TauriPluginValtioStoreOptions<S>>;
+
+    void this.checkAutoStart();
   }
 
   protected async load(): Promise<void> {
