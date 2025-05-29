@@ -19,7 +19,7 @@ Install the [Rust crate](https://crates.io/crates/tauri-plugin-vue) by adding th
 
 ```toml [src-tauri/Cargo.toml]
 [dependencies]
-tauri-plugin-vue = "0.1"
+tauri-plugin-vue = "0.2"
 ```
 
 :::
