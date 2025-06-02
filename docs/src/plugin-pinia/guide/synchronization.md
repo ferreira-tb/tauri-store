@@ -31,16 +31,52 @@ For a detailed explanation of the differences between debouncing and throttling,
 
 While this process isn’t directly related to [store persistence](./persisting-state.md), it can still affect what gets saved. When a store is saved, the data written to disk comes from Rust’s cache at that moment. If the synchronization hasn’t finished yet, Rust might still be working with outdated values.
 
+## Filtering keys
+
+For finer control over which keys are synced with the backend, you can set a filter strategy when defining the store.
+
+```typescript{13-14}
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
+
+function counterStore() {
+  return {
+    counter: ref(0),
+    ignoreMe: ref('hello darkness, my old friend')
+  };
+}
+
+export const useCounterStore = defineStore('counter', counterStore, {
+  tauri: {
+    filterKeys: ['ignoreMe'],
+    filterKeysStrategy: 'omit',
+  },
+});
+```
+
+::: tip
+[`filterKeysStrategy`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/interfaces/StoreFrontendOptions.html#filterkeysstrategy) can also accept a callback to dynamically check if the key should be filtered.
+:::
+
 ## Denylist
 
 If a store should be [saved to disk](./persisting-state.md), but not synchronized across windows, you can add it to the [denylist](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.Builder.html#method.sync_denylist).
 
 ::: code-group
 
-```rust{2} [src-tauri/src/lib.rs]
+```typescript{3} [JavaScript]
+import { denySync, allowSync } from '@tauri-store/pinia';
+
+await denySync('store-1', 'store-2');
+
+// To allow them again:
+await allowSync('store-1', 'store-2');
+```
+
+```rust{2} [Rust]
 tauri_plugin_pinia::Builder::new()
   .sync_denylist(&["store-1", "store-2"])
-  .build()
+  .build();
 ```
 
 :::

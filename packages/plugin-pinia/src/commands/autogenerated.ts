@@ -6,87 +6,58 @@
 import { commands } from '@tauri-store/shared';
 
 /**
+ * Removes one or more stores from the save denylist.
+ */
+export const allowSave = commands.allowSave('pinia');
+
+/**
+ * Removes one or more stores from the sync denylist.
+ */
+export const allowSync = commands.allowSync('pinia');
+
+/**
  * Stops the autosave.
- *
- * @example
- * ```ts
- * import { clearAutosave } from '@tauri-store/pinia';
- *
- * await clearAutosave();
- * ```
  */
 export const clearAutosave = commands.clearAutosave('pinia');
 
 /**
+ * Adds one or more stores to the save denylist.
+ */
+export const denySave = commands.denySave('pinia');
+
+/**
+ * Adds one or more stores to the sync denylist.
+ */
+export const denySync = commands.denySync('pinia');
+
+/**
  * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
- *
- * @example
- * ```ts
- * import { getDefaultSaveStrategy } from '@tauri-store/pinia';
- *
- * const { strategy, interval } = await getDefaultSaveStrategy();
- * ```
  */
 export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('pinia');
 
 /**
  * Directory where the stores are saved.
- *
- * @example
- * ```ts
- * import { getStoreCollectionPath } from '@tauri-store/pinia';
- *
- * const path = await getStoreCollectionPath();
- * ```
  */
 export const getStoreCollectionPath = commands.getStoreCollectionPath('pinia');
 
 /**
  * Gets the save strategy used by a store.
- *
- * @example
- * ```ts
- * import { getSaveStrategy } from '@tauri-store/pinia';
- *
- * const { strategy, interval } = await getSaveStrategy('my-store');
- * ```
  **/
 export const getSaveStrategy = commands.getSaveStrategy('pinia');
 
 /**
  * Lists all the store ids.
- *
- * @example
- * ```ts
- * import { getStoreIds } from '@tauri-store/pinia';
- *
- * const ids = await getStoreIds();
- * ```
  */
 export const getStoreIds = commands.getStoreIds('pinia');
 
 /**
  * Path where the store is saved.
- *
- * @example
- * ```ts
- * import { getStorePath } from '@tauri-store/pinia';
- *
- * const path = await getStorePath('my-store');
- * ```
  **/
 export const getStorePath = commands.getStorePath('pinia');
 
 /**
  * Gets the state of a store.
- *
- * @example
- * ```ts
- * import { getStoreState } from '@tauri-store/pinia';
- *
- * const state = await getStoreState('my-store');
- * ```
  */
 export const getStoreState = commands.getStoreState('pinia');
 
@@ -108,25 +79,11 @@ export const save = commands.save('pinia');
 
 /**
  * Saves all the stores to the disk.
- *
- * @example
- * ```ts
- * import { saveAll } from '@tauri-store/pinia';
- *
- * await saveAll();
- * ```
  */
 export const saveAll = commands.saveAll('pinia');
 
 /**
  * Saves all the stores to the disk immediately, ignoring the save strategy.
- *
- * @example
- * ```ts
- * import { saveAllNow } from '@tauri-store/pinia';
- *
- * await saveAllNow();
- * ```
  */
 export const saveAllNow = commands.saveAllNow('pinia');
 

@@ -295,6 +295,30 @@
       "type": "string",
       "oneOf": [
         {
+          "description": "Enables the allow_save command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-allow-save",
+          "markdownDescription": "Enables the allow_save command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the allow_save command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-allow-save",
+          "markdownDescription": "Denies the allow_save command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the allow_sync command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-allow-sync",
+          "markdownDescription": "Enables the allow_sync command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the allow_sync command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-allow-sync",
+          "markdownDescription": "Denies the allow_sync command without any pre-configured scope."
+        },
+        {
           "description": "Enables the clear_autosave command without any pre-configured scope.",
           "type": "string",
           "const": "allow-clear-autosave",
@@ -305,6 +329,30 @@
           "type": "string",
           "const": "deny-clear-autosave",
           "markdownDescription": "Denies the clear_autosave command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the deny_save command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-deny-save",
+          "markdownDescription": "Enables the deny_save command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the deny_save command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-deny-save",
+          "markdownDescription": "Denies the deny_save command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the deny_sync command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-deny-sync",
+          "markdownDescription": "Enables the deny_sync command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the deny_sync command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-deny-sync",
+          "markdownDescription": "Denies the deny_sync command without any pre-configured scope."
         },
         {
           "description": "Enables the get_default_save_strategy command without any pre-configured scope.",
@@ -535,10 +583,10 @@
           "markdownDescription": "Denies the unload command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for tauri-plugin-zustand.\n#### This default permission set includes:\n\n- `allow-clear-autosave`\n- `allow-get-default-save-strategy`\n- `allow-get-save-strategy`\n- `allow-get-store-collection-path`\n- `allow-get-store-ids`\n- `allow-get-store-path`\n- `allow-get-store-state`\n- `allow-load`\n- `allow-patch`\n- `allow-save`\n- `allow-save-all`\n- `allow-save-all-now`\n- `allow-save-now`\n- `allow-save-some`\n- `allow-save-some-now`\n- `allow-set-autosave`\n- `allow-set-save-strategy`\n- `allow-set-store-collection-path`\n- `allow-set-store-options`\n- `allow-unload`",
+          "description": "Default permissions for tauri-plugin-zustand.\n#### This default permission set includes:\n\n- `allow-allow-save`\n- `allow-allow-sync`\n- `allow-clear-autosave`\n- `allow-deny-save`\n- `allow-deny-sync`\n- `allow-get-default-save-strategy`\n- `allow-get-save-strategy`\n- `allow-get-store-collection-path`\n- `allow-get-store-ids`\n- `allow-get-store-path`\n- `allow-get-store-state`\n- `allow-load`\n- `allow-patch`\n- `allow-save`\n- `allow-save-all`\n- `allow-save-all-now`\n- `allow-save-now`\n- `allow-save-some`\n- `allow-save-some-now`\n- `allow-set-autosave`\n- `allow-set-save-strategy`\n- `allow-set-store-collection-path`\n- `allow-set-store-options`\n- `allow-unload`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for tauri-plugin-zustand.\n#### This default permission set includes:\n\n- `allow-clear-autosave`\n- `allow-get-default-save-strategy`\n- `allow-get-save-strategy`\n- `allow-get-store-collection-path`\n- `allow-get-store-ids`\n- `allow-get-store-path`\n- `allow-get-store-state`\n- `allow-load`\n- `allow-patch`\n- `allow-save`\n- `allow-save-all`\n- `allow-save-all-now`\n- `allow-save-now`\n- `allow-save-some`\n- `allow-save-some-now`\n- `allow-set-autosave`\n- `allow-set-save-strategy`\n- `allow-set-store-collection-path`\n- `allow-set-store-options`\n- `allow-unload`"
+          "markdownDescription": "Default permissions for tauri-plugin-zustand.\n#### This default permission set includes:\n\n- `allow-allow-save`\n- `allow-allow-sync`\n- `allow-clear-autosave`\n- `allow-deny-save`\n- `allow-deny-sync`\n- `allow-get-default-save-strategy`\n- `allow-get-save-strategy`\n- `allow-get-store-collection-path`\n- `allow-get-store-ids`\n- `allow-get-store-path`\n- `allow-get-store-state`\n- `allow-load`\n- `allow-patch`\n- `allow-save`\n- `allow-save-all`\n- `allow-save-all-now`\n- `allow-save-now`\n- `allow-save-some`\n- `allow-save-some-now`\n- `allow-set-autosave`\n- `allow-set-save-strategy`\n- `allow-set-store-collection-path`\n- `allow-set-store-options`\n- `allow-unload`"
         }
       ]
     }

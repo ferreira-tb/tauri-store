@@ -206,6 +206,26 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
           self.0.unwatch(store_id, watcher_id)
         }
 
+        /// Removes a store from the save denylist.
+        pub fn allow_save(&self, id: impl AsRef<str>) {
+          self.0.allow_save(id);
+        }
+
+        /// Adds a store to the save denylist.
+        pub fn deny_save(&self, id: impl AsRef<str>) {
+          self.0.deny_save(id);
+        }
+
+        /// Removes a store from the sync denylist.
+        pub fn allow_sync(&self, id: impl AsRef<str>) {
+          self.0.allow_sync(id);
+        }
+
+        /// Adds a store to the deny denylist.
+        pub fn deny_sync(&self, id: impl AsRef<str>) {
+          self.0.deny_sync(id);
+        }
+
         pub(crate) fn unload_store(&self, id: &StoreId) -> Result<()> {
           self.0.unload_store(id)
         }

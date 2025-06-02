@@ -4,7 +4,11 @@ Default permissions for tauri-store.
 
 #### This default permission set includes the following:
 
+- `allow-allow-save`
+- `allow-allow-sync`
 - `allow-clear-autosave`
+- `allow-deny-save`
+- `allow-deny-sync`
 - `allow-get-default-save-strategy`
 - `allow-get-save-strategy`
 - `allow-get-store-collection-path`
@@ -37,6 +41,58 @@ Default permissions for tauri-store.
 <tr>
 <td>
 
+`tauri-store:allow-allow-save`
+
+</td>
+<td>
+
+Enables the allow_save command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`tauri-store:deny-allow-save`
+
+</td>
+<td>
+
+Denies the allow_save command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`tauri-store:allow-allow-sync`
+
+</td>
+<td>
+
+Enables the allow_sync command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`tauri-store:deny-allow-sync`
+
+</td>
+<td>
+
+Denies the allow_sync command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `tauri-store:allow-clear-autosave`
 
 </td>
@@ -56,6 +112,58 @@ Enables the clear_autosave command without any pre-configured scope.
 <td>
 
 Denies the clear_autosave command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`tauri-store:allow-deny-save`
+
+</td>
+<td>
+
+Enables the deny_save command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`tauri-store:deny-deny-save`
+
+</td>
+<td>
+
+Denies the deny_save command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`tauri-store:allow-deny-sync`
+
+</td>
+<td>
+
+Enables the deny_sync command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`tauri-store:deny-deny-sync`
+
+</td>
+<td>
+
+Denies the deny_sync command without any pre-configured scope.
 
 </td>
 </tr>

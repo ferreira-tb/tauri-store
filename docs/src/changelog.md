@@ -11,6 +11,14 @@ outline: 2
 
 _Nothing yet._
 
+## 0.12.0
+
+### Features
+
+- Allow adding or removing stores from the save and sync deny lists after the plugin has been built.
+- Add [`allowSave`](https://tb.dev.br/tauri-store/js-docs/tauri-store/variables/allowSave.html), [`allowSync`](https://tb.dev.br/tauri-store/js-docs/tauri-store/variables/allowSync.html), [`denySave`](https://tb.dev.br/tauri-store/js-docs/tauri-store/variables/denySave.html), and [`denySync`](https://tb.dev.br/tauri-store/js-docs/tauri-store/variables/denySync.html) commands.
+- Add [`save`](https://tb.dev.br/tauri-store/js-docs/tauri-store/interfaces/StoreFrontendOptions.html#save) and [`sync`](https://tb.dev.br/tauri-store/js-docs/tauri-store/interfaces/StoreFrontendOptions.html#sync) options.
+
 ## 0.11.0
 
 ### Breaking Changes

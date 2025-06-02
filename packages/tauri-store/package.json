@@ -1,10 +1,10 @@
 {
   "name": "tauri-store",
-  "version": "0.11.1",
+  "version": "0.12.0",
   "description": "Persistent stores for Tauri",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@10.11.0",
+  "packageManager": "pnpm@10.11.1",
   "homepage": "https://tb.dev.br/tauri-store",
   "license": "MIT",
   "funding": "https://github.com/sponsors/ferreira-tb",

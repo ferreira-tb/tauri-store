@@ -66,7 +66,17 @@ You can also enable [`autosave`](https://docs.rs/tauri-store/latest/tauri_store/
 
 ::: code-group
 
-```rust{5} [src-tauri/src/lib.rs]
+```typescript [JavaScript]
+import { setAutosave, clearAutosave } from 'tauri-store';
+
+// Save every five minutes.
+await setAutosave(300);
+
+// Disable the autosave.
+await clearAutosave();
+```
+
+```rust{5} [Rust]
 use std::time::Duration;
 
 // Save every five minutes.
@@ -115,7 +125,16 @@ If a store should be [synchronized](./synchronization.md), but not saved to disk
 
 ::: code-group
 
-```rust{2} [src-tauri/src/lib.rs]
+```typescript{3} [JavaScript]
+import { denySave, allowSave } from 'tauri-store';
+
+await denySave('store-1', 'store-2');
+
+// To allow them again:
+await allowSave('store-1', 'store-2');
+```
+
+```rust{2} [Rust]
 tauri_store::Builder::new()
   .save_denylist(&["store-1", "store-2"])
   .build_plugin();

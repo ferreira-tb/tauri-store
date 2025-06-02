@@ -19,7 +19,7 @@ Install the [Rust crate](https://crates.io/crates/tauri-plugin-vue) by adding th
 
 ```toml [src-tauri/Cargo.toml]
 [dependencies]
-tauri-plugin-vue = "0.2"
+tauri-plugin-vue = "0.3"
 ```
 
 :::
@@ -102,7 +102,7 @@ await store.$tauri.start();
 ```
 
 ::: tip
-Stores won't be saved nor synchronized until you call the [start](https://tb.dev.br/tauri-store/js-docs/plugin-vue/interfaces/TauriStoreContract.html#start) method.
+Stores won't be saved nor synchronized until you [start](https://tb.dev.br/tauri-store/js-docs/plugin-vue/classes/Store.html#start) them, but you can enable the [`autoStart`](https://tb.dev.br/tauri-store/js-docs/plugin-vue/interfaces/StoreFrontendOptions.html#autostart) option to make them start automatically.
 :::
 
 5. Use the store in your Vue components:

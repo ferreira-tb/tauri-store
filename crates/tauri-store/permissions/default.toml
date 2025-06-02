@@ -2,7 +2,11 @@
 [default]
 description = "Default permissions for tauri-store."
 permissions = [
+  "allow-allow-save",
+  "allow-allow-sync",
   "allow-clear-autosave",
+  "allow-deny-save",
+  "allow-deny-sync",
   "allow-get-default-save-strategy",
   "allow-get-save-strategy",
   "allow-get-store-collection-path",

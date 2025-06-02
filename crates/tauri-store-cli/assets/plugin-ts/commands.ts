@@ -2,87 +2,58 @@
 import { commands } from '@tauri-store/shared';
 
 /**
+ * Removes one or more stores from the save denylist.
+ */
+export const allowSave = commands.allowSave('__PLUGIN_TITLE__');
+
+/**
+ * Removes one or more stores from the sync denylist.
+ */
+export const allowSync = commands.allowSync('__PLUGIN_TITLE__');
+
+/**
  * Stops the autosave.
- *
- * @example
- * ```ts
- * import { clearAutosave } from '__PACKAGE_NAME__';
- *
- * await clearAutosave();
- * ```
  */
 export const clearAutosave = commands.clearAutosave('__PLUGIN_TITLE__');
 
 /**
+ * Adds one or more stores to the save denylist.
+ */
+export const denySave = commands.denySave('__PLUGIN_TITLE__');
+
+/**
+ * Adds one or more stores to the sync denylist.
+ */
+export const denySync = commands.denySync('__PLUGIN_TITLE__');
+
+/**
  * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
- *
- * @example
- * ```ts
- * import { getDefaultSaveStrategy } from '__PACKAGE_NAME__';
- *
- * const { strategy, interval } = await getDefaultSaveStrategy();
- * ```
  */
 export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('__PLUGIN_TITLE__');
 
 /**
  * Directory where the stores are saved.
- *
- * @example
- * ```ts
- * import { getStoreCollectionPath } from '__PACKAGE_NAME__';
- *
- * const path = await getStoreCollectionPath();
- * ```
  */
 export const getStoreCollectionPath = commands.getStoreCollectionPath('__PLUGIN_TITLE__');
 
 /**
  * Gets the save strategy used by a store.
- *
- * @example
- * ```ts
- * import { getSaveStrategy } from '__PACKAGE_NAME__';
- *
- * const { strategy, interval } = await getSaveStrategy('my-store');
- * ```
  **/
 export const getSaveStrategy = commands.getSaveStrategy('__PLUGIN_TITLE__');
 
 /**
  * Lists all the store ids.
- *
- * @example
- * ```ts
- * import { getStoreIds } from '__PACKAGE_NAME__';
- *
- * const ids = await getStoreIds();
- * ```
  */
 export const getStoreIds = commands.getStoreIds('__PLUGIN_TITLE__');
 
 /**
  * Path where the store is saved.
- *
- * @example
- * ```ts
- * import { getStorePath } from '__PACKAGE_NAME__';
- *
- * const path = await getStorePath('my-store');
- * ```
  **/
 export const getStorePath = commands.getStorePath('__PLUGIN_TITLE__');
 
 /**
  * Gets the state of a store.
- *
- * @example
- * ```ts
- * import { getStoreState } from '__PACKAGE_NAME__';
- *
- * const state = await getStoreState('my-store');
- * ```
  */
 export const getStoreState = commands.getStoreState('__PLUGIN_TITLE__');
 
@@ -104,25 +75,11 @@ export const save = commands.save('__PLUGIN_TITLE__');
 
 /**
  * Saves all the stores to the disk.
- *
- * @example
- * ```ts
- * import { saveAll } from '__PACKAGE_NAME__';
- *
- * await saveAll();
- * ```
  */
 export const saveAll = commands.saveAll('__PLUGIN_TITLE__');
 
 /**
  * Saves all the stores to the disk immediately, ignoring the save strategy.
- *
- * @example
- * ```ts
- * import { saveAllNow } from '__PACKAGE_NAME__';
- *
- * await saveAllNow();
- * ```
  */
 export const saveAllNow = commands.saveAllNow('__PLUGIN_TITLE__');
 

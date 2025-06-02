@@ -12,6 +12,14 @@ outline: 2
 
 _Nothing yet._
 
+## 2.6.0
+
+### Features
+
+- Allow adding or removing stores from the save and sync deny lists after the plugin has been built.
+- Add [`allowSave`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/variables/allowSave.html), [`allowSync`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/variables/allowSync.html), [`denySave`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/variables/denySave.html), and [`denySync`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/variables/denySync.html) commands.
+- Add [`save`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/interfaces/StoreFrontendOptions.html#save) and [`sync`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/interfaces/StoreFrontendOptions.html#sync) options.
+
 ## 2.5.0
 
 ### Features

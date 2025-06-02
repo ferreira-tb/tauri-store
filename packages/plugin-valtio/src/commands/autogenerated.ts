@@ -6,87 +6,58 @@
 import { commands } from '@tauri-store/shared';
 
 /**
+ * Removes one or more stores from the save denylist.
+ */
+export const allowSave = commands.allowSave('valtio');
+
+/**
+ * Removes one or more stores from the sync denylist.
+ */
+export const allowSync = commands.allowSync('valtio');
+
+/**
  * Stops the autosave.
- *
- * @example
- * ```ts
- * import { clearAutosave } from '@tauri-store/valtio';
- *
- * await clearAutosave();
- * ```
  */
 export const clearAutosave = commands.clearAutosave('valtio');
 
 /**
+ * Adds one or more stores to the save denylist.
+ */
+export const denySave = commands.denySave('valtio');
+
+/**
+ * Adds one or more stores to the sync denylist.
+ */
+export const denySync = commands.denySync('valtio');
+
+/**
  * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
- *
- * @example
- * ```ts
- * import { getDefaultSaveStrategy } from '@tauri-store/valtio';
- *
- * const { strategy, interval } = await getDefaultSaveStrategy();
- * ```
  */
 export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('valtio');
 
 /**
  * Directory where the stores are saved.
- *
- * @example
- * ```ts
- * import { getStoreCollectionPath } from '@tauri-store/valtio';
- *
- * const path = await getStoreCollectionPath();
- * ```
  */
 export const getStoreCollectionPath = commands.getStoreCollectionPath('valtio');
 
 /**
  * Gets the save strategy used by a store.
- *
- * @example
- * ```ts
- * import { getSaveStrategy } from '@tauri-store/valtio';
- *
- * const { strategy, interval } = await getSaveStrategy('my-store');
- * ```
  **/
 export const getSaveStrategy = commands.getSaveStrategy('valtio');
 
 /**
  * Lists all the store ids.
- *
- * @example
- * ```ts
- * import { getStoreIds } from '@tauri-store/valtio';
- *
- * const ids = await getStoreIds();
- * ```
  */
 export const getStoreIds = commands.getStoreIds('valtio');
 
 /**
  * Path where the store is saved.
- *
- * @example
- * ```ts
- * import { getStorePath } from '@tauri-store/valtio';
- *
- * const path = await getStorePath('my-store');
- * ```
  **/
 export const getStorePath = commands.getStorePath('valtio');
 
 /**
  * Gets the state of a store.
- *
- * @example
- * ```ts
- * import { getStoreState } from '@tauri-store/valtio';
- *
- * const state = await getStoreState('my-store');
- * ```
  */
 export const getStoreState = commands.getStoreState('valtio');
 
@@ -108,25 +79,11 @@ export const save = commands.save('valtio');
 
 /**
  * Saves all the stores to the disk.
- *
- * @example
- * ```ts
- * import { saveAll } from '@tauri-store/valtio';
- *
- * await saveAll();
- * ```
  */
 export const saveAll = commands.saveAll('valtio');
 
 /**
  * Saves all the stores to the disk immediately, ignoring the save strategy.
- *
- * @example
- * ```ts
- * import { saveAllNow } from '@tauri-store/valtio';
- *
- * await saveAllNow();
- * ```
  */
 export const saveAllNow = commands.saveAllNow('valtio');
 

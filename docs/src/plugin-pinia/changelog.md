@@ -12,6 +12,14 @@ outline: 2
 
 _Nothing yet._
 
+## 3.7.0
+
+### Features
+
+- Allow adding or removing stores from the save and sync deny lists after the plugin has been built.
+- Add [`allowSave`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/variables/allowSave.html), [`allowSync`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/variables/allowSync.html), [`denySave`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/variables/denySave.html), and [`denySync`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/variables/denySync.html) commands.
+- Add [`save`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/interfaces/StoreFrontendOptions.html#save) and [`sync`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/interfaces/StoreFrontendOptions.html#sync) options.
+
 ## 3.6.0
 
 ### Features

@@ -295,11 +295,7 @@ where
   /// Save the store immediately, ignoring the save strategy.
   pub fn save_now(&self) -> Result<()> {
     let collection = self.app.store_collection_with_marker::<C>();
-    if collection
-      .save_denylist
-      .as_ref()
-      .is_some_and(|it| it.contains(&self.id))
-    {
+    if collection.save_denylist.contains(&self.id) {
       return Ok(());
     }
 
@@ -403,8 +399,7 @@ where
         .app
         .store_collection_with_marker::<C>()
         .sync_denylist
-        .as_ref()
-        .is_some_and(|it| it.contains(&self.id))
+        .contains(&self.id)
     {
       return Ok(());
     }

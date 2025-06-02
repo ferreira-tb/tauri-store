@@ -1,7 +1,7 @@
 [package]
 name = "tauri-plugin-pinia"
 description = "Persistent Pinia stores for Tauri"
-version = "3.6.0"
+version = "3.7.0"
 documentation = "https://docs.rs/tauri-plugin-pinia"
 homepage = "https://tb.dev.br/tauri-store/plugin-pinia/guide/getting-started"
 repository = "https://github.com/ferreira-tb/tauri-store"
@@ -34,7 +34,7 @@ serde = "1.0"
 tauri = "2"
 
 [dependencies.tauri-store]
-version = "0.11"
+version = "0.12"
 path = "../tauri-store"
 default-features = false
 features = ["derive"]

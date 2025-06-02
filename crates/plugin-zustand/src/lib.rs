@@ -54,7 +54,11 @@ impl<R: Runtime> Builder<R> {
       .setup(|app, _| setup(app, self))
       .on_event(on_event)
       .invoke_handler(tauri::generate_handler![
+        command::allow_save,
+        command::allow_sync,
         command::clear_autosave,
+        command::deny_save,
+        command::deny_sync,
         command::get_default_save_strategy,
         command::get_store_collection_path,
         command::get_save_strategy,

@@ -2,7 +2,11 @@ export { storeRef } from './ref';
 export { createStore, globalStore, setGlobalStoreOptions, store, type Store } from './store';
 
 export {
+  allowSave,
+  allowSync,
   clearAutosave,
+  denySave,
+  denySync,
   getDefaultSaveStrategy,
   getSaveStrategy,
   getStoreCollectionPath,
