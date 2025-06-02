@@ -48,10 +48,19 @@ If a store should be [saved to disk](./persisting-state.md), but not synchronize
 
 ::: code-group
 
-```rust{2} [src-tauri/src/lib.rs]
+```typescript{3} [JavaScript]
+import { denySync, allowSync } from 'tauri-store';
+
+await denySync('store-1', 'store-2');
+
+// To allow them again:
+await allowSync('store-1', 'store-2');
+```
+
+```rust{2} [Rust]
 tauri_store::Builder::new()
   .sync_denylist(&["store-1", "store-2"])
-  .build_plugin()
+  .build_plugin();
 ```
 
 :::
