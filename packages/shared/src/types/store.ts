@@ -51,7 +51,7 @@ export interface StoreFrontendOptions<S extends State = State> {
   readonly autoStart?: boolean | ((storeId: string) => MaybePromise<boolean>);
 
   /**
-   * Keys the plugin should save or ignore.
+   * Keys the plugin should sync or ignore.
    *
    * The behavior depends on the value of {@link StoreFrontendOptions.filterKeysStrategy}.
    *
@@ -61,11 +61,11 @@ export interface StoreFrontendOptions<S extends State = State> {
 
   /**
    * Strategy to use when filtering keys.
-   * - `pick`: Only the specified keys will be synced and saved.
-   * - `omit`: All keys will be synced and saved **except** the ones specified.
+   * - `pick`: Only the specified keys will be synced.
+   * - `omit`: All keys will be synced **except** the ones specified.
    *
    * You can also provide a custom function that will be called for each key.
-   * If the function returns `true`, the key will be saved and synced.
+   * If the function returns `true`, the key will be synced.
    *
    * The filtering is **shallow**, meaning that nested keys will not be filtered.
    *
