@@ -17,6 +17,7 @@ _Nothing yet._
 ### Features
 
 - Allow adding or removing stores from the save and sync deny lists after the plugin has been built.
+- Add [`allowSave`](https://tb.dev.br/tauri-store/js-docs/plugin-vue/variables/allowSave.html), [`allowSync`](https://tb.dev.br/tauri-store/js-docs/plugin-vue/variables/allowSync.html), [`denySave`](https://tb.dev.br/tauri-store/js-docs/plugin-vue/variables/denySave.html), and [`denySync`](https://tb.dev.br/tauri-store/js-docs/plugin-vue/variables/denySync.html) commands.
 - Add [`save`](https://tb.dev.br/tauri-store/js-docs/plugin-vue/interfaces/StoreFrontendOptions.html#save) and [`sync`](https://tb.dev.br/tauri-store/js-docs/plugin-vue/interfaces/StoreFrontendOptions.html#sync) options.
 
 ## 0.2.0
