@@ -1,6 +1,6 @@
 import { flushPromises } from './utils';
+import type * as commands from './commands';
 import { listen, StoreEvent } from './event';
-import type { patch, setStoreOptions } from './commands';
 import { type LooseTimeStrategyKind, TimeStrategy } from './time-strategy';
 import { DEFAULT_AUTO_START, DEFAULT_FILTER_KEYS_STRATEGY } from './defaults';
 import type {
@@ -49,7 +49,11 @@ export abstract class BaseStore<S extends State = State> {
       this.unlistenOptions?.();
       this.unlistenOptions = unlistenOptions;
     } catch (err) {
-      this.onError?.(err);
+      if (this.onError) {
+        await this.onError(err);
+      } else {
+        throw err;
+      }
     }
   }
 
@@ -67,7 +71,11 @@ export abstract class BaseStore<S extends State = State> {
       this.changeQueue = [];
       await this.unload();
     } catch (err) {
-      this.onError?.(err);
+      if (this.onError) {
+        await this.onError(err);
+      } else {
+        throw err;
+      }
     }
   }
 
@@ -85,7 +93,13 @@ export abstract class BaseStore<S extends State = State> {
     return listen<StateChangePayload<S>>(StoreEvent.StateChange, ({ payload }) => {
       if (this.enabled && payload.id === this.id) {
         this.changeQueue.push(payload);
-        this.processChangeQueue().catch((err) => this.onError?.(err));
+        this.processChangeQueue().catch(async (err: unknown) => {
+          if (this.onError) {
+            await this.onError(err);
+          } else {
+            throw err;
+          }
+        });
       }
     });
   }
@@ -121,7 +135,7 @@ export abstract class BaseStore<S extends State = State> {
 
   protected abstract patchBackend(state: S): void;
 
-  protected patchBackendHelper(fn: ReturnType<typeof patch>, state: S): void {
+  protected patchBackendHelper(fn: ReturnType<typeof commands.patch>, state: S): void {
     if (this.enabled) {
       let _state = this.options.hooks?.beforeBackendSync
         ? this.options.hooks.beforeBackendSync(state)
@@ -129,14 +143,20 @@ export abstract class BaseStore<S extends State = State> {
 
       if (_state) {
         _state = this.applyKeyFilters(_state);
-        fn(this.id, _state).catch((err) => this.onError?.(err));
+        fn(this.id, _state).catch(async (err: unknown) => {
+          if (this.onError) {
+            await this.onError(err);
+          } else {
+            throw err;
+          }
+        });
       }
     }
   }
 
   protected abstract setOptions(): Promise<void>;
 
-  protected async setOptionsHelper(fn: ReturnType<typeof setStoreOptions>): Promise<void> {
+  protected async setOptionsHelper(fn: ReturnType<typeof commands.setStoreOptions>): Promise<void> {
     try {
       await fn(this.id, {
         saveInterval: this.options.saveInterval,
@@ -145,7 +165,11 @@ export abstract class BaseStore<S extends State = State> {
         saveStrategy: this.options.saveStrategy,
       });
     } catch (err) {
-      this.onError?.(err);
+      if (this.onError) {
+        await this.onError(err);
+      } else {
+        throw err;
+      }
     }
   }
 
@@ -191,7 +215,41 @@ export abstract class BaseStore<S extends State = State> {
         await this.start();
       }
     } catch (err) {
-      this.onError?.(err);
+      if (this.onError) {
+        await this.onError(err);
+      } else {
+        throw err;
+      }
+    }
+  }
+
+  protected async updateDenylist(f: {
+    allowSave: ReturnType<typeof commands.allowSave>;
+    allowSync: ReturnType<typeof commands.allowSync>;
+    denySave: ReturnType<typeof commands.denySave>;
+    denySync: ReturnType<typeof commands.denySync>;
+  }): Promise<void> {
+    try {
+      const promises: Promise<void>[] = [];
+      if (this.options.save === false) {
+        promises.push(f.denySave(this.id));
+      } else {
+        promises.push(f.allowSave(this.id));
+      }
+
+      if (this.options.sync === false) {
+        promises.push(f.denySync(this.id));
+      } else {
+        promises.push(f.allowSync(this.id));
+      }
+
+      await Promise.all(promises);
+    } catch (err) {
+      if (this.onError) {
+        await this.onError(err);
+      } else {
+        throw err;
+      }
     }
   }
 

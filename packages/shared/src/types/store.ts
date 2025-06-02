@@ -79,6 +79,20 @@ export interface StoreFrontendOptions<S extends State = State> {
   readonly hooks?: StoreHooks<S>;
 
   /**
+   * Whether this store can be saved. Setting this to `false` will add the store to the save denylist.
+   *
+   * @default true
+   */
+  readonly save?: boolean;
+
+  /**
+   * Whether this store can be synced. Setting this to `false` will add the store to the sync denylist.
+   *
+   * @default true
+   */
+  readonly sync?: boolean;
+
+  /**
    * Interval in milliseconds to use when syncing the store with the backend.
    * This option is only valid when {@link StoreFrontendOptions.syncStrategy} is set to `debounce` or `throttle`.
    *

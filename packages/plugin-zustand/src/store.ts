@@ -8,8 +8,10 @@ import {
   DEFAULT_FILTER_KEYS,
   DEFAULT_FILTER_KEYS_STRATEGY,
   DEFAULT_HOOKS,
+  DEFAULT_SAVE,
   DEFAULT_SAVE_ON_CHANGE,
   DEFAULT_SAVE_ON_EXIT,
+  DEFAULT_SYNC,
   type Fn,
   merge,
   type State,
@@ -41,14 +43,17 @@ class TauriStore<S extends State, Store extends StoreApi<S>>
       filterKeys: options.filterKeys ?? DEFAULT_FILTER_KEYS,
       filterKeysStrategy: options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY,
       hooks: merge(options.hooks, DEFAULT_HOOKS as StoreHooks<S>),
+      save: options.save ?? DEFAULT_SAVE,
       saveInterval: saveStrategy.interval,
       saveOnChange: options.saveOnChange ?? DEFAULT_SAVE_ON_CHANGE,
       saveOnExit: options.saveOnExit ?? DEFAULT_SAVE_ON_EXIT,
       saveStrategy: saveStrategy.strategy,
+      sync: options.sync ?? DEFAULT_SYNC,
       syncInterval: syncStrategy.interval,
       syncStrategy: syncStrategy.strategy,
     } satisfies Required<TauriPluginZustandStoreOptions<S>>;
 
+    void this.updateDenylist(commands);
     void this.checkAutoStart();
   }
 
