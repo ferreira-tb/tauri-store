@@ -11,6 +11,7 @@ function store() {
 
 export const usePiniaStore = defineStore('playground', store, {
   tauri: {
+    autoStart: true,
     saveOnExit: true,
     saveOnChange: true,
   },

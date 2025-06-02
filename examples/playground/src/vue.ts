@@ -4,6 +4,7 @@ export const vueStore = createStore(
   'playground',
   { counter: 0 },
   {
+    autoStart: true,
     saveOnExit: true,
     saveOnChange: true,
   }
