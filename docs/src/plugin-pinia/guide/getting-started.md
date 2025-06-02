@@ -125,7 +125,7 @@ await store.$tauri.start();
 ```
 
 ::: tip
-Stores won't be saved nor synchronized until you call the [start](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/interfaces/TauriStoreContract.html#start) method.
+Stores won't be saved nor synchronized until you [start](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/interfaces/TauriStoreContract.html#start) them, but you can enable the [`autoStart`](https://tb.dev.br/tauri-store/js-docs/plugin-pinia/interfaces/StoreFrontendOptions.html#autostart) option to make them start automatically.
 :::
 
 ## Nuxt

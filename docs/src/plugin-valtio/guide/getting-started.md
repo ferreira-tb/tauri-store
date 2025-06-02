@@ -102,7 +102,7 @@ await counterStore.start();
 ```
 
 ::: tip
-Stores won't be saved nor synchronized until you call the [start](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/classes/Store.html#start) method.
+Stores won't be saved nor synchronized until you [start](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/classes/Store.html#start) them, but you can enable the [`autoStart`](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/interfaces/StoreFrontendOptions.html#autostart) option to make them start automatically.
 :::
 
 5. Use the store in your React components:
