@@ -3,7 +3,11 @@ export { Store, store } from './store';
 export { RuneStore, runeStore } from './runes';
 
 export {
+  allowSave,
+  allowSync,
   clearAutosave,
+  denySave,
+  denySync,
   getDefaultSaveStrategy,
   getSaveStrategy,
   getStoreCollectionPath,
