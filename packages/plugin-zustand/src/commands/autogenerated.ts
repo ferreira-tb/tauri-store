@@ -6,87 +6,58 @@
 import { commands } from '@tauri-store/shared';
 
 /**
+ * Removes one or more stores from the save denylist.
+ */
+export const allowSave = commands.allowSave('zustand');
+
+/**
+ * Removes one or more stores from the sync denylist.
+ */
+export const allowSync = commands.allowSync('zustand');
+
+/**
  * Stops the autosave.
- *
- * @example
- * ```ts
- * import { clearAutosave } from '@tauri-store/zustand';
- *
- * await clearAutosave();
- * ```
  */
 export const clearAutosave = commands.clearAutosave('zustand');
 
 /**
+ * Adds one or more stores to the save denylist.
+ */
+export const denySave = commands.denySave('zustand');
+
+/**
+ * Adds one or more stores to the sync denylist.
+ */
+export const denySync = commands.denySync('zustand');
+
+/**
  * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
- *
- * @example
- * ```ts
- * import { getDefaultSaveStrategy } from '@tauri-store/zustand';
- *
- * const { strategy, interval } = await getDefaultSaveStrategy();
- * ```
  */
 export const getDefaultSaveStrategy = commands.getDefaultSaveStrategy('zustand');
 
 /**
  * Directory where the stores are saved.
- *
- * @example
- * ```ts
- * import { getStoreCollectionPath } from '@tauri-store/zustand';
- *
- * const path = await getStoreCollectionPath();
- * ```
  */
 export const getStoreCollectionPath = commands.getStoreCollectionPath('zustand');
 
 /**
  * Gets the save strategy used by a store.
- *
- * @example
- * ```ts
- * import { getSaveStrategy } from '@tauri-store/zustand';
- *
- * const { strategy, interval } = await getSaveStrategy('my-store');
- * ```
  **/
 export const getSaveStrategy = commands.getSaveStrategy('zustand');
 
 /**
  * Lists all the store ids.
- *
- * @example
- * ```ts
- * import { getStoreIds } from '@tauri-store/zustand';
- *
- * const ids = await getStoreIds();
- * ```
  */
 export const getStoreIds = commands.getStoreIds('zustand');
 
 /**
  * Path where the store is saved.
- *
- * @example
- * ```ts
- * import { getStorePath } from '@tauri-store/zustand';
- *
- * const path = await getStorePath('my-store');
- * ```
  **/
 export const getStorePath = commands.getStorePath('zustand');
 
 /**
  * Gets the state of a store.
- *
- * @example
- * ```ts
- * import { getStoreState } from '@tauri-store/zustand';
- *
- * const state = await getStoreState('my-store');
- * ```
  */
 export const getStoreState = commands.getStoreState('zustand');
 
@@ -108,25 +79,11 @@ export const save = commands.save('zustand');
 
 /**
  * Saves all the stores to the disk.
- *
- * @example
- * ```ts
- * import { saveAll } from '@tauri-store/zustand';
- *
- * await saveAll();
- * ```
  */
 export const saveAll = commands.saveAll('zustand');
 
 /**
  * Saves all the stores to the disk immediately, ignoring the save strategy.
- *
- * @example
- * ```ts
- * import { saveAllNow } from '@tauri-store/zustand';
- *
- * await saveAllNow();
- * ```
  */
 export const saveAllNow = commands.saveAllNow('zustand');
 

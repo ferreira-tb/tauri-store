@@ -4,7 +4,11 @@
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
 
 const COMMANDS: &[&str] = &[
+  "allow_save",
+  "allow_sync",
   "clear_autosave",
+  "deny_save",
+  "deny_sync",
   "get_default_save_strategy",
   "get_store_collection_path",
   "get_save_strategy",

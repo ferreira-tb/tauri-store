@@ -1,6 +1,6 @@
 {
   "name": "@tauri-store/valtio",
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "Persistent Valtio stores for Tauri",
   "type": "module",
   "private": false,

@@ -8,9 +8,37 @@ import {
   type TimeStrategyRawTuple,
 } from '../time-strategy';
 
+export function allowSave(plugin: string) {
+  return function (...storeId: (string | string[])[]): Promise<void> {
+    const args: { ids: string[] } = { ids: flatten(storeId) };
+    return invoke(`plugin:${plugin}|allow_save`, args);
+  };
+}
+
+export function allowSync(plugin: string) {
+  return function (...storeId: (string | string[])[]): Promise<void> {
+    const args: { ids: string[] } = { ids: flatten(storeId) };
+    return invoke(`plugin:${plugin}|allow_sync`, args);
+  };
+}
+
 export function clearAutosave(plugin: string) {
   return function (): Promise<void> {
     return invoke(`plugin:${plugin}|clear_autosave`);
+  };
+}
+
+export function denySave(plugin: string) {
+  return function (...storeId: (string | string[])[]): Promise<void> {
+    const args: { ids: string[] } = { ids: flatten(storeId) };
+    return invoke(`plugin:${plugin}|deny_save`, args);
+  };
+}
+
+export function denySync(plugin: string) {
+  return function (...storeId: (string | string[])[]): Promise<void> {
+    const args: { ids: string[] } = { ids: flatten(storeId) };
+    return invoke(`plugin:${plugin}|deny_sync`, args);
   };
 }
 

@@ -8,10 +8,9 @@ use crate::event::{emit, STORE_UNLOAD_EVENT};
 use crate::meta::Meta;
 use crate::store::{SaveStrategy, Store, StoreId, StoreResource, StoreState, WatcherId};
 use autosave::Autosave;
-use dashmap::DashMap;
+use dashmap::{DashMap, DashSet};
 use serde::de::DeserializeOwned;
 use serde_json::Value as Json;
-use std::collections::HashSet;
 use std::fmt;
 use std::marker::PhantomData;
 use std::path::PathBuf;
@@ -42,8 +41,8 @@ where
   pub(crate) on_load: Option<Box<OnLoadFn<R, C>>>,
   pub(crate) autosave: Mutex<Autosave>,
   pub(crate) default_save_strategy: SaveStrategy,
-  pub(crate) save_denylist: Option<HashSet<StoreId>>,
-  pub(crate) sync_denylist: Option<HashSet<StoreId>>,
+  pub(crate) save_denylist: DashSet<StoreId>,
+  pub(crate) sync_denylist: DashSet<StoreId>,
   pub(crate) pretty: bool,
   phantom: PhantomData<C>,
 
@@ -322,6 +321,30 @@ where
     self
       .get_resource(store_id)?
       .locked(|store| Ok(store.unwatch(watcher_id)))
+  }
+
+  /// Removes a store from the save denylist.
+  pub fn allow_save(&self, id: impl AsRef<str>) {
+    let id = StoreId::from(id.as_ref());
+    self.save_denylist.remove(&id);
+  }
+
+  /// Adds a store to the save denylist.
+  pub fn deny_save(&self, id: impl AsRef<str>) {
+    let id = StoreId::from(id.as_ref());
+    self.save_denylist.insert(id);
+  }
+
+  /// Removes a store from the sync denylist.
+  pub fn allow_sync(&self, id: impl AsRef<str>) {
+    let id = StoreId::from(id.as_ref());
+    self.sync_denylist.remove(&id);
+  }
+
+  /// Adds a store to the deny denylist.
+  pub fn deny_sync(&self, id: impl AsRef<str>) {
+    let id = StoreId::from(id.as_ref());
+    self.sync_denylist.insert(id);
   }
 
   /// Removes the store from the collection.

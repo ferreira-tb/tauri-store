@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 3.7.0
+
+### Features
+
+- Allow adding or removing stores from the save and sync deny lists after the plugin has been built.
+
 ## 3.6.0
 
 ### Features

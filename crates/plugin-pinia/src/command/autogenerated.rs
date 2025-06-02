@@ -11,11 +11,47 @@ use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
 use tauri_store::{Result, SaveStrategy, StoreId, StoreOptions, StoreState};
 
 #[tauri::command]
+pub(crate) async fn allow_save<R>(app: AppHandle<R>, ids: Vec<StoreId>)
+where
+  R: Runtime,
+{
+  let pinia = app.pinia();
+  ids.iter().for_each(|id| pinia.allow_save(id));
+}
+
+#[tauri::command]
+pub(crate) async fn allow_sync<R>(app: AppHandle<R>, ids: Vec<StoreId>)
+where
+  R: Runtime,
+{
+  let pinia = app.pinia();
+  ids.iter().for_each(|id| pinia.allow_sync(id));
+}
+
+#[tauri::command]
 pub(crate) async fn clear_autosave<R>(app: AppHandle<R>)
 where
   R: Runtime,
 {
   app.pinia().clear_autosave();
+}
+
+#[tauri::command]
+pub(crate) async fn deny_save<R>(app: AppHandle<R>, ids: Vec<StoreId>)
+where
+  R: Runtime,
+{
+  let pinia = app.pinia();
+  ids.iter().for_each(|id| pinia.deny_save(id));
+}
+
+#[tauri::command]
+pub(crate) async fn deny_sync<R>(app: AppHandle<R>, ids: Vec<StoreId>)
+where
+  R: Runtime,
+{
+  let pinia = app.pinia();
+  ids.iter().for_each(|id| pinia.deny_sync(id));
 }
 
 #[tauri::command]

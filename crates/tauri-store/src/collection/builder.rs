@@ -5,8 +5,7 @@ use crate::error::Result;
 use crate::meta::Meta;
 use crate::store::{SaveStrategy, Store, StoreId};
 use crate::ManagerExt;
-use dashmap::DashMap;
-use std::collections::HashSet;
+use dashmap::{DashMap, DashSet};
 use std::marker::PhantomData;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
@@ -30,8 +29,8 @@ where
   autosave: Option<Duration>,
   on_load: Option<Box<OnLoadFn<R, C>>>,
   pretty: bool,
-  save_denylist: Option<HashSet<StoreId>>,
-  sync_denylist: Option<HashSet<StoreId>>,
+  save_denylist: DashSet<StoreId>,
+  sync_denylist: DashSet<StoreId>,
 
   #[cfg(feature = "unstable-migration")]
   migrator: Migrator,
@@ -92,11 +91,10 @@ where
     I: IntoIterator<Item = T>,
     T: AsRef<str>,
   {
-    self.save_denylist = Some(
+    self.save_denylist.extend(
       denylist
         .into_iter()
-        .map(|it| StoreId::from(it.as_ref()))
-        .collect(),
+        .map(|it| StoreId::from(it.as_ref())),
     );
 
     self
@@ -109,11 +107,10 @@ where
     I: IntoIterator<Item = T>,
     T: AsRef<str>,
   {
-    self.sync_denylist = Some(
+    self.sync_denylist.extend(
       denylist
         .into_iter()
-        .map(|it| StoreId::from(it.as_ref()))
-        .collect(),
+        .map(|it| StoreId::from(it.as_ref())),
     );
 
     self
@@ -194,9 +191,6 @@ where
       self.migrator.history = history;
     }
 
-    self.save_denylist = self.save_denylist.filter(|it| !it.is_empty());
-    self.sync_denylist = self.sync_denylist.filter(|it| !it.is_empty());
-
     app.manage(StoreCollection::<R, C> {
       app: app.clone(),
       name: Box::from(plugin_name),
@@ -252,8 +246,8 @@ where
       autosave: None,
       on_load: None,
       pretty: false,
-      save_denylist: None,
-      sync_denylist: None,
+      save_denylist: DashSet::new(),
+      sync_denylist: DashSet::new(),
 
       #[cfg(feature = "unstable-migration")]
       migrator: Migrator::default(),

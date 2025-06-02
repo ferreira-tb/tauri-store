@@ -11,11 +11,55 @@ use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
 
 #[tauri::command]
+pub(crate) async fn allow_save<R>(app: AppHandle<R>, ids: Vec<StoreId>)
+where
+  R: Runtime,
+{
+  let store_collection = app.store_collection();
+  ids
+    .iter()
+    .for_each(|id| store_collection.allow_save(id));
+}
+
+#[tauri::command]
+pub(crate) async fn allow_sync<R>(app: AppHandle<R>, ids: Vec<StoreId>)
+where
+  R: Runtime,
+{
+  let store_collection = app.store_collection();
+  ids
+    .iter()
+    .for_each(|id| store_collection.allow_sync(id));
+}
+
+#[tauri::command]
 pub(crate) async fn clear_autosave<R>(app: AppHandle<R>)
 where
   R: Runtime,
 {
   app.store_collection().clear_autosave();
+}
+
+#[tauri::command]
+pub(crate) async fn deny_save<R>(app: AppHandle<R>, ids: Vec<StoreId>)
+where
+  R: Runtime,
+{
+  let store_collection = app.store_collection();
+  ids
+    .iter()
+    .for_each(|id| store_collection.deny_save(id));
+}
+
+#[tauri::command]
+pub(crate) async fn deny_sync<R>(app: AppHandle<R>, ids: Vec<StoreId>)
+where
+  R: Runtime,
+{
+  let store_collection = app.store_collection();
+  ids
+    .iter()
+    .for_each(|id| store_collection.deny_sync(id));
 }
 
 #[tauri::command]

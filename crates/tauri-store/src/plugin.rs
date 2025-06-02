@@ -20,7 +20,11 @@ where
     .on_event(on_event)
     .setup(|app, _| setup(app, builder))
     .invoke_handler(tauri::generate_handler![
+      command::allow_save,
+      command::allow_sync,
       command::clear_autosave,
+      command::deny_save,
+      command::deny_sync,
       command::get_default_save_strategy,
       command::get_save_strategy,
       command::get_store_collection_path,
