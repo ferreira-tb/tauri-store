@@ -17,6 +17,7 @@ _Nothing yet._
 ### Features
 
 - Allow adding or removing stores from the save and sync deny lists after the plugin has been built.
+- Add [`save`](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/interfaces/StoreFrontendOptions.html#save) and [`sync`](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/interfaces/StoreFrontendOptions.html#sync) options.
 
 ## 2.6.0
 
