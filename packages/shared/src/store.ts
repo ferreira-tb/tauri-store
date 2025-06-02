@@ -186,16 +186,17 @@ export abstract class BaseStore<S extends State = State> {
   }
 
   protected applyKeyFilters(state: Partial<S>): Partial<S> {
-    if (!this.options.filterKeys) {
+    const filter = this.options.filterKeys ?? null;
+    const strategy = this.options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY;
+
+    // If the strategy is a callback, `filterKeys` doesn't matter, as we won't match against it.
+    if (!filter && typeof strategy !== 'function') {
       return state;
     }
 
     const result: Partial<S> = {};
-    const filter = this.options.filterKeys;
-    const strategy = this.options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY;
-
     for (const [key, value] of Object.entries(state)) {
-      if (!shouldFilterKey(filter, strategy, key)) {
+      if (shouldPickKey(filter, strategy, key)) {
         (result as State)[key] = value;
       }
     }
@@ -275,19 +276,19 @@ export abstract class BaseStore<S extends State = State> {
   }
 }
 
-function shouldFilterKey(
+function shouldPickKey(
   filter: StoreKeyFilter,
   strategy: StoreKeyFilterStrategy,
   key: string
 ): boolean {
   return (
-    (strategy === 'omit' && isStoreKeyMatch(filter, key)) ||
-    (strategy === 'pick' && !isStoreKeyMatch(filter, key)) ||
-    (typeof strategy === 'function' && !strategy(key))
+    (strategy === 'pick' && isKeyMatch(filter, key)) ||
+    (strategy === 'omit' && !isKeyMatch(filter, key)) ||
+    (typeof strategy === 'function' && strategy(key))
   );
 }
 
-function isStoreKeyMatch(filter: StoreKeyFilter, key: string): boolean {
+function isKeyMatch(filter: StoreKeyFilter, key: string): boolean {
   return (
     (typeof filter === 'string' && key === filter) ||
     (Array.isArray(filter) && filter.includes(key)) ||

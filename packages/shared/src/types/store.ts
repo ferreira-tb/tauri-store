@@ -55,6 +55,8 @@ export interface StoreFrontendOptions<S extends State = State> {
    *
    * The behavior depends on the value of {@link StoreFrontendOptions.filterKeysStrategy}.
    *
+   * This option is ignored if you set a callback as the filter strategy.
+   *
    * @default null
    */
   readonly filterKeys?: StoreKeyFilter;

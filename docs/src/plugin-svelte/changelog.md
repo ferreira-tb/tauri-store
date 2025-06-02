@@ -20,6 +20,10 @@ _Nothing yet._
 - Add [`allowSave`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/variables/allowSave.html), [`allowSync`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/variables/allowSync.html), [`denySave`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/variables/denySave.html), and [`denySync`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/variables/denySync.html) commands.
 - Add [`save`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/interfaces/StoreFrontendOptions.html#save) and [`sync`](https://tb.dev.br/tauri-store/js-docs/plugin-svelte/interfaces/StoreFrontendOptions.html#sync) options.
 
+### Bug fixes
+
+- Stop unnecessarily requiring `filterKeys` to be set when the strategy is a callback.
+
 ## 2.5.0
 
 ### Features

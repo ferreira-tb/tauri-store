@@ -20,6 +20,10 @@ _Nothing yet._
 - Add [`allowSave`](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/variables/allowSave.html), [`allowSync`](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/variables/allowSync.html), [`denySave`](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/variables/denySave.html), and [`denySync`](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/variables/denySync.html) commands.
 - Add [`save`](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/interfaces/StoreFrontendOptions.html#save) and [`sync`](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/interfaces/StoreFrontendOptions.html#sync) options.
 
+### Bug fixes
+
+- Stop unnecessarily requiring `filterKeys` to be set when the strategy is a callback.
+
 ## 2.6.0
 
 ### Features
