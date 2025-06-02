@@ -20,9 +20,9 @@ const items: { link: string; text: PluginName }[] = [
     <VPMenuLink v-for="item of items" :key="item.text" :item />
 
     <template #trigger>
-      <div class="trigger">
+      <div :key="plugin" class="trigger">
         <div class="icon">
-          <component :is="icon" :key="plugin" size="2rem" />
+          <component :is="icon" size="2rem" />
         </div>
         <div class="label">
           <span>Select a plugin</span>

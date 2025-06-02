@@ -9,16 +9,14 @@ import {
 } from '../time-strategy';
 
 export function allowSave(plugin: string) {
-  return function (...storeId: (string | string[])[]): Promise<void> {
-    const args: { ids: string[] } = { ids: flatten(storeId) };
-    return invoke(`plugin:${plugin}|allow_save`, args);
+  return function (...storeId: string[]): Promise<void> {
+    return invoke(`plugin:${plugin}|allow_save`, { ids: storeId });
   };
 }
 
 export function allowSync(plugin: string) {
-  return function (...storeId: (string | string[])[]): Promise<void> {
-    const args: { ids: string[] } = { ids: flatten(storeId) };
-    return invoke(`plugin:${plugin}|allow_sync`, args);
+  return function (...storeId: string[]): Promise<void> {
+    return invoke(`plugin:${plugin}|allow_sync`, { ids: storeId });
   };
 }
 
@@ -29,16 +27,14 @@ export function clearAutosave(plugin: string) {
 }
 
 export function denySave(plugin: string) {
-  return function (...storeId: (string | string[])[]): Promise<void> {
-    const args: { ids: string[] } = { ids: flatten(storeId) };
-    return invoke(`plugin:${plugin}|deny_save`, args);
+  return function (...storeId: string[]): Promise<void> {
+    return invoke(`plugin:${plugin}|deny_save`, { ids: storeId });
   };
 }
 
 export function denySync(plugin: string) {
-  return function (...storeId: (string | string[])[]): Promise<void> {
-    const args: { ids: string[] } = { ids: flatten(storeId) };
-    return invoke(`plugin:${plugin}|deny_sync`, args);
+  return function (...storeId: string[]): Promise<void> {
+    return invoke(`plugin:${plugin}|deny_sync`, { ids: storeId });
   };
 }
 
@@ -83,6 +79,7 @@ export function getStoreState(plugin: string) {
 }
 
 export function save(plugin: string) {
+  // TODO: use a saner signature.
   return function (...storeId: (string | string[])[]): Promise<void> {
     const args: { ids: string[] } = { ids: flatten(storeId) };
     return invoke(`plugin:${plugin}|save_some`, args);
@@ -102,6 +99,7 @@ export function saveAllNow(plugin: string) {
 }
 
 export function saveNow(plugin: string) {
+  // TODO: use a saner signature.
   return function (...storeId: (string | string[])[]): Promise<void> {
     const args: { ids: string[] } = { ids: flatten(storeId) };
     return invoke(`plugin:${plugin}|save_some_now`, args);

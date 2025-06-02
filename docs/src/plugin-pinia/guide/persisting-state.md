@@ -73,7 +73,17 @@ You can also enable [`autosave`](https://docs.rs/tauri-plugin-pinia/latest/tauri
 
 ::: code-group
 
-```rust{5} [src-tauri/src/lib.rs]
+```typescript [JavaScript]
+import { setAutosave, clearAutosave } from '@tauri-store/pinia';
+
+// Save every five minutes.
+await setAutosave(300);
+
+// Disable the autosave.
+await clearAutosave();
+```
+
+```rust [Rust]
 use std::time::Duration;
 
 // Save every five minutes.
