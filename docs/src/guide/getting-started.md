@@ -18,7 +18,7 @@ Install the [Rust crate](https://crates.io/crates/tauri-store) by adding the fol
 
 ```toml [src-tauri/Cargo.toml]
 [dependencies]
-tauri-store = "0.11"
+tauri-store = "0.12"
 ```
 
 :::
