@@ -19,7 +19,7 @@
     "@tauri-store/zustand": "workspace:*",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vueuse/core": "^13.3.0",
-    "pinia": "^3.0.2",
+    "pinia": "^3.0.3",
     "vue": "^3.5.16",
     "vue-tsc": "^2.2.10"
   }

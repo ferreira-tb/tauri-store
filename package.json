@@ -28,7 +28,7 @@
     "@tb-dev/eslint-config": "^7.1.6",
     "@types/node": "^22.15.29",
     "@types/react": "^19.1.6",
-    "@types/react-dom": "^19.1.5",
+    "@types/react-dom": "^19.1.6",
     "eslint": "^9.28.0",
     "prettier": "^3.5.3",
     "prettier-plugin-css-order": "^2.1.2",

@@ -11,14 +11,14 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^3.0.8",
-    "@sveltejs/kit": "^2.21.1",
-    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@sveltejs/kit": "^2.21.2",
+    "@sveltejs/vite-plugin-svelte": "^5.1.0",
     "@tauri-apps/api": "^2.5.0",
     "@tauri-apps/plugin-process": "^2.2.1",
     "@tauri-apps/plugin-shell": "^2.2.1",
     "@tauri-store/svelte": "workspace:*",
     "@tb-dev/utils": "^7.0.2",
-    "svelte": "^5.33.13",
+    "svelte": "^5.33.14",
     "svelte-check": "^4.2.1"
   }
 }
