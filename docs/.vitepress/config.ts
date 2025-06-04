@@ -8,6 +8,9 @@ export default defineConfig({
   cleanUrls: true,
   metaChunk: true,
   lastUpdated: true,
+  sitemap: {
+    hostname: 'https://tb.dev.br/tauri-store/',
+  },
 
   vite: {
     build: {

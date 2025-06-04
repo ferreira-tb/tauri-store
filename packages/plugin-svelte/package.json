@@ -56,9 +56,9 @@
     "svelte": "^5.15.0"
   },
   "devDependencies": {
-    "@sveltejs/kit": "^2.21.1",
+    "@sveltejs/kit": "^2.21.2",
     "@sveltejs/package": "^2.3.11",
-    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@sveltejs/vite-plugin-svelte": "^5.1.0",
     "svelte-check": "^4.2.1"
   }
 }
