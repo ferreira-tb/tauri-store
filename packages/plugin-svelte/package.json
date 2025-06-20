@@ -4,7 +4,7 @@
   "description": "Persistent Svelte stores and runes for Tauri",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@10.11.1",
+  "packageManager": "pnpm@10.12.1",
   "homepage": "https://tb.dev.br/tauri-store/plugin-svelte/guide/getting-started",
   "license": "MIT",
   "funding": "https://github.com/sponsors/ferreira-tb",
@@ -56,9 +56,9 @@
     "svelte": "^5.15.0"
   },
   "devDependencies": {
-    "@sveltejs/kit": "^2.21.2",
+    "@sveltejs/kit": "^2.22.0",
     "@sveltejs/package": "^2.3.11",
     "@sveltejs/vite-plugin-svelte": "^5.1.0",
-    "svelte-check": "^4.2.1"
+    "svelte-check": "^4.2.2"
   }
 }
