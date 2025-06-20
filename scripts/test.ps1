@@ -10,5 +10,5 @@ if ($Ubuntu) {
   sudo apt-get -y install libgtk-3-dev libwebkit2gtk-4.1-dev
 }
 
-cargo +nightly clippy --workspace
+cargo clippy --workspace
 cargo test -p tauri-store --tests -- --test-threads=1
