@@ -9,7 +9,7 @@
     "build:shared": "pnpm run -F @tauri-store/shared build",
     "build:package": "pnpm run -F \"tauri-store\" -F \"./packages/plugin-*\" build",
     "cli": "cargo install --path ./crates/tauri-store-cli --force --profile release-cli",
-    "clippy": "cargo +nightly clippy --workspace",
+    "clippy": "cargo clippy --workspace",
     "codegen": "cargo run -p tauri-store-cli -- codegen",
     "dev": "cargo tauri dev",
     "docs:crate": "cargo +nightly doc -p tauri-* --open --no-deps --lib --all-features",
