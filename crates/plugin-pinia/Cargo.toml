@@ -40,7 +40,7 @@ default-features = false
 features = ["derive"]
 
 [build-dependencies.tauri-plugin]
-version = "2.2"
+version = "2.3"
 features = ["build"]
 
 [features]

@@ -4,7 +4,7 @@
   "description": "Persistence for Tauri and Vue",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@10.12.4",
   "homepage": "https://tb.dev.br/tauri-store/plugin-vue/guide/getting-started",
   "license": "MIT",
   "funding": "https://github.com/sponsors/ferreira-tb",

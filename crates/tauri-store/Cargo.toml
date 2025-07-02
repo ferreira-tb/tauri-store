@@ -58,7 +58,7 @@ default-features = false
 features = ["time"]
 
 [build-dependencies.tauri-plugin]
-version = "2.2"
+version = "2.3"
 optional = true
 features = ["build"]
 
