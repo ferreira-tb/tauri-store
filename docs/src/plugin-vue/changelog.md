@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 1.0.0
+
+### Dependencies
+
+- Update minor dependencies.
+
 ## 0.3.0
 
 ### Features

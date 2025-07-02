@@ -1,7 +1,7 @@
 [package]
 name = "tauri-plugin-vue"
 description = "Persistence for Tauri and Vue"
-version = "0.3.0"
+version = "1.0.0"
 documentation = "https://docs.rs/tauri-plugin-vue"
 homepage = "https://tb.dev.br/tauri-store/plugin-vue/guide/getting-started"
 repository = "https://github.com/ferreira-tb/tauri-store"
