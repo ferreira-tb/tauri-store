@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 3.7.1
+
+### Dependencies
+
+- Update minor dependencies.
+
 ## 3.7.0
 
 ### Features

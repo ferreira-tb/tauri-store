@@ -1,7 +1,7 @@
 {
   "name": "example-valtio",
   "type": "module",
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@10.12.4",
   "private": true,
   "scripts": {
     "type-check": "tsc --noEmit",
@@ -9,12 +9,12 @@
     "vite:dev": "vite dev"
   },
   "devDependencies": {
-    "@tauri-apps/api": "^2.5.0",
-    "@tauri-apps/plugin-process": "^2.2.2",
-    "@tauri-apps/plugin-shell": "^2.2.2",
+    "@tauri-apps/api": "^2.6.0",
+    "@tauri-apps/plugin-process": "^2.3.0",
+    "@tauri-apps/plugin-shell": "^2.3.0",
     "@tauri-store/valtio": "workspace:*",
-    "@tb-dev/utils": "^7.0.4",
-    "@vitejs/plugin-react": "^4.5.2",
+    "@tb-dev/utils": "^7.0.5",
+    "@vitejs/plugin-react": "^4.6.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "valtio": "^2.1.5"

@@ -1,7 +1,7 @@
 {
   "name": "example-vue",
   "type": "module",
-  "packageManager": "pnpm@10.12.1",
+  "packageManager": "pnpm@10.12.4",
   "private": true,
   "scripts": {
     "type-check": "vue-tsc --noEmit",
@@ -9,13 +9,13 @@
     "vite:build": "vite build"
   },
   "devDependencies": {
-    "@tauri-apps/api": "^2.5.0",
-    "@tauri-apps/plugin-process": "^2.2.2",
-    "@tauri-apps/plugin-shell": "^2.2.2",
+    "@tauri-apps/api": "^2.6.0",
+    "@tauri-apps/plugin-process": "^2.3.0",
+    "@tauri-apps/plugin-shell": "^2.3.0",
     "@tauri-store/vue": "workspace:*",
-    "@vitejs/plugin-vue": "^5.2.4",
-    "@vueuse/core": "^13.4.0",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vueuse/core": "^13.5.0",
     "vue": "^3.5.17",
-    "vue-tsc": "^2.2.10"
+    "vue-tsc": "^3.0.1"
   }
 }
