@@ -20,7 +20,7 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   /// This likely indicates that it was called before the plugin was properly initialized.
   ///
   /// [store collection]: https://docs.rs/tauri-store/latest/tauri_store/struct.StoreCollection.html
-  fn valtio(&self) -> Valtio<R> {
+  fn valtio(&self) -> Valtio<'_, R> {
     Valtio(
       self
         .app_handle()

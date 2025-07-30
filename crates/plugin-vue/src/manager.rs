@@ -20,7 +20,7 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   /// This likely indicates that it was called before the plugin was properly initialized.
   ///
   /// [store collection]: https://docs.rs/tauri-store/latest/tauri_store/struct.StoreCollection.html
-  fn vue(&self) -> Vue<R> {
+  fn vue(&self) -> Vue<'_, R> {
     Vue(
       self
         .app_handle()
