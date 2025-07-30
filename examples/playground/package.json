@@ -1,7 +1,7 @@
 {
   "name": "playground",
   "type": "module",
-  "packageManager": "pnpm@10.12.4",
+  "packageManager": "pnpm@10.13.1",
   "private": true,
   "scripts": {
     "type-check": "vue-tsc --noEmit",
@@ -9,7 +9,7 @@
     "vite:build": "vite build"
   },
   "devDependencies": {
-    "@tauri-apps/api": "^2.6.0",
+    "@tauri-apps/api": "^2.7.0",
     "@tauri-apps/plugin-process": "^2.3.0",
     "@tauri-apps/plugin-shell": "^2.3.0",
     "@tauri-store/pinia": "workspace:*",
@@ -17,10 +17,10 @@
     "@tauri-store/valtio": "workspace:*",
     "@tauri-store/vue": "workspace:*",
     "@tauri-store/zustand": "workspace:*",
-    "@vitejs/plugin-vue": "^6.0.0",
-    "@vueuse/core": "^13.5.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vueuse/core": "^13.6.0",
     "pinia": "^3.0.3",
-    "vue": "^3.5.17",
-    "vue-tsc": "^3.0.1"
+    "vue": "^3.5.18",
+    "vue-tsc": "^3.0.4"
   }
 }

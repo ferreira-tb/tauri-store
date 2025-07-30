@@ -3,5 +3,6 @@
 *.js linguist-detectable=false
 *.cjs linguist-detectable=false
 *.mjs linguist-detectable=false
+*.ps1 linguist-detectable=false
 *.vue linguist-detectable=false
 *.svelte linguist-detectable=false
