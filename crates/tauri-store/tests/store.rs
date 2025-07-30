@@ -44,11 +44,11 @@ async fn id() {
 #[tokio::test]
 async fn try_state() {
   with_store(|store| {
-    let state = store.try_state::<Foo>();
+    let state = store.state::<Foo>();
     assert!(state.is_err());
 
     store.set("key", 42).unwrap();
-    let state = store.try_state::<Foo>();
+    let state = store.state::<Foo>();
     assert!(state.is_ok_and(|state| state.key == 42));
   })
   .await;
@@ -57,11 +57,11 @@ async fn try_state() {
 #[tokio::test]
 async fn try_state_or() {
   with_store(|store| {
-    let state = store.try_state_or(Foo { key: 100 });
+    let state = store.state_or(Foo { key: 100 });
     assert_eq!(state.key, 100);
 
     store.set("key", 42).unwrap();
-    let state = store.try_state_or(Foo { key: 100 });
+    let state = store.state_or(Foo { key: 100 });
     assert_eq!(state.key, 42);
   })
   .await;
@@ -70,11 +70,11 @@ async fn try_state_or() {
 #[tokio::test]
 async fn try_state_or_default() {
   with_store(|store| {
-    let state = store.try_state_or_default::<Foo>();
+    let state = store.state_or_default::<Foo>();
     assert_eq!(state.key, 0);
 
     store.set("key", 42).unwrap();
-    let state = store.try_state_or_default::<Foo>();
+    let state = store.state_or_default::<Foo>();
     assert_eq!(state.key, 42);
   })
   .await;
@@ -84,11 +84,11 @@ async fn try_state_or_default() {
 async fn try_state_or_else() {
   with_store(|store| {
     let else_fn = || Foo { key: 100 };
-    let state = store.try_state_or_else(else_fn);
+    let state = store.state_or_else(else_fn);
     assert_eq!(state.key, 100);
 
     store.set("key", 42).unwrap();
-    let state = store.try_state_or_else(else_fn);
+    let state = store.state_or_else(else_fn);
     assert_eq!(state.key, 42);
   })
   .await;
@@ -97,11 +97,11 @@ async fn try_state_or_else() {
 #[tokio::test]
 async fn get() {
   with_store(|store| {
-    let value = store.get("key");
+    let value = store.get_raw("key");
     assert!(value.is_none());
 
     store.set("key", "value").unwrap();
-    let value = store.get("key").unwrap();
+    let value = store.get_raw("key").unwrap();
     assert_eq!(value, &Value::from("value"));
   })
   .await;
@@ -110,11 +110,11 @@ async fn get() {
 #[tokio::test]
 async fn try_get() {
   with_store(|store| {
-    let value = store.try_get::<u8>("key");
+    let value = store.get::<u8>("key");
     assert!(value.is_err());
 
     store.set("key", 42).unwrap();
-    let value = store.try_get::<u8>("key");
+    let value = store.get::<u8>("key");
     assert_eq!(value.unwrap(), 42);
   })
   .await;
@@ -123,11 +123,11 @@ async fn try_get() {
 #[tokio::test]
 async fn try_get_or() {
   with_store(|store| {
-    let value = store.try_get_or::<u8>("key", 20);
+    let value = store.get_or::<u8>("key", 20);
     assert_eq!(value, 20);
 
     store.set("key", 42).unwrap();
-    let value = store.try_get_or::<u8>("key", 20);
+    let value = store.get_or::<u8>("key", 20);
     assert_eq!(value, 42);
   })
   .await;
@@ -136,11 +136,11 @@ async fn try_get_or() {
 #[tokio::test]
 async fn try_get_or_default() {
   with_store(|store| {
-    let value = store.try_get_or_default::<u8>("key");
+    let value = store.get_or_default::<u8>("key");
     assert_eq!(value, 0);
 
     store.set("key", 42).unwrap();
-    let value = store.try_get_or_default::<u8>("key");
+    let value = store.get_or_default::<u8>("key");
     assert_eq!(value, 42);
   })
   .await;
@@ -150,11 +150,11 @@ async fn try_get_or_default() {
 async fn try_get_or_else() {
   let else_fn = || 20;
   with_store(|store| {
-    let value = store.try_get_or_else::<u8>("key", else_fn);
+    let value = store.get_or_else::<u8>("key", else_fn);
     assert_eq!(value, 20);
 
     store.set("key", 42).unwrap();
-    let value = store.try_get_or_else::<u8>("key", else_fn);
+    let value = store.get_or_else::<u8>("key", else_fn);
     assert_eq!(value, 42);
   })
   .await;
@@ -163,11 +163,11 @@ async fn try_get_or_else() {
 #[tokio::test]
 async fn set() {
   with_store(|store| {
-    let value = store.get("key");
+    let value = store.get_raw("key");
     assert!(value.is_none());
 
     store.set("key", 42).unwrap();
-    let value = store.get("key").unwrap();
+    let value = store.get_raw("key").unwrap();
     assert_eq!(value, &Value::from(42));
   })
   .await;
@@ -176,11 +176,11 @@ async fn set() {
 #[tokio::test]
 async fn patch() {
   with_store(|store| {
-    let value = store.get("key");
+    let value = store.get_raw("key");
     assert!(value.is_none());
 
     store.patch(("key", 42)).unwrap();
-    let value = store.get("key").unwrap();
+    let value = store.get_raw("key").unwrap();
     assert_eq!(value, &Value::from(42));
   })
   .await;
@@ -191,7 +191,7 @@ async fn patch_many() {
   with_store(|store| {
     let keys = ["key0", "key1", "key2", "key3", "key4"];
     for key in keys {
-      let value = store.get(key);
+      let value = store.get_raw(key);
       assert!(value.is_none());
     }
 
@@ -204,7 +204,7 @@ async fn patch_many() {
     store.patch(pairs).unwrap();
 
     for (i, key) in keys.iter().enumerate() {
-      let value = store.get(key).unwrap();
+      let value = store.get_raw(key).unwrap();
       assert_eq!(value, &Value::from(i));
     }
   })

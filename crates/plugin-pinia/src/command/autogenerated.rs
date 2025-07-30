@@ -101,7 +101,7 @@ pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: StoreId) -> Result
 where
   R: Runtime,
 {
-  app.pinia().state(id)
+  app.pinia().raw_state(id)
 }
 
 #[tauri::command]
@@ -112,7 +112,7 @@ where
   spawn_blocking(move || {
     app
       .pinia()
-      .with_store(id, |store| store.state().clone())
+      .with_store(id, |store| store.raw_state().clone())
   })
   .await?
 }

@@ -2,13 +2,13 @@ use crate::error::Result;
 use crate::io_err;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use serde_json::Value as Json;
+use serde_json::{Map, Value};
 use std::collections::HashMap;
 use std::result::Result as StdResult;
 
 /// Internal state of a store.
 #[derive(Clone, Debug, Default)]
-pub struct StoreState(HashMap<String, Json>);
+pub struct StoreState(HashMap<String, Value>);
 
 impl StoreState {
   /// Creates an empty [`StoreState`].
@@ -23,22 +23,22 @@ impl StoreState {
 
   /// Consumes the [`StoreState`] and returns the inner [`HashMap`](std::collections::HashMap).
   #[inline]
-  pub fn into_inner(self) -> HashMap<String, Json> {
+  pub fn into_inner(self) -> HashMap<String, Value> {
     self.0
   }
 
-  /// Gets a reference to the value corresponding to the key.
-  pub fn get(&self, key: impl AsRef<str>) -> Option<&Json> {
+  /// Gets a reference to the raw value corresponding to the key.
+  pub fn get_raw(&self, key: impl AsRef<str>) -> Option<&Value> {
     self.0.get(key.as_ref())
   }
 
-  /// Gets a mutable reference to the value corresponding to the key.
-  pub fn get_mut(&mut self, key: impl AsRef<str>) -> Option<&mut Json> {
+  /// Gets a mutable reference to the raw value corresponding to the key.
+  pub fn get_raw_mut(&mut self, key: impl AsRef<str>) -> Option<&mut Value> {
     self.0.get_mut(key.as_ref())
   }
 
   /// Gets a value and tries to parse it as an instance of type `T`.
-  pub fn try_get<T>(&self, key: impl AsRef<str>) -> Result<T>
+  pub fn get<T>(&self, key: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
   {
@@ -53,35 +53,35 @@ impl StoreState {
   /// Gets a value and tries to parse it as an instance of type `T`.
   ///
   /// If it does not exist, returns the provided default value.
-  pub fn try_get_or<T>(&self, key: impl AsRef<str>, default: T) -> T
+  pub fn get_or<T>(&self, key: impl AsRef<str>, default: T) -> T
   where
     T: DeserializeOwned,
   {
-    self.try_get(key).unwrap_or(default)
+    self.get(key).unwrap_or(default)
   }
 
   /// Gets a value and tries to parse it as an instance of type `T`.
   ///
   /// If it does not exist, returns the default value of `T`.
-  pub fn try_get_or_default<T>(&self, key: impl AsRef<str>) -> T
+  pub fn get_or_default<T>(&self, key: impl AsRef<str>) -> T
   where
     T: DeserializeOwned + Default,
   {
-    self.try_get(key).unwrap_or_default()
+    self.get(key).unwrap_or_default()
   }
 
   /// Gets a value and tries to parse it as an instance of type `T`.
   ///
   /// If it does not exist, returns the result of the provided closure.
-  pub fn try_get_or_else<T>(&self, key: impl AsRef<str>, f: impl FnOnce() -> T) -> T
+  pub fn get_or_else<T>(&self, key: impl AsRef<str>, f: impl FnOnce() -> T) -> T
   where
     T: DeserializeOwned,
   {
-    self.try_get(key).unwrap_or_else(|_| f())
+    self.get(key).unwrap_or_else(|_| f())
   }
 
   /// Sets a key-value pair, returning the previous value, if any.
-  pub fn set(&mut self, key: impl AsRef<str>, value: impl Into<Json>) -> Option<Json> {
+  pub fn set(&mut self, key: impl AsRef<str>, value: impl Into<Value>) -> Option<Value> {
     let key = key.as_ref().to_owned();
     self.0.insert(key, value.into())
   }
@@ -102,34 +102,34 @@ impl StoreState {
   }
 
   /// Creates an iterator over the values.
-  pub fn values(&self) -> impl Iterator<Item = &Json> {
+  pub fn values(&self) -> impl Iterator<Item = &Value> {
     self.0.values()
   }
 
   /// Creates an iterator over mutable references to the values.
-  pub fn values_mut(&mut self) -> impl Iterator<Item = &mut Json> {
+  pub fn values_mut(&mut self) -> impl Iterator<Item = &mut Value> {
     self.0.values_mut()
   }
 
   /// Creates an iterator over the entries.
-  pub fn entries(&self) -> impl Iterator<Item = (&String, &Json)> {
+  pub fn entries(&self) -> impl Iterator<Item = (&String, &Value)> {
     self.0.iter()
   }
 
   /// Creates an iterator over mutable references to the entries.
-  pub fn entries_mut(&mut self) -> impl Iterator<Item = (&String, &mut Json)> {
+  pub fn entries_mut(&mut self) -> impl Iterator<Item = (&String, &mut Value)> {
     self.0.iter_mut()
   }
 
   /// Removes a key, returning the previous value, if any.
-  pub fn remove(&mut self, key: impl AsRef<str>) -> Option<Json> {
+  pub fn remove(&mut self, key: impl AsRef<str>) -> Option<Value> {
     self.0.remove(key.as_ref())
   }
 
   /// Retains only the values specified by the predicate.
   pub fn retain<F>(&mut self, f: F)
   where
-    F: FnMut(&String, &mut Json) -> bool,
+    F: FnMut(&String, &mut Value) -> bool,
   {
     self.0.retain(f);
   }
@@ -167,13 +167,13 @@ impl<'de> Deserialize<'de> for StoreState {
   where
     D: Deserializer<'de>,
   {
-    type Map = HashMap<String, Json>;
+    type Map = HashMap<String, Value>;
     Ok(Self(Map::deserialize(deserializer)?))
   }
 }
 
-impl From<HashMap<String, Json>> for StoreState {
-  fn from(map: HashMap<String, Json>) -> Self {
+impl From<HashMap<String, Value>> for StoreState {
+  fn from(map: HashMap<String, Value>) -> Self {
     Self(map)
   }
 }
@@ -181,25 +181,25 @@ impl From<HashMap<String, Json>> for StoreState {
 impl<K, V> FromIterator<(K, V)> for StoreState
 where
   K: Into<String>,
-  V: Into<Json>,
+  V: Into<Value>,
 {
   fn from_iter<I>(iter: I) -> Self
   where
     I: IntoIterator<Item = (K, V)>,
   {
-    Self(
-      iter
-        .into_iter()
-        .map(|(k, v)| (k.into(), v.into()))
-        .collect(),
-    )
+    let state = iter
+      .into_iter()
+      .map(|(k, v)| (k.into(), v.into()))
+      .collect();
+
+    Self(state)
   }
 }
 
 impl<K, V> From<(K, V)> for StoreState
 where
   K: Into<String>,
-  V: Into<Json>,
+  V: Into<Value>,
 {
   fn from((key, value): (K, V)) -> Self {
     Self::from_iter([(key, value)])
@@ -209,7 +209,7 @@ where
 impl<K, V> From<Vec<(K, V)>> for StoreState
 where
   K: Into<String>,
-  V: Into<Json>,
+  V: Into<Value>,
 {
   fn from(pairs: Vec<(K, V)>) -> Self {
     Self::from_iter(pairs)
@@ -219,9 +219,21 @@ where
 impl<const N: usize, K, V> From<[(K, V); N]> for StoreState
 where
   K: Into<String>,
-  V: Into<Json>,
+  V: Into<Value>,
 {
   fn from(pairs: [(K, V); N]) -> Self {
     Self::from_iter(pairs)
+  }
+}
+
+impl From<StoreState> for Value {
+  fn from(state: StoreState) -> Self {
+    Value::from(Map::from_iter(state.0))
+  }
+}
+
+impl From<&StoreState> for Value {
+  fn from(state: &StoreState) -> Self {
+    Value::from(state.clone())
   }
 }

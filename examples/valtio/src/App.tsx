@@ -2,9 +2,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useEffect } from 'react';
 import { useSnapshot } from 'valtio';
-import { printStore } from './commands';
 import { exit } from '@tauri-apps/plugin-process';
-import { increment, incrementNested, openStore, store } from './store';
+import { increment, openStore, store } from './store';
 import { clearAutosave, setAutosave } from '@tauri-store/valtio/src/index.js';
 
 export default function App() {
@@ -29,16 +28,10 @@ export default function App() {
       </div>
 
       <section id="counter">
-        <p>
-          Counter: {storeState.counter}
-          Nested: {storeState.nested.foo.bar.baz}
-        </p>
+        <p>Counter: {storeState.counter}</p>
         <div className="action">
           <button type="button" onClick={increment}>
             Increment
-          </button>
-          <button type="button" onClick={incrementNested}>
-            Increment Nested
           </button>
           <button type="button" onClick={store.start}>
             Start
@@ -51,9 +44,6 @@ export default function App() {
           </button>
           <button type="button" onClick={store.saveNow}>
             Save Now
-          </button>
-          <button type="button" onClick={printStore}>
-            Print
           </button>
           <button type="button" onClick={openStore}>
             Open

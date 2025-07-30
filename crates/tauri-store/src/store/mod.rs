@@ -11,7 +11,7 @@ use crate::manager::ManagerExt;
 use options::set_options;
 use save::{debounce, throttle, SaveHandle};
 use serde::de::DeserializeOwned;
-use serde_json::{json, Value as Json};
+use serde_json::Value;
 use std::collections::HashMap;
 use std::fmt;
 use std::marker::PhantomData;
@@ -127,95 +127,96 @@ where
     &self.app
   }
 
-  /// Gets a reference to the store state.
+  /// Gets a reference to the raw store state.
   #[inline]
-  pub fn state(&self) -> &StoreState {
+  pub fn raw_state(&self) -> &StoreState {
     &self.state
   }
 
   /// Tries to parse the store state as an instance of type `T`.
-  pub fn try_state<T>(&self) -> Result<T>
+  pub fn state<T>(&self) -> Result<T>
   where
     T: DeserializeOwned,
   {
-    Ok(serde_json::from_value(json!(self.state))?)
+    let value = Value::from(&self.state);
+    Ok(serde_json::from_value(value)?)
   }
 
   /// Tries to parse the store state as an instance of type `T`.
   ///
   /// If it cannot be parsed, returns the provided default value.
-  pub fn try_state_or<T>(&self, default: T) -> T
+  pub fn state_or<T>(&self, default: T) -> T
   where
     T: DeserializeOwned,
   {
-    self.try_state().unwrap_or(default)
+    self.state().unwrap_or(default)
   }
 
   /// Tries to parse the store state as an instance of type `T`.
   ///
   /// If it cannot be parsed, returns the default value of `T`.
-  pub fn try_state_or_default<T>(&self) -> T
+  pub fn state_or_default<T>(&self) -> T
   where
     T: DeserializeOwned + Default,
   {
-    self.try_state().unwrap_or_default()
+    self.state().unwrap_or_default()
   }
 
   /// Tries to parse the store state as an instance of type `T`.
   ///
   /// If it cannot be parsed, returns the result of the provided closure.
-  pub fn try_state_or_else<T>(&self, f: impl FnOnce() -> T) -> T
+  pub fn state_or_else<T>(&self, f: impl FnOnce() -> T) -> T
   where
     T: DeserializeOwned,
   {
-    self.try_state().unwrap_or_else(|_| f())
+    self.state().unwrap_or_else(|_| f())
   }
 
-  /// Gets a value from the store.
-  pub fn get(&self, key: impl AsRef<str>) -> Option<&Json> {
-    self.state.get(key)
+  /// Gets a raw value from the store.
+  pub fn get_raw(&self, key: impl AsRef<str>) -> Option<&Value> {
+    self.state.get_raw(key)
   }
 
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
-  pub fn try_get<T>(&self, key: impl AsRef<str>) -> Result<T>
+  pub fn get<T>(&self, key: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
   {
-    self.state.try_get(key)
+    self.state.get(key)
   }
 
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
   ///
   /// If the key does not exist, returns the provided default value.
-  pub fn try_get_or<T>(&self, key: impl AsRef<str>, default: T) -> T
+  pub fn get_or<T>(&self, key: impl AsRef<str>, default: T) -> T
   where
     T: DeserializeOwned,
   {
-    self.state.try_get_or(key, default)
+    self.state.get_or(key, default)
   }
 
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
   ///
   /// If the key does not exist, returns the default value of `T`.
-  pub fn try_get_or_default<T>(&self, key: impl AsRef<str>) -> T
+  pub fn get_or_default<T>(&self, key: impl AsRef<str>) -> T
   where
     T: DeserializeOwned + Default,
   {
-    self.state.try_get_or_default(key)
+    self.state.get_or_default(key)
   }
 
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
   ///
   /// If the key does not exist, returns the result of the provided closure.
-  pub fn try_get_or_else<T>(&self, key: impl AsRef<str>, f: impl FnOnce() -> T) -> T
+  pub fn get_or_else<T>(&self, key: impl AsRef<str>, f: impl FnOnce() -> T) -> T
   where
     T: DeserializeOwned,
   {
-    self.state.try_get_or_else(key, f)
+    self.state.get_or_else(key, f)
   }
 
   /// Sets a key-value pair in the store.
-  pub fn set(&mut self, key: impl AsRef<str>, value: impl Into<Json>) -> Result<()> {
+  pub fn set(&mut self, key: impl AsRef<str>, value: impl Into<Value>) -> Result<()> {
     self.state.set(key, value);
     self.on_state_change(None::<&str>)
   }
@@ -250,12 +251,12 @@ where
   }
 
   /// Creates an iterator over the store values.
-  pub fn values(&self) -> impl Iterator<Item = &Json> {
+  pub fn values(&self) -> impl Iterator<Item = &Value> {
     self.state.values()
   }
 
   /// Creates an iterator over the store entries.
-  pub fn entries(&self) -> impl Iterator<Item = (&String, &Json)> {
+  pub fn entries(&self) -> impl Iterator<Item = (&String, &Value)> {
     self.state.entries()
   }
 

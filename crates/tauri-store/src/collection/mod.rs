@@ -10,7 +10,7 @@ use crate::store::{SaveStrategy, Store, StoreId, StoreResource, StoreState, Watc
 use autosave::Autosave;
 use dashmap::{DashMap, DashSet};
 use serde::de::DeserializeOwned;
-use serde_json::Value as Json;
+use serde_json::Value;
 use std::fmt;
 use std::marker::PhantomData;
 use std::path::PathBuf;
@@ -107,101 +107,101 @@ where
     Ok(self.get_resource(store_id)?.locked(f))
   }
 
-  /// Gets a clone of the store state.
-  pub fn state(&self, store_id: impl AsRef<str>) -> Result<StoreState> {
+  /// Gets a clone of the raw store state.
+  pub fn raw_state(&self, store_id: impl AsRef<str>) -> Result<StoreState> {
     self
       .get_resource(store_id)?
-      .locked(|store| Ok(store.state().clone()))
+      .locked(|store| Ok(store.raw_state().clone()))
   }
 
   /// Gets the store state, then tries to parse it as an instance of type `T`.
-  pub fn try_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
+  pub fn state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
   {
     self
       .get_resource(store_id)?
-      .locked(|store| store.try_state())
+      .locked(|store| store.state())
   }
 
   /// Gets the store state, then tries to parse it as an instance of type `T`.
   ///
   /// If it cannot be parsed, returns the provided default value.
-  pub fn try_state_or<T>(&self, store_id: impl AsRef<str>, default: T) -> Result<T>
+  pub fn state_or<T>(&self, store_id: impl AsRef<str>, default: T) -> Result<T>
   where
     T: DeserializeOwned,
   {
     self
       .get_resource(store_id)?
-      .locked(move |store| Ok(store.try_state_or(default)))
+      .locked(move |store| Ok(store.state_or(default)))
   }
 
   /// Gets the store state, then tries to parse it as an instance of type `T`.
   ///
   /// If it cannot be parsed, returns the default value of `T`.
-  pub fn try_state_or_default<T>(&self, store_id: impl AsRef<str>) -> Result<T>
+  pub fn state_or_default<T>(&self, store_id: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned + Default,
   {
     self
       .get_resource(store_id)?
-      .locked(|store| Ok(store.try_state_or_default()))
+      .locked(|store| Ok(store.state_or_default()))
   }
 
   /// Gets the store state, then tries to parse it as an instance of type `T`.
   ///
   /// If it cannot be parsed, returns the result of the provided closure.
-  pub fn try_state_or_else<T>(&self, store_id: impl AsRef<str>, f: impl FnOnce() -> T) -> Result<T>
+  pub fn state_or_else<T>(&self, store_id: impl AsRef<str>, f: impl FnOnce() -> T) -> Result<T>
   where
     T: DeserializeOwned,
   {
     self
       .get_resource(store_id)?
-      .locked(|store| Ok(store.try_state_or_else(f)))
+      .locked(|store| Ok(store.state_or_else(f)))
   }
 
-  /// Gets a value from a store.
-  pub fn get(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Option<Json> {
+  /// Gets a raw value from a store.
+  pub fn get_raw(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Option<Value> {
     self
       .get_resource(store_id)
       .ok()?
-      .locked(|store| store.get(key).cloned())
+      .locked(|store| store.get_raw(key).cloned())
   }
 
   /// Gets a value from a store and tries to parse it as an instance of type `T`.
-  pub fn try_get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
+  pub fn get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
   where
     T: DeserializeOwned,
   {
     self
       .get_resource(store_id)?
-      .locked(|store| store.try_get(key))
+      .locked(|store| store.get(key))
   }
 
   /// Gets a value from a store and tries to parse it as an instance of type `T`.
   ///
   /// If the key does not exist, returns the provided default value.
-  pub fn try_get_or<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, default: T) -> T
+  pub fn get_or<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, default: T) -> T
   where
     T: DeserializeOwned,
   {
-    self.try_get(store_id, key).unwrap_or(default)
+    self.get(store_id, key).unwrap_or(default)
   }
 
   /// Gets a value from a store and tries to parse it as an instance of type `T`.
   ///
   /// If the key does not exist, returns the default value of `T`.
-  pub fn try_get_or_default<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> T
+  pub fn get_or_default<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> T
   where
     T: Default + DeserializeOwned,
   {
-    self.try_get(store_id, key).unwrap_or_default()
+    self.get(store_id, key).unwrap_or_default()
   }
 
   /// Gets a value from a store and tries to parse it as an instance of type `T`.
   ///
   /// If the key does not exist, returns the result of the provided closure.
-  pub fn try_get_or_else<T>(
+  pub fn get_or_else<T>(
     &self,
     store_id: impl AsRef<str>,
     key: impl AsRef<str>,
@@ -210,16 +210,14 @@ where
   where
     T: DeserializeOwned,
   {
-    self
-      .try_get(store_id, key)
-      .unwrap_or_else(|_| f())
+    self.get(store_id, key).unwrap_or_else(|_| f())
   }
 
   /// Sets a key-value pair in a store.
   pub fn set<K, V>(&self, store_id: impl AsRef<str>, key: K, value: V) -> Result<()>
   where
     K: AsRef<str>,
-    V: Into<Json>,
+    V: Into<Value>,
   {
     self
       .get_resource(store_id)?

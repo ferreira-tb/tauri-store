@@ -11,6 +11,15 @@ outline: 2
 
 _Nothing yet._
 
+## 1.0.0
+
+### Breaking Changes
+
+- Rename `Store::get` to `Store::get_raw`.
+- Rename `Store::try_get`, `Store::try_get_or`, `Store::try_get_or_default`, and `Store::try_get_or_else` to `Store::get`, `Store::get_or`, `Store::get_or_default`, and `Store::get_or_else`, respectively.
+- Rename `Store::state` to `Store::raw_state`.
+- Rename `StoreCollection::try_state`, `StoreCollection::try_state_or`, `StoreCollection::try_state_or_default`, and `StoreCollection::try_state_or_else` to `StoreCollection::state`, `StoreCollection::state_or`, `StoreCollection::state_or_default`, and `StoreCollection::state_or_else`, respectively.
+
 ## 0.12.1
 
 ### Dependencies

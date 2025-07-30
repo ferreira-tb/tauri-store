@@ -1,7 +1,6 @@
-use crate::CollectionMarker;
-
 use super::save::SaveStrategy;
 use super::Store;
+use crate::CollectionMarker;
 use serde::{Deserialize, Serialize};
 use tauri::Runtime;
 

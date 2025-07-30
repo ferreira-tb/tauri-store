@@ -4,6 +4,7 @@
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
 
 use serde::{Deserialize, Serialize};
+use std::error::Error;
 use std::time::Duration;
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 use tauri_plugin_pinia::{ManagerExt, SaveStrategy};
@@ -27,19 +28,15 @@ pub fn run() {
         .pretty(true)
         .build(),
     )
-    .setup(|app| {
-      let handle = app.handle();
-      (1..=3).for_each(|id| open_window(handle, id));
-      Ok(())
-    })
-    .invoke_handler(tauri::generate_handler![
-      get_counter,
-      print_store,
-      try_get_counter,
-      try_store_state
-    ])
+    .setup(|app| setup(app.handle()))
+    .invoke_handler(tauri::generate_handler![get_counter, get_state])
     .run(tauri::generate_context!())
     .unwrap();
+}
+
+fn setup(app: &AppHandle) -> Result<(), Box<dyn Error>> {
+  (1..=3).for_each(|id| open_window(app, id));
+  Ok(())
 }
 
 fn open_window(app: &AppHandle, id: u8) {
@@ -58,32 +55,17 @@ fn open_window(app: &AppHandle, id: u8) {
 }
 
 #[tauri::command]
-async fn get_counter(app: AppHandle) -> Option<i32> {
+async fn get_counter(app: AppHandle) -> i32 {
   app
     .pinia()
-    .get("counter-store", "counter")
-    .and_then(|counter| serde_json::from_value(counter).ok())
-}
-
-#[tauri::command]
-async fn print_store(app: AppHandle) {
-  let state = app.pinia().state("counter-store").unwrap();
-
-  println!("{state:?}");
-}
-
-#[tauri::command]
-async fn try_get_counter(app: AppHandle) -> i32 {
-  app
-    .pinia()
-    .try_get::<i32>("counter-store", "counter")
+    .get::<i32>("counter-store", "counter")
     .unwrap()
 }
 
 #[tauri::command]
-async fn try_store_state(app: AppHandle) -> CounterStore {
+async fn get_state(app: AppHandle) -> CounterStore {
   app
     .pinia()
-    .try_state::<CounterStore>("counter-store")
+    .state::<CounterStore>("counter-store")
     .unwrap()
 }

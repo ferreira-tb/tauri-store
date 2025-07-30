@@ -21,7 +21,10 @@ where
   C: CollectionMarker,
 {
   fn from(store: &'a Store<R, C>) -> Self {
-    Self { id: &store.id, state: store.state() }
+    Self {
+      id: &store.id,
+      state: store.raw_state(),
+    }
   }
 }
 
