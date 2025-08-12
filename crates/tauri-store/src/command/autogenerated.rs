@@ -2,6 +2,10 @@
 //
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
+//
+// To modify the behavior of the plugin, you must either change the
+// upstream `tauri-store` crate or update the code generation itself.
+// This ensures that all plugins maintain consistent behavior.
 
 use crate::manager::ManagerExt;
 use crate::{Result, SaveStrategy, StoreId, StoreOptions, StoreState};

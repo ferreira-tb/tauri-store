@@ -1,6 +1,6 @@
 use crate::path::examples_dir;
 use crate::process::command;
-use anyhow::Result;
+use anyhow::{Result, bail};
 use clap::Args;
 use itertools::Itertools;
 use rand::seq::IndexedRandom;
@@ -44,7 +44,9 @@ impl Example {
 
   fn pick_example(&mut self) -> Result<String> {
     if let Some(example) = self.example.take() {
-      if example != "random" {
+      if is_mobile(&example) {
+        bail!("cannot run mobile example yet");
+      } else if example != "random" {
         return Ok(example);
       }
     }
@@ -66,11 +68,19 @@ fn examples() -> Result<Vec<String>> {
         .into_string()
         .expect("invalid dirname");
 
-      if !EXCLUDE.contains(&name.as_str()) {
+      if !should_exclude(&name) && !is_mobile(&name) {
         examples.push(name);
       }
     }
   }
 
   Ok(examples)
+}
+
+fn is_mobile(name: &str) -> bool {
+  name.ends_with("-mobile")
+}
+
+fn should_exclude(name: &str) -> bool {
+  EXCLUDE.contains(&name)
 }

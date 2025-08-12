@@ -39,7 +39,8 @@ impl Meta {
     R: Runtime,
     C: CollectionMarker,
   {
-    let path = meta_file_path(&collection.app, &collection.name)?;
+    let app = collection.handle.app();
+    let path = meta_file_path(app, &collection.name)?;
     let mut meta = read(&path)?;
     meta.inner.path = Some(collection.path());
 

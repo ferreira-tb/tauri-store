@@ -5,6 +5,7 @@ export default defineConfig({
     'docs/tsconfig.json',
     'examples/migration/tsconfig.json',
     'examples/pinia/tsconfig.json',
+    'examples/pinia-mobile/tsconfig.json',
     'examples/pinia-nuxt/tsconfig.json',
     'examples/playground/tsconfig.json',
     'examples/svelte/tsconfig.json',

@@ -9,7 +9,9 @@ use std::path::{Path, PathBuf};
 use std::sync::{Arc, LazyLock, OnceLock};
 use tauri::test::{mock_app, MockRuntime};
 use tauri::{AppHandle, Manager};
-use tauri_store::{DefaultMarker, ManagerExt, SaveStrategy, Store, StoreCollection, StoreId};
+use tauri_store::{
+  DefaultMarker, Handle, ManagerExt, SaveStrategy, Store, StoreCollection, StoreId,
+};
 use tokio::fs;
 use tokio::sync::{Notify, Semaphore, SemaphorePermit};
 use tokio::time::{sleep, timeout, Duration};
@@ -22,13 +24,14 @@ static PATH: LazyLock<PathBuf> = LazyLock::new(default_path);
 static SEMAPHORE: Semaphore = Semaphore::const_new(1);
 static HANDLE: LazyLock<AppHandle<MockRuntime>> = LazyLock::new(|| {
   let app = mock_app();
-  let handle = app.app_handle();
+  let app_handle = app.app_handle().clone();
+  let handle = Handle::new(app_handle.clone());
   StoreCollection::<_, DefaultMarker>::builder()
     .path(&*PATH)
-    .build(app.app_handle(), env!("CARGO_PKG_NAME"))
+    .build(handle, env!("CARGO_PKG_NAME"))
     .unwrap();
 
-  handle.clone()
+  app_handle
 });
 
 #[derive(Default, Deserialize)]
@@ -42,7 +45,7 @@ async fn id() {
 }
 
 #[tokio::test]
-async fn try_state() {
+async fn state() {
   with_store(|store| {
     let state = store.state::<Foo>();
     assert!(state.is_err());
@@ -55,7 +58,7 @@ async fn try_state() {
 }
 
 #[tokio::test]
-async fn try_state_or() {
+async fn state_or() {
   with_store(|store| {
     let state = store.state_or(Foo { key: 100 });
     assert_eq!(state.key, 100);
@@ -68,7 +71,7 @@ async fn try_state_or() {
 }
 
 #[tokio::test]
-async fn try_state_or_default() {
+async fn state_or_default() {
   with_store(|store| {
     let state = store.state_or_default::<Foo>();
     assert_eq!(state.key, 0);
@@ -81,7 +84,7 @@ async fn try_state_or_default() {
 }
 
 #[tokio::test]
-async fn try_state_or_else() {
+async fn state_or_else() {
   with_store(|store| {
     let else_fn = || Foo { key: 100 };
     let state = store.state_or_else(else_fn);
@@ -95,7 +98,7 @@ async fn try_state_or_else() {
 }
 
 #[tokio::test]
-async fn get() {
+async fn get_raw() {
   with_store(|store| {
     let value = store.get_raw("key");
     assert!(value.is_none());
@@ -108,7 +111,7 @@ async fn get() {
 }
 
 #[tokio::test]
-async fn try_get() {
+async fn get() {
   with_store(|store| {
     let value = store.get::<u8>("key");
     assert!(value.is_err());
@@ -121,7 +124,7 @@ async fn try_get() {
 }
 
 #[tokio::test]
-async fn try_get_or() {
+async fn get_or() {
   with_store(|store| {
     let value = store.get_or::<u8>("key", 20);
     assert_eq!(value, 20);
@@ -134,7 +137,7 @@ async fn try_get_or() {
 }
 
 #[tokio::test]
-async fn try_get_or_default() {
+async fn get_or_default() {
   with_store(|store| {
     let value = store.get_or_default::<u8>("key");
     assert_eq!(value, 0);
@@ -147,7 +150,7 @@ async fn try_get_or_default() {
 }
 
 #[tokio::test]
-async fn try_get_or_else() {
+async fn get_or_else() {
   let else_fn = || 20;
   with_store(|store| {
     let value = store.get_or_else::<u8>("key", else_fn);

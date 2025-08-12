@@ -17,7 +17,7 @@ mod migration;
 #[cfg(feature = "plugin")]
 mod plugin;
 
-pub use collection::{CollectionMarker, DefaultMarker, OnLoadFn, StoreCollection};
+pub use collection::{CollectionMarker, DefaultMarker, Handle, OnLoadFn, StoreCollection};
 pub use error::{BoxResult, Error, Result};
 pub use manager::ManagerExt;
 pub use serde_json::Value as Json;
@@ -28,7 +28,7 @@ pub use event::{
 };
 
 #[cfg(feature = "derive")]
-pub use tauri_store_macros::{Collection, CollectionBuilder};
+pub use tauri_store_macros::Collection;
 
 #[cfg(feature = "plugin")]
 pub use plugin::{init, Builder};

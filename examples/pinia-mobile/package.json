@@ -1,0 +1,20 @@
+{
+  "name": "example-pinia-mobile",
+  "type": "module",
+  "packageManager": "pnpm@10.14.0",
+  "private": true,
+  "scripts": {
+    "type-check": "vue-tsc --noEmit",
+    "vite:dev": "vite dev",
+    "vite:build": "vite build"
+  },
+  "devDependencies": {
+    "@tauri-apps/api": "^2.7.0",
+    "@tauri-store/pinia": "workspace:*",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vueuse/core": "^13.6.0",
+    "pinia": "^3.0.3",
+    "vue": "^3.5.18",
+    "vue-tsc": "^3.0.5"
+  }
+}

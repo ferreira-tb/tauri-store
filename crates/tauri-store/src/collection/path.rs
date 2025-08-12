@@ -29,10 +29,11 @@ where
 
     fs::create_dir_all(&new)?;
 
+    let app = self.handle.app();
     let resources = self
       .rids()
       .into_iter()
-      .map(|rid| StoreResource::<R, C>::get(&self.app, rid))
+      .map(|rid| StoreResource::<R, C>::get(app, rid))
       .process_results(|res| res.collect_vec())
       .unwrap_or_default();
 

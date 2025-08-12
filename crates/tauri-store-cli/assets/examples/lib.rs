@@ -29,6 +29,7 @@ pub fn run() {
     .unwrap();
 }
 
+#[allow(clippy::unnecessary_wraps)]
 fn setup(app: &AppHandle) -> Result<(), Box<dyn Error>> {
   (1..=3).for_each(|id| open_window(app, id));
   Ok(())

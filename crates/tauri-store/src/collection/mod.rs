@@ -1,5 +1,6 @@
 mod autosave;
 mod builder;
+mod handle;
 mod marker;
 mod path;
 
@@ -19,6 +20,7 @@ use std::time::Duration;
 use tauri::{AppHandle, Resource, ResourceId, Runtime};
 
 pub use builder::StoreCollectionBuilder;
+pub use handle::Handle;
 pub use marker::{CollectionMarker, DefaultMarker};
 
 #[cfg(feature = "unstable-migration")]
@@ -34,7 +36,7 @@ where
   R: Runtime,
   C: CollectionMarker,
 {
-  pub(crate) app: AppHandle<R>,
+  pub(crate) handle: Handle<R>,
   pub(crate) name: Box<str>,
   pub(crate) path: Mutex<PathBuf>,
   pub(crate) stores: DashMap<StoreId, ResourceId>,
@@ -67,11 +69,11 @@ where
       None => self.load_store(id)?,
     };
 
-    StoreResource::get(&self.app, rid)
+    StoreResource::get(self.handle.app(), rid)
   }
 
   fn load_store(&self, id: StoreId) -> Result<ResourceId> {
-    let (rid, resource) = Store::load(&self.app, &id)?;
+    let (rid, resource) = Store::load(self.handle.app(), &id)?;
     if let Some(on_load) = &self.on_load {
       resource.locked(|store| on_load(store))?;
     }
@@ -88,6 +90,11 @@ where
   /// Gets the resource ids for all the stores.
   fn rids(&self) -> Vec<ResourceId> {
     self.stores.iter().map(|it| *it.value()).collect()
+  }
+
+  /// Gets a handle to the application instance.
+  pub fn app_handle(&self) -> &AppHandle<R> {
+    self.handle.app()
   }
 
   /// Lists all the store ids.
@@ -264,18 +271,20 @@ where
     // I suppose going through the rids is better than through the store ids.
     // This way, we don't need to hold references into the dashmap nor clone its keys.
     // The downside (?) is that we need to use the StoreResource directly.
+    let app = self.handle.app();
     self
       .rids()
       .into_iter()
-      .try_for_each(|rid| StoreResource::<R, C>::save(&self.app, rid))
+      .try_for_each(|rid| StoreResource::<R, C>::save(app, rid))
   }
 
   /// Saves all the stores to the disk immediately, ignoring the save strategy.
   pub fn save_all_now(&self) -> Result<()> {
+    let app = self.handle.app();
     self
       .rids()
       .into_iter()
-      .try_for_each(|rid| StoreResource::<R, C>::save_now(&self.app, rid))
+      .try_for_each(|rid| StoreResource::<R, C>::save_now(app, rid))
   }
 
   /// Default save strategy for the stores.
@@ -289,7 +298,7 @@ where
   pub fn set_autosave(&self, duration: Duration) {
     if let Ok(mut autosave) = self.autosave.lock() {
       autosave.set_duration(duration);
-      autosave.start::<R, C>(&self.app);
+      autosave.start::<R, C>(self.handle.app());
     }
   }
 
@@ -348,14 +357,15 @@ where
   /// Removes the store from the collection.
   #[doc(hidden)]
   pub fn unload_store(&self, id: &StoreId) -> Result<()> {
+    let app = self.handle.app();
     if let Some((_, rid)) = self.stores.remove(id) {
       // The store needs to be saved immediately here.
       // Otherwise, the plugin might try to load it again if `StoreCollection::get_resource` is called.
       // This scenario will happen whenever the save strategy is not `Immediate`.
-      let resource = StoreResource::<R, C>::take(&self.app, rid)?;
+      let resource = StoreResource::<R, C>::take(app, rid)?;
       resource.locked(|store| store.save_now())?;
 
-      emit(&self.app, STORE_UNLOAD_EVENT, id, None::<&str>)?;
+      emit(app, STORE_UNLOAD_EVENT, id, None::<&str>)?;
     }
 
     Ok(())
@@ -366,8 +376,9 @@ where
   pub fn on_exit(&self) -> Result<()> {
     self.clear_autosave();
 
+    let app = self.handle.app();
     for rid in self.rids() {
-      if let Ok(resource) = StoreResource::<R, C>::take(&self.app, rid) {
+      if let Ok(resource) = StoreResource::<R, C>::take(app, rid) {
         resource.locked(|store| {
           store.abort_pending_save();
           if store.save_on_exit {

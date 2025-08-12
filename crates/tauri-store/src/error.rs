@@ -14,8 +14,14 @@ pub type BoxResult<T> = StdResult<T, Box<dyn StdError>>;
 pub enum Error {
   #[error(transparent)]
   Io(#[from] std::io::Error),
+
   #[error(transparent)]
   Json(#[from] serde_json::Error),
+
+  #[cfg(any(target_os = "android", target_os = "ios"))]
+  #[error(transparent)]
+  PluginInvoke(#[from] tauri::plugin::mobile::PluginInvokeError),
+
   #[error(transparent)]
   Tauri(#[from] tauri::Error),
 }

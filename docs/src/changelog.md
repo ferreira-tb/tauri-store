@@ -20,6 +20,10 @@ _Nothing yet._
 - Rename `Store::state` to `Store::raw_state`.
 - Rename `StoreCollection::try_state`, `StoreCollection::try_state_or`, `StoreCollection::try_state_or_default`, and `StoreCollection::try_state_or_else` to `StoreCollection::state`, `StoreCollection::state_or`, `StoreCollection::state_or_default`, and `StoreCollection::state_or_else`, respectively.
 
+### Features
+
+- Add `StoreCollection::app_handle`.
+
 ## 0.12.1
 
 ### Dependencies

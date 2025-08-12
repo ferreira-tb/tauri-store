@@ -1,3 +1,4 @@
+use super::handle::Handle;
 use super::marker::CollectionMarker;
 use super::{DefaultMarker, OnLoadFn, StoreCollection};
 use crate::collection::autosave::Autosave;
@@ -163,17 +164,14 @@ where
   ///
   /// Panics if a store collection is already initialized.
   #[doc(hidden)]
-  pub fn build<M>(mut self, app: &M, plugin_name: &str) -> Result<()>
-  where
-    M: Manager<R>,
-  {
-    let app = app.app_handle();
+  pub fn build(mut self, handle: Handle<R>, plugin_name: &str) -> Result<()> {
+    let app = handle.app().clone();
     debug_assert!(
       app.try_state::<StoreCollection<R, C>>().is_none(),
       "store collection is already initialized"
     );
 
-    let meta = Meta::read(app, plugin_name)?;
+    let meta = Meta::read(&app, plugin_name)?;
     let path = meta
       .inner
       .path
@@ -192,7 +190,7 @@ where
     }
 
     app.manage(StoreCollection::<R, C> {
-      app: app.clone(),
+      handle,
       name: Box::from(plugin_name),
       path: Mutex::new(path),
       stores: DashMap::new(),
@@ -213,7 +211,7 @@ where
       .autosave
       .lock()
       .unwrap()
-      .start::<R, C>(app);
+      .start::<R, C>(&app);
 
     Ok(())
   }

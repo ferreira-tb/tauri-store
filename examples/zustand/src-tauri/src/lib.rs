@@ -2,6 +2,10 @@
 //
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
+//
+// To modify the behavior of the plugin, you must either change the
+// upstream `tauri-store` crate or update the code generation itself.
+// This ensures that all plugins maintain consistent behavior.
 
 use serde::{Deserialize, Serialize};
 use std::error::Error;
@@ -34,6 +38,7 @@ pub fn run() {
     .unwrap();
 }
 
+#[allow(clippy::unnecessary_wraps)]
 fn setup(app: &AppHandle) -> Result<(), Box<dyn Error>> {
   (1..=3).for_each(|id| open_window(app, id));
   Ok(())

@@ -12,7 +12,7 @@
     "@tb-dev/utils": "^7.0.10",
     "@vueuse/core": "^13.6.0",
     "change-case": "^5.4.4",
-    "vitepress": "^2.0.0-alpha.9",
+    "vitepress": "^2.0.0-alpha.10",
     "vue": "^3.5.18"
   }
 }
