@@ -31,5 +31,8 @@ const COMMANDS: &[&str] = &[
 ];
 
 fn main() {
-  tauri_plugin::Builder::new(COMMANDS).build();
+  tauri_plugin::Builder::new(COMMANDS)
+    .android_path("../tauri-store/android")
+    .ios_path("../tauri-store/ios")
+    .build();
 }

@@ -37,7 +37,7 @@ tauri = "2"
 version = "0.12"
 path = "../tauri-store"
 default-features = false
-features = ["derive"]
+features = ["derive","build"]
 
 [build-dependencies.tauri-plugin]
 version = "2.3"

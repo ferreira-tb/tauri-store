@@ -51,7 +51,7 @@ impl<R: Runtime> Builder<R> {
   /// Builds the Pinia plugin.
   pub fn build(self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
-      .setup(|app, _| setup(app, self))
+      .setup(|app, api| setup(app, api, self))
       .on_event(on_event)
       .invoke_handler(tauri::generate_handler![
         command::allow_save,
@@ -83,11 +83,16 @@ impl<R: Runtime> Builder<R> {
   }
 }
 
-fn setup<R>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()>
+fn setup<R, C>(
+  app: &AppHandle<R>,
+  api: tauri::plugin::PluginApi<R, C>,
+  builder: Builder<R>,
+) -> BoxResult<()>
 where
   R: Runtime,
+  C: serde::de::DeserializeOwned,
 {
-  builder.build_collection(app)?;
+  builder.build_collection(app, api)?;
   Ok(())
 }
 
