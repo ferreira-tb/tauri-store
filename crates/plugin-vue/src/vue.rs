@@ -12,7 +12,9 @@ use tauri_store::{Collection, CollectionMarker, StoreCollection};
 
 /// The Vue plugin.
 #[derive(Collection)]
-pub struct Vue<'a, R: Runtime>(pub(crate) State<'a, StoreCollection<R, VueMarker>>);
+pub struct Vue<'a, R: Runtime>(
+  pub(crate) State<'a, StoreCollection<R, VueMarker>>,
+);
 
 /// Marker for the Vue plugin.
 pub struct VueMarker;
