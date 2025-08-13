@@ -7,11 +7,11 @@
 // upstream `tauri-store` crate or update the code generation itself.
 // This ensures that all plugins maintain consistent behavior.
 
+use tauri_store::{ManagerExt, SaveStrategy};
 use serde::{Deserialize, Serialize};
 use std::error::Error;
 use std::time::Duration;
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
-use tauri_store::{ManagerExt, SaveStrategy};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]

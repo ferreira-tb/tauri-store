@@ -12,9 +12,9 @@
 #![doc = include_str!("../README.md")]
 #![doc(html_favicon_url = "https://tb.dev.br/tauri-store/favicon.ico")]
 
+mod valtio;
 mod command;
 mod manager;
-mod valtio;
 
 use serde::de::DeserializeOwned;
 use std::collections::HashSet;
@@ -26,15 +26,15 @@ use tauri::{AppHandle, RunEvent, Runtime};
 #[cfg(feature = "unstable-migration")]
 use tauri_store::Migrator;
 
+pub use valtio::{Valtio, ValtioMarker};
 pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
-pub use valtio::{Valtio, ValtioMarker};
 
 #[cfg(feature = "unstable-migration")]
 pub use tauri_store::{Migration, MigrationContext};
 
 #[cfg(target_os = "ios")]
-tauri::ios_plugin_binding!(init_plugin_valtio_plugin);
+tauri::ios_plugin_binding!(init_plugin_tauri_store);
 
 /// Builder for the Valtio plugin.
 pub struct Builder<R: Runtime> {
@@ -251,15 +251,15 @@ where
 }
 
 #[cfg(any(target_os = "android", target_os = "ios"))]
-fn setup<R, D>(app: &AppHandle<R>, api: PluginApi<R, D>, builder: Builder<R>) -> BoxResult<()>
+fn setup<R, D>(_app: &AppHandle<R>, api: PluginApi<R, D>, builder: Builder<R>) -> BoxResult<()>
 where
   R: Runtime,
   D: DeserializeOwned,
 {
   #[cfg(target_os = "android")]
-  let handle = api.register_android_plugin("", "ValtioPlugin")?;
+  let handle = api.register_android_plugin("com.plugin.tauri.store", "StorePlugin")?;
   #[cfg(target_os = "ios")]
-  let handle = api.register_ios_plugin(init_plugin_valtio_plugin)?;
+  let handle = api.register_ios_plugin(init_plugin_tauri_store)?;
 
   builder.build_collection(Handle::new(handle))?;
   Ok(())
