@@ -3,6 +3,7 @@ use super::marker::CollectionMarker;
 use super::{DefaultMarker, OnLoadFn, StoreCollection};
 use crate::collection::autosave::Autosave;
 use crate::error::Result;
+#[cfg(any(target_os = "windows", target_os = "macos", target_os = "linux"))]
 use crate::meta::Meta;
 use crate::store::{SaveStrategy, Store, StoreId};
 use crate::ManagerExt;
@@ -170,8 +171,9 @@ where
       app.try_state::<StoreCollection<R, C>>().is_none(),
       "store collection is already initialized"
     );
-
+    #[cfg(any(target_os = "windows", target_os = "macos", target_os = "linux"))]
     let meta = Meta::read(&app, plugin_name)?;
+    #[cfg(any(target_os = "windows", target_os = "macos", target_os = "linux"))]
     let path = meta
       .inner
       .path
@@ -183,7 +185,9 @@ where
           .expect("failed to resolve app data dir")
           .join(plugin_name)
       });
-
+    #[cfg(any(target_os = "android", target_os = "ios"))]
+    let path = handle.get_sandboxed_path()?;
+    println!("Store collection path: just after the sandboxed path retrieval");
     #[cfg(feature = "unstable-migration")]
     if let Some(history) = meta.inner.migration_history {
       self.migrator.history = history;
