@@ -34,7 +34,7 @@ pub use tauri_store::prelude::*;
 pub use tauri_store::{Migration, MigrationContext};
 
 #[cfg(target_os = "ios")]
-tauri::ios_plugin_binding!(init_plugin_tauri_store);
+tauri::ios_plugin_binding!(init_plugin_valtio);
 
 /// Builder for the Valtio plugin.
 pub struct Builder<R: Runtime> {
@@ -257,9 +257,12 @@ where
   D: DeserializeOwned,
 {
   #[cfg(target_os = "android")]
-  let handle = api.register_android_plugin("com.plugin.tauri.store", "StorePlugin")?;
+  let handle = api.register_android_plugin(
+    "com.plugin.valtio",
+    "ValtioPlugin",
+  )?;
   #[cfg(target_os = "ios")]
-  let handle = api.register_ios_plugin(init_plugin_tauri_store)?;
+  let handle = api.register_ios_plugin(init_plugin_valtio)?;
 
   builder.build_collection(Handle::new(handle))?;
   Ok(())

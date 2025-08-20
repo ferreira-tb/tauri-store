@@ -33,3 +33,11 @@ pub fn crate_src_dir(plugin: Plugin) -> PathBuf {
 pub fn package_src_dir(plugin: Plugin) -> PathBuf {
   packages_dir().join(plugin.dir_name()).join("src")
 }
+
+pub fn crate_ios_dir(plugin: Plugin) -> PathBuf {
+  crate_dir(plugin).join("ios")
+}
+
+pub fn crate_android_dir(plugin: Plugin) -> PathBuf {
+  crate_dir(plugin).join("android")
+}
