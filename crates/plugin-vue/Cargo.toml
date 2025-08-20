@@ -9,7 +9,6 @@ authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
 keywords = ["nuxt", "plugin", "store", "tauri", "vue"]
-links = "tauri-plugin-vue"
 
 [package.edition]
 workspace = true
