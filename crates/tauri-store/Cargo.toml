@@ -9,7 +9,7 @@ authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
 keywords = ["plugin", "store", "tauri"]
-
+links = "tauri-store"
 
 [package.edition]
 workspace = true

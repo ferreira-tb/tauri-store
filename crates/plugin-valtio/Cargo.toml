@@ -9,7 +9,7 @@ authors = ["Andrew Ferreira <andrew.shien2@gmail.com>"]
 license = "MIT"
 readme = "./README.md"
 keywords = ["plugin", "react", "store", "tauri", "valtio"]
-
+links = "tauri-plugin-valtio"
 
 [package.edition]
 workspace = true
