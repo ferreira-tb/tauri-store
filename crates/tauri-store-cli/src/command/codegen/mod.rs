@@ -38,7 +38,7 @@ impl Codegen {
   }
 }
 
-#[derive(Builder)]
+#[derive(Build  er)]
 #[builder(finish_fn = replace)]
 struct Generator<'a> {
   #[builder(start_fn)]
