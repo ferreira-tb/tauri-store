@@ -13,7 +13,7 @@ import UIKit
 import WebKit
 
 class PiniaPlugin: Plugin {
-  @objc public func getSandboxPath(_ invoke: Invoke) throws {
+  @objc public func getAppSandboxPath(_ invoke: Invoke) throws {
     if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
       invoke.resolve(["path": documentsPath.path])
     } else {
