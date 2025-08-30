@@ -8,11 +8,11 @@
 // This ensures that all plugins maintain consistent behavior.
 
 use crate::manager::ManagerExt;
-use tauri_store::{Result, SaveStrategy, StoreId, StoreOptions, StoreState};
 use std::path::PathBuf;
 use std::time::Duration;
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, Manager, Runtime, WebviewWindow};
+use tauri_store::{Result, SaveStrategy, StoreId, StoreOptions, StoreState};
 
 #[tauri::command]
 pub(crate) async fn allow_save<R>(app: AppHandle<R>, ids: Vec<StoreId>)
@@ -20,9 +20,7 @@ where
   R: Runtime,
 {
   let svelte = app.svelte();
-  ids
-    .iter()
-    .for_each(|id| svelte.allow_save(id));
+  ids.iter().for_each(|id| svelte.allow_save(id));
 }
 
 #[tauri::command]
@@ -31,9 +29,7 @@ where
   R: Runtime,
 {
   let svelte = app.svelte();
-  ids
-    .iter()
-    .for_each(|id| svelte.allow_sync(id));
+  ids.iter().for_each(|id| svelte.allow_sync(id));
 }
 
 #[tauri::command]
@@ -50,9 +46,7 @@ where
   R: Runtime,
 {
   let svelte = app.svelte();
-  ids
-    .iter()
-    .for_each(|id| svelte.deny_save(id));
+  ids.iter().for_each(|id| svelte.deny_save(id));
 }
 
 #[tauri::command]
@@ -61,9 +55,7 @@ where
   R: Runtime,
 {
   let svelte = app.svelte();
-  ids
-    .iter()
-    .for_each(|id| svelte.deny_sync(id));
+  ids.iter().for_each(|id| svelte.deny_sync(id));
 }
 
 #[tauri::command]
@@ -95,9 +87,7 @@ pub(crate) async fn get_store_path<R>(app: AppHandle<R>, id: StoreId) -> Result<
 where
   R: Runtime,
 {
-  app
-    .svelte()
-    .with_store(id, |store| store.path())
+  app.svelte().with_store(id, |store| store.path())
 }
 
 #[tauri::command]
@@ -234,11 +224,9 @@ where
 {
   let app = window.app_handle();
   let label = window.label().to_owned();
-  app
-    .svelte()
-    .with_store(id, move |store| {
-      store.set_options_with_source(options, label)
-    })?
+  app.svelte().with_store(id, move |store| {
+    store.set_options_with_source(options, label)
+  })?
 }
 
 #[tauri::command]

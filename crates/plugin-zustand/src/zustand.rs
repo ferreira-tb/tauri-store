@@ -12,9 +12,7 @@ use tauri_store::{Collection, CollectionMarker, StoreCollection};
 
 /// The Zustand plugin.
 #[derive(Collection)]
-pub struct Zustand<'a, R: Runtime>(
-  pub(crate) State<'a, StoreCollection<R, ZustandMarker>>,
-);
+pub struct Zustand<'a, R: Runtime>(pub(crate) State<'a, StoreCollection<R, ZustandMarker>>);
 
 /// Marker for the Zustand plugin.
 pub struct ZustandMarker;

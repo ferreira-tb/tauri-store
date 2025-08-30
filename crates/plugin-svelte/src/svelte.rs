@@ -12,9 +12,7 @@ use tauri_store::{Collection, CollectionMarker, StoreCollection};
 
 /// The Svelte plugin.
 #[derive(Collection)]
-pub struct Svelte<'a, R: Runtime>(
-  pub(crate) State<'a, StoreCollection<R, SvelteMarker>>,
-);
+pub struct Svelte<'a, R: Runtime>(pub(crate) State<'a, StoreCollection<R, SvelteMarker>>);
 
 /// Marker for the Svelte plugin.
 pub struct SvelteMarker;

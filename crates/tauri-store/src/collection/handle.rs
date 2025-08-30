@@ -4,9 +4,9 @@ use crate::Result;
 use serde::Deserialize;
 #[cfg(any(target_os = "android", target_os = "ios"))]
 use std::path::PathBuf;
-use tauri::{AppHandle, Runtime};
 #[cfg(any(target_os = "android", target_os = "ios"))]
 use tauri::plugin::PluginHandle;
+use tauri::{AppHandle, Runtime};
 
 #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
 pub struct Handle<R: Runtime>(AppHandle<R>);
@@ -36,7 +36,7 @@ impl<R: Runtime> Handle<R> {
   }
 
   pub fn get_sandboxed_path(&self) -> Result<PathBuf> {
-      println!("Store collection path: just before the sandboxed path retrieval");
+    println!("Store collection path: just before the sandboxed path retrieval");
     self
       .0
       .run_mobile_plugin::<GetSandboxedPathResponse>("getAppSandboxPath", ())

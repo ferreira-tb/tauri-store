@@ -12,9 +12,7 @@ use tauri_store::{Collection, CollectionMarker, StoreCollection};
 
 /// The Pinia plugin.
 #[derive(Collection)]
-pub struct Pinia<'a, R: Runtime>(
-  pub(crate) State<'a, StoreCollection<R, PiniaMarker>>,
-);
+pub struct Pinia<'a, R: Runtime>(pub(crate) State<'a, StoreCollection<R, PiniaMarker>>);
 
 /// Marker for the Pinia plugin.
 pub struct PiniaMarker;

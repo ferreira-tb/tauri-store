@@ -12,9 +12,9 @@
 #![doc = include_str!("../README.md")]
 #![doc(html_favicon_url = "https://tb.dev.br/tauri-store/favicon.ico")]
 
-mod valtio;
 mod command;
 mod manager;
+mod valtio;
 
 use serde::de::DeserializeOwned;
 use std::collections::HashSet;
@@ -26,9 +26,9 @@ use tauri::{AppHandle, RunEvent, Runtime};
 #[cfg(feature = "unstable-migration")]
 use tauri_store::Migrator;
 
-pub use valtio::{Valtio, ValtioMarker};
 pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
+pub use valtio::{Valtio, ValtioMarker};
 
 #[cfg(feature = "unstable-migration")]
 pub use tauri_store::{Migration, MigrationContext};
@@ -257,10 +257,7 @@ where
   D: DeserializeOwned,
 {
   #[cfg(target_os = "android")]
-  let handle = api.register_android_plugin(
-    "com.plugin.valtio",
-    "ValtioPlugin",
-  )?;
+  let handle = api.register_android_plugin("com.plugin.valtio", "ValtioPlugin")?;
   #[cfg(target_os = "ios")]
   let handle = api.register_ios_plugin(init_plugin_valtio)?;
 

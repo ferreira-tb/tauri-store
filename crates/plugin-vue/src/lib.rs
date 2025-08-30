@@ -12,9 +12,9 @@
 #![doc = include_str!("../README.md")]
 #![doc(html_favicon_url = "https://tb.dev.br/tauri-store/favicon.ico")]
 
-mod vue;
 mod command;
 mod manager;
+mod vue;
 
 use serde::de::DeserializeOwned;
 use std::collections::HashSet;
@@ -26,9 +26,9 @@ use tauri::{AppHandle, RunEvent, Runtime};
 #[cfg(feature = "unstable-migration")]
 use tauri_store::Migrator;
 
-pub use vue::{Vue, VueMarker};
 pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
+pub use vue::{Vue, VueMarker};
 
 #[cfg(feature = "unstable-migration")]
 pub use tauri_store::{Migration, MigrationContext};
@@ -257,10 +257,7 @@ where
   D: DeserializeOwned,
 {
   #[cfg(target_os = "android")]
-  let handle = api.register_android_plugin(
-    "com.plugin.vue",
-    "VuePlugin",
-  )?;
+  let handle = api.register_android_plugin("com.plugin.vue", "VuePlugin")?;
   #[cfg(target_os = "ios")]
   let handle = api.register_ios_plugin(init_plugin_vue)?;
 
