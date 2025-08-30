@@ -10,12 +10,14 @@ use std::{
   path::{Path, PathBuf},
   time::Instant,
 };
+
 pub(super) fn generate() -> Result<()> {
   let start = Instant::now();
   println!("{}", "generating mobile code".cyan());
 
   let ios_assets = assets_plugin_ios_dir();
   generate_ios(&ios_assets)?;
+
   let android_assets = assets_plugin_android_dir();
   generate_android(&android_assets)?;
 
@@ -73,11 +75,12 @@ fn generate_android(assets: &Path) -> Result<()> {
   generate_android_build(assets)?;
   generate_android_plugin(assets)?;
   generate_android_manifest(assets)?;
-  generate_android_setting_gradle(assets)?;
+  generate_android_settings_gradle(assets)?;
   generate_proguard_rules(assets)?;
   generate_gitignore(assets)?;
   Ok(())
 }
+
 fn generate_android_manifest(assets: &Path) -> Result<()> {
   let input = assets
     .join("src")
@@ -102,11 +105,11 @@ fn generate_android_manifest(assets: &Path) -> Result<()> {
     .generate()
 }
 
-fn generate_android_setting_gradle(assets: &Path) -> Result<()> {
+fn generate_android_settings_gradle(assets: &Path) -> Result<()> {
   let input = assets.join("settings.gradle");
   let output = |ctx: Context<'_>| {
     let dir = crate_android_dir(ctx.plugin);
-    dir.join("setting.gradle").into()
+    dir.join("settings.gradle").into()
   };
 
   Generator::builder(&input, &output)

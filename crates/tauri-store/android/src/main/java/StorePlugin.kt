@@ -13,12 +13,10 @@ class StorePlugin(private val activity: Activity): Plugin(activity) {
 
 @Command
     fun getAppSandboxPath(invoke: Invoke) {
-        // Récupère le chemin vers le répertoire "files" de l'application
         val sandboxPath = activity.filesDir.absolutePath
 
         val ret = JSObject()
         ret.put("path", sandboxPath)
         invoke.resolve(ret)
     }
-
 }

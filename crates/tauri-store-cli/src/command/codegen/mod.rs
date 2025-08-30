@@ -35,6 +35,7 @@ impl Codegen {
     examples::generate()?;
     permissions::generate(&self)?;
     mobile::generate()?;
+
     if self.format {
       command("pnpm").args(["run", "format"]).call()?;
     }
@@ -115,6 +116,7 @@ impl Generator<'_> {
         if let Some(parent) = path.parent() {
           create_dir_all(parent)?;
         }
+
         write_file(path, &contents)
       })?;
     }

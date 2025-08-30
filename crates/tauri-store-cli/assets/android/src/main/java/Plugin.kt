@@ -13,7 +13,6 @@ class __PASCAL_PLUGIN_TITLE__Plugin(private val activity: Activity): Plugin(acti
 
 @Command
     fun getAppSandboxPath(invoke: Invoke) {
-        // Récupère le chemin vers le répertoire "files" de l'application
         val sandboxPath = activity.filesDir.absolutePath
 
         val ret = JSObject()

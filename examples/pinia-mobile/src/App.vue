@@ -24,3 +24,13 @@ const { start, stop } = store.$tauri;
     </section>
   </main>
 </template>
+
+<style scoped>
+main {
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  inset: 0;
+}
+</style>

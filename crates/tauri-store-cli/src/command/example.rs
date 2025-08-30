@@ -1,6 +1,6 @@
 use crate::path::examples_dir;
 use crate::process::command;
-use anyhow::{Result, bail};
+use anyhow::Result;
 use clap::Args;
 use itertools::Itertools;
 use rand::seq::IndexedRandom;
@@ -24,10 +24,13 @@ impl Example {
       .args(["run", "build:shared"])
       .call()?;
 
-    let mut args = vec!["tauri", "dev"]
-      .into_iter()
-      .map(String::from)
-      .collect_vec();
+    let args = if is_mobile(&example) {
+      vec!["tauri", "android", "dev"]
+    } else {
+      vec!["tauri", "dev"]
+    };
+
+    let mut args = args.into_iter().map(String::from).collect_vec();
 
     if let Some(features) = self.features.take() {
       for feature in features {
@@ -43,18 +46,13 @@ impl Example {
   }
 
   fn pick_example(&mut self) -> Result<String> {
-    if let Some(example) = self.example.take() {
-      if is_mobile(&example) {
-        bail!("cannot run mobile example yet");
-      } else if example != "random" {
-        return Ok(example);
-      }
+    match self.example.take() {
+      Some(example) if example != "random" => Ok(example),
+      _ => examples()?
+        .choose(&mut rand::rng())
+        .map(|ex| Ok(ex.to_owned()))
+        .unwrap(),
     }
-
-    examples()?
-      .choose(&mut rand::rng())
-      .map(|ex| Ok(ex.to_owned()))
-      .unwrap()
   }
 }
 
