@@ -12,9 +12,9 @@
 #![doc = include_str!("../README.md")]
 #![doc(html_favicon_url = "https://tb.dev.br/tauri-store/favicon.ico")]
 
+mod pinia;
 mod command;
 mod manager;
-mod pinia;
 
 use serde::de::DeserializeOwned;
 use std::collections::HashSet;
@@ -26,15 +26,15 @@ use tauri::{AppHandle, RunEvent, Runtime};
 #[cfg(feature = "unstable-migration")]
 use tauri_store::Migrator;
 
-pub use manager::ManagerExt;
 pub use pinia::{Pinia, PiniaMarker};
+pub use manager::ManagerExt;
 pub use tauri_store::prelude::*;
 
 #[cfg(feature = "unstable-migration")]
 pub use tauri_store::{Migration, MigrationContext};
 
 #[cfg(target_os = "ios")]
-tauri::ios_plugin_binding!(init_plugin_pinia_plugin);
+tauri::ios_plugin_binding!(init_plugin_pinia);
 
 /// Builder for the Pinia plugin.
 pub struct Builder<R: Runtime> {
@@ -251,15 +251,18 @@ where
 }
 
 #[cfg(any(target_os = "android", target_os = "ios"))]
-fn setup<R, D>(app: &AppHandle<R>, api: PluginApi<R, D>, builder: Builder<R>) -> BoxResult<()>
+fn setup<R, D>(_app: &AppHandle<R>, api: PluginApi<R, D>, builder: Builder<R>) -> BoxResult<()>
 where
   R: Runtime,
   D: DeserializeOwned,
 {
   #[cfg(target_os = "android")]
-  let handle = api.register_android_plugin("", "PiniaPlugin")?;
+  let handle = api.register_android_plugin(
+    "com.plugin.pinia",
+    "PiniaPlugin",
+  )?;
   #[cfg(target_os = "ios")]
-  let handle = api.register_ios_plugin(init_plugin_pinia_plugin)?;
+  let handle = api.register_ios_plugin(init_plugin_pinia)?;
 
   builder.build_collection(Handle::new(handle))?;
   Ok(())

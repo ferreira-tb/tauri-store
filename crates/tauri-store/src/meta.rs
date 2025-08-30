@@ -26,6 +26,8 @@ pub(crate) struct Meta {
 }
 
 impl Meta {
+  #[cfg(any(target_os = "windows", target_os = "macos", target_os = "linux"))]
+
   pub(crate) fn read<R, M>(app: &M, name: &str) -> Result<MetaGuard>
   where
     R: Runtime,

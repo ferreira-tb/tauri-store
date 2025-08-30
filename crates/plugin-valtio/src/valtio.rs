@@ -12,7 +12,9 @@ use tauri_store::{Collection, CollectionMarker, StoreCollection};
 
 /// The Valtio plugin.
 #[derive(Collection)]
-pub struct Valtio<'a, R: Runtime>(pub(crate) State<'a, StoreCollection<R, ValtioMarker>>);
+pub struct Valtio<'a, R: Runtime>(
+  pub(crate) State<'a, StoreCollection<R, ValtioMarker>>,
+);
 
 /// Marker for the Valtio plugin.
 pub struct ValtioMarker;

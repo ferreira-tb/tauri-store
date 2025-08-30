@@ -25,7 +25,7 @@ pub use tauri_store::prelude::*;
 pub use tauri_store::{Migration, MigrationContext};
 
 #[cfg(target_os = "ios")]
-tauri::ios_plugin_binding!(init_plugin___SNAKE_PLUGIN_TITLE___plugin);
+tauri::ios_plugin_binding!(init_plugin___SNAKE_PLUGIN_TITLE__);
 
 /// Builder for the __PASCAL_PLUGIN_TITLE__ plugin.
 pub struct Builder<R: Runtime> {
@@ -248,9 +248,12 @@ where
   D: DeserializeOwned,
 {
   #[cfg(target_os = "android")]
-  let handle = api.register_android_plugin("", "__PASCAL_PLUGIN_TITLE__Plugin")?;
+  let handle = api.register_android_plugin(
+    "com.plugin.__SNAKE_PLUGIN_TITLE__",
+    "__PASCAL_PLUGIN_TITLE__Plugin",
+  )?;
   #[cfg(target_os = "ios")]
-  let handle = api.register_ios_plugin(init_plugin___SNAKE_PLUGIN_TITLE___plugin)?;
+  let handle = api.register_ios_plugin(init_plugin___SNAKE_PLUGIN_TITLE__)?;
 
   builder.build_collection(Handle::new(handle))?;
   Ok(())
