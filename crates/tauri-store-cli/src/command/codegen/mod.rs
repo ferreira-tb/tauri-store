@@ -107,7 +107,7 @@ impl Generator<'_> {
       }
 
       for (key, value) in self.replacements {
-        contents = contents.replace(key, &value(*plugin).to_string());
+        contents = contents.replace(key, &value(*plugin));
       }
 
       let title = plugin.title();
