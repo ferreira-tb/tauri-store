@@ -2,7 +2,7 @@
   "name": "monorepo",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.17.0",
   "scripts": {
     "build": "pnpm run build:shared && pnpm run build:package",
     "build:docs": "pwsh scripts/build-docs.ps1",
@@ -14,8 +14,7 @@
     "dev": "cargo tauri dev",
     "docs:crate": "cargo +nightly doc -p tauri-* --open --no-deps --lib --all-features",
     "docs:package": "pnpm run -F docs dev --host",
-    "eslint": "eslint . --config eslint.config.js",
-    "eslint:fix": "eslint . --config eslint.config.js --fix",
+    "eslint": "eslint . --config eslint.config.ts",
     "example": "cargo run -p tauri-store-cli -- example",
     "format": "prettier . --write && cargo fmt --all",
     "playground": "cargo run -p tauri-store-cli -- playground",
@@ -25,20 +24,20 @@
     "update": "pwsh scripts/update.ps1"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^8.0.4",
-    "@types/node": "^24.2.1",
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
-    "eslint": "^9.33.0",
+    "@tb-dev/eslint-config": "^8.0.11",
+    "@types/node": "^24.5.2",
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "eslint": "^9.36.0",
     "prettier": "^3.6.2",
     "prettier-plugin-css-order": "^2.1.2",
     "prettier-plugin-svelte": "^3.4.0",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "tslib": "^2.8.1",
-    "typedoc": "^0.28.10",
-    "typedoc-plugin-mdn-links": "^5.0.8",
-    "typescript": "~5.8.3",
-    "vite": "^7.1.2",
+    "typedoc": "^0.28.13",
+    "typedoc-plugin-mdn-links": "^5.0.9",
+    "typescript": "~5.9.2",
+    "vite": "^7.1.6",
     "vite-plugin-dts": "^4.5.4"
   }
 }

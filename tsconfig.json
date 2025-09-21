@@ -1,14 +1,14 @@
 {
-  "include": [".vitepress/**/*", ".vitepress/**/*.vue", "src/**/*", "src/**/*.vue", "types/**/*"],
+  "include": ["**/*.config.ts"],
   "compilerOptions": {
     "baseUrl": ".",
     "target": "esnext",
-    "lib": ["esnext", "dom"],
+    "lib": ["esnext"],
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "removeComments": true,
+    "removeComments": false,
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "declaration": false,
@@ -30,9 +30,5 @@
     "forceConsistentCasingInFileNames": true,
     "noEmitOnError": true,
     "types": ["vite/client"]
-  },
-  "vueCompilerOptions": {
-    "checkUnknownComponents": true,
-    "checkUnknownDirectives": true
   }
 }
