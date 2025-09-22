@@ -2,6 +2,10 @@
 //
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
+//
+// To modify the behavior of the plugin, you must either change the
+// upstream `tauri-store` crate or update the code generation itself.
+// This ensures that all plugins maintain consistent behavior.
 
 import { commands } from '@tauri-store/shared';
 
@@ -29,6 +33,11 @@ export const denySave = commands.denySave('valtio');
  * Adds one or more stores to the sync denylist.
  */
 export const denySync = commands.denySync('valtio');
+
+/**
+ * Destroys a store, cleans up its state, and deletes its file.
+ */
+export const destroy = commands.destroy('valtio');
 
 /**
  * Gets the default save strategy for the stores.
@@ -116,19 +125,6 @@ export const saveNow = commands.saveNow('valtio');
  * ```
  */
 export const setAutosave = commands.setAutosave('valtio');
-
-/**
- * Sets the directory where the stores are saved.
- * This will move all *currently active* stores to the new directory.
- *
- * @example
- * ```ts
- * import { setStoreCollectionPath } from '@tauri-store/valtio';
- *
- * await setStoreCollectionPath('/path/to/new/directory');
- * ```
- */
-export const setStoreCollectionPath = commands.setStoreCollectionPath('valtio');
 
 /**
  * Sets the save strategy for a store.

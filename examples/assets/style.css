@@ -10,6 +10,10 @@ section {
   margin-bottom: 0.5rem;
 }
 
+p {
+  text-align: center;
+}
+
 .action {
   display: flex;
   flex-direction: row;

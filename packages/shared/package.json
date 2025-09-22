@@ -1,10 +1,10 @@
 {
   "name": "@tauri-store/shared",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "description": "Utilities for Tauri Store",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.17.1",
   "homepage": "https://tb.dev.br/tauri-store",
   "license": "MIT",
   "funding": "https://github.com/sponsors/ferreira-tb",
@@ -45,7 +45,7 @@
     "typedoc": "typedoc --plugin typedoc-plugin-mdn-links"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.0.3",
-    "es-toolkit": "^1.39.8"
+    "@tauri-apps/api": "^2.8.0",
+    "es-toolkit": "^1.39.10"
   }
 }

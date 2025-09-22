@@ -24,7 +24,7 @@ pub(super) fn generate() -> Result<()> {
 fn generate_lib(assets: &Path) -> Result<()> {
   let input = assets.join("lib.rs");
   let output = |ctx: Context<'_>| match ctx.plugin {
-    Plugin::Store => {
+    Plugin::Core => {
       let vanilla = example_lib("vanilla");
       OutputDir::from(vanilla)
     }
@@ -54,7 +54,7 @@ fn generate_lib(assets: &Path) -> Result<()> {
   };
 
   let build_call = |plugin| {
-    if let Plugin::Store = plugin {
+    if let Plugin::Core = plugin {
       String::from("build_plugin")
     } else {
       String::from("build")

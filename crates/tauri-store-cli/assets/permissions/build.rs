@@ -4,6 +4,7 @@ const COMMANDS: &[&str] = &[
   "clear_autosave",
   "deny_save",
   "deny_sync",
+  "destroy",
   "get_default_save_strategy",
   "get_store_collection_path",
   "get_save_strategy",
@@ -26,5 +27,8 @@ const COMMANDS: &[&str] = &[
 ];
 
 fn main() {
-  tauri_plugin::Builder::new(COMMANDS).build();
+  tauri_plugin::Builder::new(COMMANDS)
+    .android_path("android")
+    .ios_path("ios")
+    .build();
 }

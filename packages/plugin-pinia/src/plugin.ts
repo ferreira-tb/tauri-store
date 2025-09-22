@@ -39,6 +39,10 @@ export function createPlugin(pluginOptions: TauriPluginPiniaOptions = {}) {
       saveNow: () => commands.save(store.id),
       start: () => store.start(),
       stop: () => store.stop(),
+      destroy: async () => {
+        await commands.destroy(store.id);
+        await store.stop();
+      },
     };
 
     return { $tauri };

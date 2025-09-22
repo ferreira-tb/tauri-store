@@ -19,7 +19,7 @@ Install the [Rust crate](https://crates.io/crates/tauri-plugin-svelte) by adding
 
 ```toml [src-tauri/Cargo.toml]
 [dependencies]
-tauri-plugin-svelte = "2"
+tauri-plugin-svelte = "3"
 ```
 
 :::

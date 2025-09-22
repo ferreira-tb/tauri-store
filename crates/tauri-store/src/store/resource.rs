@@ -30,9 +30,9 @@ where
     (rid, resource)
   }
 
-  // Using the StoreResource directly avoids the StoreCollection trying
-  // to load the store if it isn't in the resources table already.
   pub(crate) fn get(app: &AppHandle<R>, rid: ResourceId) -> Result<Arc<Self>> {
+    // Using the StoreResource directly avoids the StoreCollection trying
+    // to load the store if it isn't in the resources table already.
     app
       .resources_table()
       .get::<Self>(rid)
@@ -57,6 +57,7 @@ where
     })
   }
 
+  /// Locks the store and then calls the provided closure with a mutable reference to it.
   pub(crate) fn locked<F, T>(&self, f: F) -> T
   where
     F: FnOnce(&mut Store<R, C>) -> T,

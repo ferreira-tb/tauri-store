@@ -32,7 +32,7 @@ features = ["devtools", "protocol-asset"]
 
 [dependencies.tauri-store]
 path = "../../../crates/tauri-store"
-features = ["unstable-migration"]
+features = []
 
 [build-dependencies.tauri-build]
 version = "2"

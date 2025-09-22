@@ -2,6 +2,10 @@
 //
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
+//
+// To modify the behavior of the plugin, you must either change the
+// upstream `tauri-store` crate or update the code generation itself.
+// This ensures that all plugins maintain consistent behavior.
 
 import { commands } from '@tauri-store/shared';
 
@@ -29,6 +33,11 @@ export const denySave = commands.denySave('svelte');
  * Adds one or more stores to the sync denylist.
  */
 export const denySync = commands.denySync('svelte');
+
+/**
+ * Destroys a store, cleans up its state, and deletes its file.
+ */
+export const destroy = commands.destroy('svelte');
 
 /**
  * Gets the default save strategy for the stores.
@@ -116,19 +125,6 @@ export const saveNow = commands.saveNow('svelte');
  * ```
  */
 export const setAutosave = commands.setAutosave('svelte');
-
-/**
- * Sets the directory where the stores are saved.
- * This will move all *currently active* stores to the new directory.
- *
- * @example
- * ```ts
- * import { setStoreCollectionPath } from '@tauri-store/svelte';
- *
- * await setStoreCollectionPath('/path/to/new/directory');
- * ```
- */
-export const setStoreCollectionPath = commands.setStoreCollectionPath('svelte');
 
 /**
  * Sets the save strategy for a store.

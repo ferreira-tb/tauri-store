@@ -21,6 +21,5 @@
   "conventionalCommits.scopes": ["core", "pinia", "svelte", "valtio", "vue", "zustand"],
   "files.associations": {
     "*.css": "tailwindcss"
-  },
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  }
 }

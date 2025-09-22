@@ -1,10 +1,10 @@
 {
   "name": "@tauri-store/vue",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Persistence for Tauri and Vue",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.17.1",
   "homepage": "https://tb.dev.br/tauri-store/plugin-vue/guide/getting-started",
   "license": "MIT",
   "funding": "https://github.com/sponsors/ferreira-tb",
@@ -47,8 +47,8 @@
     "typedoc": "typedoc --plugin typedoc-plugin-mdn-links"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.0.3",
+    "@tauri-apps/api": "^2.8.0",
     "@tauri-store/shared": "workspace:*",
-    "vue": "^3.5.13"
+    "vue": "^3.5.21"
   }
 }

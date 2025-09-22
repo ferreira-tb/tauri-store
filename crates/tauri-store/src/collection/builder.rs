@@ -1,11 +1,14 @@
+use super::handle::Handle;
 use super::marker::CollectionMarker;
 use super::{DefaultMarker, OnLoadFn, StoreCollection};
 use crate::collection::autosave::Autosave;
+use crate::collection::table::{MarshalerTable, PathTable};
 use crate::error::Result;
-use crate::meta::Meta;
-use crate::store::{SaveStrategy, Store, StoreId};
-use crate::ManagerExt;
+use crate::manager::ManagerExt;
+use crate::migration::{Migration, MigrationContext, Migrator};
+use crate::store::{JsonMarshaler, Marshaler, SaveStrategy, Store, StoreId};
 use dashmap::{DashMap, DashSet};
+use std::collections::HashMap;
 use std::marker::PhantomData;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
@@ -15,25 +18,23 @@ use tauri::{Manager, Runtime};
 #[cfg(feature = "plugin")]
 use tauri::plugin::TauriPlugin;
 
-#[cfg(feature = "unstable-migration")]
-use crate::migration::{Migration, MigrationContext, Migrator};
-
 /// Builder for the [`StoreCollection`](crate::collection::StoreCollection).
 pub struct StoreCollectionBuilder<R, C>
 where
   R: Runtime,
   C: CollectionMarker,
 {
-  path: Option<PathBuf>,
+  default_path: Option<PathBuf>,
+  path_table: HashMap<StoreId, Box<Path>>,
+  default_marshaler: Option<Box<dyn Marshaler>>,
+  marshaler_table: HashMap<StoreId, Box<dyn Marshaler>>,
   default_save_strategy: SaveStrategy,
   autosave: Option<Duration>,
   on_load: Option<Box<OnLoadFn<R, C>>>,
-  pretty: bool,
   save_denylist: DashSet<StoreId>,
   sync_denylist: DashSet<StoreId>,
-
-  #[cfg(feature = "unstable-migration")]
   migrator: Migrator,
+  debug_stores: bool,
 }
 
 impl<R, C> StoreCollectionBuilder<R, C>
@@ -70,17 +71,19 @@ where
     self
   }
 
-  /// Directory where the stores will be saved.
+  /// Default directory where the stores are saved.
   #[must_use]
   pub fn path(mut self, path: impl AsRef<Path>) -> Self {
-    self.path = Some(path.as_ref().to_path_buf());
+    self.default_path = Some(path.as_ref().to_path_buf());
     self
   }
 
-  /// Sets whether the store files should be pretty printed.
+  /// Sets where a store should be saved.
   #[must_use]
-  pub fn pretty(mut self, yes: bool) -> Self {
-    self.pretty = yes;
+  pub fn path_of(mut self, id: impl AsRef<str>, path: impl AsRef<Path>) -> Self {
+    let id = StoreId::from(id.as_ref());
+    let path = Box::from(path.as_ref());
+    self.path_table.insert(id, path);
     self
   }
 
@@ -91,12 +94,11 @@ where
     I: IntoIterator<Item = T>,
     T: AsRef<str>,
   {
-    self.save_denylist.extend(
-      denylist
-        .into_iter()
-        .map(|it| StoreId::from(it.as_ref())),
-    );
+    let denylist = denylist
+      .into_iter()
+      .map(|it| StoreId::from(it.as_ref()));
 
+    self.save_denylist.extend(denylist);
     self
   }
 
@@ -107,18 +109,40 @@ where
     I: IntoIterator<Item = T>,
     T: AsRef<str>,
   {
-    self.sync_denylist.extend(
-      denylist
-        .into_iter()
-        .map(|it| StoreId::from(it.as_ref())),
-    );
+    let denylist = denylist
+      .into_iter()
+      .map(|it| StoreId::from(it.as_ref()));
 
+    self.sync_denylist.extend(denylist);
+    self
+  }
+
+  /// Defines how the stores should be serialized and deserialized.
+  #[must_use]
+  pub fn marshaler(mut self, marshaler: Box<dyn Marshaler>) -> Self {
+    self.default_marshaler = Some(marshaler);
+    self
+  }
+
+  /// Defines how a store should be serialized and deserialized.
+  #[must_use]
+  pub fn marshaler_of(mut self, id: impl AsRef<str>, marshaler: Box<dyn Marshaler>) -> Self {
+    let id = StoreId::from(id.as_ref());
+    self.marshaler_table.insert(id, marshaler);
+    self
+  }
+
+  /// Adds a `.dev` suffix to the store files when in development mode.
+  ///
+  /// This is enabled by default.
+  #[must_use]
+  pub fn enable_debug_stores(mut self, yes: bool) -> Self {
+    self.debug_stores = yes;
     self
   }
 
   #[must_use]
   #[doc(hidden)]
-  #[cfg(feature = "unstable-migration")]
   pub fn migrator(mut self, migrator: Migrator) -> Self {
     self.migrator = migrator;
     self
@@ -126,7 +150,6 @@ where
 
   /// Defines a migration for a store.
   #[must_use]
-  #[cfg(feature = "unstable-migration")]
   pub fn migration(mut self, id: impl Into<StoreId>, migration: Migration) -> Self {
     self.migrator.add_migration(id.into(), migration);
     self
@@ -134,7 +157,6 @@ where
 
   /// Defines multiple migrations for a store.
   #[must_use]
-  #[cfg(feature = "unstable-migration")]
   pub fn migrations<I>(mut self, id: impl Into<StoreId>, migrations: I) -> Self
   where
     I: IntoIterator<Item = Migration>,
@@ -148,7 +170,6 @@ where
 
   /// Sets a closure to be called before each migration step.
   #[must_use]
-  #[cfg(feature = "unstable-migration")]
   pub fn on_before_each_migration<F>(mut self, f: F) -> Self
   where
     F: Fn(MigrationContext) + Send + Sync + 'static,
@@ -163,57 +184,63 @@ where
   ///
   /// Panics if a store collection is already initialized.
   #[doc(hidden)]
-  pub fn build<M>(mut self, app: &M, plugin_name: &str) -> Result<()>
-  where
-    M: Manager<R>,
-  {
-    let app = app.app_handle();
+  pub fn build(self, handle: Handle<R>, plugin_name: &str) -> Result<()> {
+    let app = handle.app().clone();
     debug_assert!(
       app.try_state::<StoreCollection<R, C>>().is_none(),
       "store collection is already initialized"
     );
 
-    let meta = Meta::read(app, plugin_name)?;
-    let path = meta
-      .inner
-      .path
-      .or_else(|| self.path.take())
-      .unwrap_or_else(|| {
-        app
-          .path()
-          .app_data_dir()
-          .expect("failed to resolve app data dir")
-          .join(plugin_name)
-      });
+    let default_path = match self.default_path {
+      Some(path) => path,
+      #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+      None => app.path().app_data_dir()?.join(plugin_name),
+      #[cfg(any(target_os = "android", target_os = "ios"))]
+      None => handle.get_sandboxed_path()?.join(plugin_name),
+    };
 
-    #[cfg(feature = "unstable-migration")]
-    if let Some(history) = meta.inner.migration_history {
-      self.migrator.history = history;
-    }
+    let path_table = PathTable {
+      default: default_path.into_boxed_path(),
+      table: self.path_table,
+    };
+
+    let default_marshaler = self
+      .default_marshaler
+      .unwrap_or_else(|| Box::new(JsonMarshaler));
+
+    let marshaler_table = MarshalerTable {
+      default: default_marshaler,
+      table: self.marshaler_table,
+    };
 
     app.manage(StoreCollection::<R, C> {
-      app: app.clone(),
+      handle,
       name: Box::from(plugin_name),
-      path: Mutex::new(path),
+      path_table,
+      marshaler_table,
       stores: DashMap::new(),
       on_load: self.on_load,
       autosave: Mutex::new(Autosave::new(self.autosave)),
       default_save_strategy: self.default_save_strategy,
       save_denylist: self.save_denylist,
       sync_denylist: self.sync_denylist,
-      pretty: self.pretty,
-      phantom: PhantomData,
-
-      #[cfg(feature = "unstable-migration")]
       migrator: Mutex::new(self.migrator),
+      debug_stores: self.debug_stores,
+      phantom: PhantomData,
     });
 
-    app
-      .store_collection_with_marker::<C>()
+    let collection = app.store_collection_with_marker::<C>();
+    collection
       .autosave
       .lock()
-      .unwrap()
-      .start::<R, C>(app);
+      .expect("autosave is poisoned")
+      .start::<R, C>(&app);
+
+    collection
+      .migrator
+      .lock()
+      .expect("migrator is poisoned")
+      .read::<R, C>(&app)?;
 
     Ok(())
   }
@@ -241,16 +268,17 @@ where
 {
   fn default() -> Self {
     Self {
-      path: None,
+      default_path: None,
+      path_table: HashMap::new(),
+      default_marshaler: None,
+      marshaler_table: HashMap::new(),
       default_save_strategy: SaveStrategy::Immediate,
       autosave: None,
       on_load: None,
-      pretty: false,
       save_denylist: DashSet::new(),
       sync_denylist: DashSet::new(),
-
-      #[cfg(feature = "unstable-migration")]
       migrator: Migrator::default(),
+      debug_stores: true,
     }
   }
 }

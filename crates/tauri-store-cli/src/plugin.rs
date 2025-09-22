@@ -6,7 +6,7 @@ const PLUGIN_PREFIX: &str = "tauri-plugin-";
 #[derive(Clone, Copy, Debug, PartialEq, Eq, AsRefStr, VariantArray)]
 pub enum Plugin {
   #[strum(serialize = "tauri-store")]
-  Store,
+  Core,
   #[strum(serialize = "tauri-plugin-pinia")]
   Pinia,
   #[strum(serialize = "tauri-plugin-svelte")]
@@ -22,7 +22,7 @@ pub enum Plugin {
 impl Plugin {
   pub fn dir_name(self) -> String {
     let crate_name = self.crate_name();
-    if let Self::Store = self {
+    if let Self::Core = self {
       crate_name
     } else {
       crate_name
@@ -42,7 +42,7 @@ impl Plugin {
 
   pub fn package_name(self) -> String {
     let crate_name = self.crate_name();
-    if let Self::Store = self {
+    if let Self::Core = self {
       crate_name
     } else {
       crate_name.replace(PLUGIN_PREFIX, "@tauri-store/")
@@ -50,7 +50,7 @@ impl Plugin {
   }
 
   pub fn title(self) -> String {
-    if let Self::Store = self {
+    if let Self::Core = self {
       self.crate_name()
     } else {
       self

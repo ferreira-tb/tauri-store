@@ -58,6 +58,14 @@ where
 }
 
 #[tauri::command]
+pub(crate) async fn destroy<R>(app: AppHandle<R>, id: StoreId) -> Result<()>
+where
+  R: Runtime,
+{
+  app.__STORE_COLLECTION__().destroy(id)
+}
+
+#[tauri::command]
 pub(crate) async fn get_default_save_strategy<R>(app: AppHandle<R>) -> SaveStrategy
 where
   R: Runtime,
@@ -70,7 +78,7 @@ pub(crate) async fn get_store_collection_path<R>(app: AppHandle<R>) -> PathBuf
 where
   R: Runtime,
 {
-  app.__STORE_COLLECTION__().path()
+  app.__STORE_COLLECTION__().path().to_path_buf()
 }
 
 #[tauri::command]
@@ -106,7 +114,7 @@ pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: StoreId) -> Result
 where
   R: Runtime,
 {
-  app.__STORE_COLLECTION__().state(id)
+  app.__STORE_COLLECTION__().raw_state(id)
 }
 
 #[tauri::command]
@@ -117,7 +125,7 @@ where
   spawn_blocking(move || {
     app
       .__STORE_COLLECTION__()
-      .with_store(id, |store| store.state().clone())
+      .with_store(id, |store| store.raw_state().clone())
   })
   .await?
 }
@@ -190,14 +198,6 @@ where
   app
     .__STORE_COLLECTION__()
     .set_autosave(Duration::from_millis(interval));
-}
-
-#[tauri::command]
-pub(crate) async fn set_store_collection_path<R>(app: AppHandle<R>, path: PathBuf) -> Result<()>
-where
-  R: Runtime,
-{
-  spawn_blocking(move || app.__STORE_COLLECTION__().set_path(path)).await?
 }
 
 #[tauri::command]

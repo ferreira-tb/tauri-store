@@ -9,6 +9,7 @@ Default permissions for tauri-plugin-pinia.
 - `allow-clear-autosave`
 - `allow-deny-save`
 - `allow-deny-sync`
+- `allow-destroy`
 - `allow-get-default-save-strategy`
 - `allow-get-save-strategy`
 - `allow-get-store-collection-path`
@@ -164,6 +165,32 @@ Enables the deny_sync command without any pre-configured scope.
 <td>
 
 Denies the deny_sync command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:allow-destroy`
+
+</td>
+<td>
+
+Enables the destroy command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`pinia:deny-destroy`
+
+</td>
+<td>
+
+Denies the destroy command without any pre-configured scope.
 
 </td>
 </tr>

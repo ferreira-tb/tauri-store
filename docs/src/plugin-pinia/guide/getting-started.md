@@ -19,7 +19,7 @@ Install the [Rust crate](https://crates.io/crates/tauri-plugin-pinia) by adding 
 
 ```toml [src-tauri/Cargo.toml]
 [dependencies]
-tauri-plugin-pinia = "3"
+tauri-plugin-pinia = "4"
 ```
 
 :::

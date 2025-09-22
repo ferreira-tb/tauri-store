@@ -47,7 +47,7 @@ fn generate_build_rs(assets: &Path) -> Result<()> {
   };
 
   Generator::builder(&input, &output)
-    .skip(&[Plugin::Store])
+    .skip(&[Plugin::Core])
     .replace(&[])
     .generate()
 }

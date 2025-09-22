@@ -11,6 +11,29 @@ outline: 2
 
 _Nothing yet._
 
+## 1.0.0
+
+### Breaking Changes
+
+- Rename `Store::get` to `Store::get_raw`.
+- Rename `Store::try_get`, `Store::try_get_or`, `Store::try_get_or_default`, and `Store::try_get_or_else` to `Store::get`, `Store::get_or`, `Store::get_or_default`, and `Store::get_or_else`, respectively.
+- Rename `Store::state` to `Store::raw_state`.
+- Rename `StoreCollection::try_state`, `StoreCollection::try_state_or`, `StoreCollection::try_state_or_default`, and `StoreCollection::try_state_or_else` to `StoreCollection::state`, `StoreCollection::state_or`, `StoreCollection::state_or_default`, and `StoreCollection::state_or_else`, respectively.
+- Remove `StoreCollection::set_path` and its respective JavaScript command (`setStoreCollectionPath`);
+- Remove `meta.tauristore` file.
+- Remove `pretty` option from the plugin builder.
+
+### Features
+
+- Add `Marshaler` trait for custom serialization and deserialization.
+- Add `JsonMarshaler` and `PrettyJsonMarshaler` to save the stores as JSON files.
+- Add `TomlMarshaler` and `PrettyTomlMarshaler` to save the stores as TOML files.
+- Add `StoreCollection::app_handle`.
+- Allow to destroy stores, also deleting their respective files.
+- Introduce unchecked variants for `get` methods (e.g. `Store::get_unchecked`).
+- Use sandboxed environment on Android and iOS (thanks [@saurL](https://github.com/saurL)).
+- Stabilize store migrations.
+
 ## 0.12.1
 
 ### Dependencies

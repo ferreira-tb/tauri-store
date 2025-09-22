@@ -4,7 +4,7 @@ use crate::CollectionMarker;
 use futures::future::BoxFuture;
 use serde::ser::SerializeTuple;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use serde_json::Value as Json;
+use serde_json::Value;
 use std::fmt;
 use std::result::Result as StdResult;
 use std::time::Duration;
@@ -24,6 +24,12 @@ impl<R: Runtime> SaveHandle<R> {
 
   pub fn abort(&self) {
     self.0.abort();
+  }
+}
+
+impl<R: Runtime> Drop for SaveHandle<R> {
+  fn drop(&mut self) {
+    self.abort();
   }
 }
 
@@ -155,8 +161,8 @@ impl<'de> Deserialize<'de> for SaveStrategy {
       D::Error::custom("invalid save strategy")
     };
 
-    let value = Json::deserialize(deserializer)?;
-    if let Json::Array(mut array) = value {
+    let value = Value::deserialize(deserializer)?;
+    if let Value::Array(mut array) = value {
       if array.len() != 2 {
         return Err(err());
       }

@@ -24,10 +24,13 @@ impl Example {
       .args(["run", "build:shared"])
       .call()?;
 
-    let mut args = vec!["tauri", "dev"]
-      .into_iter()
-      .map(String::from)
-      .collect_vec();
+    let args = if is_mobile(&example) {
+      vec!["tauri", "android", "dev"]
+    } else {
+      vec!["tauri", "dev"]
+    };
+
+    let mut args = args.into_iter().map(String::from).collect_vec();
 
     if let Some(features) = self.features.take() {
       for feature in features {
@@ -43,16 +46,13 @@ impl Example {
   }
 
   fn pick_example(&mut self) -> Result<String> {
-    if let Some(example) = self.example.take() {
-      if example != "random" {
-        return Ok(example);
-      }
+    match self.example.take() {
+      Some(example) if example != "random" => Ok(example),
+      _ => examples()?
+        .choose(&mut rand::rng())
+        .map(|ex| Ok(ex.to_owned()))
+        .unwrap(),
     }
-
-    examples()?
-      .choose(&mut rand::rng())
-      .map(|ex| Ok(ex.to_owned()))
-      .unwrap()
   }
 }
 
@@ -66,11 +66,19 @@ fn examples() -> Result<Vec<String>> {
         .into_string()
         .expect("invalid dirname");
 
-      if !EXCLUDE.contains(&name.as_str()) {
+      if !should_exclude(&name) && !is_mobile(&name) {
         examples.push(name);
       }
     }
   }
 
   Ok(examples)
+}
+
+fn is_mobile(name: &str) -> bool {
+  name.ends_with("-mobile")
+}
+
+fn should_exclude(name: &str) -> bool {
+  EXCLUDE.contains(&name)
 }

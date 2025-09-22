@@ -7,6 +7,7 @@ export {
   clearAutosave,
   denySave,
   denySync,
+  destroy,
   getDefaultSaveStrategy,
   getSaveStrategy,
   getStoreCollectionPath,
@@ -19,7 +20,6 @@ export {
   saveNow,
   setAutosave,
   setSaveStrategy,
-  setStoreCollectionPath,
   setStoreOptions,
 } from './commands';
 

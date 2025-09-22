@@ -1,5 +1,6 @@
 use __IMPORT_SOURCE__::{ManagerExt, SaveStrategy};
 use serde::{Deserialize, Serialize};
+use std::error::Error;
 use std::time::Duration;
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 
@@ -19,22 +20,18 @@ pub fn run() {
       __IMPORT_SOURCE__::Builder::new()
         .default_save_strategy(SaveStrategy::throttle_secs(3))
         .autosave(Duration::from_secs(60))
-        .pretty(true)
         .__BUILD_CALL__(),
     )
-    .setup(|app| {
-      let handle = app.handle();
-      (1..=3).for_each(|id| open_window(handle, id));
-      Ok(())
-    })
-    .invoke_handler(tauri::generate_handler![
-      get_counter,
-      print_store,
-      try_get_counter,
-      try_store_state
-    ])
+    .setup(|app| setup(app.handle()))
+    .invoke_handler(tauri::generate_handler![get_counter, get_state])
     .run(tauri::generate_context!())
     .unwrap();
+}
+
+#[allow(clippy::unnecessary_wraps)]
+fn setup(app: &AppHandle) -> Result<(), Box<dyn Error>> {
+  (1..=3).for_each(|id| open_window(app, id));
+  Ok(())
 }
 
 fn open_window(app: &AppHandle, id: u8) {
@@ -53,35 +50,17 @@ fn open_window(app: &AppHandle, id: u8) {
 }
 
 #[tauri::command]
-async fn get_counter(app: AppHandle) -> Option<i32> {
+async fn get_counter(app: AppHandle) -> i32 {
   app
     .__STORE_COLLECTION__()
-    .get("counter-store", "counter")
-    .and_then(|counter| serde_json::from_value(counter).ok())
-}
-
-#[tauri::command]
-async fn print_store(app: AppHandle) {
-  let state = app
-    .__STORE_COLLECTION__()
-    .state("counter-store")
-    .unwrap();
-
-  println!("{state:?}");
-}
-
-#[tauri::command]
-async fn try_get_counter(app: AppHandle) -> i32 {
-  app
-    .__STORE_COLLECTION__()
-    .try_get::<i32>("counter-store", "counter")
+    .get::<i32>("counter-store", "counter")
     .unwrap()
 }
 
 #[tauri::command]
-async fn try_store_state(app: AppHandle) -> CounterStore {
+async fn get_state(app: AppHandle) -> CounterStore {
   app
     .__STORE_COLLECTION__()
-    .try_state::<CounterStore>("counter-store")
+    .state::<CounterStore>("counter-store")
     .unwrap()
 }

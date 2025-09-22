@@ -2,6 +2,10 @@
 //
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
+//
+// To modify the behavior of the plugin, you must either change the
+// upstream `tauri-store` crate or update the code generation itself.
+// This ensures that all plugins maintain consistent behavior.
 
 #![forbid(unsafe_code)]
 #![cfg_attr(docsrs, feature(doc_auto_cfg))]
@@ -12,46 +16,209 @@ mod command;
 mod manager;
 mod pinia;
 
-use std::collections::HashSet;
-use std::path::PathBuf;
+use serde::de::DeserializeOwned;
+use std::collections::{HashMap, HashSet};
+use std::path::{Path, PathBuf};
 use std::time::Duration;
-use tauri::plugin::TauriPlugin;
+use tauri::plugin::{PluginApi, TauriPlugin};
 use tauri::{AppHandle, RunEvent, Runtime};
-use tauri_store::CollectionBuilder;
-
-#[cfg(feature = "unstable-migration")]
 use tauri_store::Migrator;
 
 pub use manager::ManagerExt;
 pub use pinia::{Pinia, PiniaMarker};
 pub use tauri_store::prelude::*;
-
-#[cfg(feature = "unstable-migration")]
 pub use tauri_store::{Migration, MigrationContext};
 
-// The `CollectionBuilder` macro depends on this.
-type Marker = PiniaMarker;
+#[cfg(target_os = "ios")]
+tauri::ios_plugin_binding!(init_plugin_pinia);
 
 /// Builder for the Pinia plugin.
-#[derive(CollectionBuilder)]
 pub struct Builder<R: Runtime> {
-  path: Option<PathBuf>,
+  default_path: Option<PathBuf>,
+  path_table: HashMap<StoreId, Box<Path>>,
+  default_marshaler: Option<Box<dyn Marshaler>>,
+  marshaler_table: HashMap<StoreId, Box<dyn Marshaler>>,
   default_save_strategy: SaveStrategy,
   autosave: Option<Duration>,
-  on_load: Option<Box<OnLoadFn<R, Marker>>>,
-  pretty: bool,
+  on_load: Option<Box<OnLoadFn<R, PiniaMarker>>>,
   save_denylist: HashSet<StoreId>,
   sync_denylist: HashSet<StoreId>,
-
-  #[cfg(feature = "unstable-migration")]
   migrator: Migrator,
+  debug_stores: bool,
 }
 
 impl<R: Runtime> Builder<R> {
+  /// Creates a new builder instance with default values.
+  pub fn new() -> Self {
+    Self::default()
+  }
+
+  /// Sets the autosave interval for all stores.
+  #[must_use]
+  pub fn autosave(mut self, interval: Duration) -> Self {
+    self.autosave = Some(interval);
+    self
+  }
+
+  /// Sets the default save strategy to be used by the stores.
+  #[must_use]
+  pub fn default_save_strategy(mut self, strategy: SaveStrategy) -> Self {
+    self.default_save_strategy = strategy;
+    self
+  }
+
+  /// Registers a closure to be called when a store is loaded.
+  #[must_use]
+  pub fn on_load<F>(mut self, f: F) -> Self
+  where
+    F: Fn(&Store<R, PiniaMarker>) -> Result<()> + Send + Sync + 'static,
+  {
+    self.on_load = Some(Box::new(f));
+    self
+  }
+
+  /// Default directory where the stores are saved.
+  #[must_use]
+  pub fn path(mut self, path: impl AsRef<Path>) -> Self {
+    let path = path.as_ref().to_path_buf();
+    self.default_path = Some(path);
+    self
+  }
+
+  /// Directory where a specific store should be saved.
+  #[must_use]
+  pub fn path_of(mut self, id: impl AsRef<str>, path: impl AsRef<Path>) -> Self {
+    let id = StoreId::from(id.as_ref());
+    let path = Box::from(path.as_ref());
+    self.path_table.insert(id, path);
+    self
+  }
+
+  /// Sets a list of stores that should not be saved to disk.
+  #[must_use]
+  pub fn save_denylist<I, T>(mut self, denylist: I) -> Self
+  where
+    I: IntoIterator<Item = T>,
+    T: AsRef<str>,
+  {
+    self.save_denylist.extend(
+      denylist
+        .into_iter()
+        .map(|it| StoreId::from(it.as_ref())),
+    );
+
+    self
+  }
+
+  /// Sets a list of stores that should not be synchronized across windows.
+  #[must_use]
+  pub fn sync_denylist<I, T>(mut self, denylist: I) -> Self
+  where
+    I: IntoIterator<Item = T>,
+    T: AsRef<str>,
+  {
+    self.sync_denylist.extend(
+      denylist
+        .into_iter()
+        .map(|it| StoreId::from(it.as_ref())),
+    );
+
+    self
+  }
+
+  /// Defines how the stores should be serialized and deserialized.
+  #[must_use]
+  pub fn marshaler(mut self, marshaler: Box<dyn Marshaler>) -> Self {
+    self.default_marshaler = Some(marshaler);
+    self
+  }
+
+  /// Defines how a store should be serialized and deserialized.
+  #[must_use]
+  pub fn marshaler_of(mut self, id: impl AsRef<str>, marshaler: Box<dyn Marshaler>) -> Self {
+    let id = StoreId::from(id.as_ref());
+    self.marshaler_table.insert(id, marshaler);
+    self
+  }
+
+  /// Adds a `.dev` suffix to the store files when in development mode.
+  ///
+  /// This is enabled by default.
+  #[must_use]
+  pub fn enable_debug_stores(mut self, yes: bool) -> Self {
+    self.debug_stores = yes;
+    self
+  }
+
+  /// Defines a migration for a store.
+  #[must_use]
+  pub fn migration(mut self, id: impl Into<StoreId>, migration: Migration) -> Self {
+    self.migrator.add_migration(id.into(), migration);
+    self
+  }
+
+  /// Defines multiple migrations for a store.
+  #[must_use]
+  pub fn migrations<I>(mut self, id: impl Into<StoreId>, migrations: I) -> Self
+  where
+    I: IntoIterator<Item = Migration>,
+  {
+    self
+      .migrator
+      .add_migrations(id.into(), migrations);
+
+    self
+  }
+
+  /// Sets a closure to be called before each migration step.
+  #[must_use]
+  pub fn on_before_each_migration<F>(mut self, f: F) -> Self
+  where
+    F: Fn(MigrationContext) + Send + Sync + 'static,
+  {
+    self.migrator.on_before_each(f);
+    self
+  }
+
+  fn build_collection(self, handle: Handle<R>) -> Result<()> {
+    let mut builder = StoreCollection::<R, PiniaMarker>::builder()
+      .default_save_strategy(self.default_save_strategy)
+      .save_denylist(&self.save_denylist)
+      .sync_denylist(&self.sync_denylist)
+      .migrator(self.migrator)
+      .enable_debug_stores(self.debug_stores);
+
+    if let Some(path) = self.default_path {
+      builder = builder.path(path);
+    }
+
+    if let Some(on_load) = self.on_load {
+      builder = builder.on_load(on_load);
+    }
+
+    if let Some(duration) = self.autosave {
+      builder = builder.autosave(duration);
+    }
+
+    if let Some(marshaler) = self.default_marshaler {
+      builder = builder.marshaler(marshaler);
+    }
+
+    for (id, path) in self.path_table {
+      builder = builder.path_of(id, path);
+    }
+
+    for (id, marshaler) in self.marshaler_table {
+      builder = builder.marshaler_of(id, marshaler);
+    }
+
+    builder.build(handle, env!("CARGO_PKG_NAME"))
+  }
+
   /// Builds the Pinia plugin.
   pub fn build(self) -> TauriPlugin<R> {
     tauri::plugin::Builder::new("pinia")
-      .setup(|app, _| setup(app, self))
+      .setup(|app, api| setup(app, api, self))
       .on_event(on_event)
       .invoke_handler(tauri::generate_handler![
         command::allow_save,
@@ -59,6 +226,7 @@ impl<R: Runtime> Builder<R> {
         command::clear_autosave,
         command::deny_save,
         command::deny_sync,
+        command::destroy,
         command::get_default_save_strategy,
         command::get_store_collection_path,
         command::get_save_strategy,
@@ -75,7 +243,6 @@ impl<R: Runtime> Builder<R> {
         command::save_some_now,
         command::set_autosave,
         command::set_save_strategy,
-        command::set_store_collection_path,
         command::set_store_options,
         command::unload
       ])
@@ -83,11 +250,48 @@ impl<R: Runtime> Builder<R> {
   }
 }
 
-fn setup<R>(app: &AppHandle<R>, builder: Builder<R>) -> BoxResult<()>
+impl<R: Runtime> Default for Builder<R> {
+  fn default() -> Self {
+    Self {
+      default_path: None,
+      path_table: HashMap::new(),
+      default_marshaler: None,
+      marshaler_table: HashMap::new(),
+      default_save_strategy: SaveStrategy::default(),
+      autosave: None,
+      on_load: None,
+      save_denylist: HashSet::default(),
+      sync_denylist: HashSet::default(),
+      migrator: Migrator::default(),
+      debug_stores: true,
+    }
+  }
+}
+
+#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+fn setup<R, D>(app: &AppHandle<R>, _api: PluginApi<R, D>, builder: Builder<R>) -> BoxResult<()>
 where
   R: Runtime,
+  D: DeserializeOwned,
 {
-  builder.build_collection(app)?;
+  let handle = Handle::new(app.clone());
+  builder.build_collection(handle)?;
+  Ok(())
+}
+
+#[cfg(any(target_os = "android", target_os = "ios"))]
+fn setup<R, D>(_app: &AppHandle<R>, api: PluginApi<R, D>, builder: Builder<R>) -> BoxResult<()>
+where
+  R: Runtime,
+  D: DeserializeOwned,
+{
+  #[cfg(target_os = "android")]
+  let handle = api.register_android_plugin("com.plugin.pinia", "PiniaPlugin")?;
+
+  #[cfg(target_os = "ios")]
+  let handle = api.register_ios_plugin(init_plugin_pinia)?;
+
+  builder.build_collection(Handle::new(handle))?;
   Ok(())
 }
 

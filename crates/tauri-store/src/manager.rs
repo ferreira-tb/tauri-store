@@ -17,7 +17,7 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   /// This likely indicates it was called before the plugin was properly initialized.
   ///
   /// [store collection]: https://docs.rs/tauri-store/latest/tauri_store/struct.StoreCollection.html
-  fn store_collection(&self) -> State<StoreCollection<R, DefaultMarker>> {
+  fn store_collection(&self) -> State<'_, StoreCollection<R, DefaultMarker>> {
     self.store_collection_with_marker::<DefaultMarker>()
   }
 
@@ -30,7 +30,7 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   /// This likely indicates it was called before the plugin was properly initialized.
   ///
   /// [store collection]: https://docs.rs/tauri-store/latest/tauri_store/struct.StoreCollection.html
-  fn store_collection_with_marker<C>(&self) -> State<StoreCollection<R, C>>
+  fn store_collection_with_marker<C>(&self) -> State<'_, StoreCollection<R, C>>
   where
     C: CollectionMarker,
   {

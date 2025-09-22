@@ -3,6 +3,28 @@ import type { TauriStoreContract } from '@tauri-store/shared';
 
 export { createPlugin, TauriPluginPinia } from './plugin';
 
+export {
+  allowSave,
+  allowSync,
+  clearAutosave,
+  denySave,
+  denySync,
+  destroy,
+  getDefaultSaveStrategy,
+  getSaveStrategy,
+  getStoreCollectionPath,
+  getStoreIds,
+  getStorePath,
+  getStoreState,
+  save,
+  saveAll,
+  saveAllNow,
+  saveNow,
+  setAutosave,
+  setSaveStrategy,
+  setStoreOptions,
+} from './commands';
+
 export type {
   LooseTimeStrategyKind,
   MaybePromise,
@@ -21,28 +43,6 @@ export type {
   TimeStrategy,
   TimeStrategyKind,
 } from './types';
-
-export {
-  allowSave,
-  allowSync,
-  clearAutosave,
-  denySave,
-  denySync,
-  getDefaultSaveStrategy,
-  getSaveStrategy,
-  getStoreCollectionPath,
-  getStoreIds,
-  getStorePath,
-  getStoreState,
-  save,
-  saveAll,
-  saveAllNow,
-  saveNow,
-  setAutosave,
-  setSaveStrategy,
-  setStoreCollectionPath,
-  setStoreOptions,
-} from './commands';
 
 declare module 'pinia' {
   export interface PiniaCustomProperties {

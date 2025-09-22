@@ -38,6 +38,12 @@ export function denySync(plugin: string) {
   };
 }
 
+export function destroy(plugin: string) {
+  return function (storeId: string): Promise<void> {
+    return invoke(`plugin:${plugin}|destroy`, { id: storeId });
+  };
+}
+
 export function getDefaultSaveStrategy(plugin: string) {
   return async function (): Promise<TimeStrategy> {
     return TimeStrategy.parse(

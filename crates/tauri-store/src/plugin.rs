@@ -1,11 +1,15 @@
-use crate::collection::DefaultMarker;
+use crate::collection::{DefaultMarker, Handle, StoreCollectionBuilder};
 use crate::command;
 use crate::error::BoxResult;
 use crate::manager::ManagerExt;
-use tauri::plugin::TauriPlugin;
+use serde::de::DeserializeOwned;
+use tauri::plugin::{PluginApi, TauriPlugin};
 use tauri::{AppHandle, RunEvent, Runtime};
 
 pub use crate::collection::StoreCollectionBuilder as Builder;
+
+#[cfg(target_os = "ios")]
+tauri::ios_plugin_binding!(init_plugin_tauri_store);
 
 /// Initializes the store plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
@@ -18,13 +22,14 @@ where
 {
   tauri::plugin::Builder::new("tauri-store")
     .on_event(on_event)
-    .setup(|app, _| setup(app, builder))
+    .setup(|app, api| setup(app, api, builder))
     .invoke_handler(tauri::generate_handler![
       command::allow_save,
       command::allow_sync,
       command::clear_autosave,
       command::deny_save,
       command::deny_sync,
+      command::destroy,
       command::get_default_save_strategy,
       command::get_save_strategy,
       command::get_store_collection_path,
@@ -41,18 +46,44 @@ where
       command::save_some_now,
       command::set_autosave,
       command::set_save_strategy,
-      command::set_store_collection_path,
       command::set_store_options,
       command::unload
     ])
     .build()
 }
 
-fn setup<R>(app: &AppHandle<R>, builder: Builder<R, DefaultMarker>) -> BoxResult<()>
+#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+pub(super) fn setup<R, D>(
+  app: &AppHandle<R>,
+  _api: PluginApi<R, D>,
+  builder: StoreCollectionBuilder<R, DefaultMarker>,
+) -> BoxResult<()>
 where
   R: Runtime,
+  D: DeserializeOwned,
 {
-  builder.build(app, env!("CARGO_PKG_NAME"))?;
+  let handle = Handle::new(app.clone());
+  builder.build(handle, env!("CARGO_PKG_NAME"))?;
+  Ok(())
+}
+
+#[cfg(any(target_os = "android", target_os = "ios"))]
+pub(super) fn setup<R, D>(
+  _app: &AppHandle<R>,
+  api: PluginApi<R, D>,
+  builder: StoreCollectionBuilder<R, DefaultMarker>,
+) -> BoxResult<()>
+where
+  R: Runtime,
+  D: DeserializeOwned,
+{
+  #[cfg(target_os = "android")]
+  let handle = api.register_android_plugin("", "TauriStorePlugin")?;
+  #[cfg(target_os = "ios")]
+  let handle = api.register_ios_plugin(init_plugin_tauri_store)?;
+
+  builder.build(Handle::new(handle), env!("CARGO_PKG_NAME"))?;
+
   Ok(())
 }
 

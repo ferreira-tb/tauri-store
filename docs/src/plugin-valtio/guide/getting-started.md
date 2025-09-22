@@ -19,7 +19,7 @@ Install the [Rust crate](https://crates.io/crates/tauri-plugin-valtio) by adding
 
 ```toml [src-tauri/Cargo.toml]
 [dependencies]
-tauri-plugin-valtio = "2"
+tauri-plugin-valtio = "3"
 ```
 
 :::

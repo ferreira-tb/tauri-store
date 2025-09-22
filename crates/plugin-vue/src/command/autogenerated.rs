@@ -2,6 +2,10 @@
 //
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
+//
+// To modify the behavior of the plugin, you must either change the
+// upstream `tauri-store` crate or update the code generation itself.
+// This ensures that all plugins maintain consistent behavior.
 
 use crate::manager::ManagerExt;
 use std::path::PathBuf;
@@ -55,6 +59,14 @@ where
 }
 
 #[tauri::command]
+pub(crate) async fn destroy<R>(app: AppHandle<R>, id: StoreId) -> Result<()>
+where
+  R: Runtime,
+{
+  app.vue().destroy(id)
+}
+
+#[tauri::command]
 pub(crate) async fn get_default_save_strategy<R>(app: AppHandle<R>) -> SaveStrategy
 where
   R: Runtime,
@@ -67,7 +79,7 @@ pub(crate) async fn get_store_collection_path<R>(app: AppHandle<R>) -> PathBuf
 where
   R: Runtime,
 {
-  app.vue().path()
+  app.vue().path().to_path_buf()
 }
 
 #[tauri::command]
@@ -101,7 +113,7 @@ pub(crate) async fn get_store_state<R>(app: AppHandle<R>, id: StoreId) -> Result
 where
   R: Runtime,
 {
-  app.vue().state(id)
+  app.vue().raw_state(id)
 }
 
 #[tauri::command]
@@ -112,7 +124,7 @@ where
   spawn_blocking(move || {
     app
       .vue()
-      .with_store(id, |store| store.state().clone())
+      .with_store(id, |store| store.raw_state().clone())
   })
   .await?
 }
@@ -185,14 +197,6 @@ where
   app
     .vue()
     .set_autosave(Duration::from_millis(interval));
-}
-
-#[tauri::command]
-pub(crate) async fn set_store_collection_path<R>(app: AppHandle<R>, path: PathBuf) -> Result<()>
-where
-  R: Runtime,
-{
-  spawn_blocking(move || app.vue().set_path(path)).await?
 }
 
 #[tauri::command]

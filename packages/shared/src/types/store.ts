@@ -169,6 +169,8 @@ export interface TauriStoreContract {
   readonly start: () => Promise<void>;
   /** Stops watching for changes. */
   readonly stop: () => Promise<void>;
+  /** Destroys the store, cleans up its Rust state, and deletes the file. */
+  readonly destroy: () => Promise<void>;
 }
 
 /** State of a store. */

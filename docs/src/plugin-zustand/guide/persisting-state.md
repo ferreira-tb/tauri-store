@@ -104,26 +104,6 @@ tauri_plugin_zustand::Builder::new()
   .build();
 ```
 
-:::
-
-The path can also be modified at runtime. In this case, all _currently active_ stores will be moved to the new directory.
-
-::: code-group
-
-```typescript [JavaScript]
-import { setStoreCollectionPath } from '@tauri-store/zustand';
-
-await setStoreCollectionPath('/path/to/new/directory');
-```
-
-```rust [Rust]
-use tauri_plugin_zustand::ManagerExt;
-
-manager.zustand().set_path("/path/to/new/directory");
-```
-
-:::
-
 ## Denylist
 
 If a store should be [synchronized](./synchronization.md), but not saved to disk, you can add it to the [denylist](https://docs.rs/tauri-plugin-zustand/latest/tauri_plugin_zustand/struct.Builder.html#method.save_denylist).

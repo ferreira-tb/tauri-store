@@ -13,7 +13,7 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
     mod __impl_collection {
       use super::{#name, #marker_ident};
       use serde::de::DeserializeOwned;
-      use std::path::{Path, PathBuf};
+      use std::path::Path;
       use std::time::Duration;
       use tauri::{AppHandle, Runtime};
       use tauri_store::prelude::*;
@@ -25,14 +25,13 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
         }
 
         /// Directory where the stores are saved.
-        pub fn path(&self) -> PathBuf {
+        pub fn path(&self) -> &Path {
           self.0.path()
         }
 
-        /// Sets the directory where the stores are saved.
-        /// This will move all *currently active* stores to the new directory.
-        pub fn set_path(&self, path: impl AsRef<Path>) -> Result<()> {
-          self.0.set_path(path)
+        /// Directory where a specific store is saved.
+        pub fn path_of(&self, store_id: impl AsRef<str>) -> &Path {
+          self.0.path_of(store_id)
         }
 
         /// Calls a closure with a mutable reference to the store with the given id.
@@ -43,91 +42,113 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
           self.0.with_store(id, f)
         }
 
-        /// Gets a clone of the store state if it exists.
-        pub fn state(&self, store_id: impl AsRef<str>) -> Result<StoreState> {
-          self.0.state(store_id)
+        /// Gets a clone of the raw store state if it exists.
+        pub fn raw_state(&self, store_id: impl AsRef<str>) -> Result<StoreState> {
+          self.0.raw_state(store_id)
         }
 
         /// Gets the store state, then tries to parse it as an instance of type `T`.
-        pub fn try_state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
+        pub fn state<T>(&self, store_id: impl AsRef<str>) -> Result<T>
         where
           T: DeserializeOwned,
         {
-          self.0.try_state(store_id)
+          self.0.state(store_id)
         }
 
         /// Gets the store state, then tries to parse it as an instance of type `T`.
         ///
         /// If it cannot be parsed, returns the provided default value.
-        pub fn try_state_or<T>(&self, store_id: impl AsRef<str>, default: T) -> Result<T>
+        pub fn state_or<T>(&self, store_id: impl AsRef<str>, default: T) -> Result<T>
         where
           T: DeserializeOwned,
         {
-          self.0.try_state_or(store_id, default)
+          self.0.state_or(store_id, default)
         }
 
         /// Gets the store state, then tries to parse it as an instance of type `T`.
         ///
         /// If it cannot be parsed, returns the default value of `T`.
-        pub fn try_state_or_default<T>(&self, store_id: impl AsRef<str>) -> Result<T>
+        pub fn state_or_default<T>(&self, store_id: impl AsRef<str>) -> Result<T>
         where
           T: DeserializeOwned + Default,
         {
-          self.0.try_state_or_default(store_id)
+          self.0.state_or_default(store_id)
         }
 
         /// Gets the store state, then tries to parse it as an instance of type `T`.
         ///
         /// If it cannot be parsed, returns the result of the provided closure.
-        pub fn try_state_or_else<T>(&self, store_id: impl AsRef<str>, f: impl FnOnce() -> T) -> Result<T>
+        pub fn state_or_else<T>(&self, store_id: impl AsRef<str>, f: impl FnOnce() -> T) -> Result<T>
         where
           T: DeserializeOwned,
         {
-          self.0.try_state_or_else(store_id, f)
+          self.0.state_or_else(store_id, f)
         }
 
-        /// Gets a value from a store.
-        pub fn get(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Option<Json> {
-          self.0.get(store_id, key)
+        /// Gets a raw value from a store.
+        pub fn get_raw(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Option<Json> {
+          self.0.get_raw(store_id, key)
+        }
+
+        /// Gets a raw value from a store.
+        ///
+        /// # Safety
+        ///
+        /// This is *undefined behavior* if the key doesn't exist in the store.
+        pub unsafe fn get_raw_unchecked(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Json {
+          unsafe { self.0.get_raw_unchecked(store_id, key) }
         }
 
         /// Gets a value from a store and tries to parse it as an instance of type `T`.
-        pub fn try_get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
+        pub fn get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
         where
           T: DeserializeOwned,
         {
-          self.0.try_get(store_id, key)
+          self.0.get(store_id, key)
         }
 
         /// Gets a value from a store and tries to parse it as an instance of type `T`.
         ///
         /// If the key does not exist, returns the provided default value.
-        pub fn try_get_or<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, default: T) -> T
+        pub fn get_or<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, default: T) -> T
         where
           T: DeserializeOwned,
         {
-          self.0.try_get_or(store_id, key, default)
+          self.0.get_or(store_id, key, default)
         }
 
         /// Gets a value from a store and tries to parse it as an instance of type `T`.
         ///
         /// If the key does not exist, returns the default value of `T`.
-        pub fn try_get_or_default<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> T
+        pub fn get_or_default<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> T
         where
           T: Default + DeserializeOwned,
         {
-          self.0.try_get_or_default(store_id, key)
+          self.0.get_or_default(store_id, key)
         }
 
         /// Gets a value from a store and tries to parse it as an instance of type `T`.
         ///
         /// If the key does not exist, returns the result of the provided closure.
-        pub fn try_get_or_else<T, F>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, f: F) -> T
+        pub fn get_or_else<T, F>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>, f: F) -> T
         where
           T: DeserializeOwned,
           F: FnOnce() -> T,
         {
-          self.0.try_get_or_else(store_id, key, f)
+          self.0.get_or_else(store_id, key, f)
+        }
+
+        /// Gets a value from a store and parses it as an instance of type `T`.
+        ///
+        /// # Safety
+        ///
+        /// This is *undefined behavior* if the key doesn't exist in the store
+        /// **OR** if the value cannot be represented as a valid `T`.
+        pub unsafe fn get_unchecked<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> T
+        where
+          T: DeserializeOwned,
+        {
+          unsafe { self.0.get(store_id, key).unwrap_unchecked() }
         }
 
         /// Sets a key-value pair in a store.
@@ -224,6 +245,11 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
         /// Adds a store to the deny denylist.
         pub fn deny_sync(&self, id: impl AsRef<str>) {
           self.0.deny_sync(id);
+        }
+
+        /// Destroys a store, cleans up its state, and deletes its file.
+        pub fn destroy(&self, id: impl AsRef<str>) -> Result<()> {
+          self.0.destroy(id)
         }
 
         pub(crate) fn unload_store(&self, id: &StoreId) -> Result<()> {

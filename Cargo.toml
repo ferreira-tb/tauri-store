@@ -11,6 +11,7 @@ members = [
   "crates/tauri-store-macros",
   "crates/tauri-store-utils",
   "examples/migration/src-tauri",
+  "examples/pinia-mobile/src-tauri",
   "examples/pinia-nuxt/src-tauri",
   "examples/pinia/src-tauri",
   "examples/playground/src-tauri",

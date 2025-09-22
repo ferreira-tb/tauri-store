@@ -12,7 +12,6 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "declaration": false,
-
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
@@ -30,7 +29,10 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "noEmitOnError": true,
-
     "types": ["vite/client"]
+  },
+  "vueCompilerOptions": {
+    "checkUnknownComponents": true,
+    "checkUnknownDirectives": true
   }
 }

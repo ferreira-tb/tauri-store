@@ -2,6 +2,10 @@
 //
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
+//
+// To modify the behavior of the plugin, you must either change the
+// upstream `tauri-store` crate or update the code generation itself.
+// This ensures that all plugins maintain consistent behavior.
 
 const COMMANDS: &[&str] = &[
   "allow_save",
@@ -9,6 +13,7 @@ const COMMANDS: &[&str] = &[
   "clear_autosave",
   "deny_save",
   "deny_sync",
+  "destroy",
   "get_default_save_strategy",
   "get_store_collection_path",
   "get_save_strategy",
@@ -31,5 +36,8 @@ const COMMANDS: &[&str] = &[
 ];
 
 fn main() {
-  tauri_plugin::Builder::new(COMMANDS).build();
+  tauri_plugin::Builder::new(COMMANDS)
+    .android_path("android")
+    .ios_path("ios")
+    .build();
 }

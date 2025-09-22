@@ -154,6 +154,11 @@ export class RuneStore<S extends State> extends BaseStore<S> implements TauriSto
   public readonly saveNow = (): Promise<void> => {
     return commands.saveNow(this.id);
   };
+
+  public readonly destroy = async (): Promise<void> => {
+    await commands.destroy(this.id);
+    await this.stop();
+  };
 }
 
 function createEffectRoot(fn: Fn, flush: Flush = DEFAULT_FLUSH): Fn {

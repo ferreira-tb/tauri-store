@@ -1,7 +1,7 @@
 [package]
 name = "tauri-store"
 description = "Persistent stores for Tauri"
-version = "0.12.1"
+version = "1.0.0"
 documentation = "https://docs.rs/tauri-store"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
@@ -22,7 +22,7 @@ workspace = true
 
 [package.metadata.docs.rs]
 no-default-features = true
-features = ["plugin", "unstable-migration"]
+features = ["marshaler-toml", "plugin"]
 rustc-args = ["--cfg", "docsrs"]
 rustdoc-args = ["--cfg", "docsrs"]
 
@@ -40,25 +40,28 @@ thiserror = "2.0"
 
 [dependencies.semver]
 version = "1.0"
-optional = true
 features = ["serde"]
 
 [dependencies.tauri-store-macros]
-version = "0.12"
+version = "1"
 optional = true
 path = "../tauri-store-macros"
 
 [dependencies.tauri-store-utils]
-version = "0.5"
+version = "0.6"
 path = "../tauri-store-utils"
 
 [dependencies.tokio]
-version = "1.39"
+version = "1.47"
 default-features = false
 features = ["time"]
 
+[dependencies.toml]
+version = "0.9"
+optional = true
+
 [build-dependencies.tauri-plugin]
-version = "2.3"
+version = "2.4"
 optional = true
 features = ["build"]
 
@@ -73,5 +76,5 @@ features = ["test"]
 default = ["plugin"]
 plugin = ["dep:tauri-plugin"]
 derive = ["dep:tauri-store-macros"]
+marshaler-toml = ["dep:toml"]
 file-sync-all = []
-unstable-migration = ["dep:semver", "tauri-store-utils/version"]

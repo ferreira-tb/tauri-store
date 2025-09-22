@@ -12,6 +12,14 @@ outline: 2
 
 _Nothing yet._
 
+## 4.0.0
+
+### Breaking Changes
+
+- Update `tauri-store` to `1.0.0`.
+
+Please refer to its [changelog](https://tb.dev.br/tauri-store/changelog) for more details.
+
 ## 3.7.1
 
 ### Dependencies

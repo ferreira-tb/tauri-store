@@ -1,26 +1,19 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useEffect } from 'react';
-import { printStore } from './commands';
 import { exit } from '@tauri-apps/plugin-process';
 import { openStore, tauriHandler, useCounterStore } from './store';
 import { clearAutosave, setAutosave } from '@tauri-store/zustand/src/index.js';
 
 export default function App() {
   const counter = useCounterStore((state) => state.counter);
-  const nested = useCounterStore((state) => state.nested);
   const increment = useCounterStore((state) => state.increment);
-  const incrementNested = useCounterStore((state) => state.incrementNested);
 
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown);
     return () => {
       window.removeEventListener('keydown', onKeyDown);
     };
-  }, []);
-
-  useEffect(() => {
-    tauriHandler.start();
   }, []);
 
   return (
@@ -35,16 +28,10 @@ export default function App() {
       </div>
 
       <section id="counter">
-        <p>
-          Counter: {counter}
-          Nested: {nested.foo.bar.baz}
-        </p>
+        <p>Counter: {counter}</p>
         <div className="action">
           <button type="button" onClick={increment}>
             Increment
-          </button>
-          <button type="button" onClick={incrementNested}>
-            Increment Nested
           </button>
           <button type="button" onClick={() => tauriHandler.start()}>
             Start
@@ -57,9 +44,6 @@ export default function App() {
           </button>
           <button type="button" onClick={() => tauriHandler.saveNow()}>
             Save Now
-          </button>
-          <button type="button" onClick={printStore}>
-            Print
           </button>
           <button type="button" onClick={openStore}>
             Open

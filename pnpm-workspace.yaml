@@ -4,6 +4,7 @@ packages:
   - 'docs'
   - 'examples/migration'
   - 'examples/pinia'
+  - 'examples/pinia-mobile'
   - 'examples/pinia-nuxt'
   - 'examples/playground'
   - 'examples/svelte'

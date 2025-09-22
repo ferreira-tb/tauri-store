@@ -206,6 +206,11 @@ export class Store<S extends State> extends BaseStore<S> implements TauriStoreCo
     return commands.saveNow(this.id);
   };
 
+  public readonly destroy = async (): Promise<void> => {
+    await commands.destroy(this.id);
+    await this.stop();
+  };
+
   private readonly clone = <T>(value: T): T => {
     if (typeof this.options.clone === 'function') {
       return this.options.clone(value);

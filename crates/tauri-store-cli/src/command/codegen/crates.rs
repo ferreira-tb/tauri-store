@@ -32,7 +32,7 @@ fn generate_plugin(assets: &Path) -> Result<()> {
   };
 
   Generator::builder(&input, &output)
-    .skip(&[Plugin::Store])
+    .skip(&[Plugin::Core])
     .replace(&[("__PASCAL_PLUGIN_TITLE__", &|it| it.title_as(Case::Pascal))])
     .generate()
 }
@@ -45,7 +45,7 @@ fn generate_manager(assets: &Path) -> Result<()> {
   };
 
   Generator::builder(&input, &output)
-    .skip(&[Plugin::Store])
+    .skip(&[Plugin::Core])
     .replace(&[
       ("__PASCAL_PLUGIN_TITLE__", &|it| it.title_as(Case::Pascal)),
       ("__SNAKE_PLUGIN_TITLE__", &|it| it.title_as(Case::Snake)),
@@ -61,7 +61,7 @@ fn generate_commands(assets: &Path) -> Result<()> {
   };
 
   let import_source = |plugin| {
-    if let Plugin::Store = plugin {
+    if let Plugin::Core = plugin {
       String::from("crate")
     } else {
       String::from("tauri_store")
@@ -86,7 +86,7 @@ fn generate_lib(assets: &Path) -> Result<()> {
   };
 
   Generator::builder(&input, &output)
-    .skip(&[Plugin::Store])
+    .skip(&[Plugin::Core])
     .replace(&[
       ("__PASCAL_PLUGIN_TITLE__", &|it| it.title_as(Case::Pascal)),
       ("__SNAKE_PLUGIN_TITLE__", &|it| it.title_as(Case::Snake)),

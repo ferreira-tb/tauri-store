@@ -27,6 +27,11 @@ export const denySave = commands.denySave('__PLUGIN_TITLE__');
 export const denySync = commands.denySync('__PLUGIN_TITLE__');
 
 /**
+ * Destroys a store, cleans up its state, and deletes its file.
+ */
+export const destroy = commands.destroy('__PLUGIN_TITLE__');
+
+/**
  * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
  */
@@ -112,19 +117,6 @@ export const saveNow = commands.saveNow('__PLUGIN_TITLE__');
  * ```
  */
 export const setAutosave = commands.setAutosave('__PLUGIN_TITLE__');
-
-/**
- * Sets the directory where the stores are saved.
- * This will move all *currently active* stores to the new directory.
- *
- * @example
- * ```ts
- * import { setStoreCollectionPath } from '__PACKAGE_NAME__';
- *
- * await setStoreCollectionPath('/path/to/new/directory');
- * ```
- */
-export const setStoreCollectionPath = commands.setStoreCollectionPath('__PLUGIN_TITLE__');
 
 /**
  * Sets the save strategy for a store.

@@ -2,8 +2,13 @@
 //
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
+//
+// To modify the behavior of the plugin, you must either change the
+// upstream `tauri-store` crate or update the code generation itself.
+// This ensures that all plugins maintain consistent behavior.
 
 use serde::{Deserialize, Serialize};
+use std::error::Error;
 use std::time::Duration;
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 use tauri_plugin_zustand::{ManagerExt, SaveStrategy};
@@ -24,22 +29,18 @@ pub fn run() {
       tauri_plugin_zustand::Builder::new()
         .default_save_strategy(SaveStrategy::throttle_secs(3))
         .autosave(Duration::from_secs(60))
-        .pretty(true)
         .build(),
     )
-    .setup(|app| {
-      let handle = app.handle();
-      (1..=3).for_each(|id| open_window(handle, id));
-      Ok(())
-    })
-    .invoke_handler(tauri::generate_handler![
-      get_counter,
-      print_store,
-      try_get_counter,
-      try_store_state
-    ])
+    .setup(|app| setup(app.handle()))
+    .invoke_handler(tauri::generate_handler![get_counter, get_state])
     .run(tauri::generate_context!())
     .unwrap();
+}
+
+#[allow(clippy::unnecessary_wraps)]
+fn setup(app: &AppHandle) -> Result<(), Box<dyn Error>> {
+  (1..=3).for_each(|id| open_window(app, id));
+  Ok(())
 }
 
 fn open_window(app: &AppHandle, id: u8) {
@@ -58,32 +59,17 @@ fn open_window(app: &AppHandle, id: u8) {
 }
 
 #[tauri::command]
-async fn get_counter(app: AppHandle) -> Option<i32> {
+async fn get_counter(app: AppHandle) -> i32 {
   app
     .zustand()
-    .get("counter-store", "counter")
-    .and_then(|counter| serde_json::from_value(counter).ok())
-}
-
-#[tauri::command]
-async fn print_store(app: AppHandle) {
-  let state = app.zustand().state("counter-store").unwrap();
-
-  println!("{state:?}");
-}
-
-#[tauri::command]
-async fn try_get_counter(app: AppHandle) -> i32 {
-  app
-    .zustand()
-    .try_get::<i32>("counter-store", "counter")
+    .get::<i32>("counter-store", "counter")
     .unwrap()
 }
 
 #[tauri::command]
-async fn try_store_state(app: AppHandle) -> CounterStore {
+async fn get_state(app: AppHandle) -> CounterStore {
   app
     .zustand()
-    .try_state::<CounterStore>("counter-store")
+    .state::<CounterStore>("counter-store")
     .unwrap()
 }

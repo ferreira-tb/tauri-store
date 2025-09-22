@@ -7,6 +7,7 @@ permissions = [
   "allow-clear-autosave",
   "allow-deny-save",
   "allow-deny-sync",
+  "allow-destroy",
   "allow-get-default-save-strategy",
   "allow-get-save-strategy",
   "allow-get-store-collection-path",

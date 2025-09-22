@@ -1,7 +1,7 @@
 {
   "name": "docs",
   "type": "module",
-  "packageManager": "pnpm@10.13.1",
+  "packageManager": "pnpm@10.17.1",
   "private": true,
   "scripts": {
     "dev": "vitepress dev",
@@ -9,10 +9,10 @@
     "preview": "vitepress preview"
   },
   "devDependencies": {
-    "@tb-dev/utils": "^7.0.8",
-    "@vueuse/core": "^13.6.0",
+    "@tb-dev/utils": "^7.0.14",
+    "@vueuse/core": "^13.9.0",
     "change-case": "^5.4.4",
-    "vitepress": "^2.0.0-alpha.9",
-    "vue": "^3.5.18"
+    "vitepress": "^2.0.0-alpha.12",
+    "vue": "^3.5.21"
   }
 }

@@ -2,6 +2,10 @@
 //
 // Check the `codegen` command in the `tauri-store-cli` crate.
 // https://github.com/ferreira-tb/tauri-store/tree/main/crates/tauri-store-cli
+//
+// To modify the behavior of the plugin, you must either change the
+// upstream `tauri-store` crate or update the code generation itself.
+// This ensures that all plugins maintain consistent behavior.
 
 use crate::valtio::{Valtio, ValtioMarker};
 use tauri::{Manager, Runtime};
@@ -20,7 +24,7 @@ pub trait ManagerExt<R: Runtime>: Manager<R> {
   /// This likely indicates that it was called before the plugin was properly initialized.
   ///
   /// [store collection]: https://docs.rs/tauri-store/latest/tauri_store/struct.StoreCollection.html
-  fn valtio(&self) -> Valtio<R> {
+  fn valtio(&self) -> Valtio<'_, R> {
     Valtio(
       self
         .app_handle()
