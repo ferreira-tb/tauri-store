@@ -1,11 +1,22 @@
-use crate::error::{Error, Result};
+use crate::collection::CollectionMarker;
+use crate::error::Result;
 use crate::store::{StoreId, StoreState};
+use crate::ManagerExt;
 use itertools::Itertools;
 use semver::Version;
 use serde::{Deserialize, Serialize};
+use serde_json::{from_slice, to_vec};
 use std::cmp::Ordering;
 use std::collections::HashMap;
+use std::fs::{self, File};
+use std::io::Write;
+use std::path::PathBuf;
+use std::sync::{Mutex, OnceLock};
+use tauri::{AppHandle, Runtime};
 use tauri_store_utils::Semver;
+
+// We cannot use `LazyLock` because our MSRV is 1.77.2.
+static LOCK: OnceLock<Mutex<()>> = OnceLock::new();
 
 type MigrationFn = dyn Fn(&mut StoreState) -> Result<()> + Send + Sync;
 type BeforeEachMigrationFn = dyn Fn(MigrationContext) + Send + Sync;
@@ -15,7 +26,7 @@ type BeforeEachMigrationFn = dyn Fn(MigrationContext) + Send + Sync;
 pub struct Migrator {
   migrations: HashMap<StoreId, Vec<Migration>>,
   before_each: Option<Box<BeforeEachMigrationFn>>,
-  pub(crate) history: MigrationHistory,
+  history: MigrationHistory,
 }
 
 impl Migrator {
@@ -38,7 +49,16 @@ impl Migrator {
       .extend(migrations);
   }
 
-  pub fn migrate(&mut self, id: &StoreId, state: &mut StoreState) -> MigrationResult {
+  pub fn migrate<R, C>(
+    &mut self,
+    app: &AppHandle<R>,
+    id: &StoreId,
+    state: &mut StoreState,
+  ) -> Result<()>
+  where
+    R: Runtime,
+    C: CollectionMarker,
+  {
     let mut migrations = self
       .migrations
       .get(id)
@@ -53,12 +73,13 @@ impl Migrator {
     }
 
     if migrations.is_empty() {
-      return MigrationResult::new(0);
+      return Ok(());
     }
 
     let mut iter = migrations.iter().peekable();
     let mut previous = None;
     let mut done = 0;
+    let mut last_err = None;
 
     while let Some(migration) = iter.next() {
       let current = &migration.version;
@@ -69,7 +90,8 @@ impl Migrator {
       }
 
       if let Err(err) = (migration.inner)(state) {
-        return MigrationResult::with_error(done, err);
+        last_err = Some(err);
+        break;
       }
 
       self.history.set(id, current);
@@ -77,7 +99,14 @@ impl Migrator {
       done += 1;
     }
 
-    MigrationResult::new(done)
+    if done > 0 {
+      self.write::<R, C>(app)?;
+    }
+
+    match last_err {
+      Some(err) => Err(err),
+      None => Ok(()),
+    }
   }
 
   #[doc(hidden)]
@@ -87,6 +116,59 @@ impl Migrator {
   {
     self.before_each = Some(Box::new(f));
   }
+
+  pub(crate) fn read<R, C>(&mut self, app: &AppHandle<R>) -> Result<()>
+  where
+    R: Runtime,
+    C: CollectionMarker,
+  {
+    let path = path::<R, C>(app);
+    if let Ok(bytes) = fs::read(&path) {
+      self.history = from_slice(&bytes)?;
+    }
+
+    Ok(())
+  }
+
+  fn write<R, C>(&self, app: &AppHandle<R>) -> Result<()>
+  where
+    R: Runtime,
+    C: CollectionMarker,
+  {
+    let path = path::<R, C>(app);
+    let lock = LOCK
+      .get_or_init(Mutex::default)
+      .lock()
+      .expect("migrator file lock is poisoned");
+
+    if let Some(parent) = path.parent() {
+      fs::create_dir_all(parent)?;
+    }
+
+    let bytes = to_vec(&self.history)?;
+    let mut file = File::create(path)?;
+    file.write_all(&bytes)?;
+    file.flush()?;
+
+    if cfg!(feature = "file-sync-all") {
+      file.sync_all()?;
+    }
+
+    drop(lock);
+
+    Ok(())
+  }
+}
+
+fn path<R, C>(app: &AppHandle<R>) -> PathBuf
+where
+  R: Runtime,
+  C: CollectionMarker,
+{
+  app
+    .store_collection_with_marker::<C>()
+    .path
+    .join("migration.tauristore")
 }
 
 /// A migration step.
@@ -158,22 +240,5 @@ impl MigrationHistory {
 
   pub fn set(&mut self, id: &StoreId, version: &Version) {
     self.0.insert(id.clone(), version.clone());
-  }
-}
-
-// This way the meta can be updated even if some migrations fail.
-#[doc(hidden)]
-pub struct MigrationResult {
-  pub(crate) done: u32,
-  pub(crate) error: Option<Error>,
-}
-
-impl MigrationResult {
-  pub const fn new(done: u32) -> Self {
-    Self { done, error: None }
-  }
-
-  pub const fn with_error(done: u32, error: Error) -> Self {
-    Self { done, error: Some(error) }
   }
 }

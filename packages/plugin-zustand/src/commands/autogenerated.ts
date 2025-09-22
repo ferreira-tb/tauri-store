@@ -122,19 +122,6 @@ export const saveNow = commands.saveNow('zustand');
 export const setAutosave = commands.setAutosave('zustand');
 
 /**
- * Sets the directory where the stores are saved.
- * This will move all *currently active* stores to the new directory.
- *
- * @example
- * ```ts
- * import { setStoreCollectionPath } from '@tauri-store/zustand';
- *
- * await setStoreCollectionPath('/path/to/new/directory');
- * ```
- */
-export const setStoreCollectionPath = commands.setStoreCollectionPath('zustand');
-
-/**
  * Sets the save strategy for a store.
  * Calling this will abort any pending save operation.
  *

@@ -2,11 +2,9 @@ mod autosave;
 mod builder;
 mod handle;
 mod marker;
-mod path;
 
 use crate::error::Result;
 use crate::event::{emit, STORE_UNLOAD_EVENT};
-use crate::meta::Meta;
 use crate::store::{SaveStrategy, Store, StoreId, StoreResource, StoreState, WatcherId};
 use autosave::Autosave;
 use dashmap::{DashMap, DashSet};
@@ -14,7 +12,7 @@ use serde::de::DeserializeOwned;
 use serde_json::Value;
 use std::fmt;
 use std::marker::PhantomData;
-use std::path::PathBuf;
+use std::path::Path;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tauri::{AppHandle, Resource, ResourceId, Runtime};
@@ -38,7 +36,7 @@ where
 {
   pub(crate) handle: Handle<R>,
   pub(crate) name: Box<str>,
-  pub(crate) path: Mutex<PathBuf>,
+  pub(crate) path: Box<Path>,
   pub(crate) stores: DashMap<StoreId, ResourceId>,
   pub(crate) on_load: Option<Box<OnLoadFn<R, C>>>,
   pub(crate) autosave: Mutex<Autosave>,
@@ -103,6 +101,18 @@ where
       .iter()
       .map(|it| it.key().clone())
       .collect()
+  }
+
+  /// Store collection name.
+  #[inline]
+  pub fn name(&self) -> &str {
+    &self.name
+  }
+
+  /// Directory where the stores are saved.
+  #[inline]
+  pub fn path(&self) -> &Path {
+    &self.path
   }
 
   /// Calls a closure with a mutable reference to the store with the given id.
@@ -386,8 +396,6 @@ where
         });
       }
     }
-
-    Meta::write(self)?;
 
     Ok(())
   }

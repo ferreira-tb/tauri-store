@@ -3,8 +3,6 @@ use super::marker::CollectionMarker;
 use super::{DefaultMarker, OnLoadFn, StoreCollection};
 use crate::collection::autosave::Autosave;
 use crate::error::Result;
-#[cfg(any(target_os = "windows", target_os = "macos", target_os = "linux"))]
-use crate::meta::Meta;
 use crate::store::{SaveStrategy, Store, StoreId};
 use crate::ManagerExt;
 use dashmap::{DashMap, DashSet};
@@ -85,12 +83,11 @@ where
     I: IntoIterator<Item = T>,
     T: AsRef<str>,
   {
-    self.save_denylist.extend(
-      denylist
-        .into_iter()
-        .map(|it| StoreId::from(it.as_ref())),
-    );
+    let denylist = denylist
+      .into_iter()
+      .map(|it| StoreId::from(it.as_ref()));
 
+    self.save_denylist.extend(denylist);
     self
   }
 
@@ -101,12 +98,11 @@ where
     I: IntoIterator<Item = T>,
     T: AsRef<str>,
   {
-    self.sync_denylist.extend(
-      denylist
-        .into_iter()
-        .map(|it| StoreId::from(it.as_ref())),
-    );
+    let denylist = denylist
+      .into_iter()
+      .map(|it| StoreId::from(it.as_ref()));
 
+    self.sync_denylist.extend(denylist);
     self
   }
 
@@ -157,38 +153,25 @@ where
   ///
   /// Panics if a store collection is already initialized.
   #[doc(hidden)]
-  pub fn build(mut self, handle: Handle<R>, plugin_name: &str) -> Result<()> {
+  pub fn build(self, handle: Handle<R>, plugin_name: &str) -> Result<()> {
     let app = handle.app().clone();
     debug_assert!(
       app.try_state::<StoreCollection<R, C>>().is_none(),
       "store collection is already initialized"
     );
-    #[cfg(any(target_os = "windows", target_os = "macos", target_os = "linux"))]
-    let meta = Meta::read(&app, plugin_name)?;
-    #[cfg(any(target_os = "windows", target_os = "macos", target_os = "linux"))]
-    let path = meta
-      .inner
-      .path
-      .or_else(|| self.path.take())
-      .unwrap_or_else(|| {
-        app
-          .path()
-          .app_data_dir()
-          .expect("failed to resolve app data dir")
-          .join(plugin_name)
-      });
-    #[cfg(any(target_os = "android", target_os = "ios"))]
-    let path = handle.get_sandboxed_path()?;
-    println!("Store collection path: just after the sandboxed path retrieval");
-    #[cfg(feature = "unstable-migration")]
-    if let Some(history) = meta.inner.migration_history {
-      self.migrator.history = history;
-    }
+
+    let path = match self.path {
+      Some(path) => path,
+      #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
+      None => app.path().app_data_dir()?.join(plugin_name),
+      #[cfg(any(target_os = "android", target_os = "ios"))]
+      None => handle.get_sandboxed_path()?.join(plugin_name),
+    };
 
     app.manage(StoreCollection::<R, C> {
       handle,
       name: Box::from(plugin_name),
-      path: Mutex::new(path),
+      path: path.into_boxed_path(),
       stores: DashMap::new(),
       on_load: self.on_load,
       autosave: Mutex::new(Autosave::new(self.autosave)),
@@ -201,12 +184,19 @@ where
       migrator: Mutex::new(self.migrator),
     });
 
-    app
-      .store_collection_with_marker::<C>()
+    let collection = app.store_collection_with_marker::<C>();
+    collection
       .autosave
       .lock()
-      .unwrap()
+      .expect("autosave is poisoned")
       .start::<R, C>(&app);
+
+    #[cfg(feature = "unstable-migration")]
+    collection
+      .migrator
+      .lock()
+      .expect("migrator is poisoned")
+      .read::<R, C>(&app)?;
 
     Ok(())
   }

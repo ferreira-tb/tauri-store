@@ -114,19 +114,6 @@ export const saveNow = commands.saveNow('__PLUGIN_TITLE__');
 export const setAutosave = commands.setAutosave('__PLUGIN_TITLE__');
 
 /**
- * Sets the directory where the stores are saved.
- * This will move all *currently active* stores to the new directory.
- *
- * @example
- * ```ts
- * import { setStoreCollectionPath } from '__PACKAGE_NAME__';
- *
- * await setStoreCollectionPath('/path/to/new/directory');
- * ```
- */
-export const setStoreCollectionPath = commands.setStoreCollectionPath('__PLUGIN_TITLE__');
-
-/**
  * Sets the save strategy for a store.
  * Calling this will abort any pending save operation.
  *

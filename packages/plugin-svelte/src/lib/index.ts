@@ -20,7 +20,6 @@ export {
   saveNow,
   setAutosave,
   setSaveStrategy,
-  setStoreCollectionPath,
   setStoreOptions,
 } from './commands';
 

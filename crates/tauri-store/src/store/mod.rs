@@ -91,24 +91,12 @@ where
 
   #[cfg(feature = "unstable-migration")]
   fn run_pending_migrations(&mut self, app: &AppHandle<R>) -> Result<()> {
-    use crate::meta::Meta;
-
-    let collection = app.store_collection_with_marker::<C>();
-    let result = collection
+    app
+      .store_collection_with_marker::<C>()
       .migrator
       .lock()
       .expect("migrator is poisoned")
-      .migrate(&self.id, &mut self.state);
-
-    if result.done > 0 {
-      Meta::write(&collection)?;
-    }
-
-    if let Some(err) = result.error {
-      Err(err)
-    } else {
-      Ok(())
-    }
+      .migrate::<R, C>(&self.app, &self.id, &mut self.state)
   }
 
   /// The id of the store.
@@ -473,7 +461,7 @@ where
   R: Runtime,
   C: CollectionMarker,
 {
-  append_filename(&app.store_collection_with_marker::<C>().path(), id)
+  append_filename(app.store_collection_with_marker::<C>().path(), id)
 }
 
 /// Appends the store filename to the given directory path.

@@ -100,26 +100,6 @@ tauri_plugin_valtio::Builder::new()
   .build();
 ```
 
-:::
-
-The path can also be modified at runtime. In this case, all _currently active_ stores will be moved to the new directory.
-
-::: code-group
-
-```typescript [JavaScript]
-import { setStoreCollectionPath } from '@tauri-store/valtio';
-
-await setStoreCollectionPath('/path/to/new/directory');
-```
-
-```rust [Rust]
-use tauri_plugin_valtio::ManagerExt;
-
-manager.valtio().set_path("/path/to/new/directory");
-```
-
-:::
-
 ## Denylist
 
 If a store should be [synchronized](./synchronization.md), but not saved to disk, you can add it to the [denylist](https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio/struct.Builder.html#method.save_denylist).

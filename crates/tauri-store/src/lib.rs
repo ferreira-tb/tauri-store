@@ -6,7 +6,6 @@ mod collection;
 mod error;
 mod event;
 mod manager;
-mod meta;
 pub mod prelude;
 mod store;
 

@@ -71,7 +71,7 @@ pub(crate) async fn get_store_collection_path<R>(app: AppHandle<R>) -> PathBuf
 where
   R: Runtime,
 {
-  app.vue().path()
+  app.vue().path().to_path_buf()
 }
 
 #[tauri::command]
@@ -189,14 +189,6 @@ where
   app
     .vue()
     .set_autosave(Duration::from_millis(interval));
-}
-
-#[tauri::command]
-pub(crate) async fn set_store_collection_path<R>(app: AppHandle<R>, path: PathBuf) -> Result<()>
-where
-  R: Runtime,
-{
-  spawn_blocking(move || app.vue().set_path(path)).await?
 }
 
 #[tauri::command]
