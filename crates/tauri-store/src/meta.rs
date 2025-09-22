@@ -52,7 +52,6 @@ impl Meta {
     }
 
     write_file(path, &meta.inner)
-      .pretty(true)
       .sync(cfg!(feature = "file-sync-all"))
       .call()?;
 
@@ -73,7 +72,6 @@ fn read(path: &Path) -> Result<MetaGuard> {
 
   let meta = read_file(path)
     .create(true)
-    .create_pretty(true)
     .create_sync(cfg!(feature = "file-sync-all"))
     .call()?;
 

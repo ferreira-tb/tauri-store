@@ -42,7 +42,6 @@ pub struct Builder<R: Runtime> {
   default_save_strategy: SaveStrategy,
   autosave: Option<Duration>,
   on_load: Option<Box<OnLoadFn<R, ZustandMarker>>>,
-  pretty: bool,
   save_denylist: HashSet<StoreId>,
   sync_denylist: HashSet<StoreId>,
 
@@ -85,13 +84,6 @@ impl<R: Runtime> Builder<R> {
   pub fn path(mut self, path: impl AsRef<Path>) -> Self {
     let path = path.as_ref().to_path_buf();
     self.path = Some(path);
-    self
-  }
-
-  /// Sets whether the store files should be pretty printed.
-  #[must_use]
-  pub fn pretty(mut self, yes: bool) -> Self {
-    self.pretty = yes;
     self
   }
 
@@ -163,7 +155,6 @@ impl<R: Runtime> Builder<R> {
   fn build_collection(self, handle: Handle<R>) -> Result<()> {
     let mut builder = StoreCollection::<R, ZustandMarker>::builder()
       .default_save_strategy(self.default_save_strategy)
-      .pretty(self.pretty)
       .save_denylist(&self.save_denylist)
       .sync_denylist(&self.sync_denylist);
 
@@ -229,7 +220,6 @@ impl<R: Runtime> Default for Builder<R> {
       default_save_strategy: SaveStrategy::default(),
       autosave: None,
       on_load: None,
-      pretty: false,
       save_denylist: HashSet::default(),
       sync_denylist: HashSet::default(),
 

@@ -29,7 +29,6 @@ pub fn run() {
       tauri_plugin_svelte::Builder::new()
         .default_save_strategy(SaveStrategy::throttle_secs(3))
         .autosave(Duration::from_secs(60))
-        .pretty(true)
         .build(),
     )
     .setup(|app| setup(app.handle()))

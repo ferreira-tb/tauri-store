@@ -302,7 +302,6 @@ where
 
     write_file(self.path(), &self.state)
       .sync(cfg!(feature = "file-sync-all"))
-      .pretty(collection.pretty)
       .call()?;
 
     Ok(())

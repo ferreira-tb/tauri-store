@@ -30,7 +30,6 @@ where
   default_save_strategy: SaveStrategy,
   autosave: Option<Duration>,
   on_load: Option<Box<OnLoadFn<R, C>>>,
-  pretty: bool,
   save_denylist: DashSet<StoreId>,
   sync_denylist: DashSet<StoreId>,
 
@@ -76,13 +75,6 @@ where
   #[must_use]
   pub fn path(mut self, path: impl AsRef<Path>) -> Self {
     self.path = Some(path.as_ref().to_path_buf());
-    self
-  }
-
-  /// Sets whether the store files should be pretty printed.
-  #[must_use]
-  pub fn pretty(mut self, yes: bool) -> Self {
-    self.pretty = yes;
     self
   }
 
@@ -203,7 +195,6 @@ where
       default_save_strategy: self.default_save_strategy,
       save_denylist: self.save_denylist,
       sync_denylist: self.sync_denylist,
-      pretty: self.pretty,
       phantom: PhantomData,
 
       #[cfg(feature = "unstable-migration")]
@@ -247,7 +238,6 @@ where
       default_save_strategy: SaveStrategy::Immediate,
       autosave: None,
       on_load: None,
-      pretty: false,
       save_denylist: DashSet::new(),
       sync_denylist: DashSet::new(),
 

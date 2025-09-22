@@ -1,7 +1,7 @@
 use bon::builder;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
-use serde_json::{from_slice, to_vec, to_vec_pretty};
+use serde_json::{from_slice, to_vec};
 use std::fs::{self, File};
 use std::io::ErrorKind::NotFound;
 use std::io::Result;
@@ -13,7 +13,7 @@ use std::path::Path;
 pub fn read_file<T>(
   #[builder(start_fn)] path: impl AsRef<Path>,
   #[builder(default)] create: bool,
-  #[builder(default)] create_pretty: bool,
+
   #[builder(default)] create_sync: bool,
 ) -> Result<T>
 where
@@ -26,7 +26,6 @@ where
       if create {
         write_file(&path, &value)
           .create_new(true)
-          .pretty(create_pretty)
           .sync(create_sync)
           .call()?;
       }
@@ -43,7 +42,6 @@ pub fn write_file<T>(
   #[builder(start_fn)] path: impl AsRef<Path>,
   #[builder(start_fn)] value: &T,
   #[builder(default)] create_new: bool,
-  #[builder(default)] pretty: bool,
   #[builder(default)] sync: bool,
 ) -> Result<()>
 where
@@ -54,12 +52,7 @@ where
     fs::create_dir_all(parent)?;
   }
 
-  let bytes = if pretty {
-    to_vec_pretty(value)?
-  } else {
-    to_vec(value)?
-  };
-
+  let bytes = to_vec(value)?;
   let mut file = if create_new {
     File::create_new(path)?
   } else {

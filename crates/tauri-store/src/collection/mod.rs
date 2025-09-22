@@ -45,7 +45,6 @@ where
   pub(crate) default_save_strategy: SaveStrategy,
   pub(crate) save_denylist: DashSet<StoreId>,
   pub(crate) sync_denylist: DashSet<StoreId>,
-  pub(crate) pretty: bool,
   phantom: PhantomData<C>,
 
   #[cfg(feature = "unstable-migration")]
@@ -408,8 +407,6 @@ where
 {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     f.debug_struct("StoreCollection")
-      .field("default_save_strategy", &self.default_save_strategy)
-      .field("pretty", &self.pretty)
       .finish_non_exhaustive()
   }
 }
