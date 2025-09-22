@@ -180,6 +180,11 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
   public async saveNow(): Promise<void> {
     return commands.saveNow(this.id);
   }
+
+  public async destroy(): Promise<void> {
+    await commands.destroy(this.id);
+    await this.stop();
+  }
 }
 
 /**

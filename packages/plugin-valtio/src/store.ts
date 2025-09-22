@@ -157,6 +157,10 @@ export function toStore<S extends State>(
     saveNow: () => commands.save(_store.id),
     start: () => _store.start(),
     stop: () => _store.stop(),
+    destroy: async () => {
+      await commands.destroy(_store.id);
+      await _store.stop();
+    },
   };
 }
 
