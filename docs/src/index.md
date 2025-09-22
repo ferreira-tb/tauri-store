@@ -56,6 +56,7 @@ pnpm run example random
 You can enable some [Cargo features](https://doc.rust-lang.org/cargo/reference/features.html) to customize the plugin's behavior.
 
 - `file-sync-all`: call [`File::sync_all`](https://doc.rust-lang.org/std/fs/struct.File.html#method.sync_all) after writing to the store file to ensure that all in-memory data reaches the filesystem. Enabling this can significantly degrade performance.
+- `marshaler-toml`: allow to save the stores as TOML files.
 
 ## Versioning
 
