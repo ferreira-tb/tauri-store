@@ -22,7 +22,7 @@ workspace = true
 
 [package.metadata.docs.rs]
 no-default-features = true
-features = []
+features = ["marshaler-toml"]
 rustc-args = ["--cfg", "docsrs"]
 rustdoc-args = ["--cfg", "docsrs"]
 
@@ -44,4 +44,5 @@ version = "2.4"
 features = ["build"]
 
 [features]
+marshaler-toml = ["tauri-store/marshaler-toml"]
 file-sync-all = ["tauri-store/file-sync-all"]

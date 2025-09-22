@@ -1,9 +1,10 @@
+use crate::store::MarshalingError;
 use serde::{Serialize, Serializer};
 use std::error::Error as StdError;
 use std::result::Result as StdResult;
 
 /// A [`Result`](std::result::Result) type with [`Error`](crate::Error) as the error variant.
-pub type Result<T> = StdResult<T, Error>;
+pub type Result<T, E = Error> = StdResult<T, E>;
 
 /// A [`Result`](std::result::Result) type with a boxed error.
 pub type BoxResult<T> = StdResult<T, Box<dyn StdError>>;
@@ -12,6 +13,12 @@ pub type BoxResult<T> = StdResult<T, Box<dyn StdError>>;
 #[non_exhaustive]
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
+  #[error(transparent)]
+  FailedToDeserialize(MarshalingError),
+
+  #[error(transparent)]
+  FailedToSerialize(MarshalingError),
+
   #[error(transparent)]
   Io(#[from] std::io::Error),
 

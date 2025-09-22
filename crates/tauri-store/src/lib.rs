@@ -24,10 +24,16 @@ pub use event::{
 pub use manager::ManagerExt;
 pub use migration::{Migration, MigrationContext, Migrator};
 pub use serde_json::Value as Json;
-pub use store::{SaveStrategy, Store, StoreId, StoreOptions, StoreState, WatcherId};
+pub use store::{
+  JsonMarshaler, Marshaler, MarshalingError, SaveStrategy, Store, StoreId, StoreOptions,
+  StoreState, WatcherId,
+};
 
 #[cfg(feature = "derive")]
 pub use tauri_store_macros::Collection;
 
 #[cfg(feature = "plugin")]
 pub use plugin::{init, Builder};
+
+#[cfg(feature = "marshaler-toml")]
+pub use store::TomlMarshaler;

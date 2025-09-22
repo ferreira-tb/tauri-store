@@ -13,6 +13,7 @@ const COMMANDS: &[&str] = &[
   "clear_autosave",
   "deny_save",
   "deny_sync",
+  "destroy",
   "get_default_save_strategy",
   "get_store_collection_path",
   "get_save_strategy",

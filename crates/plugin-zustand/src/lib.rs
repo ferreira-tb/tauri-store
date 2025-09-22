@@ -17,7 +17,7 @@ mod manager;
 mod zustand;
 
 use serde::de::DeserializeOwned;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 use std::time::Duration;
 use tauri::plugin::{PluginApi, TauriPlugin};
@@ -34,13 +34,17 @@ tauri::ios_plugin_binding!(init_plugin_zustand);
 
 /// Builder for the Zustand plugin.
 pub struct Builder<R: Runtime> {
-  path: Option<PathBuf>,
+  default_path: Option<PathBuf>,
+  path_table: HashMap<StoreId, Box<Path>>,
+  default_marshaler: Option<Box<dyn Marshaler>>,
+  marshaler_table: HashMap<StoreId, Box<dyn Marshaler>>,
   default_save_strategy: SaveStrategy,
   autosave: Option<Duration>,
   on_load: Option<Box<OnLoadFn<R, ZustandMarker>>>,
   save_denylist: HashSet<StoreId>,
   sync_denylist: HashSet<StoreId>,
   migrator: Migrator,
+  debug_stores: bool,
 }
 
 impl<R: Runtime> Builder<R> {
@@ -73,11 +77,20 @@ impl<R: Runtime> Builder<R> {
     self
   }
 
-  /// Directory where the stores will be saved.
+  /// Default directory where the stores are saved.
   #[must_use]
   pub fn path(mut self, path: impl AsRef<Path>) -> Self {
     let path = path.as_ref().to_path_buf();
-    self.path = Some(path);
+    self.default_path = Some(path);
+    self
+  }
+
+  /// Directory where a specific store should be saved.
+  #[must_use]
+  pub fn path_of(mut self, id: impl AsRef<str>, path: impl AsRef<Path>) -> Self {
+    let id = StoreId::from(id.as_ref());
+    let path = Box::from(path.as_ref());
+    self.path_table.insert(id, path);
     self
   }
 
@@ -110,6 +123,30 @@ impl<R: Runtime> Builder<R> {
         .map(|it| StoreId::from(it.as_ref())),
     );
 
+    self
+  }
+
+  /// Defines how the stores should be serialized and deserialized.
+  #[must_use]
+  pub fn marshaler(mut self, marshaler: Box<dyn Marshaler>) -> Self {
+    self.default_marshaler = Some(marshaler);
+    self
+  }
+
+  /// Defines how a store should be serialized and deserialized.
+  #[must_use]
+  pub fn marshaler_of(mut self, id: impl AsRef<str>, marshaler: Box<dyn Marshaler>) -> Self {
+    let id = StoreId::from(id.as_ref());
+    self.marshaler_table.insert(id, marshaler);
+    self
+  }
+
+  /// Adds a `.dev` suffix to the store files when in development mode.
+  ///
+  /// This is enabled by default.
+  #[must_use]
+  pub fn enable_debug_stores(mut self, yes: bool) -> Self {
+    self.debug_stores = yes;
     self
   }
 
@@ -148,9 +185,10 @@ impl<R: Runtime> Builder<R> {
       .default_save_strategy(self.default_save_strategy)
       .save_denylist(&self.save_denylist)
       .sync_denylist(&self.sync_denylist)
-      .migrator(self.migrator);
+      .migrator(self.migrator)
+      .enable_debug_stores(self.debug_stores);
 
-    if let Some(path) = self.path {
+    if let Some(path) = self.default_path {
       builder = builder.path(path);
     }
 
@@ -160,6 +198,18 @@ impl<R: Runtime> Builder<R> {
 
     if let Some(duration) = self.autosave {
       builder = builder.autosave(duration);
+    }
+
+    if let Some(marshaler) = self.default_marshaler {
+      builder = builder.marshaler(marshaler);
+    }
+
+    for (id, path) in self.path_table {
+      builder = builder.path_of(id, path);
+    }
+
+    for (id, marshaler) in self.marshaler_table {
+      builder = builder.marshaler_of(id, marshaler);
     }
 
     builder.build(handle, env!("CARGO_PKG_NAME"))
@@ -203,13 +253,17 @@ impl<R: Runtime> Builder<R> {
 impl<R: Runtime> Default for Builder<R> {
   fn default() -> Self {
     Self {
-      path: None,
+      default_path: None,
+      path_table: HashMap::new(),
+      default_marshaler: None,
+      marshaler_table: HashMap::new(),
       default_save_strategy: SaveStrategy::default(),
       autosave: None,
       on_load: None,
       save_denylist: HashSet::default(),
       sync_denylist: HashSet::default(),
       migrator: Migrator::default(),
+      debug_stores: true,
     }
   }
 }

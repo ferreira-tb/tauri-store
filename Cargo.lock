@@ -4063,6 +4063,7 @@ dependencies = [
  "tauri-store-utils",
  "thiserror 2.0.16",
  "tokio",
+ "toml 0.9.7",
 ]
 
 [[package]]

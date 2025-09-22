@@ -2,11 +2,13 @@ use super::handle::Handle;
 use super::marker::CollectionMarker;
 use super::{DefaultMarker, OnLoadFn, StoreCollection};
 use crate::collection::autosave::Autosave;
+use crate::collection::table::{MarshalerTable, PathTable};
 use crate::error::Result;
+use crate::manager::ManagerExt;
 use crate::migration::{Migration, MigrationContext, Migrator};
-use crate::store::{SaveStrategy, Store, StoreId};
-use crate::ManagerExt;
+use crate::store::{JsonMarshaler, Marshaler, SaveStrategy, Store, StoreId};
 use dashmap::{DashMap, DashSet};
+use std::collections::HashMap;
 use std::marker::PhantomData;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
@@ -22,13 +24,17 @@ where
   R: Runtime,
   C: CollectionMarker,
 {
-  path: Option<PathBuf>,
+  default_path: Option<PathBuf>,
+  path_table: HashMap<StoreId, Box<Path>>,
+  default_marshaler: Option<Box<dyn Marshaler>>,
+  marshaler_table: HashMap<StoreId, Box<dyn Marshaler>>,
   default_save_strategy: SaveStrategy,
   autosave: Option<Duration>,
   on_load: Option<Box<OnLoadFn<R, C>>>,
   save_denylist: DashSet<StoreId>,
   sync_denylist: DashSet<StoreId>,
   migrator: Migrator,
+  debug_stores: bool,
 }
 
 impl<R, C> StoreCollectionBuilder<R, C>
@@ -65,10 +71,19 @@ where
     self
   }
 
-  /// Directory where the stores will be saved.
+  /// Default directory where the stores are saved.
   #[must_use]
   pub fn path(mut self, path: impl AsRef<Path>) -> Self {
-    self.path = Some(path.as_ref().to_path_buf());
+    self.default_path = Some(path.as_ref().to_path_buf());
+    self
+  }
+
+  /// Sets where a store should be saved.
+  #[must_use]
+  pub fn path_of(mut self, id: impl AsRef<str>, path: impl AsRef<Path>) -> Self {
+    let id = StoreId::from(id.as_ref());
+    let path = Box::from(path.as_ref());
+    self.path_table.insert(id, path);
     self
   }
 
@@ -99,6 +114,30 @@ where
       .map(|it| StoreId::from(it.as_ref()));
 
     self.sync_denylist.extend(denylist);
+    self
+  }
+
+  /// Defines how the stores should be serialized and deserialized.
+  #[must_use]
+  pub fn marshaler(mut self, marshaler: Box<dyn Marshaler>) -> Self {
+    self.default_marshaler = Some(marshaler);
+    self
+  }
+
+  /// Defines how a store should be serialized and deserialized.
+  #[must_use]
+  pub fn marshaler_of(mut self, id: impl AsRef<str>, marshaler: Box<dyn Marshaler>) -> Self {
+    let id = StoreId::from(id.as_ref());
+    self.marshaler_table.insert(id, marshaler);
+    self
+  }
+
+  /// Adds a `.dev` suffix to the store files when in development mode.
+  ///
+  /// This is enabled by default.
+  #[must_use]
+  pub fn enable_debug_stores(mut self, yes: bool) -> Self {
+    self.debug_stores = yes;
     self
   }
 
@@ -152,7 +191,7 @@ where
       "store collection is already initialized"
     );
 
-    let path = match self.path {
+    let default_path = match self.default_path {
       Some(path) => path,
       #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
       None => app.path().app_data_dir()?.join(plugin_name),
@@ -160,18 +199,34 @@ where
       None => handle.get_sandboxed_path()?.join(plugin_name),
     };
 
+    let path_table = PathTable {
+      default: default_path.into_boxed_path(),
+      table: self.path_table,
+    };
+
+    let default_marshaler = self
+      .default_marshaler
+      .unwrap_or_else(|| Box::new(JsonMarshaler));
+
+    let marshaler_table = MarshalerTable {
+      default: default_marshaler,
+      table: self.marshaler_table,
+    };
+
     app.manage(StoreCollection::<R, C> {
       handle,
       name: Box::from(plugin_name),
-      path: path.into_boxed_path(),
+      path_table,
+      marshaler_table,
       stores: DashMap::new(),
       on_load: self.on_load,
       autosave: Mutex::new(Autosave::new(self.autosave)),
       default_save_strategy: self.default_save_strategy,
       save_denylist: self.save_denylist,
       sync_denylist: self.sync_denylist,
-      phantom: PhantomData,
       migrator: Mutex::new(self.migrator),
+      debug_stores: self.debug_stores,
+      phantom: PhantomData,
     });
 
     let collection = app.store_collection_with_marker::<C>();
@@ -213,13 +268,17 @@ where
 {
   fn default() -> Self {
     Self {
-      path: None,
+      default_path: None,
+      path_table: HashMap::new(),
+      default_marshaler: None,
+      marshaler_table: HashMap::new(),
       default_save_strategy: SaveStrategy::Immediate,
       autosave: None,
       on_load: None,
       save_denylist: DashSet::new(),
       sync_denylist: DashSet::new(),
       migrator: Migrator::default(),
+      debug_stores: true,
     }
   }
 }

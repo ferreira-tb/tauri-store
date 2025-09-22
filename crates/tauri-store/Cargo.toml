@@ -22,7 +22,7 @@ workspace = true
 
 [package.metadata.docs.rs]
 no-default-features = true
-features = ["plugin"]
+features = ["marshaler-toml", "plugin"]
 rustc-args = ["--cfg", "docsrs"]
 rustdoc-args = ["--cfg", "docsrs"]
 
@@ -56,6 +56,10 @@ version = "1.47"
 default-features = false
 features = ["time"]
 
+[dependencies.toml]
+version = "0.9"
+optional = true
+
 [build-dependencies.tauri-plugin]
 version = "2.4"
 optional = true
@@ -72,4 +76,5 @@ features = ["test"]
 default = ["plugin"]
 plugin = ["dep:tauri-plugin"]
 derive = ["dep:tauri-store-macros"]
+marshaler-toml = ["dep:toml"]
 file-sync-all = []

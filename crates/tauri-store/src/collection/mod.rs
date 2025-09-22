@@ -2,6 +2,7 @@ mod autosave;
 mod builder;
 mod handle;
 mod marker;
+mod table;
 
 use crate::error::Result;
 use crate::event::{emit, STORE_UNLOAD_EVENT};
@@ -16,6 +17,7 @@ use std::marker::PhantomData;
 use std::path::Path;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
+use table::{MarshalerTable, PathTable};
 use tauri::{AppHandle, Resource, ResourceId, Runtime};
 
 pub use builder::StoreCollectionBuilder;
@@ -34,14 +36,16 @@ where
 {
   pub(crate) handle: Handle<R>,
   pub(crate) name: Box<str>,
-  pub(crate) path: Box<Path>,
   pub(crate) stores: DashMap<StoreId, ResourceId>,
+  pub(crate) path_table: PathTable,
+  pub(crate) marshaler_table: MarshalerTable,
   pub(crate) on_load: Option<Box<OnLoadFn<R, C>>>,
   pub(crate) autosave: Mutex<Autosave>,
   pub(crate) default_save_strategy: SaveStrategy,
   pub(crate) save_denylist: DashSet<StoreId>,
   pub(crate) sync_denylist: DashSet<StoreId>,
   pub(crate) migrator: Mutex<Migrator>,
+  pub(crate) debug_stores: bool,
   phantom: PhantomData<C>,
 }
 
@@ -105,10 +109,16 @@ where
     &self.name
   }
 
-  /// Directory where the stores are saved.
+  /// Default directory where the stores are saved.
   #[inline]
   pub fn path(&self) -> &Path {
-    &self.path
+    &self.path_table.default
+  }
+
+  /// Directory where a specific store is saved.
+  pub fn path_of(&self, store_id: impl AsRef<str>) -> &Path {
+    let store_id = StoreId::from(store_id.as_ref());
+    self.path_table.get(&store_id)
   }
 
   /// Calls a closure with a mutable reference to the store with the given id.
@@ -446,7 +456,6 @@ where
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     f.debug_struct("StoreCollection")
       .field("name", &self.name)
-      .field("path", &self.path)
       .finish_non_exhaustive()
   }
 }

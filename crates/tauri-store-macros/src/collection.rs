@@ -29,6 +29,11 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
           self.0.path()
         }
 
+        /// Directory where a specific store is saved.
+        pub fn path_of(&self, store_id: impl AsRef<str>) -> &Path {
+          self.0.path_of(store_id)
+        }
+
         /// Calls a closure with a mutable reference to the store with the given id.
         pub fn with_store<F, T>(&self, id: impl AsRef<str>, f: F) -> Result<T>
         where

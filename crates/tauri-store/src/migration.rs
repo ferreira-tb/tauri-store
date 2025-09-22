@@ -167,7 +167,7 @@ where
 {
   app
     .store_collection_with_marker::<C>()
-    .path
+    .path()
     .join("migration.tauristore")
 }
 

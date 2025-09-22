@@ -1,4 +1,5 @@
 mod id;
+mod marshaler;
 mod options;
 mod resource;
 mod save;
@@ -7,39 +8,38 @@ mod watch;
 
 use crate::collection::CollectionMarker;
 use crate::error::{Error, Result};
+use crate::event::{
+  emit, ConfigPayload, EventSource, StatePayload, STORE_CONFIG_CHANGE_EVENT,
+  STORE_STATE_CHANGE_EVENT,
+};
 use crate::manager::ManagerExt;
+use crate::StoreCollection;
 use options::set_options;
 use save::{debounce, throttle, SaveHandle};
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::ErrorKind::NotFound;
+use std::io::ErrorKind;
 use std::io::Write;
 use std::marker::PhantomData;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 use std::sync::{Arc, OnceLock};
 use std::{fmt, fs};
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, ResourceId, Runtime};
 use watch::Watcher;
 
-use crate::event::{
-  emit, ConfigPayload, EventSource, StatePayload, STORE_CONFIG_CHANGE_EVENT,
-  STORE_STATE_CHANGE_EVENT,
-};
-
 pub use id::StoreId;
+pub use marshaler::{JsonMarshaler, Marshaler, MarshalingError};
 pub use options::StoreOptions;
 pub(crate) use resource::StoreResource;
 pub use save::SaveStrategy;
 pub use state::StoreState;
 pub use watch::WatcherId;
 
-#[cfg(debug_assertions)]
-const FILE_EXTENSION: &str = "dev.json";
-#[cfg(not(debug_assertions))]
-const FILE_EXTENSION: &str = "json";
+#[cfg(feature = "marshaler-toml")]
+pub use marshaler::TomlMarshaler;
 
 type ResourceTuple<R, C> = (ResourceId, Arc<StoreResource<R, C>>);
 
@@ -68,10 +68,14 @@ where
 {
   pub(crate) fn load(app: &AppHandle<R>, id: impl AsRef<str>) -> Result<ResourceTuple<R, C>> {
     let id = StoreId::from(id.as_ref());
-    let path = store_path::<R, C>(app, &id);
+    let collection = app.store_collection_with_marker::<C>();
+    let marshaler = collection.marshaler_table.get(&id);
+    let path = make_path::<R, C>(&collection, &id, marshaler.extension());
     let state = match fs::read(&path) {
-      Ok(bytes) => serde_json::from_slice(&bytes)?,
-      Err(err) if err.kind() == NotFound => StoreState::default(),
+      Ok(bytes) => marshaler
+        .deserialize(&bytes)
+        .map_err(Error::FailedToDeserialize)?,
+      Err(err) if err.kind() == ErrorKind::NotFound => StoreState::default(),
       Err(err) => return Err(Error::Io(err)),
     };
 
@@ -88,13 +92,14 @@ where
       phantom: PhantomData,
     };
 
-    store.run_pending_migrations(app)?;
+    store.run_pending_migrations()?;
 
     Ok(StoreResource::create(app, store))
   }
 
-  fn run_pending_migrations(&mut self, app: &AppHandle<R>) -> Result<()> {
-    app
+  fn run_pending_migrations(&mut self) -> Result<()> {
+    self
+      .app
       .store_collection_with_marker::<C>()
       .migrator
       .lock()
@@ -110,7 +115,9 @@ where
 
   /// Path to the store file.
   pub fn path(&self) -> PathBuf {
-    store_path::<R, C>(&self.app, &self.id)
+    let collection = self.app.store_collection_with_marker::<C>();
+    let marshaler = collection.marshaler_table.get(&self.id);
+    make_path::<R, C>(&collection, &self.id, marshaler.extension())
   }
 
   /// Gets a handle to the application instance.
@@ -313,8 +320,17 @@ where
       return Ok(());
     }
 
-    let bytes = serde_json::to_vec(&self.state)?;
-    let mut file = File::create(self.path())?;
+    let marshaler = collection.marshaler_table.get(&self.id);
+    let bytes = marshaler
+      .serialize(&self.state)
+      .map_err(Error::FailedToSerialize)?;
+
+    let path = self.path();
+    if let Some(parent) = path.parent() {
+      fs::create_dir_all(parent)?;
+    }
+
+    let mut file = File::create(path)?;
     file.write_all(&bytes)?;
     file.flush()?;
 
@@ -493,15 +509,21 @@ where
   }
 }
 
-fn store_path<R, C>(app: &AppHandle<R>, id: &StoreId) -> PathBuf
+fn make_path<R, C>(collection: &StoreCollection<R, C>, id: &StoreId, extension: &str) -> PathBuf
 where
   R: Runtime,
   C: CollectionMarker,
 {
-  append_filename(app.store_collection_with_marker::<C>().path(), id)
-}
+  debug_assert!(
+    !extension.eq_ignore_ascii_case("tauristore"),
+    "illegal store extension: {extension}"
+  );
 
-/// Appends the store filename to the given directory path.
-pub(crate) fn append_filename(path: &Path, id: &StoreId) -> PathBuf {
-  path.join(format!("{id}.{FILE_EXTENSION}"))
+  let filename = if cfg!(debug_assertions) && collection.debug_stores {
+    format!("{id}.dev.{extension}")
+  } else {
+    format!("{id}.{extension}")
+  };
+
+  collection.path_of(id).join(filename)
 }

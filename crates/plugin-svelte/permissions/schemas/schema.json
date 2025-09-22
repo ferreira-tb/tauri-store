@@ -355,6 +355,18 @@
           "markdownDescription": "Denies the deny_sync command without any pre-configured scope."
         },
         {
+          "description": "Enables the destroy command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-destroy",
+          "markdownDescription": "Enables the destroy command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the destroy command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-destroy",
+          "markdownDescription": "Denies the destroy command without any pre-configured scope."
+        },
+        {
           "description": "Enables the get_default_save_strategy command without any pre-configured scope.",
           "type": "string",
           "const": "allow-get-default-save-strategy",
@@ -583,10 +595,10 @@
           "markdownDescription": "Denies the unload command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for tauri-plugin-svelte.\n#### This default permission set includes:\n\n- `allow-allow-save`\n- `allow-allow-sync`\n- `allow-clear-autosave`\n- `allow-deny-save`\n- `allow-deny-sync`\n- `allow-get-default-save-strategy`\n- `allow-get-save-strategy`\n- `allow-get-store-collection-path`\n- `allow-get-store-ids`\n- `allow-get-store-path`\n- `allow-get-store-state`\n- `allow-load`\n- `allow-patch`\n- `allow-save`\n- `allow-save-all`\n- `allow-save-all-now`\n- `allow-save-now`\n- `allow-save-some`\n- `allow-save-some-now`\n- `allow-set-autosave`\n- `allow-set-save-strategy`\n- `allow-set-store-collection-path`\n- `allow-set-store-options`\n- `allow-unload`",
+          "description": "Default permissions for tauri-plugin-svelte.\n#### This default permission set includes:\n\n- `allow-allow-save`\n- `allow-allow-sync`\n- `allow-clear-autosave`\n- `allow-deny-save`\n- `allow-deny-sync`\n- `allow-destroy`\n- `allow-get-default-save-strategy`\n- `allow-get-save-strategy`\n- `allow-get-store-collection-path`\n- `allow-get-store-ids`\n- `allow-get-store-path`\n- `allow-get-store-state`\n- `allow-load`\n- `allow-patch`\n- `allow-save`\n- `allow-save-all`\n- `allow-save-all-now`\n- `allow-save-now`\n- `allow-save-some`\n- `allow-save-some-now`\n- `allow-set-autosave`\n- `allow-set-save-strategy`\n- `allow-set-store-collection-path`\n- `allow-set-store-options`\n- `allow-unload`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for tauri-plugin-svelte.\n#### This default permission set includes:\n\n- `allow-allow-save`\n- `allow-allow-sync`\n- `allow-clear-autosave`\n- `allow-deny-save`\n- `allow-deny-sync`\n- `allow-get-default-save-strategy`\n- `allow-get-save-strategy`\n- `allow-get-store-collection-path`\n- `allow-get-store-ids`\n- `allow-get-store-path`\n- `allow-get-store-state`\n- `allow-load`\n- `allow-patch`\n- `allow-save`\n- `allow-save-all`\n- `allow-save-all-now`\n- `allow-save-now`\n- `allow-save-some`\n- `allow-save-some-now`\n- `allow-set-autosave`\n- `allow-set-save-strategy`\n- `allow-set-store-collection-path`\n- `allow-set-store-options`\n- `allow-unload`"
+          "markdownDescription": "Default permissions for tauri-plugin-svelte.\n#### This default permission set includes:\n\n- `allow-allow-save`\n- `allow-allow-sync`\n- `allow-clear-autosave`\n- `allow-deny-save`\n- `allow-deny-sync`\n- `allow-destroy`\n- `allow-get-default-save-strategy`\n- `allow-get-save-strategy`\n- `allow-get-store-collection-path`\n- `allow-get-store-ids`\n- `allow-get-store-path`\n- `allow-get-store-state`\n- `allow-load`\n- `allow-patch`\n- `allow-save`\n- `allow-save-all`\n- `allow-save-all-now`\n- `allow-save-now`\n- `allow-save-some`\n- `allow-save-some-now`\n- `allow-set-autosave`\n- `allow-set-save-strategy`\n- `allow-set-store-collection-path`\n- `allow-set-store-options`\n- `allow-unload`"
         }
       ]
     }

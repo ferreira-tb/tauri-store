@@ -25,6 +25,8 @@ _Nothing yet._
 
 ### Features
 
+- Add `Marshaler` trait for custom serialization and deserialization.
+- Add `TomlMarshaler` to save the stores as TOML files.
 - Add `StoreCollection::app_handle`.
 - Allow to destroy stores, also deleting their respective files.
 - Introduce unchecked variants for `get` methods (e.g. `Store::get_unchecked`).

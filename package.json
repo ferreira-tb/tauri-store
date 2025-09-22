@@ -2,7 +2,7 @@
   "name": "monorepo",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.17.0",
+  "packageManager": "pnpm@10.17.1",
   "scripts": {
     "build": "pnpm run build:shared && pnpm run build:package",
     "build:docs": "pwsh scripts/build-docs.ps1",
@@ -37,7 +37,7 @@
     "typedoc": "^0.28.13",
     "typedoc-plugin-mdn-links": "^5.0.9",
     "typescript": "~5.9.2",
-    "vite": "^7.1.6",
+    "vite": "^7.1.7",
     "vite-plugin-dts": "^4.5.4"
   }
 }
