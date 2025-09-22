@@ -1,5 +1,18 @@
-import type { State } from '../types';
 import { invoke } from '@tauri-apps/api/core';
+import type { State, TauriStoreContract } from '../types';
+
+/**
+ * Destroys the store.
+ *
+ * {@link TauriStoreContract.stop} **MUST** be called immediately after.
+ *
+ * @internal
+ */
+export function destroy(plugin: string) {
+  return function (storeId: string): Promise<void> {
+    return invoke(`plugin:${plugin}|destroy`, { id: storeId });
+  };
+}
 
 /**
  * Loads the store state from the backend.

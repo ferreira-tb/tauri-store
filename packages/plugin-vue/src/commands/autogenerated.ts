@@ -35,11 +35,6 @@ export const denySave = commands.denySave('vue');
 export const denySync = commands.denySync('vue');
 
 /**
- * Destroys a store, cleans up its state, and deletes its file.
- */
-export const destroy = commands.destroy('vue');
-
-/**
  * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
  */
@@ -158,6 +153,9 @@ export const setStoreOptions = commands.setStoreOptions('vue');
 /////////////////////////
 // INTERNAL COMMANDS
 /////////////////////////
+
+/** @internal */
+export const destroy = commands.destroy('vue');
 
 /** @internal */
 export const load = commands.load('vue');

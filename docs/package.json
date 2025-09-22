@@ -9,7 +9,7 @@
     "preview": "vitepress preview"
   },
   "devDependencies": {
-    "@tb-dev/utils": "^7.0.14",
+    "@tb-dev/utils": "^7.0.15",
     "@vueuse/core": "^13.9.0",
     "change-case": "^5.4.4",
     "vitepress": "^2.0.0-alpha.12",
