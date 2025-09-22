@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 3.0.1
+
+### Bug fixes
+
+- Remove accidentally exposed internal command.
+
 ## 3.0.0
 
 ### Breaking Changes
