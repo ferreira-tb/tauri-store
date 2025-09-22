@@ -14,6 +14,8 @@ Persistent stores for Tauri.
 - Synchronize across multiple windows.
 - Debounce or throttle store updates.
 - Access the stores from both JavaScript and Rust.
+- Serialize and deserialize the stores into and from custom formats.
+- Define store migrations.
 
 ## Framework support
 

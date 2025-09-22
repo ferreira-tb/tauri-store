@@ -4,6 +4,7 @@ use std::path::PathBuf;
 use tauri::plugin::PluginHandle;
 use tauri::{AppHandle, Runtime};
 
+/// Plugin handle.
 pub struct Handle<R: Runtime>(PluginHandle<R>);
 
 impl<R: Runtime> Handle<R> {

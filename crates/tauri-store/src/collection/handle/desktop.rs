@@ -1,5 +1,6 @@
 use tauri::{AppHandle, Runtime};
 
+/// Plugin handle.
 pub struct Handle<R: Runtime>(AppHandle<R>);
 
 #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]

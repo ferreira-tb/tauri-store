@@ -392,6 +392,7 @@ where
   }
 
   /// Destroys a store, cleans up its state, and deletes its file.
+  #[doc(hidden)]
   pub fn destroy(&self, id: impl AsRef<str>) -> Result<()> {
     let id = StoreId::from(id.as_ref());
     self.unload_and(&id, Store::destroy)
