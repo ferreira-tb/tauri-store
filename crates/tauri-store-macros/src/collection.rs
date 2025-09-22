@@ -248,7 +248,7 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
         }
 
         /// Destroys a store, cleans up its state, and deletes its file.
-        pub fn destroy(&self, id: impl AsRef<str>) -> Result<()> {
+        pub(crate) fn destroy(&self, id: impl AsRef<str>) -> Result<()> {
           self.0.destroy(id)
         }
 

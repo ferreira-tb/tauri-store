@@ -100,6 +100,24 @@ tauri_plugin_valtio::Builder::new()
   .build();
 ```
 
+:::
+
+::: tip
+On Android and iOS, however, the stores are saved in a sandboxed directory. See [#221](https://github.com/ferreira-tb/tauri-store/issues/221).
+:::
+
+To change the path for a specific store only:
+
+::: code-group
+
+```rust{2} [src-tauri/src/lib.rs]
+tauri_plugin_valtio::Builder::new()
+  .path_of("my-store", "/path/to/other/directory")
+  .build();
+```
+
+:::
+
 ## Denylist
 
 If a store should be [synchronized](./synchronization.md), but not saved to disk, you can add it to the [denylist](https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio/struct.Builder.html#method.save_denylist).
@@ -122,3 +140,11 @@ tauri_plugin_valtio::Builder::new()
 ```
 
 :::
+
+## Cleaning up
+
+If you want to dispose of a store and delete it from disk, you can use the [destroy](https://tb.dev.br/tauri-store/js-docs/plugin-valtio/interfaces/TauriStoreContract.html#destroy) method.
+
+```typescript
+await store.destroy();
+```
