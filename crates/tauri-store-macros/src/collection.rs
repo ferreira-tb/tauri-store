@@ -85,6 +85,15 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
           self.0.get_raw(store_id, key)
         }
 
+        /// Gets a raw value from a store.
+        ///
+        /// # Safety
+        ///
+        /// This is *undefined behavior* if the key doesn't exist in the store.
+        pub unsafe fn get_raw_unchecked(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Json {
+          unsafe { self.0.get_raw_unchecked(store_id, key) }
+        }
+
         /// Gets a value from a store and tries to parse it as an instance of type `T`.
         pub fn get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
         where
@@ -122,6 +131,19 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
           F: FnOnce() -> T,
         {
           self.0.get_or_else(store_id, key, f)
+        }
+
+        /// Gets a value from a store and parses it as an instance of type `T`.
+        ///
+        /// # Safety
+        ///
+        /// This is *undefined behavior* if the key doesn't exist in the store
+        /// **OR** if the value cannot be represented as a valid `T`.
+        pub unsafe fn get_unchecked<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> T
+        where
+          T: DeserializeOwned,
+        {
+          unsafe { self.0.get(store_id, key).unwrap_unchecked() }
         }
 
         /// Sets a key-value pair in a store.

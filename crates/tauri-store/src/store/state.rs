@@ -37,6 +37,24 @@ impl StoreState {
     self.0.get_mut(key.as_ref())
   }
 
+  /// Gets a reference to the raw value corresponding to the key.
+  ///
+  /// # Safety
+  ///
+  /// This is *undefined behavior* if the key doesn't exist in the store.
+  pub unsafe fn get_raw_unchecked(&self, key: impl AsRef<str>) -> &Value {
+    unsafe { self.0.get(key.as_ref()).unwrap_unchecked() }
+  }
+
+  /// Gets a mutable reference to the raw value corresponding to the key.
+  ///
+  /// # Safety
+  ///
+  /// This is *undefined behavior* if the key doesn't exist in the store.
+  pub unsafe fn get_raw_unchecked_mut(&mut self, key: impl AsRef<str>) -> &mut Value {
+    unsafe { self.0.get_mut(key.as_ref()).unwrap_unchecked() }
+  }
+
   /// Gets a value and tries to parse it as an instance of type `T`.
   pub fn get<T>(&self, key: impl AsRef<str>) -> Result<T>
   where
@@ -78,6 +96,19 @@ impl StoreState {
     T: DeserializeOwned,
   {
     self.get(key).unwrap_or_else(|_| f())
+  }
+
+  /// Gets a value and parses it as an instance of type `T`.
+  ///
+  /// # Safety
+  ///
+  /// This is *undefined behavior* if the key doesn't exist in the store
+  /// **OR** if the value cannot be represented as a valid `T`.
+  pub unsafe fn get_unchecked<T>(&self, key: impl AsRef<str>) -> T
+  where
+    T: DeserializeOwned,
+  {
+    self.get(key).unwrap_unchecked()
   }
 
   /// Sets a key-value pair, returning the previous value, if any.

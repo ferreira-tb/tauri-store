@@ -18,6 +18,8 @@ _Nothing yet._
 
 - Update `tauri-store` to `1.0.0`.
 
+Please refer to its [changelog](https://tb.dev.br/tauri-store/changelog) for more details.
+
 ## 0.3.1
 
 ### Dependencies

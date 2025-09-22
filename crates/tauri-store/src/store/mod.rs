@@ -163,9 +163,18 @@ where
     self.state().unwrap_or_else(|_| f())
   }
 
-  /// Gets a raw value from the store.
+  /// Gets a reference to a raw value from the store.
   pub fn get_raw(&self, key: impl AsRef<str>) -> Option<&Value> {
     self.state.get_raw(key)
+  }
+
+  /// Gets a reference to a raw value from the store.
+  ///
+  /// # Safety
+  ///
+  /// This is *undefined behavior* if the key doesn't exist in the store.
+  pub unsafe fn get_raw_unchecked(&self, key: impl AsRef<str>) -> &Value {
+    unsafe { self.state.get_raw_unchecked(key) }
   }
 
   /// Gets a value from the store and tries to parse it as an instance of type `T`.
@@ -204,6 +213,19 @@ where
     T: DeserializeOwned,
   {
     self.state.get_or_else(key, f)
+  }
+
+  /// Gets a value from the store and parses it as an instance of type `T`.
+  ///
+  /// # Safety
+  ///
+  /// This is *undefined behavior* if the key doesn't exist in the store
+  /// **OR** if the value cannot be represented as a valid `T`.
+  pub unsafe fn get_unchecked<T>(&self, key: impl AsRef<str>) -> T
+  where
+    T: DeserializeOwned,
+  {
+    unsafe { self.state.get_unchecked(key) }
   }
 
   /// Sets a key-value pair in the store.

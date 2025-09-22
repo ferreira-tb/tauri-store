@@ -180,6 +180,15 @@ where
       .locked(|store| store.get_raw(key).cloned())
   }
 
+  /// Gets a raw value from a store.
+  ///
+  /// # Safety
+  ///
+  /// This is *undefined behavior* if the key doesn't exist in the store.
+  pub unsafe fn get_raw_unchecked(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Value {
+    unsafe { self.get_raw(store_id, key).unwrap_unchecked() }
+  }
+
   /// Gets a value from a store and tries to parse it as an instance of type `T`.
   pub fn get<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> Result<T>
   where
@@ -223,6 +232,19 @@ where
     T: DeserializeOwned,
   {
     self.get(store_id, key).unwrap_or_else(|_| f())
+  }
+
+  /// Gets a value from a store and parses it as an instance of type `T`.
+  ///
+  /// # Safety
+  ///
+  /// This is *undefined behavior* if the key doesn't exist in the store
+  /// **OR** if the value cannot be represented as a valid `T`.
+  pub unsafe fn get_unchecked<T>(&self, store_id: impl AsRef<str>, key: impl AsRef<str>) -> T
+  where
+    T: DeserializeOwned,
+  {
+    unsafe { self.get(store_id, key).unwrap_unchecked() }
   }
 
   /// Sets a key-value pair in a store.
@@ -362,7 +384,7 @@ where
   /// Destroys a store, cleans up its state, and deletes its file.
   pub fn destroy(&self, id: impl AsRef<str>) -> Result<()> {
     let id = StoreId::from(id.as_ref());
-    self.unload_and(&id, |store| store.destroy())
+    self.unload_and(&id, Store::destroy)
   }
 
   /// Removes the store from the collection.
