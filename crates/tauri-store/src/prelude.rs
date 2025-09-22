@@ -1,7 +1,8 @@
 pub use crate::{
-  BoxResult, Error, Handle, Json, JsonMarshaler, Marshaler, MarshalingError, OnLoadFn, Result,
-  SaveStrategy, Store, StoreCollection, StoreId, StoreOptions, StoreState, WatcherId,
+  BoxResult, Error, Handle, Json, JsonMarshaler, Marshaler, MarshalingError, OnLoadFn,
+  PrettyJsonMarshaler, Result, SaveStrategy, Store, StoreCollection, StoreId, StoreOptions,
+  StoreState, WatcherId,
 };
 
 #[cfg(feature = "marshaler-toml")]
-pub use crate::TomlMarshaler;
+pub use crate::{PrettyTomlMarshaler, TomlMarshaler};

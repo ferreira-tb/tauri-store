@@ -25,8 +25,8 @@ pub use manager::ManagerExt;
 pub use migration::{Migration, MigrationContext, Migrator};
 pub use serde_json::Value as Json;
 pub use store::{
-  JsonMarshaler, Marshaler, MarshalingError, SaveStrategy, Store, StoreId, StoreOptions,
-  StoreState, WatcherId,
+  JsonMarshaler, Marshaler, MarshalingError, PrettyJsonMarshaler, SaveStrategy, Store, StoreId,
+  StoreOptions, StoreState, WatcherId,
 };
 
 #[cfg(feature = "derive")]
@@ -36,4 +36,4 @@ pub use tauri_store_macros::Collection;
 pub use plugin::{init, Builder};
 
 #[cfg(feature = "marshaler-toml")]
-pub use store::TomlMarshaler;
+pub use store::{PrettyTomlMarshaler, TomlMarshaler};

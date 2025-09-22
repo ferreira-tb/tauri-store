@@ -28,6 +28,22 @@ impl Marshaler for JsonMarshaler {
   }
 }
 
+pub struct PrettyJsonMarshaler;
+
+impl Marshaler for PrettyJsonMarshaler {
+  fn serialize(&self, state: &StoreState) -> Result<Vec<u8>, MarshalingError> {
+    Ok(serde_json::to_vec_pretty(state)?)
+  }
+
+  fn deserialize(&self, bytes: &[u8]) -> Result<StoreState, MarshalingError> {
+    Ok(serde_json::from_slice(bytes)?)
+  }
+
+  fn extension(&self) -> &'static str {
+    "json"
+  }
+}
+
 #[cfg(feature = "marshaler-toml")]
 pub struct TomlMarshaler;
 
@@ -35,6 +51,24 @@ pub struct TomlMarshaler;
 impl Marshaler for TomlMarshaler {
   fn serialize(&self, state: &StoreState) -> Result<Vec<u8>, MarshalingError> {
     Ok(toml::to_string(state)?.into_bytes())
+  }
+
+  fn deserialize(&self, bytes: &[u8]) -> Result<StoreState, MarshalingError> {
+    Ok(toml::from_slice(bytes)?)
+  }
+
+  fn extension(&self) -> &'static str {
+    "toml"
+  }
+}
+
+#[cfg(feature = "marshaler-toml")]
+pub struct PrettyTomlMarshaler;
+
+#[cfg(feature = "marshaler-toml")]
+impl Marshaler for PrettyTomlMarshaler {
+  fn serialize(&self, state: &StoreState) -> Result<Vec<u8>, MarshalingError> {
+    Ok(toml::to_string_pretty(state)?.into_bytes())
   }
 
   fn deserialize(&self, bytes: &[u8]) -> Result<StoreState, MarshalingError> {

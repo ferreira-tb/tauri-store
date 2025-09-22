@@ -31,7 +31,7 @@ use tauri::{AppHandle, ResourceId, Runtime};
 use watch::Watcher;
 
 pub use id::StoreId;
-pub use marshaler::{JsonMarshaler, Marshaler, MarshalingError};
+pub use marshaler::{JsonMarshaler, Marshaler, MarshalingError, PrettyJsonMarshaler};
 pub use options::StoreOptions;
 pub(crate) use resource::StoreResource;
 pub use save::SaveStrategy;
@@ -39,7 +39,7 @@ pub use state::StoreState;
 pub use watch::WatcherId;
 
 #[cfg(feature = "marshaler-toml")]
-pub use marshaler::TomlMarshaler;
+pub use marshaler::{PrettyTomlMarshaler, TomlMarshaler};
 
 type ResourceTuple<R, C> = (ResourceId, Arc<StoreResource<R, C>>);
 
