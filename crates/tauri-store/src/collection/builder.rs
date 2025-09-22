@@ -3,6 +3,7 @@ use super::marker::CollectionMarker;
 use super::{DefaultMarker, OnLoadFn, StoreCollection};
 use crate::collection::autosave::Autosave;
 use crate::error::Result;
+use crate::migration::{Migration, MigrationContext, Migrator};
 use crate::store::{SaveStrategy, Store, StoreId};
 use crate::ManagerExt;
 use dashmap::{DashMap, DashSet};
@@ -14,9 +15,6 @@ use tauri::{Manager, Runtime};
 
 #[cfg(feature = "plugin")]
 use tauri::plugin::TauriPlugin;
-
-#[cfg(feature = "unstable-migration")]
-use crate::migration::{Migration, MigrationContext, Migrator};
 
 /// Builder for the [`StoreCollection`](crate::collection::StoreCollection).
 pub struct StoreCollectionBuilder<R, C>
@@ -30,8 +28,6 @@ where
   on_load: Option<Box<OnLoadFn<R, C>>>,
   save_denylist: DashSet<StoreId>,
   sync_denylist: DashSet<StoreId>,
-
-  #[cfg(feature = "unstable-migration")]
   migrator: Migrator,
 }
 
@@ -108,7 +104,6 @@ where
 
   #[must_use]
   #[doc(hidden)]
-  #[cfg(feature = "unstable-migration")]
   pub fn migrator(mut self, migrator: Migrator) -> Self {
     self.migrator = migrator;
     self
@@ -116,7 +111,6 @@ where
 
   /// Defines a migration for a store.
   #[must_use]
-  #[cfg(feature = "unstable-migration")]
   pub fn migration(mut self, id: impl Into<StoreId>, migration: Migration) -> Self {
     self.migrator.add_migration(id.into(), migration);
     self
@@ -124,7 +118,6 @@ where
 
   /// Defines multiple migrations for a store.
   #[must_use]
-  #[cfg(feature = "unstable-migration")]
   pub fn migrations<I>(mut self, id: impl Into<StoreId>, migrations: I) -> Self
   where
     I: IntoIterator<Item = Migration>,
@@ -138,7 +131,6 @@ where
 
   /// Sets a closure to be called before each migration step.
   #[must_use]
-  #[cfg(feature = "unstable-migration")]
   pub fn on_before_each_migration<F>(mut self, f: F) -> Self
   where
     F: Fn(MigrationContext) + Send + Sync + 'static,
@@ -179,8 +171,6 @@ where
       save_denylist: self.save_denylist,
       sync_denylist: self.sync_denylist,
       phantom: PhantomData,
-
-      #[cfg(feature = "unstable-migration")]
       migrator: Mutex::new(self.migrator),
     });
 
@@ -191,7 +181,6 @@ where
       .expect("autosave is poisoned")
       .start::<R, C>(&app);
 
-    #[cfg(feature = "unstable-migration")]
     collection
       .migrator
       .lock()
@@ -230,8 +219,6 @@ where
       on_load: None,
       save_denylist: DashSet::new(),
       sync_denylist: DashSet::new(),
-
-      #[cfg(feature = "unstable-migration")]
       migrator: Migrator::default(),
     }
   }

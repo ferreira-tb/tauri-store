@@ -59,6 +59,14 @@ where
 }
 
 #[tauri::command]
+pub(crate) async fn destroy<R>(app: AppHandle<R>, id: StoreId) -> Result<()>
+where
+  R: Runtime,
+{
+  app.zustand().destroy(id)
+}
+
+#[tauri::command]
 pub(crate) async fn get_default_save_strategy<R>(app: AppHandle<R>) -> SaveStrategy
 where
   R: Runtime,

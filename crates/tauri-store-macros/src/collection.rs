@@ -220,6 +220,11 @@ pub fn impl_collection(ast: &DeriveInput) -> TokenStream {
           self.0.deny_sync(id);
         }
 
+        /// Destroys a store, cleans up its state, and deletes its file.
+        pub fn destroy(&self, id: impl AsRef<str>) -> Result<()> {
+          self.0.destroy(id)
+        }
+
         pub(crate) fn unload_store(&self, id: &StoreId) -> Result<()> {
           self.0.unload_store(id)
         }

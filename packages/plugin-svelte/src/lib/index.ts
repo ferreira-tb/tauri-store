@@ -8,6 +8,7 @@ export {
   clearAutosave,
   denySave,
   denySync,
+  destroy,
   getDefaultSaveStrategy,
   getSaveStrategy,
   getStoreCollectionPath,

@@ -22,7 +22,7 @@ workspace = true
 
 [package.metadata.docs.rs]
 no-default-features = true
-features = ["plugin", "unstable-migration"]
+features = ["plugin"]
 rustc-args = ["--cfg", "docsrs"]
 rustdoc-args = ["--cfg", "docsrs"]
 
@@ -40,7 +40,6 @@ thiserror = "2.0"
 
 [dependencies.semver]
 version = "1.0"
-optional = true
 features = ["serde"]
 
 [dependencies.tauri-store-macros]
@@ -74,4 +73,3 @@ default = ["plugin"]
 plugin = ["dep:tauri-plugin"]
 derive = ["dep:tauri-store-macros"]
 file-sync-all = []
-unstable-migration = ["dep:semver", "tauri-store-utils/version"]

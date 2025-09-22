@@ -6,20 +6,22 @@ mod state;
 mod watch;
 
 use crate::collection::CollectionMarker;
-use crate::error::Result;
+use crate::error::{Error, Result};
 use crate::manager::ManagerExt;
 use options::set_options;
 use save::{debounce, throttle, SaveHandle};
 use serde::de::DeserializeOwned;
 use serde_json::Value;
 use std::collections::HashMap;
-use std::fmt;
+use std::fs::File;
+use std::io::ErrorKind::NotFound;
+use std::io::Write;
 use std::marker::PhantomData;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, OnceLock};
+use std::{fmt, fs};
 use tauri::async_runtime::spawn_blocking;
 use tauri::{AppHandle, ResourceId, Runtime};
-use tauri_store_utils::{read_file, write_file};
 use watch::Watcher;
 
 use crate::event::{
@@ -67,9 +69,12 @@ where
   pub(crate) fn load(app: &AppHandle<R>, id: impl AsRef<str>) -> Result<ResourceTuple<R, C>> {
     let id = StoreId::from(id.as_ref());
     let path = store_path::<R, C>(app, &id);
-    let state = read_file(&path).call()?;
+    let state = match fs::read(&path) {
+      Ok(bytes) => serde_json::from_slice(&bytes)?,
+      Err(err) if err.kind() == NotFound => StoreState::default(),
+      Err(err) => return Err(Error::Io(err)),
+    };
 
-    #[allow(unused_mut)]
     let mut store = Self {
       app: app.clone(),
       id,
@@ -83,13 +88,11 @@ where
       phantom: PhantomData,
     };
 
-    #[cfg(feature = "unstable-migration")]
     store.run_pending_migrations(app)?;
 
     Ok(StoreResource::create(app, store))
   }
 
-  #[cfg(feature = "unstable-migration")]
   fn run_pending_migrations(&mut self, app: &AppHandle<R>) -> Result<()> {
     app
       .store_collection_with_marker::<C>()
@@ -288,9 +291,14 @@ where
       return Ok(());
     }
 
-    write_file(self.path(), &self.state)
-      .sync(cfg!(feature = "file-sync-all"))
-      .call()?;
+    let bytes = serde_json::to_vec(&self.state)?;
+    let mut file = File::create(self.path())?;
+    file.write_all(&bytes)?;
+    file.flush()?;
+
+    if cfg!(feature = "file-sync-all") {
+      file.sync_all()?;
+    }
 
     Ok(())
   }
@@ -351,6 +359,11 @@ where
     self.watchers.remove(&id.into()).is_some()
   }
 
+  /// Sets the store options.
+  pub fn set_options(&mut self, options: StoreOptions) -> Result<()> {
+    self.set_options_with_source(options, None::<&str>)
+  }
+
   /// Sets the store options, optionally having a window as the source.
   #[doc(hidden)]
   pub fn set_options_with_source<E>(&mut self, options: StoreOptions, source: E) -> Result<()>
@@ -359,11 +372,6 @@ where
   {
     set_options(self, options);
     self.on_config_change(source)
-  }
-
-  /// Sets the store options.
-  pub fn set_options(&mut self, options: StoreOptions) -> Result<()> {
-    self.set_options_with_source(options, None::<&str>)
   }
 
   fn on_state_change(&self, source: impl Into<EventSource>) -> Result<()> {
@@ -436,6 +444,13 @@ where
       .throttle_save_handle
       .get()
       .map(SaveHandle::abort);
+  }
+
+  pub(crate) fn destroy(&mut self) -> Result<()> {
+    self.abort_pending_save();
+    self.state.clear();
+    fs::remove_file(self.path())?;
+    Ok(())
   }
 }
 

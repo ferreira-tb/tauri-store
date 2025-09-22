@@ -4093,10 +4093,7 @@ dependencies = [
 name = "tauri-store-utils"
 version = "0.6.0"
 dependencies = [
- "bon",
  "semver",
- "serde",
- "serde_json",
  "tauri",
  "thiserror 2.0.16",
  "tokio",

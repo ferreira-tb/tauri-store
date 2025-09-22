@@ -35,6 +35,11 @@ export const denySave = commands.denySave('valtio');
 export const denySync = commands.denySync('valtio');
 
 /**
+ * Destroys a store, cleans up its state, and deletes its file.
+ */
+export const destroy = commands.destroy('valtio');
+
+/**
  * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
  */

@@ -5,6 +5,7 @@ mod marker;
 
 use crate::error::Result;
 use crate::event::{emit, STORE_UNLOAD_EVENT};
+use crate::migration::Migrator;
 use crate::store::{SaveStrategy, Store, StoreId, StoreResource, StoreState, WatcherId};
 use autosave::Autosave;
 use dashmap::{DashMap, DashSet};
@@ -20,9 +21,6 @@ use tauri::{AppHandle, Resource, ResourceId, Runtime};
 pub use builder::StoreCollectionBuilder;
 pub use handle::Handle;
 pub use marker::{CollectionMarker, DefaultMarker};
-
-#[cfg(feature = "unstable-migration")]
-use crate::migration::Migrator;
 
 /// Closure to be called when a store is loaded.
 pub type OnLoadFn<R, C> = dyn Fn(&Store<R, C>) -> Result<()> + Send + Sync;
@@ -43,10 +41,8 @@ where
   pub(crate) default_save_strategy: SaveStrategy,
   pub(crate) save_denylist: DashSet<StoreId>,
   pub(crate) sync_denylist: DashSet<StoreId>,
-  phantom: PhantomData<C>,
-
-  #[cfg(feature = "unstable-migration")]
   pub(crate) migrator: Mutex<Migrator>,
+  phantom: PhantomData<C>,
 }
 
 impl<R, C> StoreCollection<R, C>
@@ -363,17 +359,29 @@ where
     self.sync_denylist.insert(id);
   }
 
+  /// Destroys a store, cleans up its state, and deletes its file.
+  pub fn destroy(&self, id: impl AsRef<str>) -> Result<()> {
+    let id = StoreId::from(id.as_ref());
+    self.unload_and(&id, |store| store.destroy())
+  }
+
   /// Removes the store from the collection.
   #[doc(hidden)]
   pub fn unload_store(&self, id: &StoreId) -> Result<()> {
+    // The store needs to be saved immediately here.
+    // Otherwise, the plugin might try to load it again if `StoreCollection::get_resource` is called.
+    // This scenario will happen whenever the save strategy is not `Immediate`.
+    self.unload_and(id, |store| store.save_now())
+  }
+
+  fn unload_and<F>(&self, id: &StoreId, f: F) -> Result<()>
+  where
+    F: FnOnce(&mut Store<R, C>) -> Result<()>,
+  {
     let app = self.handle.app();
     if let Some((_, rid)) = self.stores.remove(id) {
-      // The store needs to be saved immediately here.
-      // Otherwise, the plugin might try to load it again if `StoreCollection::get_resource` is called.
-      // This scenario will happen whenever the save strategy is not `Immediate`.
       let resource = StoreResource::<R, C>::take(app, rid)?;
-      resource.locked(|store| store.save_now())?;
-
+      resource.locked(f)?;
       emit(app, STORE_UNLOAD_EVENT, id, None::<&str>)?;
     }
 
@@ -415,6 +423,8 @@ where
 {
   fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
     f.debug_struct("StoreCollection")
+      .field("name", &self.name)
+      .field("path", &self.path)
       .finish_non_exhaustive()
   }
 }

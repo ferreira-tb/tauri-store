@@ -22,15 +22,11 @@ use std::path::{Path, PathBuf};
 use std::time::Duration;
 use tauri::plugin::{PluginApi, TauriPlugin};
 use tauri::{AppHandle, RunEvent, Runtime};
-
-#[cfg(feature = "unstable-migration")]
 use tauri_store::Migrator;
 
 pub use manager::ManagerExt;
 pub use pinia::{Pinia, PiniaMarker};
 pub use tauri_store::prelude::*;
-
-#[cfg(feature = "unstable-migration")]
 pub use tauri_store::{Migration, MigrationContext};
 
 #[cfg(target_os = "ios")]
@@ -44,8 +40,6 @@ pub struct Builder<R: Runtime> {
   on_load: Option<Box<OnLoadFn<R, PiniaMarker>>>,
   save_denylist: HashSet<StoreId>,
   sync_denylist: HashSet<StoreId>,
-
-  #[cfg(feature = "unstable-migration")]
   migrator: Migrator,
 }
 
@@ -121,7 +115,6 @@ impl<R: Runtime> Builder<R> {
 
   /// Defines a migration for a store.
   #[must_use]
-  #[cfg(feature = "unstable-migration")]
   pub fn migration(mut self, id: impl Into<StoreId>, migration: Migration) -> Self {
     self.migrator.add_migration(id.into(), migration);
     self
@@ -129,7 +122,6 @@ impl<R: Runtime> Builder<R> {
 
   /// Defines multiple migrations for a store.
   #[must_use]
-  #[cfg(feature = "unstable-migration")]
   pub fn migrations<I>(mut self, id: impl Into<StoreId>, migrations: I) -> Self
   where
     I: IntoIterator<Item = Migration>,
@@ -143,7 +135,6 @@ impl<R: Runtime> Builder<R> {
 
   /// Sets a closure to be called before each migration step.
   #[must_use]
-  #[cfg(feature = "unstable-migration")]
   pub fn on_before_each_migration<F>(mut self, f: F) -> Self
   where
     F: Fn(MigrationContext) + Send + Sync + 'static,
@@ -156,7 +147,8 @@ impl<R: Runtime> Builder<R> {
     let mut builder = StoreCollection::<R, PiniaMarker>::builder()
       .default_save_strategy(self.default_save_strategy)
       .save_denylist(&self.save_denylist)
-      .sync_denylist(&self.sync_denylist);
+      .sync_denylist(&self.sync_denylist)
+      .migrator(self.migrator);
 
     if let Some(path) = self.path {
       builder = builder.path(path);
@@ -168,11 +160,6 @@ impl<R: Runtime> Builder<R> {
 
     if let Some(duration) = self.autosave {
       builder = builder.autosave(duration);
-    }
-
-    #[cfg(feature = "unstable-migration")]
-    {
-      builder = builder.migrator(self.migrator);
     }
 
     builder.build(handle, env!("CARGO_PKG_NAME"))
@@ -189,6 +176,7 @@ impl<R: Runtime> Builder<R> {
         command::clear_autosave,
         command::deny_save,
         command::deny_sync,
+        command::destroy,
         command::get_default_save_strategy,
         command::get_store_collection_path,
         command::get_save_strategy,
@@ -221,8 +209,6 @@ impl<R: Runtime> Default for Builder<R> {
       on_load: None,
       save_denylist: HashSet::default(),
       sync_denylist: HashSet::default(),
-
-      #[cfg(feature = "unstable-migration")]
       migrator: Migrator::default(),
     }
   }
@@ -247,6 +233,7 @@ where
 {
   #[cfg(target_os = "android")]
   let handle = api.register_android_plugin("com.plugin.pinia", "PiniaPlugin")?;
+
   #[cfg(target_os = "ios")]
   let handle = api.register_ios_plugin(init_plugin_pinia)?;
 

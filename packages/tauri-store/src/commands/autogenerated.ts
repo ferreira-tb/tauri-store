@@ -35,6 +35,11 @@ export const denySave = commands.denySave('tauri-store');
 export const denySync = commands.denySync('tauri-store');
 
 /**
+ * Destroys a store, cleans up its state, and deletes its file.
+ */
+export const destroy = commands.destroy('tauri-store');
+
+/**
  * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
  */

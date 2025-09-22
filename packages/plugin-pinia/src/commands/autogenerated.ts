@@ -35,6 +35,11 @@ export const denySave = commands.denySave('pinia');
 export const denySync = commands.denySync('pinia');
 
 /**
+ * Destroys a store, cleans up its state, and deletes its file.
+ */
+export const destroy = commands.destroy('pinia');
+
+/**
  * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
  */

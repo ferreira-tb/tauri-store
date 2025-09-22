@@ -29,6 +29,7 @@ where
       command::clear_autosave,
       command::deny_save,
       command::deny_sync,
+      command::destroy,
       command::get_default_save_strategy,
       command::get_save_strategy,
       command::get_store_collection_path,

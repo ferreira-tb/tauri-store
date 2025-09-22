@@ -27,6 +27,12 @@ impl<R: Runtime> SaveHandle<R> {
   }
 }
 
+impl<R: Runtime> Drop for SaveHandle<R> {
+  fn drop(&mut self) {
+    self.abort();
+  }
+}
+
 pub(super) fn debounce<R, C>(id: StoreId, duration: Duration) -> SaveHandle<R>
 where
   R: Runtime,

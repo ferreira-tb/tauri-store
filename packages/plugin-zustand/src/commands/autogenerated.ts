@@ -35,6 +35,11 @@ export const denySave = commands.denySave('zustand');
 export const denySync = commands.denySync('zustand');
 
 /**
+ * Destroys a store, cleans up its state, and deletes its file.
+ */
+export const destroy = commands.destroy('zustand');
+
+/**
  * Gets the default save strategy for the stores.
  * It can be overridden on a per-store basis.
  */
