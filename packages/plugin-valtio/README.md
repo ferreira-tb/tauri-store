@@ -2,6 +2,9 @@
 
 Persistent [Valtio](https://valtio.dev/) stores for Tauri and React.
 
+> [!NOTE]
+> This is not an official plugin.
+
 ## Features
 
 - Save your stores to disk.

@@ -3900,7 +3900,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-pinia"
-version = "4.0.1"
+version = "4.0.2"
 dependencies = [
  "serde",
  "tauri",
@@ -3941,7 +3941,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-svelte"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "serde",
  "tauri",
@@ -3951,7 +3951,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-valtio"
-version = "3.0.1"
+version = "3.0.2"
 dependencies = [
  "serde",
  "tauri",
@@ -3961,7 +3961,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-vue"
-version = "2.0.1"
+version = "2.0.2"
 dependencies = [
  "serde",
  "tauri",
@@ -3986,7 +3986,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-zustand"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "serde",
  "tauri",
@@ -4048,7 +4048,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "anyhow",
  "dashmap",
@@ -4083,7 +4083,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-macros"
-version = "1.0.1"
+version = "1.0.2"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -4092,7 +4092,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-utils"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "semver",
  "tauri",

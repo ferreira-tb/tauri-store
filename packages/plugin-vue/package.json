@@ -1,6 +1,6 @@
 {
   "name": "@tauri-store/vue",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Persistence for Tauri and Vue",
   "type": "module",
   "private": false,

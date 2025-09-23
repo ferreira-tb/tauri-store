@@ -2,6 +2,9 @@
 
 Persistent [Pinia](https://pinia.vuejs.org/) stores for Tauri and Vue.
 
+> [!NOTE]
+> This is not an official plugin.
+
 ## Features
 
 - Save your stores to disk.

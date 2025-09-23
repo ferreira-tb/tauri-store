@@ -2,6 +2,9 @@
 
 Persistent [Svelte](https://svelte.dev/) stores and runes for Tauri.
 
+> [!NOTE]
+> This is not an official plugin.
+
 ## Features
 
 - Save your stores to disk.

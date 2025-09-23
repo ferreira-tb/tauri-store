@@ -2,6 +2,9 @@
 
 Persistent stores for Tauri.
 
+> [!NOTE]
+> This is not an official Tauri crate.
+
 ## Features
 
 - Save your stores to disk.
