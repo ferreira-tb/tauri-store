@@ -8,6 +8,10 @@ description: Persistent stores for Tauri
 
 Persistent stores for Tauri.
 
+::: info
+This is not an official plugin.
+:::
+
 ## Features
 
 - Save your stores to disk.

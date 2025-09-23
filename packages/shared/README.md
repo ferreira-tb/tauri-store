@@ -6,6 +6,9 @@ This won't be of any use to you unless you're developing a plugin yourself.
 
 Reference: https://tb.dev.br/tauri-store/js-docs/shared/index.html
 
+> [!NOTE]
+> This is not an official Tauri package.
+
 ## Documentation
 
 Check the [documentation](https://tb.dev.br/tauri-store/) for more information on how to install and use the plugins.

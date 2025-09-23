@@ -1,6 +1,6 @@
 {
   "name": "@tauri-store/pinia",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Persistent Pinia stores for Tauri",
   "type": "module",
   "private": false,

@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 2.0.2
+
+### Documentation
+
+- Update README.
+
 ## 2.0.1
 
 ### Bug fixes
