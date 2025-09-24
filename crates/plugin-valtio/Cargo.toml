@@ -21,10 +21,10 @@ workspace = true
 workspace = true
 
 [package.metadata.docs.rs]
-no-default-features = true
-features = ["marshaler-toml"]
 rustc-args = ["--cfg", "docsrs"]
 rustdoc-args = ["--cfg", "docsrs"]
+no-default-features = true
+features = ["marshaler-cbor", "marshaler-ron", "marshaler-toml"]
 
 [lints]
 workspace = true
@@ -44,5 +44,7 @@ version = "2.4"
 features = ["build"]
 
 [features]
+marshaler-cbor = ["tauri-store/marshaler-cbor"]
+marshaler-ron = ["tauri-store/marshaler-ron"]
 marshaler-toml = ["tauri-store/marshaler-toml"]
 file-sync-all = ["tauri-store/file-sync-all"]

@@ -11,6 +11,12 @@ outline: 2
 
 _Nothing yet._
 
+## 1.1.0
+
+### Features
+
+- Add [CBOR](https://cbor.io/) and [RON](https://github.com/ron-rs/ron) marshalers.
+
 ## 1.0.2
 
 ### Documentation

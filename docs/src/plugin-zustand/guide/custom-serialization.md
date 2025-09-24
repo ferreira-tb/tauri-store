@@ -25,9 +25,12 @@ tauri_plugin_zustand::Builder::new()
 
 Currently, the following marshalers are available:
 
+- [`CborMarshaler`](https://docs.rs/tauri-plugin-zustand/latest/tauri_plugin_zustand/struct.CborMarshaler.html)
 - [`JsonMarshaler`](https://docs.rs/tauri-plugin-zustand/latest/tauri_plugin_zustand/struct.JsonMarshaler.html)
 - [`PrettyJsonMarshaler`](https://docs.rs/tauri-plugin-zustand/latest/tauri_plugin_zustand/struct.PrettyJsonMarshaler.html)
+- [`PrettyRonMarshaler`](https://docs.rs/tauri-plugin-zustand/latest/tauri_plugin_zustand/struct.PrettyRonMarshaler.html)
 - [`PrettyTomlMarshaler`](https://docs.rs/tauri-plugin-zustand/latest/tauri_plugin_zustand/struct.PrettyTomlMarshaler.html)
+- [`RonMarshaler`](https://docs.rs/tauri-plugin-zustand/latest/tauri_plugin_zustand/struct.RonMarshaler.html)
 - [`TomlMarshaler`](https://docs.rs/tauri-plugin-zustand/latest/tauri_plugin_zustand/struct.TomlMarshaler.html)
 
 ## Custom marshaler

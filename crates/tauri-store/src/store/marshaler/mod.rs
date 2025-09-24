@@ -1,5 +1,9 @@
 mod json;
 
+#[cfg(feature = "marshaler-cbor")]
+mod cbor;
+#[cfg(feature = "marshaler-ron")]
+mod ron;
 #[cfg(feature = "marshaler-toml")]
 mod toml;
 
@@ -7,6 +11,10 @@ use crate::store::StoreState;
 
 pub use json::{JsonMarshaler, PrettyJsonMarshaler};
 
+#[cfg(feature = "marshaler-cbor")]
+pub use cbor::CborMarshaler;
+#[cfg(feature = "marshaler-ron")]
+pub use ron::{PrettyRonMarshaler, RonMarshaler};
 #[cfg(feature = "marshaler-toml")]
 pub use toml::{PrettyTomlMarshaler, TomlMarshaler};
 

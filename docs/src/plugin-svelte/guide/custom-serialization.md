@@ -25,9 +25,12 @@ tauri_plugin_svelte::Builder::new()
 
 Currently, the following marshalers are available:
 
+- [`CborMarshaler`](https://docs.rs/tauri-plugin-svelte/latest/tauri_plugin_svelte/struct.CborMarshaler.html)
 - [`JsonMarshaler`](https://docs.rs/tauri-plugin-svelte/latest/tauri_plugin_svelte/struct.JsonMarshaler.html)
 - [`PrettyJsonMarshaler`](https://docs.rs/tauri-plugin-svelte/latest/tauri_plugin_svelte/struct.PrettyJsonMarshaler.html)
+- [`PrettyRonMarshaler`](https://docs.rs/tauri-plugin-svelte/latest/tauri_plugin_svelte/struct.PrettyRonMarshaler.html)
 - [`PrettyTomlMarshaler`](https://docs.rs/tauri-plugin-svelte/latest/tauri_plugin_svelte/struct.PrettyTomlMarshaler.html)
+- [`RonMarshaler`](https://docs.rs/tauri-plugin-svelte/latest/tauri_plugin_svelte/struct.RonMarshaler.html)
 - [`TomlMarshaler`](https://docs.rs/tauri-plugin-svelte/latest/tauri_plugin_svelte/struct.TomlMarshaler.html)
 
 ## Custom marshaler

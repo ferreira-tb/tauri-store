@@ -25,9 +25,12 @@ tauri_plugin_pinia::Builder::new()
 
 Currently, the following marshalers are available:
 
+- [`CborMarshaler`](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.CborMarshaler.html)
 - [`JsonMarshaler`](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.JsonMarshaler.html)
 - [`PrettyJsonMarshaler`](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.PrettyJsonMarshaler.html)
+- [`PrettyRonMarshaler`](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.PrettyRonMarshaler.html)
 - [`PrettyTomlMarshaler`](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.PrettyTomlMarshaler.html)
+- [`RonMarshaler`](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.RonMarshaler.html)
 - [`TomlMarshaler`](https://docs.rs/tauri-plugin-pinia/latest/tauri_plugin_pinia/struct.TomlMarshaler.html)
 
 ## Custom marshaler
