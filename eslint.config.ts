@@ -25,7 +25,7 @@ export default defineConfig({
   features: {
     vue: true,
   },
-  ignores: ['**/.nuxt', '**/.svelte-kit', '**/assets'],
+  ignores: ['**/.nuxt', '**/.svelte-kit', '**/assets', '**/nuxt.config.ts'],
   moduleBoundaryTypesFiles: ['packages/**/*.ts'],
   overrides: {
     typescript: {
