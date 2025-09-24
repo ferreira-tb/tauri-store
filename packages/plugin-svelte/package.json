@@ -1,6 +1,6 @@
 {
   "name": "@tauri-store/svelte",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "description": "Persistent Svelte stores and runes for Tauri",
   "type": "module",
   "private": false,

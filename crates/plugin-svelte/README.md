@@ -3,7 +3,7 @@
 Persistent [Svelte](https://svelte.dev/) stores and runes for Tauri.
 
 > [!NOTE]
-> This is not an official plugin.
+> This is not an official Tauri plugin.
 
 ## Features
 

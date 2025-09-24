@@ -62,12 +62,12 @@ where
 
     let _ = tx.send(Message::Call);
 
-    self.sender.replace(tx);
+    self.sender.inner.lock().replace(tx);
     self.abort_handle.replace(actor.run(app));
   }
 
   pub fn abort(&self) {
-    self.sender.take();
+    self.sender.inner.lock().take();
     self.abort_handle.abort();
     self.waiting.store(false, Relaxed);
   }
