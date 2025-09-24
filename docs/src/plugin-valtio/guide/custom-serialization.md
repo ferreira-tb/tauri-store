@@ -25,9 +25,12 @@ tauri_plugin_valtio::Builder::new()
 
 Currently, the following marshalers are available:
 
+- [`CborMarshaler`](https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio/struct.CborMarshaler.html)
 - [`JsonMarshaler`](https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio/struct.JsonMarshaler.html)
 - [`PrettyJsonMarshaler`](https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio/struct.PrettyJsonMarshaler.html)
+- [`PrettyRonMarshaler`](https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio/struct.PrettyRonMarshaler.html)
 - [`PrettyTomlMarshaler`](https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio/struct.PrettyTomlMarshaler.html)
+- [`RonMarshaler`](https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio/struct.RonMarshaler.html)
 - [`TomlMarshaler`](https://docs.rs/tauri-plugin-valtio/latest/tauri_plugin_valtio/struct.TomlMarshaler.html)
 
 ## Custom marshaler

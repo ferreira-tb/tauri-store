@@ -25,9 +25,12 @@ tauri_store::Builder::new()
 
 Currently, the following marshalers are available:
 
+- [`CborMarshaler`](https://docs.rs/tauri-store/latest/tauri_store/struct.CborMarshaler.html)
 - [`JsonMarshaler`](https://docs.rs/tauri-store/latest/tauri_store/struct.JsonMarshaler.html)
 - [`PrettyJsonMarshaler`](https://docs.rs/tauri-store/latest/tauri_store/struct.PrettyJsonMarshaler.html)
+- [`PrettyRonMarshaler`](https://docs.rs/tauri-store/latest/tauri_store/struct.PrettyRonMarshaler.html)
 - [`PrettyTomlMarshaler`](https://docs.rs/tauri-store/latest/tauri_store/struct.PrettyTomlMarshaler.html)
+- [`RonMarshaler`](https://docs.rs/tauri-store/latest/tauri_store/struct.RonMarshaler.html)
 - [`TomlMarshaler`](https://docs.rs/tauri-store/latest/tauri_store/struct.TomlMarshaler.html)
 
 ## Custom marshaler

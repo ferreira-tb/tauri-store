@@ -35,5 +35,9 @@ pub use tauri_store_macros::Collection;
 #[cfg(feature = "plugin")]
 pub use plugin::{init, Builder};
 
+#[cfg(feature = "marshaler-cbor")]
+pub use store::CborMarshaler;
+#[cfg(feature = "marshaler-ron")]
+pub use store::{PrettyRonMarshaler, RonMarshaler};
 #[cfg(feature = "marshaler-toml")]
 pub use store::{PrettyTomlMarshaler, TomlMarshaler};

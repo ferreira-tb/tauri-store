@@ -38,6 +38,10 @@ pub use save::SaveStrategy;
 pub use state::StoreState;
 pub use watch::WatcherId;
 
+#[cfg(feature = "marshaler-cbor")]
+pub use marshaler::CborMarshaler;
+#[cfg(feature = "marshaler-ron")]
+pub use marshaler::{PrettyRonMarshaler, RonMarshaler};
 #[cfg(feature = "marshaler-toml")]
 pub use marshaler::{PrettyTomlMarshaler, TomlMarshaler};
 

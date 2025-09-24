@@ -4,5 +4,9 @@ pub use crate::{
   StoreState, WatcherId,
 };
 
+#[cfg(feature = "marshaler-cbor")]
+pub use crate::CborMarshaler;
+#[cfg(feature = "marshaler-ron")]
+pub use crate::{PrettyRonMarshaler, RonMarshaler};
 #[cfg(feature = "marshaler-toml")]
 pub use crate::{PrettyTomlMarshaler, TomlMarshaler};
