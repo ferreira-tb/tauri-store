@@ -1,5 +1,4 @@
-use crate::sync::MutexOption;
-use std::ops::Deref;
+use parking_lot::Mutex;
 use tokio::task::AbortHandle;
 
 /// A dyn compatible trait intended to be used with types
@@ -12,20 +11,23 @@ pub trait RemoteCallable<T> {
 }
 
 #[derive(Default)]
-pub(crate) struct OptionalAbortHandle(MutexOption<AbortHandle>);
+pub(crate) struct OptionalAbortHandle {
+  inner: Mutex<Option<AbortHandle>>,
+}
 
 impl OptionalAbortHandle {
   pub(crate) fn abort(&self) {
-    if let Some(handle) = self.0.take() {
+    let mut lock = self.inner.lock();
+    if let Some(handle) = lock.take() {
+      drop(lock);
       handle.abort();
     }
   }
-}
 
-impl Deref for OptionalAbortHandle {
-  type Target = MutexOption<AbortHandle>;
-
-  fn deref(&self) -> &Self::Target {
-    &self.0
+  pub(crate) fn replace(&self, handle: AbortHandle) {
+    let mut lock = self.inner.lock();
+    if let Some(old) = lock.replace(handle) {
+      old.abort();
+    }
   }
 }

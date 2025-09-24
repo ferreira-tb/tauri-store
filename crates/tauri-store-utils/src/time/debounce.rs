@@ -1,8 +1,7 @@
 use crate::manager::ManagerExt;
-use crate::sync::MutexOption;
 use crate::task::{OptionalAbortHandle, RemoteCallable};
+use parking_lot::Mutex;
 use std::future::Future;
-use std::ops::Deref;
 use std::sync::{Arc, Weak};
 use std::time::Duration;
 use tauri::{AppHandle, Runtime};
@@ -56,12 +55,12 @@ where
       duration: self.duration,
     };
 
-    self.sender.replace(tx);
+    self.sender.inner.lock().replace(tx);
     self.abort_handle.replace(actor.run(app));
   }
 
   pub fn abort(&self) {
-    self.sender.take();
+    self.sender.inner.lock().take();
     self.abort_handle.abort();
   }
 }
@@ -131,22 +130,18 @@ where
 }
 
 #[derive(Default)]
-pub(super) struct OptionalSender(MutexOption<UnboundedSender<Message>>);
+pub(super) struct OptionalSender {
+  pub(super) inner: Mutex<Option<UnboundedSender<Message>>>,
+}
 
 impl OptionalSender {
   pub(super) fn send(&self) -> bool {
     self
-      .0
+      .inner
+      .lock()
+      .as_ref()
       .map(|it| it.send(Message::Call).is_ok())
       .unwrap_or(false)
-  }
-}
-
-impl Deref for OptionalSender {
-  type Target = MutexOption<UnboundedSender<Message>>;
-
-  fn deref(&self) -> &Self::Target {
-    &self.0
   }
 }
 

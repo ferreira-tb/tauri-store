@@ -1,7 +1,7 @@
 [package]
 name = "tauri-store-utils"
 description = "Utilities for the Tauri store"
-version = "0.6.1"
+version = "0.7.0"
 documentation = "https://docs.rs/tauri-store-utils"
 homepage = "https://tb.dev.br/tauri-store"
 repository = "https://github.com/ferreira-tb/tauri-store"
@@ -29,6 +29,7 @@ rustdoc-args = ["--cfg", "docsrs"]
 workspace = true
 
 [dependencies]
+parking_lot = "0.12"
 semver = "1.0"
 tauri = "2"
 thiserror = "2.0"

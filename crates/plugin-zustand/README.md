@@ -3,7 +3,7 @@
 Persistent [Zustand](https://zustand.docs.pmnd.rs/getting-started/introduction) stores for Tauri and React.
 
 > [!NOTE]
-> This is not an official plugin.
+> This is not an official Tauri plugin.
 
 ## Features
 
