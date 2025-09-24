@@ -4150,7 +4150,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-utils"
-version = "0.7.0"
+version = "0.7.1"
 dependencies = [
  "parking_lot",
  "semver",
