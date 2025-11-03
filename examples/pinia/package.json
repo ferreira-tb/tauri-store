@@ -1,7 +1,7 @@
 {
   "name": "example-pinia",
   "type": "module",
-  "packageManager": "pnpm@10.17.1",
+  "packageManager": "pnpm@10.20.0",
   "private": true,
   "scripts": {
     "type-check": "vue-tsc --noEmit",
@@ -9,14 +9,14 @@
     "vite:build": "vite build"
   },
   "devDependencies": {
-    "@tauri-apps/api": "^2.8.0",
-    "@tauri-apps/plugin-process": "^2.3.0",
-    "@tauri-apps/plugin-shell": "^2.3.1",
+    "@tauri-apps/api": "^2.9.0",
+    "@tauri-apps/plugin-process": "^2.3.1",
+    "@tauri-apps/plugin-shell": "^2.3.3",
     "@tauri-store/pinia": "workspace:*",
     "@vitejs/plugin-vue": "^6.0.1",
-    "@vueuse/core": "^13.9.0",
+    "@vueuse/core": "^14.0.0",
     "pinia": "^3.0.3",
-    "vue": "^3.5.21",
-    "vue-tsc": "^3.0.8"
+    "vue": "^3.5.22",
+    "vue-tsc": "^3.1.3"
   }
 }

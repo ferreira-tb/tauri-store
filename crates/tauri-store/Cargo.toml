@@ -21,8 +21,6 @@ workspace = true
 workspace = true
 
 [package.metadata.docs.rs]
-rustc-args = ["--cfg", "docsrs"]
-rustdoc-args = ["--cfg", "docsrs"]
 no-default-features = true
 features = ["marshaler-cbor", "marshaler-ron", "marshaler-toml", "plugin"]
 

@@ -19,6 +19,10 @@ workspace = true
 [package.categories]
 workspace = true
 
+[package.metadata.docs.rs]
+no-default-features = true
+features = []
+
 [lib]
 proc-macro = true
 
