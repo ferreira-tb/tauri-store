@@ -33,11 +33,15 @@ export interface StoreBuilderReturn<S extends State> extends TauriStoreContract 
 
   /**
    * Subscribes to changes in the store.
+   *
+   * @see https://valtio.dev/docs/api/advanced/subscribe
    */
   subscribe: Store<S>['subscribe'];
 
   /**
    * Subscribes to changes in a key of the store.
+   *
+   * @see https://valtio.dev/docs/api/utils/subscribeKey
    */
   subscribeKey: Store<S>['subscribeKey'];
 }
