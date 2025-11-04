@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 3.2.0
+
+### Features
+
+- Add `subscribe` and `subscribeKey` methods to the store.
+
 ## 3.1.0
 
 ### Features

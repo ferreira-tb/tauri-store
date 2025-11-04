@@ -1,5 +1,6 @@
 import * as commands from './commands';
-import { snapshot, subscribe, proxy as toProxy } from 'valtio';
+import { subscribeKey } from 'valtio/utils';
+import { type INTERNAL_Op, snapshot, subscribe, proxy as toProxy } from 'valtio';
 import type { StoreBuilderReturn, TauriPluginValtioStoreOptions } from './types';
 import {
   BaseStore,
@@ -56,19 +57,19 @@ class Store<S extends State> extends BaseStore<S> {
     void this.checkAutoStart();
   }
 
-  protected async load(): Promise<void> {
+  protected readonly load = async (): Promise<void> => {
     const state = await commands.load<S>(this.id);
     this.patchSelf(state);
 
     await this.flush();
     this.unwatch = this.watch();
-  }
+  };
 
-  protected async unload(): Promise<void> {
+  protected readonly unload = async (): Promise<void> => {
     await commands.unload(this.id);
-  }
+  };
 
-  protected watch(): Fn {
+  protected readonly watch = (): Fn => {
     const patchBackend = () => {
       const state = snapshot(this.state);
       this.patchBackend(state as S);
@@ -83,9 +84,9 @@ class Store<S extends State> extends BaseStore<S> {
     }
 
     return subscribe(this.state, patchBackend);
-  }
+  };
 
-  protected patchSelf(state: S): void {
+  protected readonly patchSelf = (state: S): void => {
     let _state = this.options.hooks?.beforeFrontendSync
       ? this.options.hooks.beforeFrontendSync(state)
       : state;
@@ -94,15 +95,30 @@ class Store<S extends State> extends BaseStore<S> {
       _state = this.applyKeyFilters(_state);
       Object.assign(this.state, _state);
     }
-  }
+  };
 
-  protected patchBackend(state: S): void {
+  protected readonly patchBackend = (state: S): void => {
     this.patchBackendHelper(commands.patch, state);
-  }
+  };
 
-  protected async setOptions(): Promise<void> {
+  protected readonly setOptions = async (): Promise<void> => {
     return this.setOptionsHelper(commands.setStoreOptions);
-  }
+  };
+
+  public readonly subscribe = (
+    callback: (unstable_ops: INTERNAL_Op[]) => void,
+    notifyInSync?: boolean
+  ): Fn => {
+    return subscribe(this.state, callback, notifyInSync);
+  };
+
+  public readonly subscribeKey = <Key extends keyof S>(
+    key: Key,
+    callback: (value: S[Key]) => void,
+    notifyInSync?: boolean
+  ): Fn => {
+    return subscribeKey(this.state, key, callback, notifyInSync);
+  };
 }
 
 /**
@@ -146,20 +162,22 @@ export function toStore<S extends State>(
   proxy: S,
   options: TauriPluginValtioStoreOptions<S> = {}
 ): StoreBuilderReturn<S> {
-  const _store = new Store(id, proxy, options);
+  const rawStore = new Store(id, proxy, options);
   return {
-    id: _store.id,
+    id: rawStore.id,
     state: proxy,
-    getPath: () => commands.getStorePath(_store.id),
-    save: () => commands.save(_store.id),
+    getPath: () => commands.getStorePath(rawStore.id),
+    save: () => commands.save(rawStore.id),
     saveAll: () => commands.saveAll(),
     saveAllNow: () => commands.saveAllNow(),
-    saveNow: () => commands.save(_store.id),
-    start: () => _store.start(),
-    stop: () => _store.stop(),
+    saveNow: () => commands.save(rawStore.id),
+    start: () => rawStore.start(),
+    stop: () => rawStore.stop(),
+    subscribe: rawStore.subscribe,
+    subscribeKey: rawStore.subscribeKey,
     destroy: async () => {
-      await commands.destroy(_store.id);
-      await _store.stop();
+      await commands.destroy(rawStore.id);
+      await rawStore.stop();
     },
   };
 }
