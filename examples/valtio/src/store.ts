@@ -21,6 +21,9 @@ export const store = valtio('counter-store', defaultValue, {
   },
 });
 
+store.subscribe((ops) => console.log(ops));
+store.subscribeKey('counter', (value) => console.log(value));
+
 export async function openStore() {
   const path = await store.getPath();
   await open(path);

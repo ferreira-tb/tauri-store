@@ -1,3 +1,4 @@
+import type { Store } from './store';
 import type { State, StoreOptions, TauriStoreContract } from '@tauri-store/shared';
 
 export type {
@@ -29,4 +30,18 @@ export interface StoreBuilderReturn<S extends State> extends TauriStoreContract 
    * @see https://valtio.dev/docs/api/basic/proxy
    */
   state: S;
+
+  /**
+   * Subscribes to changes in the store.
+   *
+   * @see https://valtio.dev/docs/api/advanced/subscribe
+   */
+  subscribe: Store<S>['subscribe'];
+
+  /**
+   * Subscribes to changes in a key of the store.
+   *
+   * @see https://valtio.dev/docs/api/utils/subscribeKey
+   */
+  subscribeKey: Store<S>['subscribeKey'];
 }
