@@ -1,7 +1,7 @@
 {
   "name": "docs",
   "type": "module",
-  "packageManager": "pnpm@10.20.0",
+  "packageManager": "pnpm@10.22.0",
   "private": true,
   "scripts": {
     "dev": "vitepress dev",
@@ -13,6 +13,6 @@
     "@vueuse/core": "^14.0.0",
     "change-case": "^5.4.4",
     "vitepress": "^2.0.0-alpha.12",
-    "vue": "^3.5.22"
+    "vue": "^3.5.24"
   }
 }
