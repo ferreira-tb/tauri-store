@@ -54,13 +54,12 @@ version = "1.47"
 default-features = false
 features = ["time"]
 
-# Optional marshalers
 [dependencies.ciborium]
 version = "0.2"
 optional = true
 
 [dependencies.ron]
-version = "0.11"
+version = "0.12"
 optional = true
 
 [dependencies.toml]
@@ -83,9 +82,7 @@ features = ["test"]
 default = ["plugin"]
 plugin = ["dep:tauri-plugin"]
 derive = ["dep:tauri-store-macros"]
-
 marshaler-cbor = ["dep:ciborium"]
 marshaler-ron = ["dep:ron"]
 marshaler-toml = ["dep:toml"]
-
 file-sync-all = []
