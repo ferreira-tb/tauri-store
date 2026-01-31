@@ -2,7 +2,7 @@
   "name": "monorepo",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.22.0",
+  "packageManager": "pnpm@10.28.2",
   "scripts": {
     "build": "pnpm run build:shared && pnpm run build:package",
     "build:docs": "pwsh scripts/build-docs.ps1",
@@ -24,20 +24,20 @@
     "update": "pwsh scripts/update.ps1"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^8.1.1",
-    "@types/node": "^24.10.1",
-    "@types/react": "^19.2.4",
+    "@tb-dev/eslint-config": "^8.2.5",
+    "@types/node": "^25.1.0",
+    "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^9.39.1",
-    "prettier": "^3.6.2",
-    "prettier-plugin-css-order": "^2.1.2",
-    "prettier-plugin-svelte": "^3.4.0",
-    "prettier-plugin-tailwindcss": "^0.7.1",
+    "eslint": "^9.39.2",
+    "prettier": "^3.8.1",
+    "prettier-plugin-css-order": "^2.2.0",
+    "prettier-plugin-svelte": "^3.4.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "tslib": "^2.8.1",
-    "typedoc": "^0.28.14",
-    "typedoc-plugin-mdn-links": "^5.0.10",
+    "typedoc": "^0.28.16",
+    "typedoc-plugin-mdn-links": "^5.1.1",
     "typescript": "~5.9.3",
-    "vite": "^7.2.2",
+    "vite": "^7.3.1",
     "vite-plugin-dts": "^4.5.4"
   }
 }

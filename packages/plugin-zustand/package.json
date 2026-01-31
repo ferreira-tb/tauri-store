@@ -4,7 +4,7 @@
   "description": "Persistent Zustand stores for Tauri",
   "type": "module",
   "private": false,
-  "packageManager": "pnpm@10.22.0",
+  "packageManager": "pnpm@10.28.2",
   "homepage": "https://tb.dev.br/tauri-store/plugin-zustand/guide/getting-started",
   "license": "MIT",
   "funding": "https://github.com/sponsors/ferreira-tb",
