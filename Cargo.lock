@@ -3879,7 +3879,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-pinia"
-version = "4.1.0"
+version = "4.1.1"
 dependencies = [
  "serde",
  "tauri",
@@ -3920,7 +3920,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-svelte"
-version = "3.1.0"
+version = "3.1.1"
 dependencies = [
  "serde",
  "tauri",
@@ -3930,7 +3930,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-valtio"
-version = "3.2.0"
+version = "3.2.1"
 dependencies = [
  "serde",
  "tauri",
@@ -3940,7 +3940,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-vue"
-version = "2.1.0"
+version = "2.1.1"
 dependencies = [
  "serde",
  "tauri",
@@ -3965,7 +3965,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-plugin-zustand"
-version = "1.1.0"
+version = "1.1.1"
 dependencies = [
  "serde",
  "tauri",
@@ -4027,7 +4027,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store"
-version = "1.1.0"
+version = "1.1.1"
 dependencies = [
  "anyhow",
  "ciborium",
@@ -4064,7 +4064,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-macros"
-version = "1.1.0"
+version = "1.1.1"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -4073,7 +4073,7 @@ dependencies = [
 
 [[package]]
 name = "tauri-store-utils"
-version = "0.7.1"
+version = "0.7.2"
 dependencies = [
  "parking_lot",
  "semver",
