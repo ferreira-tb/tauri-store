@@ -54,7 +54,7 @@ class Store<S extends State> extends BaseStore<S> {
     } satisfies Required<TauriPluginValtioStoreOptions<S>>;
 
     void this.updateDenylist(commands);
-    void this.checkAutoStart();
+    void this.tryAutoStart();
   }
 
   protected readonly load = async (): Promise<void> => {

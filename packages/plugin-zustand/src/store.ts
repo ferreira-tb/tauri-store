@@ -54,7 +54,7 @@ class TauriStore<S extends State, Store extends StoreApi<S>>
     } satisfies Required<TauriPluginZustandStoreOptions<S>>;
 
     void this.updateDenylist(commands);
-    void this.checkAutoStart();
+    void this.tryAutoStart();
   }
 
   protected readonly load = async (): Promise<void> => {

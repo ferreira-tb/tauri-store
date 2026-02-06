@@ -204,8 +204,7 @@ export abstract class BaseStore<S extends State = State> {
     return result;
   }
 
-  // TODO: Don't you think we could give this a better name?
-  protected async checkAutoStart(): Promise<void> {
+  protected async tryAutoStart(): Promise<void> {
     try {
       let autoStart = this.options.autoStart ?? DEFAULT_AUTO_START;
       if (typeof autoStart !== 'boolean') {

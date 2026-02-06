@@ -52,7 +52,7 @@ export class Store extends BaseStore {
     } satisfies Required<TauriPluginPiniaStoreOptions>;
 
     void this.updateDenylist(commands);
-    void this.checkAutoStart();
+    void this.tryAutoStart();
   }
 
   protected async load(): Promise<void> {

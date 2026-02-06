@@ -91,7 +91,7 @@ export class Store<S extends State> extends BaseStore<S> implements StoreContrac
     } satisfies Required<TauriPluginSvelteStoreOptions<S>>;
 
     void this.updateDenylist(commands);
-    void this.checkAutoStart();
+    void this.tryAutoStart();
   }
 
   public set(value: S): void {
