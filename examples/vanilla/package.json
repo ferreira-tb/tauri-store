@@ -8,10 +8,10 @@
     "vite:dev": "vite dev"
   },
   "devDependencies": {
-    "@tauri-apps/api": "^2.9.1",
+    "@tauri-apps/api": "^2.10.1",
     "@tauri-apps/plugin-process": "^2.3.1",
-    "@tauri-apps/plugin-shell": "^2.3.4",
-    "@tb-dev/utils": "^7.2.0",
+    "@tauri-apps/plugin-shell": "^2.3.5",
+    "@tb-dev/utils": "^7.2.2",
     "tauri-store": "workspace:*"
   }
 }

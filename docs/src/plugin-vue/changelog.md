@@ -12,6 +12,12 @@ outline: 2
 
 _Nothing yet._
 
+## 2.1.1
+
+### Internal changes
+
+- Rename `checkAutoStart` to `tryAutoStart` to better reflect behavior (thanks [@RainyNight9](https://github.com/RainyNight9)).
+
 ## 2.1.0
 
 ### Features
