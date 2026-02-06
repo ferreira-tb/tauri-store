@@ -74,7 +74,7 @@ export class RuneStore<S extends State> extends BaseStore<S> implements TauriSto
     } satisfies Required<TauriPluginSvelteRuneStoreOptions<S>>;
 
     void this.updateDenylist(commands);
-    void this.checkAutoStart();
+    void this.tryAutoStart();
   }
 
   protected readonly load = async (): Promise<void> => {

@@ -55,7 +55,7 @@ export class Store<S extends State> extends BaseStore<S> implements TauriStoreCo
     } satisfies Required<TauriStoreOptions<S>>;
 
     void this.updateDenylist(commands);
-    void this.checkAutoStart();
+    void this.tryAutoStart();
   }
 
   protected readonly load = async (): Promise<void> => {
