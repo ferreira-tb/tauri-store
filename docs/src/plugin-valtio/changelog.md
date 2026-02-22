@@ -12,11 +12,21 @@ outline: 2
 
 _Nothing yet._
 
+## 3.3.0
+
+### Features
+
+- Add `preserve-order` feature.
+
+### Dependencies
+
+- Update `tauri-store` to `1.2.0`.
+
 ## 3.2.1
 
 ### Internal changes
 
-- Rename `checkAutoStart` to `tryAutoStart` to better reflect behavior (thanks [@RainyNight9](https://github.com/RainyNight9)).
+- Rename `checkAutoStart` to `tryAutoStart` to better reflect behavior (thanks [RainyNight9](https://github.com/RainyNight9)).
 
 ## 3.2.0
 

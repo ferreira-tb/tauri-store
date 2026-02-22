@@ -7,7 +7,7 @@ name = "tauri-store-cli"
 description = "Command line tools for tauri-store"
 version = "1.0.0"
 publish = false
-rust-version = "1.85"
+rust-version = "1.93"
 edition = "2024"
 
 [lints]
@@ -15,11 +15,11 @@ workspace = true
 
 [dependencies]
 anyhow = "1.0"
-bon = "3.8"
+bon = "3.9"
 colored = "3.1"
 convert_case = "0.11"
 itertools = "0.14"
-rand = "0.9"
+rand = "0.10"
 
 [dependencies.clap]
 version = "4.5"
@@ -30,5 +30,5 @@ version = "2.1"
 features = ["deref"]
 
 [dependencies.strum]
-version = "0.27"
+version = "0.28"
 features = ["derive"]
