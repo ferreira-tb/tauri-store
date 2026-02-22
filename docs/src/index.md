@@ -64,6 +64,7 @@ You can enable some [Cargo features](https://doc.rust-lang.org/cargo/reference/f
 - `marshaler-cbor`: enables the CBOR marshaler.
 - `marshaler-ron`: enables the RON marshaler.
 - `marshaler-toml`: enables the TOML marshaler.
+- `preserve-order`: preserve key order if the marshaler being used supports such feature.
 
 ## Versioning
 

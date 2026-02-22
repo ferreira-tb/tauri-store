@@ -11,11 +11,21 @@ outline: 2
 
 _Nothing yet._
 
+## 1.2.0
+
+### Features
+
+- Add `preserve-order` feature.
+
+### Dependencies
+
+- Update [`toml`](https://crates.io/crates/toml) to `1.0`.
+
 ## 1.1.1
 
 ### Internal changes
 
-- Rename `checkAutoStart` to `tryAutoStart` to better reflect behavior (thanks [@RainyNight9](https://github.com/RainyNight9)).
+- Rename `checkAutoStart` to `tryAutoStart` to better reflect behavior (thanks [RainyNight9](https://github.com/RainyNight9)).
 
 ### Dependencies
 
@@ -59,7 +69,7 @@ _Nothing yet._
 - Add `StoreCollection::app_handle`.
 - Allow to destroy stores, also deleting their respective files.
 - Introduce unchecked variants for `get` methods (e.g. `Store::get_unchecked`).
-- Use sandboxed environment on Android and iOS (thanks [@saurL](https://github.com/saurL)).
+- Use sandboxed environment on Android and iOS (thanks [saurL](https://github.com/saurL)).
 - Stabilize store migrations.
 
 ## 0.12.1
