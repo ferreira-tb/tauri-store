@@ -11,6 +11,12 @@ outline: 2
 
 _Nothing yet._
 
+## 1.2.1
+
+### Bug fixes
+
+- Use [`IndexMap`](https://docs.rs/indexmap/2.13.0/indexmap/map/struct.IndexMap.html) internally when the [`preserve-order`](https://tb.dev.br/tauri-store/#cargo-features) feature is enabled.
+
 ## 1.2.0
 
 ### Features

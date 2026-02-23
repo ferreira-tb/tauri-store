@@ -28,8 +28,8 @@ features = ["marshaler-cbor", "marshaler-ron", "marshaler-toml"]
 workspace = true
 
 [dependencies]
-serde = "1.0"
-tauri = "2"
+serde.workspace = true
+tauri.workspace = true
 
 [dependencies.tauri-store]
 version = "1"
