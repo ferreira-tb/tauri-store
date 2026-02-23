@@ -3,8 +3,12 @@ use crate::io_err;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_json::{Map, Value};
-use std::collections::HashMap;
 use std::result::Result as StdResult;
+
+#[cfg(feature = "preserve-order")]
+type HashMap<K, V> = indexmap::IndexMap<K, V>;
+#[cfg(not(feature = "preserve-order"))]
+type HashMap<K, V> = std::collections::HashMap<K, V>;
 
 /// Internal state of a store.
 #[derive(Clone, Debug, Default)]
@@ -154,7 +158,12 @@ impl StoreState {
 
   /// Removes a key, returning the previous value, if any.
   pub fn remove(&mut self, key: impl AsRef<str>) -> Option<Value> {
-    self.0.remove(key.as_ref())
+    #[cfg(feature = "preserve-order")]
+    let value = self.0.shift_remove(key.as_ref());
+    #[cfg(not(feature = "preserve-order"))]
+    let value = self.0.remove(key.as_ref());
+
+    value
   }
 
   /// Retains only the values specified by the predicate.
