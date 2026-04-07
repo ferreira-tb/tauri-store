@@ -1,8 +1,8 @@
 /** @type {import('typedoc').TypeDocOptions} */
-module.exports = {
-  entryPoints: ['src/lib/index.ts'],
-  out: '../../docs/.vitepress/dist/js-docs/plugin-svelte',
-  titleLink: 'https://tb.dev.br/tauri-store/plugin-svelte/guide/getting-started',
+export default {
+  entryPoints: ['src/index.ts'],
+  out: '../../docs/.vitepress/dist/js-docs/plugin-valtio',
+  titleLink: 'https://tb.dev.br/tauri-store/plugin-valtio/guide/getting-started',
   includeVersion: true,
   excludeInternal: true,
   excludePrivate: true,

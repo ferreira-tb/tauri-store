@@ -1,5 +1,5 @@
 /** @type {import('typedoc').TypeDocOptions} */
-module.exports = {
+export default {
   entryPoints: ['src/index.ts'],
   out: '../../docs/.vitepress/dist/js-docs/plugin-vue',
   titleLink: 'https://tb.dev.br/tauri-store/plugin-vue/guide/getting-started',

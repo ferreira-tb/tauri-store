@@ -2,7 +2,6 @@
   "include": [".vitepress/**/*", ".vitepress/**/*.vue", "src/**/*", "src/**/*.vue", "types/**/*"],
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "esnext",
     "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -29,7 +28,7 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "noEmitOnError": true,
-    "types": ["vite/client"]
+    "types": ["node", "vite/client"]
   },
   "vueCompilerOptions": {
     "checkUnknownComponents": true,

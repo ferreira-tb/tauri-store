@@ -29,16 +29,16 @@ export default defineConfig({
   moduleBoundaryTypesFiles: ['packages/**/*.ts'],
   overrides: {
     typescript: {
-      '@typescript-eslint/consistent-type-definitions': 'off',
-      '@typescript-eslint/naming-convention': 'off',
-      '@typescript-eslint/no-confusing-void-expression': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-non-null-assertion': 'off',
-      '@typescript-eslint/use-unknown-in-catch-callback-variable': 'off',
+      'consistent-type-definitions': 'off',
+      'naming-convention': 'off',
+      'no-confusing-void-expression': 'off',
+      'no-explicit-any': 'off',
+      'no-non-null-assertion': 'off',
+      'use-unknown-in-catch-callback-variable': 'off',
     },
     vue: {
-      'vue/enforce-style-attribute': 'off',
-      'vue/v-on-handler-style': 'off',
+      'enforce-style-attribute': 'off',
+      'v-on-handler-style': 'off',
     },
   },
 });

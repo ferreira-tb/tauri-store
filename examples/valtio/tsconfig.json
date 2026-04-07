@@ -5,7 +5,6 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "target": "esnext",
     "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -16,7 +15,6 @@
     "skipLibCheck": true,
     "declaration": false,
     "jsx": "react-jsx",
-    "downlevelIteration": false,
     "experimentalDecorators": true,
     "alwaysStrict": true,
     "noImplicitAny": true,
