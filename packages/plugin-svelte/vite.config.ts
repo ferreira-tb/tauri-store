@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     emptyOutDir: true,
     minify: false,
-    rollupOptions: {
+    rolldownOptions: {
       external: [/^@tauri-apps/, /^@tauri-store/, 'svelte', 'svelte/store'],
     },
   },
