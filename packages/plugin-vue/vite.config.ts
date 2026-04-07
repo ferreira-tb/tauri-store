@@ -13,7 +13,7 @@ export default defineConfig({
       formats: ['es'],
       fileName: 'index',
     },
-    rollupOptions: {
+    rolldownOptions: {
       external: [/^@tauri-apps/, /^@tauri-store/, 'vue'],
     },
   },

@@ -1,8 +1,8 @@
 /** @type {import('typedoc').TypeDocOptions} */
-module.exports = {
+export default {
   entryPoints: ['src/index.ts'],
-  out: '../../docs/.vitepress/dist/js-docs/plugin-valtio',
-  titleLink: 'https://tb.dev.br/tauri-store/plugin-valtio/guide/getting-started',
+  out: '../../docs/.vitepress/dist/js-docs/shared',
+  titleLink: 'https://tb.dev.br/tauri-store/',
   includeVersion: true,
   excludeInternal: true,
   excludePrivate: true,
