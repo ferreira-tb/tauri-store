@@ -1,5 +1,5 @@
 import type { Option } from './types';
-import { debounce as kitDebounce, throttle as kitThrottle } from 'es-toolkit';
+import { debounce as kitDebounce, throttle as kitThrottle } from 'es-toolkit/function';
 
 export function debounce<T extends (...args: any) => any>(f: T, wait?: Option<number>): T {
   return kitDebounce(f, wait ?? 0) as unknown as T;

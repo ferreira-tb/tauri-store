@@ -14,7 +14,7 @@ export default defineConfig({
       fileName: 'index',
     },
     rolldownOptions: {
-      external: [/^@tauri-apps/, 'es-toolkit'],
+      external: [/^@tauri-apps/, /^es-toolkit/],
     },
   },
 });

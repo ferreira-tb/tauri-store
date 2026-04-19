@@ -20,7 +20,7 @@
     "playground": "cargo run -p tauri-store-cli -- playground",
     "sync": "pnpm run --recursive --if-present sync",
     "test:crate": "pwsh scripts/test.ps1",
-    "type-check": "pnpm run --recursive --if-present type-check",
+    "type-check": "pnpm run  -F \"./packages/*\" type-check",
     "update": "pwsh scripts/update.ps1"
   },
   "devDependencies": {

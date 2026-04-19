@@ -1,7 +1,6 @@
 {
   "include": ["./src/**/*"],
   "compilerOptions": {
-    "baseUrl": ".",
     "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -11,7 +10,6 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "declaration": false,
-
     "alwaysStrict": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
@@ -29,7 +27,6 @@
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
     "noEmitOnError": true,
-
     "types": ["vite/client"]
   }
 }
