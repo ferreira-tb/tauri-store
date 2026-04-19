@@ -1,7 +1,6 @@
 {
   "include": ["./src/**/*"],
   "compilerOptions": {
-    "baseUrl": ".",
     "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "bundler",

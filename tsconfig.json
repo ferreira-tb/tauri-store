@@ -1,7 +1,6 @@
 {
   "include": ["**/*.config.ts"],
   "compilerOptions": {
-    "baseUrl": ".",
     "lib": ["esnext"],
     "module": "esnext",
     "moduleResolution": "bundler",

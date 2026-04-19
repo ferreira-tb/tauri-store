@@ -17,10 +17,10 @@
     "@tauri-store/valtio": "workspace:*",
     "@tauri-store/vue": "workspace:*",
     "@tauri-store/zustand": "workspace:*",
-    "@vitejs/plugin-vue": "^6.0.5",
+    "@vitejs/plugin-vue": "^6.0.6",
     "@vueuse/core": "^14.2.1",
     "pinia": "^3.0.4",
     "vue": "^3.5.32",
-    "vue-tsc": "^3.2.6"
+    "vue-tsc": "^3.2.7"
   }
 }

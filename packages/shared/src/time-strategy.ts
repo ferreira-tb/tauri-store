@@ -1,5 +1,5 @@
-import { parseBigInt } from './utils';
 import type { Option } from './types';
+import { parseBigInt } from './utils';
 
 export type TimeStrategyKind = 'debounce' | 'throttle' | 'immediate';
 
