@@ -32,7 +32,7 @@ use watch::Watcher;
 
 pub use id::StoreId;
 pub use marshaler::{JsonMarshaler, Marshaler, MarshalingError, PrettyJsonMarshaler};
-pub use options::StoreOptions;
+pub use options::{StoreKeyFilter, StoreKeyFilterStrategy, StoreOptions};
 pub(crate) use resource::StoreResource;
 pub use save::SaveStrategy;
 pub use state::StoreState;
@@ -59,6 +59,8 @@ where
   pub(crate) save_on_exit: bool,
   save_on_change: bool,
   save_strategy: Option<SaveStrategy>,
+  save_filter_keys: Option<StoreKeyFilter>,
+  save_filter_keys_strategy: StoreKeyFilterStrategy,
   debounce_save_handle: OnceLock<SaveHandle<R>>,
   throttle_save_handle: OnceLock<SaveHandle<R>>,
   watchers: HashMap<WatcherId, Watcher<R>>,
@@ -90,6 +92,8 @@ where
       save_on_change: false,
       save_on_exit: true,
       save_strategy: None,
+      save_filter_keys: None,
+      save_filter_keys_strategy: StoreKeyFilterStrategy::default(),
       debounce_save_handle: OnceLock::new(),
       throttle_save_handle: OnceLock::new(),
       watchers: HashMap::new(),
@@ -325,8 +329,20 @@ where
     }
 
     let marshaler = collection.marshaler_table.get(&self.id);
+
+    // Apply save key filter if configured.
+    // `filtered_state` is declared outside the conditional block so that its lifetime
+    // extends to cover the `state_to_save` reference derived from it below.
+    let filtered_state;
+    let state_to_save: &StoreState = if let Some(filter) = &self.save_filter_keys {
+      filtered_state = self.state.filtered(filter, self.save_filter_keys_strategy);
+      &filtered_state
+    } else {
+      &self.state
+    };
+
     let bytes = marshaler
-      .serialize(&self.state)
+      .serialize(state_to_save)
       .map_err(Error::FailedToSerialize)?;
 
     let path = self.path();
@@ -509,6 +525,8 @@ where
       .field("save_on_exit", &self.save_on_exit)
       .field("save_on_change", &self.save_on_change)
       .field("save_strategy", &self.save_strategy)
+      .field("save_filter_keys", &self.save_filter_keys)
+      .field("save_filter_keys_strategy", &self.save_filter_keys_strategy)
       .finish_non_exhaustive()
   }
 }

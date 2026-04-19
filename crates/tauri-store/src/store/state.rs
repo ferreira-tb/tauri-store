@@ -191,6 +191,22 @@ impl StoreState {
   pub fn is_empty(&self) -> bool {
     self.0.is_empty()
   }
+
+  /// Returns a new [`StoreState`] with keys filtered according to the given filter and strategy.
+  #[must_use]
+  pub fn filtered(
+    &self,
+    filter: &crate::store::options::StoreKeyFilter,
+    strategy: crate::store::options::StoreKeyFilterStrategy,
+  ) -> StoreState {
+    use crate::store::options::StoreKeyFilterStrategy;
+    let mut state = self.clone();
+    state.retain(|key, _| match strategy {
+      StoreKeyFilterStrategy::Omit => !filter.matches(key),
+      StoreKeyFilterStrategy::Pick => filter.matches(key),
+    });
+    state
+  }
 }
 
 impl Serialize for StoreState {
