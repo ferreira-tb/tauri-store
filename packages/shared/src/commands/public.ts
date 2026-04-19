@@ -146,6 +146,9 @@ export function setStoreOptions(plugin: string) {
     }
 
     const _options: StoreBackendRawOptions = {
+      saveFilterKeys:
+        options.saveFilterKeys !== undefined ? (options.saveFilterKeys ?? null) : undefined,
+      saveFilterKeysStrategy: options.saveFilterKeysStrategy ?? null,
       saveOnChange: typeof options.saveOnChange === 'boolean' ? options.saveOnChange : null,
       saveOnExit: typeof options.saveOnExit === 'boolean' ? options.saveOnExit : null,
       saveStrategy,

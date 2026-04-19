@@ -32,6 +32,24 @@ export interface StoreBackendOptions {
    * @default 'immediate'
    */
   saveStrategy?: LooseTimeStrategyKind;
+
+  /**
+   * Keys to exclude from persistence to disk.
+   * These keys will still be synced across windows.
+   * Only `string` and `string[]` are supported (not `RegExp`), as this filter is applied on the Rust side.
+   *
+   * @default null
+   */
+  saveFilterKeys?: string | string[] | null;
+
+  /**
+   * Strategy to use when filtering keys during save.
+   * - `pick`: Only the specified keys will be saved.
+   * - `omit`: All keys will be saved **except** the ones specified.
+   *
+   * @default 'omit'
+   */
+  saveFilterKeysStrategy?: 'pick' | 'omit';
 }
 
 /** @internal */
@@ -39,6 +57,8 @@ export interface StoreBackendRawOptions {
   readonly saveOnChange?: Option<boolean>;
   readonly saveOnExit?: Option<boolean>;
   readonly saveStrategy?: Option<TimeStrategyRawTuple>;
+  readonly saveFilterKeys?: Option<string | string[]>;
+  readonly saveFilterKeysStrategy?: Option<'pick' | 'omit'>;
 }
 
 /** Options that can only be set from JavaScript. */
@@ -74,6 +94,31 @@ export interface StoreFrontendOptions<S extends State = State> {
    * @default 'omit'
    */
   readonly filterKeysStrategy?: StoreKeyFilterStrategy;
+
+  /**
+   * Keys to exclude from multi-window synchronization.
+   * These keys will not be sent to the Rust backend during sync.
+   *
+   * When set, this takes priority over `filterKeys` for sync operations.
+   * This option is ignored if you set a callback as the sync filter strategy.
+   *
+   * @default null
+   */
+  readonly syncFilterKeys?: StoreKeyFilter;
+
+  /**
+   * Strategy to use when filtering keys during sync.
+   * - `pick`: Only the specified keys will be synced.
+   * - `omit`: All keys will be synced **except** the ones specified.
+   *
+   * You can also provide a custom function called for each key.
+   * If the function returns `true`, the key will be synced.
+   *
+   * When set, this takes priority over `filterKeysStrategy` for sync operations.
+   *
+   * @default 'omit'
+   */
+  readonly syncFilterKeysStrategy?: StoreKeyFilterStrategy;
 
   /**
    * Hooks to run custom logic at specific points in the store lifecycle.
