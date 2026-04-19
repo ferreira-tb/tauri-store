@@ -9,7 +9,10 @@ outline: 2
 
 ## Next
 
-_Nothing yet._
+### Dependencies
+
+- Update dependencies.
+- Disable `tauri` default features.
 
 ## 1.2.2
 
