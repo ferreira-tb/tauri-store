@@ -58,7 +58,7 @@ version = "2.1"
 features = ["deref"]
 
 [workspace.dependencies.indexmap]
-version = "2.13.1"
+version = "2.14"
 features = ["serde"]
 
 [workspace.dependencies.semver]
@@ -70,7 +70,7 @@ version = "0.28"
 features = ["derive"]
 
 [workspace.dependencies.tokio]
-version = "1.47"
+version = "1.52"
 default-features = false
 
 [workspace.lints.clippy]
