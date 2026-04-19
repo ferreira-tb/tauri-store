@@ -1,0 +1,15 @@
+[bump]
+exclude = [
+  "example-migration",
+  "example-pinia",
+  "example-pinia-mobile",
+  "example-pinia-nuxt",
+  "example-svelte",
+  "example-svelte-runes",
+  "example-valtio",
+  "example-vanilla",
+  "example-vue",
+  "example-zustand",
+  "playground",
+  "tauri-store-cli",
+]
