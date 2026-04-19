@@ -32,7 +32,7 @@ if (-not $SkipCodegen -and -not $Fast) {
 
 if (-not $SkipLint -and -not $Fast) {
   pnpm run clippy
-  pnpm run eslint
+  pnpm run lint
   pnpm run type-check
 }
 
@@ -74,7 +74,7 @@ foreach ($Crate in $Crates) {
 }
 
 Get-ChildItem -Path './crates' -Directory -Exclude 'tauri-store*' |
-  ForEach-Object { Publish-Crate -Name $_.Name }
+ForEach-Object { Publish-Crate -Name $_.Name }
 
 function Publish-Package {
   param([string]$Name)
@@ -106,4 +106,4 @@ function Publish-Package {
 }
 
 Get-ChildItem -Path './packages' -Directory |
-  ForEach-Object { Publish-Package -Name $_.Name }
+ForEach-Object { Publish-Package -Name $_.Name }

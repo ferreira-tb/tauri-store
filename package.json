@@ -14,14 +14,13 @@
     "dev": "cargo tauri dev",
     "docs:crate": "cargo +nightly doc -p tauri-* --open --no-deps --lib --all-features",
     "docs:package": "pnpm run -F docs dev --host",
-    "eslint": "eslint . --config eslint.config.ts",
     "example": "cargo run -p tauri-store-cli -- example",
     "format": "prettier . --write && cargo fmt --all",
+    "lint": "eslint . --config eslint.config.ts",
     "playground": "cargo run -p tauri-store-cli -- playground",
     "sync": "pnpm run --recursive --if-present sync",
     "test:crate": "pwsh scripts/test.ps1",
-    "type-check": "pnpm run  -F \"./packages/*\" type-check",
-    "update": "pwsh scripts/update.ps1"
+    "type-check": "pnpm run  -F \"./packages/*\" type-check"
   },
   "devDependencies": {
     "@tb-dev/eslint-config": "^10.0.7",
