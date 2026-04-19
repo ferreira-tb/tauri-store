@@ -1,7 +1,7 @@
 import * as commands from './commands';
 import { subscribeKey } from 'valtio/utils';
-import { type INTERNAL_Op, snapshot, subscribe, proxy as toProxy } from 'valtio';
 import type { StoreBuilderReturn, TauriPluginValtioStoreOptions } from './types';
+import { type INTERNAL_Op, snapshot, subscribe, proxy as toProxy } from 'valtio';
 import {
   BaseStore,
   debounce,

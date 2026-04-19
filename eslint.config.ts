@@ -25,7 +25,14 @@ export default defineConfig({
   features: {
     vue: true,
   },
-  ignores: ['**/.nuxt', '**/.svelte-kit', '**/assets', '**/nuxt.config.ts'],
+  ignores: [
+    '**/.nuxt',
+    '**/.svelte-kit',
+    '**/assets',
+    '**/examples/pinia',
+    '**/examples/pinia-nuxt',
+    '**/nuxt.config.ts',
+  ],
   moduleBoundaryTypesFiles: ['packages/**/*.ts'],
   overrides: {
     typescript: {

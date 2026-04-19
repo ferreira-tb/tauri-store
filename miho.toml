@@ -13,3 +13,14 @@ exclude = [
   "playground",
   "tauri-store-cli",
 ]
+
+[update]
+exclude = [
+  "@tauri-apps/api",
+  "pinia",
+  "svelte",
+  "tauri-plugin",
+  "tokio",
+  "valtio",
+  "vue",
+]
