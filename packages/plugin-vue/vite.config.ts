@@ -1,9 +1,9 @@
-import dts from 'vite-plugin-dts';
 import { resolve } from 'node:path';
+import dts from 'unplugin-dts/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [dts({ rollupTypes: false })],
+  plugins: [dts({ bundleTypes: false })],
   build: {
     outDir: 'dist',
     emptyOutDir: true,

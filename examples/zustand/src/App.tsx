@@ -45,6 +45,9 @@ export default function App() {
           <button type="button" onClick={() => tauriHandler.saveNow()}>
             Save Now
           </button>
+          <button type="button" onClick={() => tauriHandler.destroy()}>
+            Destroy
+          </button>
           <button type="button" onClick={openStore}>
             Open
           </button>
