@@ -142,7 +142,7 @@ export abstract class BaseStore<S extends State = State> {
         : state;
 
       if (_state) {
-        _state = this.applyKeyFilters(_state);
+        _state = this.applySyncKeyFilters(_state);
         fn(this.id, _state).catch(async (err: unknown) => {
           if (this.onError) {
             await this.onError(err);
@@ -159,6 +159,8 @@ export abstract class BaseStore<S extends State = State> {
   protected async setOptionsHelper(fn: ReturnType<typeof commands.setStoreOptions>): Promise<void> {
     try {
       await fn(this.id, {
+        saveFilterKeys: this.options.saveFilterKeys,
+        saveFilterKeysStrategy: this.options.saveFilterKeysStrategy,
         saveInterval: this.options.saveInterval,
         saveOnChange: this.options.saveOnChange,
         saveOnExit: this.options.saveOnExit,
@@ -183,6 +185,14 @@ export abstract class BaseStore<S extends State = State> {
       this.options.saveInterval = saveStrategy.interval;
       this.options.saveStrategy = saveStrategy.strategy;
     }
+
+    if (config.saveFilterKeys !== undefined) {
+      this.options.saveFilterKeys = config.saveFilterKeys ?? null;
+    }
+
+    if (typeof config.saveFilterKeysStrategy === 'string') {
+      this.options.saveFilterKeysStrategy = config.saveFilterKeysStrategy;
+    }
   }
 
   protected applyKeyFilters(state: Partial<S>): Partial<S> {
@@ -190,6 +200,38 @@ export abstract class BaseStore<S extends State = State> {
     const strategy = this.options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY;
 
     // If the strategy is a callback, `filterKeys` doesn't matter, as we won't match against it.
+    if (!filter && typeof strategy !== 'function') {
+      return state;
+    }
+
+    const result: Partial<S> = {};
+    for (const [key, value] of Object.entries(state)) {
+      if (shouldPickKey(filter, strategy, key)) {
+        (result as State)[key] = value;
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * Applies sync key filters to the state before sending to the backend.
+   * Uses `syncFilterKeys`/`syncFilterKeysStrategy` if set,
+   * otherwise falls back to `filterKeys`/`filterKeysStrategy`.
+   *
+   * Note: `syncFilterKeysStrategy` is only applied when `syncFilterKeys` is non-null.
+   * Setting `syncFilterKeys: null` (the default) always falls back to `filterKeys`.
+   */
+  protected applySyncKeyFilters(state: Partial<S>): Partial<S> {
+    const syncFilter = this.options.syncFilterKeys ?? null;
+    // Fall back to filterKeys when syncFilterKeys is null (not explicitly set).
+    const filter = syncFilter ?? (this.options.filterKeys ?? null);
+    // Use sync strategy only when a sync filter is active; otherwise use the regular strategy.
+    const strategy =
+      syncFilter != null
+        ? (this.options.syncFilterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY)
+        : (this.options.filterKeysStrategy ?? DEFAULT_FILTER_KEYS_STRATEGY);
+
     if (!filter && typeof strategy !== 'function') {
       return state;
     }

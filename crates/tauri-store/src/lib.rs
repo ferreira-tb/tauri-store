@@ -26,7 +26,7 @@ pub use migration::{Migration, MigrationContext, Migrator};
 pub use serde_json::Value as Json;
 pub use store::{
   JsonMarshaler, Marshaler, MarshalingError, PrettyJsonMarshaler, SaveStrategy, Store, StoreId,
-  StoreOptions, StoreState, WatcherId,
+  StoreKeyFilter, StoreKeyFilterStrategy, StoreOptions, StoreState, WatcherId,
 };
 
 #[cfg(feature = "derive")]
