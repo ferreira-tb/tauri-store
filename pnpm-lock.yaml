@@ -10,19 +10,16 @@ overrides:
   cookie@<0.7.0: '>=0.7.0'
   esbuild@>=0.27.3 <0.28.1: ^0.28.1
   lodash@<=4.17.23: '>=4.18.0'
-  lodash@>=4.0.0 <=4.17.23: '>=4.18.0'
-  minimatch@<3.1.3: '>=3.1.3'
   minimatch@<3.1.4: '>=3.1.4'
   serialize-javascript@<7.0.5: '>=7.0.5'
-  serialize-javascript@<=7.0.2: '>=7.0.3'
 
 importers:
 
   .:
     devDependencies:
       '@tb-dev/eslint-config':
-        specifier: ^10.0.12
-        version: 10.0.12(eslint@10.5.0)(typescript@6.0.3)
+        specifier: ^10.0.13
+        version: 10.0.13(eslint@10.5.0)(typescript@6.0.3)
       '@types/node':
         specifier: ^26.0.0
         version: 26.0.0
@@ -69,8 +66,8 @@ importers:
   docs:
     devDependencies:
       '@tb-dev/utils':
-        specifier: ^7.3.23
-        version: 7.3.23
+        specifier: ^7.3.25
+        version: 7.3.25
       '@vueuse/core':
         specifier: ^14.3.0
         version: 14.3.0(vue@3.5.38)
@@ -81,7 +78,7 @@ importers:
         specifier: ^2.0.0-alpha.17
         version: 2.0.0-alpha.17(@types/node@26.0.0)(change-case@5.4.4)(fuse.js@7.4.2)(jiti@2.7.0)(lightningcss@1.32.0)(oxc-minify@0.133.0)(postcss@8.5.15)(terser@5.48.0)(typescript@6.0.3)(yaml@2.9.0)
       vue:
-        specifier: ^3.5.32
+        specifier: ^3.5.38
         version: 3.5.38(typescript@6.0.3)
 
   examples/migration:
@@ -93,8 +90,8 @@ importers:
         specifier: ^2.3.1
         version: 2.3.1
       '@tb-dev/utils':
-        specifier: ^7.3.23
-        version: 7.3.23
+        specifier: ^7.3.25
+        version: 7.3.25
       tauri-store:
         specifier: workspace:*
         version: link:../../packages/tauri-store
@@ -123,7 +120,7 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4(typescript@6.0.3)(vue@3.5.38)
       vue:
-        specifier: ^3.5.32
+        specifier: ^3.5.38
         version: 3.5.38(typescript@6.0.3)
       vue-tsc:
         specifier: ^3.3.5
@@ -147,7 +144,7 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4(typescript@6.0.3)(vue@3.5.38)
       vue:
-        specifier: ^3.5.32
+        specifier: ^3.5.38
         version: 3.5.38(typescript@6.0.3)
       vue-tsc:
         specifier: ^3.3.5
@@ -183,7 +180,7 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4(typescript@6.0.3)(vue@3.5.38)
       vue:
-        specifier: ^3.5.32
+        specifier: ^3.5.38
         version: 3.5.38(typescript@6.0.3)
       vue-router:
         specifier: ^5.1.0
@@ -228,7 +225,7 @@ importers:
         specifier: ^3.0.4
         version: 3.0.4(typescript@6.0.3)(vue@3.5.38)
       vue:
-        specifier: ^3.5.32
+        specifier: ^3.5.38
         version: 3.5.38(typescript@6.0.3)
       vue-tsc:
         specifier: ^3.3.5
@@ -258,8 +255,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/plugin-svelte
       '@tb-dev/utils':
-        specifier: ^7.3.23
-        version: 7.3.23
+        specifier: ^7.3.25
+        version: 7.3.25
       svelte:
         specifier: ^5.55.4
         version: 5.56.3(@typescript-eslint/types@8.61.1)
@@ -291,8 +288,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/plugin-svelte
       '@tb-dev/utils':
-        specifier: ^7.3.23
-        version: 7.3.23
+        specifier: ^7.3.25
+        version: 7.3.25
       svelte:
         specifier: ^5.55.4
         version: 5.56.3(@typescript-eslint/types@8.61.1)
@@ -315,8 +312,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/plugin-valtio
       '@tb-dev/utils':
-        specifier: ^7.3.23
-        version: 7.3.23
+        specifier: ^7.3.25
+        version: 7.3.25
       '@vitejs/plugin-react':
         specifier: ^6.0.2
         version: 6.0.2(vite@8.0.16)
@@ -342,8 +339,8 @@ importers:
         specifier: ^2.3.5
         version: 2.3.5
       '@tb-dev/utils':
-        specifier: ^7.3.23
-        version: 7.3.23
+        specifier: ^7.3.25
+        version: 7.3.25
       tauri-store:
         specifier: workspace:*
         version: link:../../packages/tauri-store
@@ -369,7 +366,7 @@ importers:
         specifier: ^14.3.0
         version: 14.3.0(vue@3.5.38)
       vue:
-        specifier: ^3.5.32
+        specifier: ^3.5.38
         version: 3.5.38(typescript@6.0.3)
       vue-tsc:
         specifier: ^3.3.5
@@ -390,8 +387,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/plugin-zustand
       '@tb-dev/utils':
-        specifier: ^7.3.23
-        version: 7.3.23
+        specifier: ^7.3.25
+        version: 7.3.25
       '@vitejs/plugin-react':
         specifier: ^6.0.2
         version: 6.0.2(vite@8.0.16)
@@ -414,10 +411,10 @@ importers:
         specifier: workspace:*
         version: link:../shared
       pinia:
-        specifier: ^3.0.3
+        specifier: ^3.0.4
         version: 3.0.4(typescript@6.0.3)(vue@3.5.38)
       vue:
-        specifier: ^3.5.21
+        specifier: ^3.5.38
         version: 3.5.38(typescript@6.0.3)
 
   packages/plugin-svelte:
@@ -466,7 +463,7 @@ importers:
         specifier: workspace:*
         version: link:../shared
       vue:
-        specifier: ^3.5.21
+        specifier: ^3.5.38
         version: 3.5.38(typescript@6.0.3)
 
   packages/plugin-zustand:
@@ -1962,11 +1959,11 @@ packages:
   '@tauri-apps/plugin-shell@2.3.5':
     resolution: {integrity: sha512-jewtULhiQ7lI7+owCKAjc8tYLJr92U16bPOeAa472LHJdgaibLP83NcfAF2e+wkEcA53FxKQAZ7byDzs2eeizg==}
 
-  '@tb-dev/eslint-config@10.0.12':
-    resolution: {integrity: sha512-pNa1FP3dlbB9ttSa8qIys60UvYE26Il55HfVdbzdR8k8QH8mOmXP3dSWe9VIHeHyugPgCrz4w30nBoHTxd6KOQ==}
+  '@tb-dev/eslint-config@10.0.13':
+    resolution: {integrity: sha512-GH1bjNfRKa43t9n5R5zY5c6ICVYYvNJ+tVrGxmahg7ySE2F6ab15jjMj07GwjB7oOjGcQ7qebT4j4ONz1xXooQ==}
 
-  '@tb-dev/utils@7.3.23':
-    resolution: {integrity: sha512-njMXrLDSXSgI12Krc8A8d/EuB4RjIT7QD1nuF+yqlzitX6IeJ35P5dfep2jRGDEN7XSdS5nyBwVOHsJnpLPFwQ==}
+  '@tb-dev/utils@7.3.25':
+    resolution: {integrity: sha512-ZdzbjzTKyiQiSaulp3bGUjUMwd6TwI1SKcHT1YM8aKoVqYZCuWXhIiLWoFDuWOU3HPSc4a3qzZff0onN0nwZhA==}
 
   '@tybys/wasm-util@0.10.2':
     resolution: {integrity: sha512-RoBvJ2X0wuKlWFIjrwffGw1IqZHKQqzIchKaadZZfnNpsAYp2mM0h36JtPCjNDAHGgYez/15uMBpfGwchhiMgg==}
@@ -2526,10 +2523,6 @@ packages:
   citty@0.2.2:
     resolution: {integrity: sha512-+6vJA3L98yv+IdfKGZHBNiGW5KHn22e/JwID0Strsz8h4S/csAu/OuICwxrg44k5MRiZHWIo8XXuJgQTriRP4w==}
 
-  clean-regexp@1.0.0:
-    resolution: {integrity: sha512-GfisEZEJvzKrmGWkvfhgzcz/BllN1USeqD2V6tg14OAOgaCD2Z/PUEuxnAZ/nPvmaHRG7a8y77p1T/IRQ4D1Hw==}
-    engines: {node: '>=4'}
-
   cliui@9.0.1:
     resolution: {integrity: sha512-k7ndgKhwoQveBL+/1tqGJYNz097I7WOvwbmmU2AR5+magtbjPWQTS1C5vzGkBC8Ym8UWRzfKUzUUqFLypY4Q+w==}
     engines: {node: '>=20'}
@@ -2759,6 +2752,10 @@ packages:
   destr@2.0.5:
     resolution: {integrity: sha512-ugFTXCtDZunbzasqBxrK93Ik/DRYsO6S/fedkWEMKqt04xZ4csmnmwGDBAb07QWNaGMAmnTIemsYZCksjATwsA==}
 
+  detect-indent@7.0.2:
+    resolution: {integrity: sha512-y+8xyqdGLL+6sh0tVeHcfP/QDd8gUgbasolJJpY7NgeQGSZ739bDtSiaiDgtoicy+mtYB81dKLxO9xRhCyIB3A==}
+    engines: {node: '>=12.20'}
+
   detect-libc@2.1.2:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
@@ -2855,10 +2852,6 @@ packages:
   escape-html@1.0.3:
     resolution: {integrity: sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==}
 
-  escape-string-regexp@1.0.5:
-    resolution: {integrity: sha512-vbRorB5FUQWvla16U8R/qgaFIya2qGzwDrNmCZuYKrbdSUMG6I1ZCGQRefkRVhuOkIGVne7BQ35DSfo1qvJqFg==}
-    engines: {node: '>=0.8.0'}
-
   escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
@@ -2873,11 +2866,11 @@ packages:
     peerDependencies:
       eslint: ^8.45.0 || ^9.0.0 || ^10.0.0
 
-  eslint-plugin-unicorn@64.0.0:
-    resolution: {integrity: sha512-rNZwalHh8i0UfPlhNwg5BTUO1CMdKNmjqe+TgzOTZnpKoi8VBgsW7u9qCHIdpxEzZ1uwrJrPF0uRb7l//K38gA==}
-    engines: {node: ^20.10.0 || >=21.0.0}
+  eslint-plugin-unicorn@68.0.0:
+    resolution: {integrity: sha512-mHYWvX948Q4H3bGc39bsNMxD/leOuNI+Iws9NVsoSz5VA7EGP86wnz7mZ/SPSvRhefT8L4hd8DHfDuGC+lIoCQ==}
+    engines: {node: '>=22'}
     peerDependencies:
-      eslint: '>=9.38.0'
+      eslint: '>=10.4'
 
   eslint-plugin-vue@10.9.2:
     resolution: {integrity: sha512-4g7ZP3pYcuqd7Zp0pzUKcos0W+RkjBz4EGdhJ92FcYk6v03Ti/GK5NwjgsjxHK+98eXDbHeK7VtX1az7/8doZA==}
@@ -6411,12 +6404,12 @@ snapshots:
     dependencies:
       '@tauri-apps/api': 2.11.1
 
-  '@tb-dev/eslint-config@10.0.12(eslint@10.5.0)(typescript@6.0.3)':
+  '@tb-dev/eslint-config@10.0.13(eslint@10.5.0)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/eslint-plugin': 8.61.1(@typescript-eslint/parser@8.61.1)(eslint@10.5.0)(typescript@6.0.3)
       '@typescript-eslint/parser': 8.61.1(eslint@10.5.0)(typescript@6.0.3)
       eslint-plugin-perfectionist: 5.9.1(eslint@10.5.0)(typescript@6.0.3)
-      eslint-plugin-unicorn: 64.0.0(eslint@10.5.0)
+      eslint-plugin-unicorn: 68.0.0(eslint@10.5.0)
       eslint-plugin-vue: 10.9.2(@typescript-eslint/parser@8.61.1)(eslint@10.5.0)(vue-eslint-parser@10.4.1)
       globals: 17.6.0
       vue-eslint-parser: 10.4.1(eslint@10.5.0)
@@ -6426,7 +6419,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@tb-dev/utils@7.3.23': {}
+  '@tb-dev/utils@7.3.25': {}
 
   '@tybys/wasm-util@0.10.2':
     dependencies:
@@ -7040,10 +7033,6 @@ snapshots:
 
   citty@0.2.2: {}
 
-  clean-regexp@1.0.0:
-    dependencies:
-      escape-string-regexp: 1.0.5
-
   cliui@9.0.1:
     dependencies:
       string-width: 7.2.0
@@ -7235,6 +7224,8 @@ snapshots:
 
   destr@2.0.5: {}
 
+  detect-indent@7.0.2: {}
+
   detect-libc@2.1.2: {}
 
   devalue@5.8.1: {}
@@ -7332,8 +7323,6 @@ snapshots:
 
   escape-html@1.0.3: {}
 
-  escape-string-regexp@1.0.5: {}
-
   escape-string-regexp@4.0.0: {}
 
   escape-string-regexp@5.0.0: {}
@@ -7347,14 +7336,15 @@ snapshots:
       - supports-color
       - typescript
 
-  eslint-plugin-unicorn@64.0.0(eslint@10.5.0):
+  eslint-plugin-unicorn@68.0.0(eslint@10.5.0):
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
       '@eslint-community/eslint-utils': 4.9.1(eslint@10.5.0)
+      browserslist: 4.28.2
       change-case: 5.4.4
       ci-info: 4.4.0
-      clean-regexp: 1.0.0
       core-js-compat: 3.49.0
+      detect-indent: 7.0.2
       eslint: 10.5.0(jiti@2.7.0)
       find-up-simple: 1.0.1
       globals: 17.6.0
@@ -7362,7 +7352,6 @@ snapshots:
       is-builtin-module: 5.0.0
       jsesc: 3.1.0
       pluralize: 8.0.0
-      regexp-tree: 0.1.27
       regjsparser: 0.13.2
       semver: 7.8.4
       strip-indent: 4.1.1

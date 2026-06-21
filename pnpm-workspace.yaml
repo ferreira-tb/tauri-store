@@ -31,15 +31,11 @@ minimumReleaseAgeStrict: true
 minimumReleaseAgeExclude:
   - '@tb-dev/*'
   - '@tsukilabs/*'
-  - esbuild@0.28.1
 
 overrides:
   ajv@>=7.0.0-alpha.0 <8.18.0: '>=8.18.0'
   cookie@<0.7.0: '>=0.7.0'
   esbuild@>=0.27.3 <0.28.1: ^0.28.1
   lodash@<=4.17.23: '>=4.18.0'
-  lodash@>=4.0.0 <=4.17.23: '>=4.18.0'
-  minimatch@<3.1.3: '>=3.1.3'
   minimatch@<3.1.4: '>=3.1.4'
   serialize-javascript@<7.0.5: '>=7.0.5'
-  serialize-javascript@<=7.0.2: '>=7.0.3'

@@ -15,12 +15,4 @@ exclude = [
 ]
 
 [update]
-exclude = [
-  "@tauri-apps/api",
-  "pinia",
-  "svelte",
-  "tauri-plugin",
-  "tokio",
-  "valtio",
-  "vue",
-]
+exclude = ["@tauri-apps/api", "svelte", "tauri-plugin", "tokio", "valtio"]

@@ -10,6 +10,10 @@ outline: 2
 
 ## Next
 
+_Nothing yet._
+
+## 2.2.1
+
 ### Dependencies
 
 - Update dependencies.

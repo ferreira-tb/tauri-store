@@ -9,10 +9,10 @@
     "preview": "vitepress preview"
   },
   "devDependencies": {
-    "@tb-dev/utils": "^7.3.23",
+    "@tb-dev/utils": "^7.3.25",
     "@vueuse/core": "^14.3.0",
     "change-case": "^5.4.4",
     "vitepress": "^2.0.0-alpha.17",
-    "vue": "^3.5.32"
+    "vue": "^3.5.38"
   }
 }
