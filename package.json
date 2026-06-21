@@ -23,7 +23,7 @@
     "type-check": "pnpm run  -F \"./packages/*\" type-check"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^10.0.12",
+    "@tb-dev/eslint-config": "^10.0.13",
     "@types/node": "^26.0.0",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
