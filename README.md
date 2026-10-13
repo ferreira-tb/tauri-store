@@ -1,5 +1,10 @@
 # tauri-store
 
+> [!WARNING]
+> **This project is no longer maintained.**
+>
+> No further support, bug fixes, or compatibility updates should be expected. If you still depend on this project, consider forking it and maintaining your own version.
+
 Persistent stores for Tauri.
 
 > [!NOTE]
